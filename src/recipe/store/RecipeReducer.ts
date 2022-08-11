@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import ingredient, { RecipeIngredientReducerActionTypes, RECIPE_INGREDIENTS_STORE } from './IngredientReducer';
 import subrecipes, { RecipeSubrecipesReducerActionTypes, RECIPE_SUBRECIPES_STORE } from './SubRecipeReducer';

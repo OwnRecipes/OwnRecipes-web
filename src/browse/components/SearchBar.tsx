@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import Icon from '../../common/components/Icon';
 import Input from '../../common/components/Input';

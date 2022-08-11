@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import queryString from 'query-string';
 import { useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import Search from '../components/Search';
 

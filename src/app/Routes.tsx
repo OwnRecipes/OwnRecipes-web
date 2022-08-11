@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Route, Routes as RouterRoutes, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -5,16 +6,17 @@ import { AnyComponent } from '../types/Types';
 import { getEnvAsBoolean, getResourcePath, isDemoMode } from '../common/utility';
 import { CombinedStore } from './Store';
 import UserRole from '../common/types/UserRole';
+import Spinner from './components/PageSpinner';
 
-import NewsPage from '../news/container/NewsPage';
-import LoginPage from '../account/containers/LoginPage';
-import BrowsePage from '../browse/containers/BrowsePage';
-import RecipeFormPage from '../recipe_form/containers/RecipeFormPage';
-import RecipePage from '../recipe/containers/RecipePage';
-// import List from '../../list/containers/List';
-// import Menu from '../../menu/containers/Menu';
-import NotFoundPage from './components/NotFoundPage';
-import RandomPage from '../random/containers/RandomPage';
+const NewsPage = lazy(() => import('../news/container/NewsPage'));
+const LoginPage = lazy(() => import('../account/containers/LoginPage'));
+const BrowsePage = lazy(() => import('../browse/containers/BrowsePage'));
+const RecipeFormPage = lazy(() => import('../recipe_form/containers/RecipeFormPage'));
+const RecipePage = lazy(() => import('../recipe/containers/RecipePage'));
+// const ListPage = lazy(() => import('../../list/containers/ListPage'));
+// const MenuPage = lazy(() => import('../../menu/containers/MenuPage'));
+const NotFoundPage = lazy(() => import('./components/NotFoundPage'));
+const RandomPage = lazy(() => import('../random/containers/RandomPage'));
 
 export type IRouteType = {
   /** URL path. Should start with a slash. */
@@ -109,6 +111,16 @@ function hasRequiredRole(restriction: Array<string> | undefined, userRole: strin
   else return restriction.includes(userRole);
 }
 
+function toPageComponent(cmp: AnyComponent): React.ReactNode {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const PageComponent = cmp as any;
+  return (
+    <Suspense fallback={<Spinner />}>
+      <PageComponent />
+    </Suspense>
+  );
+}
+
 const Routes: React.FC = () => {
   const account = useSelector((state: CombinedStore) => state.account.item);
   const isAuthenticated = account != null && account.id !== 0;
@@ -118,11 +130,9 @@ const Routes: React.FC = () => {
 
   let routesList: Array<React.ReactNode>;
   if (isAuthenticated) {
-    routesList = PrivateRoutes.filter(r => hasRequiredRole(r.restriction, role)).map(r => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const PageComponent = r.component as any;
-      return <Route path={getResourcePath(r.path)} key={r.path} element={<PageComponent />} />;
-    });
+    routesList = PrivateRoutes.filter(r => hasRequiredRole(r.restriction, role)).map(r => (
+      <Route path={getResourcePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
+    ));
     routesList.push(
       <Route path={getResourcePath('/')} key='/' element={<Navigate replace to={getResourcePath('/home')} />} />
     );
@@ -130,22 +140,16 @@ const Routes: React.FC = () => {
       <Route path='*' key='*' element={<Navigate replace to={getResourcePath(isDemoMode() ? '/home' : '/NotFound')} />} />
     );
   } else if (isLoginRequired) {
-    routesList = PublicRoutesIfRequireLogin.map(r => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const PageComponent = r.component as any;
-      return <Route path={getResourcePath(r.path)} key={r.path} element={<PageComponent />} />;
-    });
+    routesList = PublicRoutesIfRequireLogin.map(r => (
+      <Route path={getResourcePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
+    ));
     routesList.push(
       <Route path='*' key='*' element={<Navigate replace to={getResourcePath('/login')} />} />
     );
   } else {
-    routesList = PublicRoutes.map(r => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const PageComponent = r.component as any;
-      const path = getResourcePath(r.path);
-      // console.log(`[Routes] registering "${path}"`);
-      return <Route path={path} key={r.path} element={<PageComponent />} />;
-    });
+    routesList = PublicRoutes.map(r => (
+      <Route path={getResourcePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
+    ));
     const defaultPath = getResourcePath('/home');
     // console.log(`[Routes] registering default path as "${defaultPath}"`);
     routesList.push(

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 import { IntlShape } from 'react-intl';
 
 import env, { EnvType } from '../env';

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import '../css/recipe.css';
 

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { isResponseError, ResponseError } from '../../common/CustomSuperagent';
 import { ACTION } from '../../common/store/ReduxHelper';

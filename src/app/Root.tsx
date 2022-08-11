@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import Spinner from './components/Spinner';
+import Spinner from './components/PageSpinner';
 import store from '../common/store/store';
 import ContextProvider from './components/ContextProvider';
 import ThemeProvider from './components/ThemeProvider';

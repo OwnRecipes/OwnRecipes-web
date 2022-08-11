@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { NavDropdown, Button } from 'react-bootstrap';
 
@@ -6,9 +6,11 @@ import { getEnv, getResourcePath } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import Icon from '../../common/components/Icon';
-import { LanguageDialog } from './LanguageDialog';
-import { ThemeDialog } from './ThemeDialog';
 import { LanguageCode } from '../../common/language';
+import LoadingSpinner from '../../common/components/LoadingSpinner';
+
+const LanguageDialog = lazy(() => import('./LanguageDialog'));
+const ThemeDialog = lazy(() => import('./ThemeDialog'));
 
 export const AccountLoginMenuItem: React.FC = () => {
   const { formatMessage } = useIntl();
@@ -111,17 +113,25 @@ export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
         <NavDropdown.Item onClick={onLogoutClick}>{formatMessage(messages.logout)}</NavDropdown.Item>
       </NavDropdown>
 
-      <LanguageDialog
-          show     = {showLanguageDialog}
-          settings = {settings}
-          onChangeLanguage = {handleChangeLanguage}
-          onClose = {handleLanguageDialogClose} />
+      {showLanguageDialog && (
+        <Suspense fallback={<LoadingSpinner position='screen-center' />}>
+          <LanguageDialog
+              show     = {showLanguageDialog}
+              settings = {settings}
+              onChangeLanguage = {handleChangeLanguage}
+              onClose = {handleLanguageDialogClose} />
+        </Suspense>
+      )}
 
-      <ThemeDialog
-          show     = {showThemeDialog}
-          settings = {settings}
-          onChangeTheme = {handleChangeTheme}
-          onClose = {handleThemeDialogClose} />
+      {showThemeDialog && (
+        <Suspense fallback={<LoadingSpinner position='screen-center' />}>
+          <ThemeDialog
+              show     = {showThemeDialog}
+              settings = {settings}
+              onChangeTheme = {handleChangeTheme}
+              onClose = {handleThemeDialogClose} />
+        </Suspense>
+      )}
     </>
   );
 };

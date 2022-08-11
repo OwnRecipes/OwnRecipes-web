@@ -1,5 +1,5 @@
 import { IntlShape } from 'react-intl';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { ResponseError } from '../CustomSuperagent';
 import { optionallyFormatMessage } from '../utility';

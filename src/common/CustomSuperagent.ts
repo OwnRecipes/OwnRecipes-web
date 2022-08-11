@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 import * as defaults from 'superagent-defaults';
 import superRequest, { SuperAgentStatic } from 'superagent';
 import jwtDecode, { JwtPayload } from 'jwt-decode';

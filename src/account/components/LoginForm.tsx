@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import '../css/login.css';
 

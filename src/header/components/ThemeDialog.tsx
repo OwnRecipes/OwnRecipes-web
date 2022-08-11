@@ -83,3 +83,5 @@ const ThemeDialogContent: React.FC<IThemeDialogContentProps> = ({
     </ListGroup>
   );
 };
+
+export default ThemeDialog;

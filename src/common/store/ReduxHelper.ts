@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import GenericReducerType, { PendingState } from './GenericReducerType';
 import ArrayReducerType from './ArrayReducerType';

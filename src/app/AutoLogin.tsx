@@ -1,16 +1,16 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
-import { AccountState } from '../account/store/types';
 import { ThunkDispatch } from 'redux-thunk';
 import { NavigateFunction, useLocation, useNavigate } from 'react-router';
 import { Location } from 'history';
 
 import './css/404.css';
 
-import { getEnvAsBoolean, getResourcePath } from '../common/utility';
 import { CombinedStore } from './Store';
 import * as AccountActions from '../account/store/actions';
+import { AccountState } from '../account/store/types';
+import { getEnvAsBoolean, getResourcePath } from '../common/utility';
 
 const AutoLogin: React.FC = () => {
   const nav = useNavigate();
@@ -49,8 +49,8 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
     super(props);
 
     this.state = {
-      originUrl: this.props.loc.pathname,
-      originSearch: this.props.loc.search,
+      originUrl: props.loc.pathname,
+      originSearch: props.loc.search,
     };
   }
 

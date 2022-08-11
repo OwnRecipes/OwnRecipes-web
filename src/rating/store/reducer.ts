@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
 import { Rating, RatingAction, RatingsAction, IRatingAddAction, IRatingDeleteAction, RatingsState, RATINGS_STORE, RATING_STORE } from './types';

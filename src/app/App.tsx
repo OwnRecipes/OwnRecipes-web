@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import Header from '../header/containers/Header';
 import DemoAlert from '../demo/components/DemoAlert';
 import Footer from './components/Footer';
@@ -14,24 +16,33 @@ import ConnectionObserver from './components/ConnectionObserver';
 import InternalErrorDialog from './components/InternalErrorDialog';
 import IntlMessagesCreator from './components/IntlMessagesCreator';
 import { isDemoMode } from '../common/utility';
+import Spinner from './components/PageSpinner';
 
 const App = () => {
   const main = (
-    <ErrorBoundary verbose printStack>
-      <AutoLogin />
-      <div id='content'>
-        <Header />
-        {isDemoMode() && <DemoAlert />}
-        <ConnectionObserver />
-        <IntlMessagesCreator />
-        <Routes />
-      </div>
-      <Footer />
-      <InternalErrorDialog />
-    </ErrorBoundary>
+    <Suspense fallback={<Spinner />}>
+      <ErrorBoundary verbose printStack>
+        <AppFC />
+      </ErrorBoundary>
+    </Suspense>
   );
 
   return main;
 };
+
+const AppFC: React.FC = () => (
+  <>
+    <AutoLogin />
+    <div id='content'>
+      <Header />
+      {isDemoMode() && <DemoAlert />}
+      <ConnectionObserver />
+      <IntlMessagesCreator />
+      <Routes />
+    </div>
+    <Footer />
+    <InternalErrorDialog />
+  </>
+);
 
 export default App;

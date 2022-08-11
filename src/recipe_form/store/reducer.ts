@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
-import { PendingState } from '../../common/store/GenericReducerType';
+import * as _ from 'lodash-es';
 
+import { PendingState } from '../../common/store/GenericReducerType';
 import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 import { RecipeFormAction, RecipeFormActionTypes, RecipeFormState, RECIPE_FORM_STORE } from './types';
