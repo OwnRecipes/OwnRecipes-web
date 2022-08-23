@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 
+import '../../common/css/modal.css';
+
 import * as AuthActions from '../store/actions';
 import useDispatch from '../../common/hooks/useDispatch';
 import LoginForm from '../components/LoginForm';

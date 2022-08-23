@@ -6,7 +6,7 @@ import { AnyComponent } from '../types/Types';
 import { getEnvAsBoolean, getResourcePath, isDemoMode } from '../common/utility';
 import { CombinedStore } from './Store';
 import UserRole from '../common/types/UserRole';
-import Spinner from './components/PageSpinner';
+import PageSpinner from './components/PageSpinner';
 
 const NewsPage = lazy(() => import('../news/container/NewsPage'));
 const LoginPage = lazy(() => import('../account/containers/LoginPage'));
@@ -115,7 +115,7 @@ function toPageComponent(cmp: AnyComponent): React.ReactNode {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const PageComponent = cmp as any;
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<PageSpinner />}>
       <PageComponent />
     </Suspense>
   );

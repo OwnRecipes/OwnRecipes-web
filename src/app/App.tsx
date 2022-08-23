@@ -16,11 +16,11 @@ import ConnectionObserver from './components/ConnectionObserver';
 import InternalErrorDialog from './components/InternalErrorDialog';
 import IntlMessagesCreator from './components/IntlMessagesCreator';
 import { isDemoMode } from '../common/utility';
-import Spinner from './components/PageSpinner';
+import PageSpinner from './components/PageSpinner';
 
 const App = () => {
   const main = (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<PageSpinner />}>
       <ErrorBoundary verbose printStack>
         <AppFC />
       </ErrorBoundary>

@@ -64,7 +64,7 @@
   margin-top: 5px;
   margin-left: 12px;
 }
-.recipe-details .recipe-schema .ingredients-buttons .recipe-list-spinner .sk-circle:before {
+.recipe-details .recipe-schema .ingredients-buttons .recipe-list-spinner .circular-progress.circle:before {
   background-color: #555;
 }
 .recipe-details .recipe-schema .ingredients-buttons .bi {

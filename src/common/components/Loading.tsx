@@ -1,4 +1,4 @@
-import Spinner from 'react-spinkit';
+import CircularProgress from './CircularProgress';
 
 interface ILoadingProps {
   message?: string;
@@ -7,7 +7,7 @@ interface ILoadingProps {
 const Loading = ({ message }: ILoadingProps) => (
   <div className='spinner'>
     {message && <h3 className='no-results'>{ message }</h3>}
-    <Spinner className='spinner-obj' name='circle' fadeIn='none' />
+    <CircularProgress />
   </div>
 );
 

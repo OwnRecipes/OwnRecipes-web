@@ -15,7 +15,7 @@ exports[`Loading component test 1`] = `
         className="spinner"
       >
         <div
-          className="sk-spinner spinner-obj sk-circle"
+          className="circular-progress circle"
         >
           <div />
           <div />

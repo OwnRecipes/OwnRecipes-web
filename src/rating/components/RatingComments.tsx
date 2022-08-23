@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button, Col, Row } from 'react-bootstrap';
-import Spinner from 'react-spinkit';
 
 import { Rating } from '../store/types';
 import Icon from '../../common/components/Icon';
@@ -9,6 +8,7 @@ import P from '../../common/components/P';
 import Modal from '../../common/components/Modal';
 import Ratings from './Ratings';
 import { PendingState } from '../../common/store/GenericReducerType';
+import CircularProgress from '../../common/components/CircularProgress';
 
 export interface IRatingCommentsProps {
   recipeSlug: string;
@@ -94,7 +94,7 @@ const RatingComments: React.FC<IRatingCommentsProps> = ({ recipeSlug, ratings, u
 
   return (
     <>
-      {pending === PendingState.LOADING && <Spinner name='three-bounce' />}
+      {pending === PendingState.LOADING && <CircularProgress variant='three-bounce' />}
       {ratingsList.length === 0 && beTheFirst}
       {ratingsList}
 

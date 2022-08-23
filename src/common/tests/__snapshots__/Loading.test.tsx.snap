@@ -10,7 +10,7 @@ exports[`Loading component test 1`] = `
     Loading ...
   </h3>
   <div
-    className="sk-spinner spinner-obj sk-circle"
+    className="circular-progress circle"
   >
     <div />
     <div />

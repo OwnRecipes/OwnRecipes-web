@@ -98,7 +98,7 @@
 .container.browser .spinner {
   text-align: center;
 }
-.container.browser .spinner .spinner-obj {
+.container.browser .spinner .circular-progress {
   height: 100px !important;
   width: 100px !important;
   margin-top: 30px;

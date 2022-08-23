@@ -165,10 +165,6 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
   color: var(--secondaryText);
 }
 
-.sk-spinner.sk-circle {
-  color: var(--disabledText);
-}
-
 
 .nav-link {
   color: var(--primaryMain);
