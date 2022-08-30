@@ -4,8 +4,9 @@ import { useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router';
 import * as _ from 'lodash-es';
 
-import Search from '../components/Search';
+import '../css/browse.css';
 
+import Search from '../components/Search';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
 import * as SearchActions from '../store/SearchActions';
 import * as FilterActions from '../store/FilterActions';
