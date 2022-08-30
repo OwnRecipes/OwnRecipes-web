@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import queryString from 'query-string';
 import { useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
 
@@ -20,6 +19,7 @@ import SearchReload from '../components/SearchReload';
 import RandomHeader from '../components/RandomHeader';
 import useSingle from '../../common/hooks/useSingle';
 import SearchResults from '../../browse/containers/SearchResults';
+import { objToSearchString } from '../../common/utility';
 
 const RandomPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,9 +29,9 @@ const RandomPage: React.FC = () => {
   const search   = useSelector((state: CombinedStore) => state.browse.search.items);
 
   const locationSearch = location.search;
-  const qs: Record<string, string> = queryString.parse(locationSearch) as Record<string, string>;
-  const qsMergedDefaults = mergeDefaultFilters(qs, DefaultFilters) as Record<string, string>;
-  const qsMergedString = queryString.stringify(qsMergedDefaults);
+  const qs = Object.fromEntries(new URLSearchParams(locationSearch));
+  const qsMergedDefaults = mergeDefaultFilters(DefaultFilters, qs);
+  const qsMergedString = objToSearchString(qsMergedDefaults);
 
   const fetchCourses = useCallback(() => dispatch(RecipeGroupActions.fetchCourses()) , [dispatch, RecipeGroupActions]);
   const courses  = useSelector((state: CombinedStore) => state.recipeGroups.courses.items);

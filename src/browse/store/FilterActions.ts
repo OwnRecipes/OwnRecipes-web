@@ -1,9 +1,8 @@
-import queryString from 'query-string';
-
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_RATING_STORE, BROWSE_FILTER_TAGS_STORE, FilterDispatch } from './FilterTypes';
+import { objToSearchString } from '../../common/utility';
 
 const parsedFilter = (filters: Record<string, string>): Record<string, string> => {
   const parsedFilters: Record<string, string> = {};
@@ -28,7 +27,7 @@ export const loadCourses = (filters: Record<string, string>) => (dispatch: Filte
       dispatch({
         store: BROWSE_FILTER_COURSE_STORE,
         type:  ACTION.GET_SUCCESS,
-        id:    queryString.stringify(filters),
+        id:    objToSearchString(filters),
         data:  res.body.results,
       })
     ))
@@ -48,7 +47,7 @@ export const loadCuisines = (filters: Record<string, string>) => (dispatch: Filt
       dispatch({
         store: BROWSE_FILTER_CUISINE_STORE,
         type:  ACTION.GET_SUCCESS,
-        id:    queryString.stringify(filters),
+        id:    objToSearchString(filters),
         data:  res.body.results,
       })
     ))
@@ -68,7 +67,7 @@ export const loadRatings = (filter: Record<string, string>) => (dispatch: Filter
       dispatch({
         store: BROWSE_FILTER_RATING_STORE,
         type:  ACTION.GET_SUCCESS,
-        id:    queryString.stringify(filter),
+        id:    objToSearchString(filter),
         data:  res.body.results,
       })
     ))
@@ -88,7 +87,7 @@ export const loadTags = (filters: Record<string, string>) => (dispatch: FilterDi
       dispatch({
         store: BROWSE_FILTER_TAGS_STORE,
         type:  ACTION.GET_SUCCESS,
-        id:    queryString.stringify(filters),
+        id:    objToSearchString(filters),
         data:  res.body.results,
       })
     ))
@@ -98,7 +97,7 @@ export const loadTags = (filters: Record<string, string>) => (dispatch: FilterDi
         dispatch({
           store: BROWSE_FILTER_TAGS_STORE,
           type:  ACTION.GET_SUCCESS,
-          id:    queryString.stringify(filters),
+          id:    objToSearchString(filters),
           data:  [],
         });
       } else {

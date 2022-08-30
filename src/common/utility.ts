@@ -48,6 +48,18 @@ export function isNumber(str: string): boolean {
   return !isNaN(str as unknown as number) && !isNaN(parseFloat(str));
 }
 
+export function objToSearchString(params: Record<string, string | number | boolean | undefined>): string {
+  const paramsStrings: Record<string, string> = {};
+  Object.keys(params).forEach(key => {
+    if (params[key] != null) {
+      paramsStrings[key] = String(params[key]);
+    }
+  });
+  const paramss = new URLSearchParams(paramsStrings);
+  paramss.sort();
+  return paramss.toString();
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function updateFormData(prev: any, id: string, newValue: unknown): any {
   const updFormData = _.cloneDeep(prev);

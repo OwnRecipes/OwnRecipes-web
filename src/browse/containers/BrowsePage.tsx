@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import queryString from 'query-string';
 import { useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router';
 import * as _ from 'lodash-es';
@@ -15,14 +14,18 @@ import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
 import { CombinedStore } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
-import { getResourcePath } from '../../common/utility';
+import { getResourcePath, objToSearchString } from '../../common/utility';
 
 export function mergeDefaultFilters(
-    query: queryString.ParsedQuery<string | number | boolean>,
-    defaultFilters: Record<string, unknown>
-  ): Record<string, unknown> {
-  const filter = { ...defaultFilters };
-  return _.merge(filter, query);
+    defaultFilters: Record<string, unknown>,
+    params: Record<string, string>
+  ): Record<string, string> {
+  const filterS: Record<string, string> = {};
+  Object.keys(defaultFilters).forEach(key => {
+    filterS[key] = String(defaultFilters[key]);
+  });
+
+  return _.merge(filterS, params);
 }
 
 export function buildSearchString(route: string, qs: Record<string, string>, value: string): string {
@@ -35,9 +38,8 @@ export function buildSearchString(route: string, qs: Record<string, string>, val
     delete qsBuilder.search;
   }
 
-  let str = queryString.stringify(qsBuilder);
-  str = getResourcePath(str ? `/${route}?${str}` : `/${route}`);
-  return str;
+  const str = objToSearchString(qsBuilder);
+  return getResourcePath(str ? `/${route}?${str}` : `/${route}`);
 }
 
 export function buildSearchUrl(route: string, qs: Record<string, string>, name: string, value: string, multiSelect = false): string {
@@ -69,7 +71,7 @@ export function buildSearchUrl(route: string, qs: Record<string, string>, name: 
     delete qsBuilder[name];
   }
 
-  const str = queryString.stringify(qsBuilder);
+  const str = objToSearchString(qsBuilder);
   return getResourcePath(str ? `/${route}?${str}` : `/${route}`);
 }
 
@@ -86,9 +88,9 @@ const BrowsePage: React.FC = () => {
   const tags     = useSelector((state: CombinedStore) => state.browse.filters.tags.items);
 
   const locationSearch = location.search;
-  const qs: Record<string, string> = queryString.parse(locationSearch) as Record<string, string>;
-  const qsMergedDefaults = mergeDefaultFilters(qs, DefaultFilters) as Record<string, string>;
-  const qsMergedString = queryString.stringify(qsMergedDefaults);
+  const qs = Object.fromEntries(new URLSearchParams(locationSearch));
+  const qsMergedDefaults = mergeDefaultFilters(DefaultFilters, qs);
+  const qsMergedString = objToSearchString(qsMergedDefaults);
 
   const reloadData = () => {
     window.scrollTo(0, 0);

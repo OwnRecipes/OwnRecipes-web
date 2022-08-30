@@ -1,9 +1,8 @@
-import queryString from 'query-string';
-
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { BROWSER_SEARCH_STORE, SearchDispatch, SearchResultDto, toSearchResult } from './SearchTypes';
 import { ACTION } from '../../common/store/ReduxHelper';
+import { objToSearchString } from '../../common/utility';
 
 const FILTER_QUERY_PARAMETER_MAPPING: Record<string, string> = {
   cuisine: 'cuisine__slug',
@@ -29,7 +28,7 @@ export const loadRecipes = (filters: Record<string, string>) => (dispatch: Searc
       dispatch({
         store: BROWSER_SEARCH_STORE,
         type:  ACTION.GET_SUCCESS,
-        id:    queryString.stringify(filters),
+        id:    objToSearchString(filters),
         data:  toSearchResult(resDto),
       });
     })
@@ -54,7 +53,7 @@ export const loadRandomRecipes = (filters: Record<string, string>) => (dispatch:
       dispatch({
         store: BROWSER_SEARCH_STORE,
         type:  ACTION.GET_SUCCESS,
-        id:    queryString.stringify(filters),
+        id:    objToSearchString(filters),
         data:  toSearchResult(resDto),
       });
     })
