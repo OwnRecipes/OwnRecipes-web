@@ -1,10 +1,10 @@
 import { createRef } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
-import { DebounceInput } from 'react-debounce-input';
 import classNames from 'classnames';
 
 import '../css/input.css';
 
+import DebounceInput from './DebounceInput';
 import BaseComponent, { IBaseComponentProps } from './BaseComponent';
 import Tooltip from './Tooltip';
 import ConditionalWrapper from './ConditionalWrapper';
