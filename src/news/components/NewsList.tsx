@@ -55,7 +55,7 @@ const NewsCarousel: React.FC = () => {
 
   return (
     <>
-      {news.pending === PendingState.LOADING && (
+      {news.meta.pending === PendingState.LOADING && (
         <Loading />
       )}
       {carouselItems.length > 0 && (

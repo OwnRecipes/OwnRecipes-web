@@ -5,14 +5,14 @@ import { Button, Form } from 'react-bootstrap';
 import { Recipe } from '../store/RecipeTypes';
 
 // import IngredientButtons from './IngredientButtons';
-import GenericReducerType, { PendingState } from '../../common/store/GenericReducerType';
+import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 import Input from '../../common/components/Input';
 import { updateFormData } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 
 export interface IIngredientsHeaderProps {
   recipe:      Recipe | undefined;
-  recipeState: GenericReducerType;
+  recipeMeta:  ReducerMeta;
 
   // lists: Array<any>;
 
@@ -30,7 +30,7 @@ export interface IFormDataProps {
   servings: number;
 }
 
-const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({ recipe, recipeState, updateServings }: IIngredientsHeaderProps) => {
+const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({ recipe, recipeMeta, updateServings }: IIngredientsHeaderProps) => {
   const { formatMessage } = useIntl();
   const messages = defineMessages({
     ingredients: {
@@ -75,7 +75,7 @@ const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({ recipe, recipeSt
     updateServings(formData.servings);
   };
 
-  const pending  = recipeState.pending;
+  const pending  = recipeMeta.pending;
   const servings = recipe?.customServings ?? 0;
   const hasNoIngredients = pending === PendingState.COMPLETED
       && recipe?.subrecipes != null && recipe.subrecipes.length === 0

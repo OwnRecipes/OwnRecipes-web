@@ -18,8 +18,8 @@ const Status: React.FC = () => {
     },
   });
 
-  const isDirty = useSelector((state: CombinedStore) => state.recipeForm.dirty);
-  const pending = useSelector((state: CombinedStore) => state.recipeForm.pending);
+  const isDirty = useSelector((state: CombinedStore) => state.recipeForm.meta.dirty);
+  const pending = useSelector((state: CombinedStore) => state.recipeForm.meta.pending);
   const prevPending = useRef<PendingState>();
   const [showSaveSuccess, setShowSaveSuccess] = useState<boolean>(false);
 

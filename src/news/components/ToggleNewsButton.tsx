@@ -34,7 +34,7 @@ const ToggleNewsButton: React.FC<IToggleNewsButtonProps> = ({ showNews, onClick 
   if (!connection.hasConnection) {
     return null;
   }
-  if (news.pending === PendingState.COMPLETED && newsList != null && newsList.filter(entry => entry.frontpage !== false).length === 0) {
+  if (news.meta.pending === PendingState.COMPLETED && newsList != null && newsList.filter(entry => entry.frontpage !== false).length === 0) {
     return null;
   }
 

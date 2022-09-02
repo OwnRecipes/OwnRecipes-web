@@ -31,8 +31,11 @@ const RecipeFormPage: React.FC = () => {
   const save            = useCallback((data: Recipe) => dispatch(RecipeFormActions.save(data)), [dispatch, RecipeFormActions]);
   const validate        = useCallback((data: Recipe) => dispatch(RecipeFormActions.validate(data)), [dispatch, RecipeFormActions]);
 
+  const recipe = useSelector((state: CombinedStore) => state.recipe.item);
+
+  // TODO Field-Component to connect Inputs with their value and validation
   const recipeForm = useSelector((state: CombinedStore) => state.recipeForm.item);
-  const validation = useSelector((state: CombinedStore) => state.recipeForm.validation);
+  const validation = useSelector((state: CombinedStore) => state.recipeForm.meta.validation);
 
   const recipeSlug = params.recipe ?? '';
   const isNew = recipeSlug === 'create';
@@ -60,7 +63,7 @@ const RecipeFormPage: React.FC = () => {
   };
 
   return (
-    <PageWrapper title={isNew ? intl.formatMessage(messages.new_recipe) : recipeForm?.title}>
+    <PageWrapper title={isNew ? intl.formatMessage(messages.new_recipe) : recipe?.title}>
       <EditGuard />
       <RecipeForm
           form      = {recipeForm}

@@ -1,6 +1,5 @@
 import * as _ from 'lodash-es';
 
-import { PendingState } from '../../common/store/GenericReducerType';
 import ReduxHelper, { ACTION, GenericItemReducerAction, toBasicAction } from '../../common/store/ReduxHelper';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 import { RecipeFormAction, RecipeFormActionTypes, RecipeFormState, RECIPE_FORM_STORE } from './types';
@@ -55,12 +54,12 @@ const reducer = (state = defaultState, action: RecipeFormAction): RecipeFormStat
            const newState = _.cloneDeep(defaultState);
 
            newState.item  = action.payload as Recipe;
-           newState.pending = PendingState.INITIAL;
+
            return newState;
          }
       case RecipeFormActionTypes.RECIPE_FORM_UPDATE:
         {
-          const newState = _.clone(state);
+          const newState = ReduxHelper.cloneState(state);
 
           const newItem  = _.clone(newState.item) ?? {} as Recipe;
           _.set(newItem, action.payload.name, action.payload.value);
@@ -81,7 +80,7 @@ const reducer = (state = defaultState, action: RecipeFormAction): RecipeFormStat
           }
 
           newState.item   = newItem;
-          newState.dirty  = true;
+          newState.meta.dirty  = true;
           ReduxHelper.doSetValidation(newState, action.payload.validation, 'merge');
 
           return newState;

@@ -58,7 +58,6 @@ const recipe = (state = defaultState, action: RecipeAction): RecipeState => {
 
           const { customServings } = action.payload;
           let updItem: Recipe = _.clone(state.item);
-          debugger;
 
           const subRecipes = subrecipes(
             updItem.subrecipes,

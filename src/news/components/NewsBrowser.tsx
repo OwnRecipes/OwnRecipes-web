@@ -20,9 +20,9 @@ const NewsBrowser: React.FC = () => {
     },
   });
 
-  const miniBrowseState = useSelector((state: CombinedStore) => state.browse.miniBrowse);
+  const miniBrowseMeta = useSelector((state: CombinedStore) => state.browse.miniBrowse.meta);
 
-  if (!miniBrowseState.hasConnection || miniBrowseState.error != null) return null;
+  if (!miniBrowseMeta.hasConnection || miniBrowseMeta.error != null) return null;
 
   return (
     <ErrorBoundary verbose printStack>

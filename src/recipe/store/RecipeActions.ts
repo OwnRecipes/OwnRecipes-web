@@ -1,14 +1,18 @@
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { Recipe, RecipeActionTypes, RecipeDispatch, RECIPE_STORE, toRecipe } from './RecipeTypes';
+import { Recipe, RecipeAction, RecipeActionTypes, RecipeDispatch, RecipeDto, RECIPE_STORE, toRecipe } from './RecipeTypes';
 import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
+
+export const getRecipeSuccess = (recipe: Recipe): RecipeAction => (
+  { ...toBasicAction(RECIPE_STORE, ACTION.GET_SUCCESS), payload: recipe }
+);
 
 export const load = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
   dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.GET_START) });
   request()
     .get(`${serverURLs.recipe}${recipeSlug}/`)
     .then(res => {
-      dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.GET_SUCCESS), payload: toRecipe(res.body) });
+      dispatch(getRecipeSuccess(toRecipe(res.body as RecipeDto)));
     })
     .catch(err => dispatch(handleError(err, RECIPE_STORE)));
 };

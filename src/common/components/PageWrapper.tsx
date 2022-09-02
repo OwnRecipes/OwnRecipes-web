@@ -45,7 +45,7 @@ function toCleanLocationPath(path: string): string {
  const PageWrapper: React.FC<IPageWrapperProps> = ({ title, id, state, children }: IPageWrapperProps) => {
   const nav = useNavigate();
   const location = useLocation();
-  const error = state?.error;
+  const error = state?.meta.error;
 
   const dynamicHeightContext = useContext(DynamicHeightContext);
 

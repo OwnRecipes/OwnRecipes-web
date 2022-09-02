@@ -5,14 +5,13 @@ import * as _ from 'lodash-es';
 
 import '../css/login.css';
 
-import { AccountState } from '../store/types';
 import Icon from '../../common/components/Icon';
 import Input from '../../common/components/Input';
 import Alert from './Alert';
-import { PendingState } from '../../common/store/GenericReducerType';
+import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 
 export interface ILoginFormProps {
-  accountState: AccountState;
+  accountMeta: ReducerMeta;
 
   onLogin: (username: string, password: string) => void;
 }
@@ -22,7 +21,7 @@ interface ILoginFormData {
   password: string;
 }
 
-const LoginForm: React.FC<ILoginFormProps> = ({ accountState, onLogin }: ILoginFormProps) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ accountMeta, onLogin }: ILoginFormProps) => {
   const intl = useIntl();
 
   const { formatMessage } = intl;
@@ -66,7 +65,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({ accountState, onLogin }: ILoginF
 
   return (
     <Form className='form-signin' onSubmit={handleSubmit}>
-      <Alert reducerState={accountState} />
+      <Alert reducerMeta={accountMeta} />
 
       <h2 className='form-signin-heading'>{formatMessage(messages.please_sign_in)}</h2>
       <Input
@@ -87,7 +86,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({ accountState, onLogin }: ILoginF
           inputAdornmentStart = {<Icon icon='key' size='2x' />}
           onChange = {handleChange} />
 
-      <Button variant='primary' type='submit' disabled={accountState.pending === PendingState.LOADING}>
+      <Button variant='primary' type='submit' disabled={accountMeta.pending === PendingState.LOADING}>
         {formatMessage(messages.sign_in)}
       </Button>
     </Form>

@@ -6,19 +6,23 @@ import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
 import { Recipe, RecipeDto, toRecipe, toRecipeRequest } from '../../recipe/store/RecipeTypes';
 import { createValidationResult, hasValidationError, runFieldValidator, runValidators, ValidationResult } from '../../common/store/Validation';
 import { COURSES_STORE, CUISINES_STORE, TAGS_STORE } from '../../recipe_groups/store/types';
+import { getRecipeSuccess } from '../../recipe/store/RecipeActions';
 
 export const load = (recipeSlug: string) => (dispatch: RecipeFormDispatch) => {
   dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.GET_START) });
   request()
     .get(`${serverURLs.recipe}${recipeSlug}/`)
     .then(res => {
+      const recipe = toRecipe(res.body);
       dispatch({
         ...toBasicAction(
           RECIPE_FORM_STORE,
           ACTION.GET_SUCCESS
         ),
-        payload: toRecipe(res.body),
+        payload: recipe,
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dispatch(getRecipeSuccess(recipe) as any);
     })
     .catch(err => dispatch(handleError(err, RECIPE_FORM_STORE)));
 };
@@ -115,25 +119,31 @@ export const save = (data: Recipe) => (dispatch: RecipeFormDispatch) => {
           .patch(`${serverURLs.recipe}${res.body.slug}/`)
           .attach('photo', photo)
           .then(resPhoto => {
+            const recipe = toRecipe(resPhoto.body);
             dispatch({
               ...toBasicAction(
                 RECIPE_FORM_STORE,
                 isNew ? ACTION.CREATE_SUCCESS : ACTION.UPDATE_SUCCESS
               ),
               oldId: data.id,
-              payload: toRecipe(resPhoto.body),
+              payload: recipe,
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            dispatch(getRecipeSuccess(recipe) as any);
           })
           .catch(err => dispatch(handleError(err, RECIPE_FORM_STORE)));
       } else {
+        const recipe = toRecipe(res.body);
         dispatch({
           ...toBasicAction(
             RECIPE_FORM_STORE,
             isNew ? ACTION.CREATE_SUCCESS : ACTION.UPDATE_SUCCESS
           ),
           oldId: isNew ? (null as any) : data.id, // eslint-disable-line @typescript-eslint/no-explicit-any
-          payload: monkeypatchPhotoUrls(toRecipe(res.body)),
+          payload: monkeypatchPhotoUrls(recipe),
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        dispatch(getRecipeSuccess(recipe) as any);
       }
 
       // OPT HACK: Move this to recipe_groups

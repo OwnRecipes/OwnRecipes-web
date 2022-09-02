@@ -9,14 +9,19 @@ export enum PendingState {
   ABORTED   = 'ABORTED',
 }
 
-type GenericReducerType = {
-  readonly ident: string;
-
+export type ReducerMeta = {
   error:      Error | undefined;
   validation: ValidationResult | undefined;
   pending:    PendingState;
 
   hasConnection: boolean;
+  dirty: boolean;
+};
+
+type GenericReducerType = {
+  readonly ident: string;
+
+  meta: ReducerMeta;
 };
 
 export default GenericReducerType;

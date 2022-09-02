@@ -142,13 +142,15 @@ export default class ReduxHelper {
     const newState: ItemReducerType<T> = {
       ident: ident,
 
-      item: undefined,
-      dirty: false,
+      meta: {
+        dirty: false,
+        error: undefined,
+        validation: undefined,
+        pending: PendingState.INITIAL,
+        hasConnection: true,
+      },
 
-      error: undefined,
-      validation: undefined,
-      pending: PendingState.INITIAL,
-      hasConnection: true,
+      item: undefined,
     };
 
     return newState;
@@ -158,12 +160,16 @@ export default class ReduxHelper {
     const newState: ArrayReducerType<T> = {
       ident: ident,
 
+      meta: {
+        dirty: false,
+        error: undefined,
+        validation: undefined,
+        pending: PendingState.INITIAL,
+        hasConnection: true,
+      },
+
       items: undefined,
 
-      error: undefined,
-      validation: undefined,
-      pending: PendingState.INITIAL,
-      hasConnection: true,
     };
 
     return newState;
@@ -173,143 +179,145 @@ export default class ReduxHelper {
     const newState: MapReducerType<T> = {
       ident: ident,
 
-      items: undefined,
+      meta: {
+        dirty: false,
+        error: undefined,
+        validation: undefined,
+        pending: PendingState.INITIAL,
+        hasConnection: true,
+      },
 
-      error: undefined,
-      validation: undefined,
-      pending: PendingState.INITIAL,
-      hasConnection: true,
+      items: undefined,
     };
 
     return newState;
   };
 
-  static setItem = <T>(state: T, item: unknown | undefined): T => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const newState = { ...state } as any;
+  static setItem = <TItem, TState extends ItemReducerType<TItem>>(state: TState, item: TItem | undefined): TState => {
+    const updState = ReduxHelper.cloneState(state);
 
-    newState.error   = undefined;
-    newState.pending = PendingState.COMPLETED;
-    newState.hasConnection = true;
+    updState.item  = item;
 
-    newState.item  = item;
-    newState.dirty = false;
+    updState.meta.error   = undefined;
+    updState.meta.pending = PendingState.COMPLETED;
+    updState.meta.hasConnection = true;
+    updState.meta.dirty = false;
 
-    return newState;
+    return updState;
   };
 
-  static preloadItem = <T>(state: T, item: unknown | undefined): T => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const newState = { ...state } as any;
+  static preloadItem = <TItem, TState extends ItemReducerType<TItem>>(state: TState, item: TItem | undefined): TState => {
+    const updState = ReduxHelper.cloneState(state);
 
-    newState.error   = undefined;
-    newState.pending = PendingState.INITIAL;
+    updState.item  = item;
 
-    newState.item  = item;
+    updState.meta.error   = undefined;
+    updState.meta.pending = PendingState.INITIAL;
 
-    return newState;
+    return updState;
   };
 
   static setArray<T>(state: ArrayReducerType<T>, items: Array<T>): ArrayReducerType<T> {
-    const updState = _.clone(state);
+    const updState = ReduxHelper.cloneState(state);
 
-    updState.error = undefined;
-    updState.pending = PendingState.COMPLETED;
-    updState.hasConnection = true;
     updState.items = items;
+
+    updState.meta.error = undefined;
+    updState.meta.pending = PendingState.COMPLETED;
+    updState.meta.hasConnection = true;
+
     return updState;
   }
 
   static setMapItem<T>(state: MapReducerType<T>, id: string, item: T): MapReducerType<T> {
-    const updState = _.clone(state);
-    const map = updState.items;
-    const updMap = map ? _.clone(map) : {};
+    const updState = ReduxHelper.cloneState(state);
 
-    _.set(updMap, id, item);
+    updState.items = state.items ? _.clone(state.items) : {};
+    _.set(updState.items, id, item);
 
-    updState.error = undefined;
-    updState.pending = PendingState.COMPLETED;
-    updState.hasConnection = true;
-    updState.items = updMap;
+    updState.meta.error = undefined;
+    updState.meta.pending = PendingState.COMPLETED;
+    updState.meta.hasConnection = true;
+
     return updState;
   }
 
   static deleteMapItem<T>(state: MapReducerType<T>, id: string): MapReducerType<T> {
-    const updState = _.clone(state);
-    const map = updState.items;
-    const updMap = map ? _.clone(map) : {};
+    const updState = ReduxHelper.cloneState(state);
 
-    _.unset(updMap, id);
+    updState.items = state.items ? _.clone(state.items) : {};
+    _.unset(updState.items, id);
 
-    updState.error = undefined;
-    updState.pending = PendingState.COMPLETED;
-    updState.hasConnection = true;
-    updState.items = updMap;
+    updState.meta.error = undefined;
+    updState.meta.pending = PendingState.COMPLETED;
+    updState.meta.hasConnection = true;
+
     return updState;
   }
 
   static setError = <T extends GenericReducerType>(state: T, error: Error | undefined): T => {
-    const newState = { ...state };
+    const updState = ReduxHelper.cloneState(state);
 
-    newState.error   = error;
-    newState.pending = PendingState.ABORTED;
-    newState.hasConnection = true;
+    updState.meta.error   = error;
+    updState.meta.pending = PendingState.ABORTED;
+    updState.meta.hasConnection = true;
 
-    return newState;
+    return updState;
   };
 
   static setNoConnection = <T extends GenericReducerType>(state: T): T => {
-    const newState = { ...state };
+    const updState = ReduxHelper.cloneState(state);
 
-    newState.error = undefined;
-    newState.pending = PendingState.INITIAL;
-    newState.hasConnection = false;
+    updState.meta.error = undefined;
+    updState.meta.pending = PendingState.INITIAL;
+    updState.meta.hasConnection = false;
 
-    return newState;
+    return updState;
   };
 
   static setPending = <T extends GenericReducerType>(state: T, pending: PendingState): T => {
-    const newState = { ...state };
+    const updState = ReduxHelper.cloneState(state);
 
-    newState.error   = undefined;
-    newState.pending = pending;
+    updState.meta.error   = undefined;
+    updState.meta.pending = pending;
 
-    return newState;
+    return updState;
   };
 
   static setSoftReset = <T extends GenericReducerType>(state: T): T => {
-    const newState = { ...state };
+    const updState = ReduxHelper.cloneState(state);
 
-    newState.error = undefined;
-    newState.pending = PendingState.INITIAL;
-    newState.hasConnection = true;
+    updState.meta.error = undefined;
+    updState.meta.pending = PendingState.INITIAL;
+    updState.meta.hasConnection = true;
 
-    return newState;
+    return updState;
   };
 
-  static doSetValidation = <T extends GenericReducerType>(newState: T, validation: ValidationResult | undefined, mode: 'overwrite' | 'merge') => {
+  static doSetValidation = <T extends GenericReducerType>(updState: T, validation: ValidationResult | undefined, mode: 'overwrite' | 'merge') => {
     if (mode === 'overwrite' || validation == null) {
-      newState.validation = validation;
+      updState.meta.validation = validation;
     } else {
-      const newErrors = isValidationResult(newState.validation) ? _.clone(newState.validation) : createValidationResult();
+      const newErrors = isValidationResult(updState.meta.validation) ? _.clone(updState.meta.validation) : createValidationResult();
 
       Object.keys(validation).forEach(key => {
         _.set(newErrors, key, validation[key]);
       });
-      newState.validation = newErrors;
+      updState.meta.validation = newErrors;
     }
   };
 
   static setValidation = <T extends GenericReducerType>(state: T, validation: ValidationResult | undefined, mode: 'overwrite' | 'merge' = 'overwrite'): T => {
-    const newState = { ...state };
+    const updState = ReduxHelper.cloneState(state);
 
-    ReduxHelper.doSetValidation(newState, validation, mode);
+    ReduxHelper.doSetValidation(updState, validation, mode);
 
-    newState.pending = PendingState.ABORTED;
+    updState.meta.pending = PendingState.ABORTED;
     if (mode === 'overwrite') {
-      newState.hasConnection = true;
+      updState.meta.hasConnection = true;
     }
-    return newState;
+
+    return updState;
   };
 
   static caseItemDefaultReducer = <T>(state: ItemReducerType<T>, action: GenericItemReducerAction<T>, defaultState: ItemReducerType<T>): ItemReducerType<T> => {
@@ -481,5 +489,11 @@ export default class ReduxHelper {
     }
 
     return state;
+  };
+
+  static cloneState = <T extends GenericReducerType>(state: T): T => {
+    const cpy = { ...state };
+    cpy.meta = { ...state.meta };
+    return cpy;
   };
 }

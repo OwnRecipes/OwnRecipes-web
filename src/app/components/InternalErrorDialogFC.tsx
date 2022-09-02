@@ -76,6 +76,10 @@ const InternalErrorDialogContent: React.FC<IInternalErrorDialogContentProps> = (
   });
 
   const responseText = getResponseText(internalError);
+  if (internalError) {
+    // eslint-disable-next-line no-console
+    console.error(`${internalError.message}\n\n${internalError.stack}`);
+  }
 
   return (
     <Accordion defaultActiveKey='0' flush alwaysOpen>

@@ -20,15 +20,15 @@ export interface ISearchResultsProps {
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ qs, qsString, buildUrl, onOpenRecipe }: ISearchResultsProps) => {
   const searchState = useSelector((state: CombinedStore) => state.browse.search);
-  const pending = searchState.pending === PendingState.LOADING;
+  const pending = searchState.meta.pending === PendingState.LOADING;
 
   const [searchResults, setSearchResults] = useState<SearchResult | undefined>(undefined);
 
   useEffect(() => {
-    if (searchState.pending === PendingState.COMPLETED) {
+    if (searchState.meta.pending === PendingState.COMPLETED) {
       setSearchResults(searchState.items?.[qsString]);
     }
-  }, [searchState.pending, searchState.items]);
+  }, [searchState.meta.pending, searchState.items]);
 
   useEffect(() => {
     const res = searchState.items?.[qsString];

@@ -16,22 +16,22 @@ import { isDemoMode } from './utility';
 export type ResponseError = superRequest.ResponseError;
 export const isResponseError = (obj: unknown): obj is ResponseError => (
   obj != null
-    && (obj as ResponseError).status != null
-    && typeof (obj as ResponseError).status === 'number'
-    && (obj as ResponseError).response != null); // eslint-disable-line no-underscore-dangle, @typescript-eslint/no-explicit-any
+  && (obj as ResponseError).status != null
+  && typeof (obj as ResponseError).status === 'number'
+  && (obj as ResponseError).response != null); // eslint-disable-line no-underscore-dangle, @typescript-eslint/no-explicit-any
 
 export type NetworkError = {
   message: string;
-  method:  'DELETE' | 'GET' | 'PATCH' | 'PUT' | 'POST';
-  status:  undefined;
-  url:     string;
+  method: 'DELETE' | 'GET' | 'PATCH' | 'PUT' | 'POST';
+  status: undefined;
+  url: string;
 };
 export const isNetworkError = (obj: unknown): obj is NetworkError => (
   obj != null
-    && (obj as NetworkError).status === undefined
-    && ['DELETE', 'GET', 'PATCH', 'PUT', 'POST'].includes((obj as NetworkError).method)
-    && (obj as NetworkError).url != null && (obj as NetworkError).url.length > 0
-    && !isResponseError(obj)
+  && (obj as NetworkError).status === undefined
+  && ['DELETE', 'GET', 'PATCH', 'PUT', 'POST'].includes((obj as NetworkError).method)
+  && (obj as NetworkError).url != null && (obj as NetworkError).url.length > 0
+  && !isResponseError(obj)
 );
 
 export const refreshToken = (() => {
@@ -68,26 +68,26 @@ export const request = (): SuperAgentStatic => {
   const customRequest = defaults();
 
   if (!isDemoMode()) {
-  // Add the user token if the user is logged in
-  const accountState = store.getState().account;
-  const account = accountState.item;
-  if (account && account.id) {
-    const decodedToken: JwtPayload | undefined = account.token ? jwtDecode<JwtPayload>(account.token) : undefined;
+    // Add the user token if the user is logged in
+    const accountState = store.getState().account;
+    const account = accountState.item;
+    if (account && account.id) {
+      const decodedToken: JwtPayload | undefined = account.token ? jwtDecode<JwtPayload>(account.token) : undefined;
 
-    // Check if the user's token is outdated.
-    // The token expired after 14 days.
-    // See: https://github.com/open-eats/openeats-api/blob/master/base/settings.py#L174
-    if (decodedToken == null || decodedToken.exp == null) {
-      // If the token is undefined.
-      // Log the user out and direct them to the login page.
-      store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
-    } else if (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp)) {
-      // If it is then call for a refreshed token.
-      // If the token is to old, the request will fail and
-      // the user will be logged-out and redirect to the login screen.
-      refreshToken.instance(account.token);
-    }
-    customRequest.set('Authorization', `JWT ${account.token}`);
+      // Check if the user's token is outdated.
+      // The token expired after 14 days.
+      // See: https://github.com/open-eats/openeats-api/blob/master/base/settings.py#L174
+      if (decodedToken == null || decodedToken.exp == null) {
+        // If the token is undefined.
+        // Log the user out and direct them to the login page.
+        store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
+      } else if (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp)) {
+        // If it is then call for a refreshed token.
+        // If the token is to old, the request will fail and
+        // the user will be logged-out and redirect to the login screen.
+        refreshToken.instance(account.token);
+      }
+      customRequest.set('Authorization', `JWT ${account.token}`);
     }
   }
 

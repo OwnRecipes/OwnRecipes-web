@@ -16,24 +16,25 @@ const EditGuard: React.FC = () => {
   const accountState = useSelector((state: CombinedStore) => state.account);
   const recipeFormState = useSelector((state: CombinedStore) => state.recipeForm);
   const recipeForm = recipeFormState.item;
+  const { pending } = recipeFormState.meta;
 
   const user = accountState.item;
   const mayEdit = user != null && (isNew || (recipeForm != null && user.id === recipeForm.author));
 
   useEffect(() => {
-    if (user != null && recipeFormState.pending === PendingState.COMPLETED && recipeForm != null && !mayEdit) {
+    if (user != null && pending === PendingState.COMPLETED && recipeForm != null && !mayEdit) {
       nav(getResourcePath(`/recipe/${recipeSlug}`));
     }
   }, [user, recipeFormState, recipeForm, mayEdit]);
 
   useEffect(() => {
     if (recipeForm == null) return;
-    if (recipeFormState.pending === PendingState.COMPLETED) {
+    if (pending === PendingState.COMPLETED) {
       if (isNew) {
         nav(getResourcePath(`/recipe/edit/${recipeForm.slug}`));
       }
     }
-  }, [recipeFormState.pending]);
+  }, [pending]);
 
   return null;
 };

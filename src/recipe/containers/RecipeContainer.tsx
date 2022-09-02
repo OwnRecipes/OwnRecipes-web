@@ -34,27 +34,27 @@ const RecipeContainer: React.FC = () => {
     }
   }, [paramsRecipe]);
 
-  const accountState = useSelector((state: CombinedStore) => state.account);
-  const account = accountState.item;
+  const userId = useSelector((state: CombinedStore) => state.account.item?.id);
   // TODO Lists
   // const listsState   = useSelector((state: CombinedStore) => state.lists);
   // const lists: listsState.items;
-  const recipeState  = useSelector((state: CombinedStore) => state.recipe);
-  const recipe = recipeState.item;
-  const prevRecipe = useRef<Recipe | undefined>();
+  const recipeState = useSelector((state: CombinedStore) => state.recipe);
+  const recipe      = recipeState.item;
+  const recipeMeta  = recipeState.meta;
+  const prevRecipe  = useRef<Recipe | undefined>();
 
   // const [showItemModal, setShowItemModal] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   // If recipe not found, redirect to NotFound-Page
   useEffect(() => {
-    if (_.get(recipeState.error, 'status') === 404) {
+    if (_.get(recipeMeta.error, 'status') === 404) {
       nav(getResourcePath('/NotFound'));
     }
-  }, [recipeState.error]);
+  }, [recipeMeta.error]);
 
   const recipeSlug = params.recipe ?? '';
-  const showEditLink = (account != null && account.id === recipe?.author);
+  const showEditLink = (userId != null && userId === recipe?.author);
 
   const handlePreloadRecipe = () => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
@@ -106,7 +106,7 @@ const RecipeContainer: React.FC = () => {
             validation={menuItemValidation} /> */}
         <RecipeScheme
             recipe       = {recipe}
-            recipeState  = {recipeState}
+            recipeMeta   = {recipeMeta}
 
             showEditLink = {showEditLink}
 

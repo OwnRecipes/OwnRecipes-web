@@ -36,7 +36,7 @@ const Ratings: React.FC = () => {
           userId     = {account?.id}
           userRole   = {account?.role}
           ratings    = {ratings}
-          pending    = {ratingsState.pending}
+          pending    = {ratingsState.meta.pending}
 
           addRating  = {addRatingCallback}
           removeRating = {removeRatingCallback} />

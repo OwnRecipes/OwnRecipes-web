@@ -4,13 +4,13 @@ import RecipeHeader from './RecipeHeader';
 import '../css/recipe.css';
 
 import { Recipe } from '../store/RecipeTypes';
-import GenericReducerType from '../../common/store/GenericReducerType';
+import { ReducerMeta } from '../../common/store/GenericReducerType';
 import IngredientsPanel from './IngredientsPanel';
 import { Col, Row } from 'react-bootstrap';
 
 interface IRecipeSchemeProps {
   recipe:       Recipe | undefined;
-  recipeState:  GenericReducerType;
+  recipeMeta:   ReducerMeta;
   showEditLink: boolean;
 
   onEditRecipe: () => void;
@@ -29,7 +29,7 @@ interface IRecipeSchemeProps {
   updateServings: (servings: number) => void;
 }
 
-const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeState, showEditLink, onEditRecipe, deleteRecipe, updateServings }: IRecipeSchemeProps) => (
+const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, showEditLink, onEditRecipe, deleteRecipe, updateServings }: IRecipeSchemeProps) => (
   <div className='recipe-details'>
     <RecipeHeader
         recipe = {recipe}
@@ -44,7 +44,7 @@ const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeState, showE
       <Col xl={4} lg={12}>
         <IngredientsPanel
             recipe = {recipe}
-            recipeState = {recipeState}
+            recipeMeta = {recipeMeta}
 
             // lists = {lists}
 

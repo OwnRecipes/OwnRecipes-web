@@ -1,13 +1,13 @@
 import { defineMessages, useIntl } from 'react-intl';
 
 import Alert from '../../common/components/Alert';
-import GenericReducerType from '../../common/store/GenericReducerType';
+import { ReducerMeta } from '../../common/store/GenericReducerType';
 
 export interface ILoginAlert {
-  reducerState: GenericReducerType;
+  reducerMeta: ReducerMeta;
 }
 
-const LoginAlert: React.FC<ILoginAlert> = ({ reducerState }: ILoginAlert) => {
+const LoginAlert: React.FC<ILoginAlert> = ({ reducerMeta }: ILoginAlert) => {
   const { formatMessage } = useIntl();
 
   const messages = defineMessages({
@@ -23,7 +23,7 @@ const LoginAlert: React.FC<ILoginAlert> = ({ reducerState }: ILoginAlert) => {
     },
   });
 
-  const { error } = reducerState;
+  const { error } = reducerMeta;
 
   return (
     <>

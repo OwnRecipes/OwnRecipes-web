@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
 
-  const accountState = useSelector((state: CombinedStore) => state.account);
+  const accountMeta = useSelector((state: CombinedStore) => state.account.meta);
 
   const handleLogin = (username: string, password: string) => {
     dispatch(AuthActions.getToken(username, password));
@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
 
         <Modal.Body>
           <LoginForm
-              accountState={accountState}
+              accountMeta={accountMeta}
               onLogin={handleLogin} />
           <hr />
           <SignUpInfo />
