@@ -110,7 +110,7 @@ export function runFieldValidator(result: ValidationResult, valueValidations: Va
 
   if (!hasError) {
     // reset previous errors
-    _.unset(result, name);
+    _.set(result, name, undefined);
   }
 }
 
