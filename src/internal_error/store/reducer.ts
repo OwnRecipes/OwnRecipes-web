@@ -5,9 +5,9 @@ const defaultState: InternalErrorState = { item: undefined };
 
 const reducer = (state = defaultState, action: InternalErrorAction): InternalErrorState => {
   if (INTERNAL_ERROR_STORE === action.store) {
-    switch (action.type) {
+    switch (action.typs) {
       case ACTION.RESET: return defaultState;
-      case ACTION.ERROR: return ReduxHelper.setItem(state, action.data);
+      case ACTION.ERROR: return ReduxHelper.setItem(state, action.payload);
       default: break;
     }
   }

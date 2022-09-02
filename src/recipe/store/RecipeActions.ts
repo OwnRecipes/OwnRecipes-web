@@ -1,78 +1,102 @@
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { Recipe, RecipeActionTypes, RecipeDispatch, RECIPE_STORE, toRecipe } from './RecipeTypes';
-import { ACTION } from '../../common/store/ReduxHelper';
+import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
 
 export const load = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
-  dispatch({ store: RECIPE_STORE, type: ACTION.GET_START });
+  dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.GET_START) });
   request()
     .get(`${serverURLs.recipe}${recipeSlug}/`)
     .then(res => {
-      dispatch({ store: RECIPE_STORE, type: ACTION.GET_SUCCESS, data: toRecipe(res.body) });
+      dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.GET_SUCCESS), payload: toRecipe(res.body) });
     })
     .catch(err => dispatch(handleError(err, RECIPE_STORE)));
 };
 
 export const deleteRecipe = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
-  dispatch({ store: RECIPE_STORE, type: ACTION.DELETE_START });
+  dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.DELETE_START) });
   request()
     .delete(`${serverURLs.recipe}${recipeSlug}/`)
     .then(() => {
-      dispatch({ store: RECIPE_STORE, type: RecipeActionTypes.RECIPE_DELETE, data: { slug: recipeSlug } });
+      dispatch({ ...toBasicAction(RECIPE_STORE, RecipeActionTypes.RECIPE_DELETE), payload: { slug: recipeSlug } });
     })
     .catch(err => dispatch(handleError(err, RECIPE_STORE)));
 };
 
 export const updateServings = (recipeSlug: string, value: number) => (dispatch: RecipeDispatch) => {
   dispatch({
-    store: RECIPE_STORE,
-    type: RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_UPDATE,
-    recipeSlug: recipeSlug,
-    customServings: value,
+    ...toBasicAction(
+      RECIPE_STORE,
+      RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_UPDATE
+    ),
+    payload: {
+      recipeSlug: recipeSlug,
+      customServings: value,
+    },
   });
 };
 
 export const resetServings = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
   dispatch({
-    store: RECIPE_STORE,
-    type: RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_RESET,
-    recipeSlug: recipeSlug,
+    ...toBasicAction(
+      RECIPE_STORE,
+      RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_RESET
+    ),
+    payload: {
+      recipeSlug: recipeSlug,
+    },
   });
 };
 
 export const checkIngredient = (recipeSlug: string, id: number, value: boolean) => (dispatch: RecipeDispatch) => {
   dispatch({
-    store: RECIPE_STORE,
-    type: RecipeActionTypes.RECIPE_INGREDIENT_CHECK_INGREDIENT,
-    recipeSlug: recipeSlug,
-    id: id,
-    value: value,
+    ...toBasicAction(
+      RECIPE_STORE,
+      RecipeActionTypes.RECIPE_INGREDIENT_CHECK_INGREDIENT
+    ),
+    payload: {
+      recipeSlug: recipeSlug,
+      id: id,
+      value: value,
+    },
   });
 };
 
 export const checkSubRecipe = (recipeSlug: string, id: number, value: boolean) => (dispatch: RecipeDispatch) => {
   dispatch({
-    store: RECIPE_STORE,
-    type: RecipeActionTypes.RECIPE_INGREDIENT_CHECK_SUBRECIPE,
-    recipeSlug: recipeSlug,
-    id: id,
-    value: value,
+    ...toBasicAction(
+      RECIPE_STORE,
+      RecipeActionTypes.RECIPE_INGREDIENT_CHECK_SUBRECIPE
+    ),
+    payload: {
+      recipeSlug: recipeSlug,
+      id: id,
+      value: value,
+    },
   });
 };
 
 export const checkAll = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
   dispatch({
-    store: RECIPE_STORE,
-    type: RecipeActionTypes.RECIPE_INGREDIENT_CHECK_ALL,
-    recipeSlug: recipeSlug,
+    ...toBasicAction(
+      RECIPE_STORE,
+      RecipeActionTypes.RECIPE_INGREDIENT_CHECK_ALL
+    ),
+    payload: {
+      recipeSlug: recipeSlug,
+    },
   });
 };
 
 export const unCheckAll = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
   dispatch({
-    store: RECIPE_STORE,
-    type: RecipeActionTypes.RECIPE_INGREDIENT_UNCHECK_ALL,
-    recipeSlug: recipeSlug,
+    ...toBasicAction(
+      RECIPE_STORE,
+      RecipeActionTypes.RECIPE_INGREDIENT_UNCHECK_ALL
+    ),
+    payload: {
+      recipeSlug: recipeSlug,
+    },
   });
 };
 
@@ -101,26 +125,31 @@ export const bulkAdd = (recipeState: Recipe, list: string) => (dispatch: RecipeD
   checkedIngredients = checkedIngredients.reduce((a, b) => a.concat(b), []).concat(checkedSubRecipe);
 
   if (checkedIngredients.length > 0) {
-    dispatch({ type: RecipeConstants.RECIPE_LIST_LOADING });
+    dispatch({ ...toBasicAction(RECIPE_LIST_STORE, RecipeConstants.RECIPE_LIST_LOADING) });
     request()
       .post(serverURLs.bulk_list_item)
       .send(checkedIngredients)
       .then(res => {
-        dispatch({ type: RecipeConstants.RECIPE_LIST_COMPLETE });
+        dispatch({ ...toBasicAction(RECIPE_LIST_STORE, RecipeConstants.RECIPE_LIST_COMPLETE) });
         dispatch({
-          type: RecipeConstants.RECIPE_INGREDIENT_UNCHECK_ALL,
-          recipeSlug: recipeState.slug,
+          ...toBasicAction(
+            RECIPE_LIST_STORE
+            RecipeConstants.RECIPE_INGREDIENT_UNCHECK_ALL
+          ),
+          payload: {
+            recipeSlug: recipeState.slug,
+          },
         });
       })
-      .catch(err => { dispatch({ type: RecipeConstants.RECIPE_LIST_ERROR }); });
+      .catch(err => dispatch(handleError(err, RECIPE_LIST_STORE)));
   }
 };
 */
 
 export const preload = (recipe: Partial<Recipe>) => (dispatch: RecipeDispatch) => {
-  dispatch({ store: RECIPE_STORE, type: ACTION.PRELOAD, data: recipe });
+  dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.PRELOAD), payload: recipe });
 };
 
 export const reset = () => (dispatch: RecipeDispatch) => {
-  dispatch({ store: RECIPE_STORE, type: ACTION.RESET });
+  dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.RESET) });
 };

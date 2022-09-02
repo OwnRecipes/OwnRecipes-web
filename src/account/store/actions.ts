@@ -4,11 +4,11 @@ import moment from 'moment';
 import { handleError, refreshToken, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { AccountActionTypes, ACCOUNT_STORE, AccountDispatch, ACCOUNT_TOKEN_STORAGE_KEY, UserAccount, LoginDto, toUserAccount } from './types';
-import { ACTION } from '../../common/store/ReduxHelper';
+import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
 import LocalStorageHelper from '../../common/LocalStorageHelper';
 
 export const getToken = (username: string, pass: string) => (dispatch: AccountDispatch) => {
-  dispatch({ store: ACCOUNT_STORE, type: ACTION.GET_START });
+  dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.GET_START) });
 
   const url = serverURLs.auth_token;
   request()
@@ -16,17 +16,17 @@ export const getToken = (username: string, pass: string) => (dispatch: AccountDi
     .send({ username: username, password: pass })
     .then(res => {
       const data: LoginDto = res.body;
-      dispatch({ store: ACCOUNT_STORE, type: AccountActionTypes.LOGIN, user: toUserAccount(data) });
+      dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data) });
     })
     .catch(err => dispatch(handleError(err, ACCOUNT_STORE)));
 };
 
 export const tryAutoLogin = () => (dispatch: AccountDispatch) => {
-  dispatch({ store: ACCOUNT_STORE, type: ACTION.GET_START });
+  dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.GET_START) });
 
   const storageItem = LocalStorageHelper.getItem(ACCOUNT_TOKEN_STORAGE_KEY);
   if (storageItem == null) {
-    dispatch({ store: ACCOUNT_STORE, type: ACTION.SOFT_RESET });
+    dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.SOFT_RESET) });
     return;
   }
   const user: UserAccount = JSON.parse(storageItem);
@@ -36,13 +36,13 @@ export const tryAutoLogin = () => (dispatch: AccountDispatch) => {
     if (decodedToken.exp != null && (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp))) {
       refreshToken.instance(user.token);
     } else {
-      dispatch({ store: ACCOUNT_STORE, type: AccountActionTypes.LOGIN, user: user });
+      dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: user });
     }
   } else {
-    dispatch({ store: ACCOUNT_STORE, type: ACTION.SOFT_RESET });
+    dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.SOFT_RESET) });
   }
 };
 
 export const logUserOut = () => (dispatch: AccountDispatch) => {
-  dispatch({ store: ACCOUNT_STORE, type: AccountActionTypes.LOGOUT });
+  dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
 };

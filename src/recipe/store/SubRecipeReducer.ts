@@ -1,4 +1,6 @@
 import { Dispatch as ReduxDispatch } from 'redux';
+import { BasicAction, PayloadAction } from '../../common/store/ReduxHelper';
+import { QuantityFormatter } from './IngredientReducer';
 import { SubRecipe } from './RecipeTypes';
 
 export const RECIPE_SUBRECIPES_STORE = '@@recipeSubrecipes';
@@ -8,32 +10,31 @@ export enum RecipeSubrecipesReducerActionTypes {
   RECIPE_SUBRECIPES_SERVINGS_UPDATE = 'RECIPE_SUBRECIPES_SERVINGS_UPDATE',
 }
 
-export interface IRecipeSubrecipesLoadAction {
+export type IRecipeSubrecipesLoadAction = {
   store: typeof RECIPE_SUBRECIPES_STORE;
-  type: typeof RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_LOAD;
-  subrecipes: Array<SubRecipe>;
-  formatQuantity: (numerator: number | undefined, denominator: number) => string;
-}
+  typs: typeof RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_LOAD;
+  formatQuantity: QuantityFormatter;
+} & PayloadAction<Array<SubRecipe>>;
 
-export interface IRecipeSubrecipesIngredientsUpdateAction {
+export type IRecipeSubrecipesIngredientsUpdateAction = {
   store: typeof RECIPE_SUBRECIPES_STORE;
-  type: typeof RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_SERVINGS_UPDATE;
-  formatQuantity: (numerator: number | undefined, denominator: number) => string;
-}
+  typs: typeof RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_SERVINGS_UPDATE;
+  formatQuantity: QuantityFormatter;
+} & BasicAction;
 
-export type RecipeSubrecipesState = Array<SubRecipe>;
-export type RecipeSubrecipesAction = IRecipeSubrecipesLoadAction | IRecipeSubrecipesIngredientsUpdateAction;
-export type RecipeSubrecipesDispatch  = ReduxDispatch<RecipeSubrecipesAction>;
+export type RecipeSubrecipesState    = Array<SubRecipe>;
+export type RecipeSubrecipesAction   = IRecipeSubrecipesLoadAction | IRecipeSubrecipesIngredientsUpdateAction;
+export type RecipeSubrecipesDispatch = ReduxDispatch<RecipeSubrecipesAction>;
 
-const merge = (state: RecipeSubrecipesState, action: IRecipeSubrecipesLoadAction) => {
+const merge = (state: RecipeSubrecipesState, subrecipes: Array<SubRecipe>, formatQuantity: QuantityFormatter) => {
   const list: Array<number> = [];
   state
     .filter(subrecipe => subrecipe.checked)
     .forEach(subrecipe => list.push(subrecipe.child_recipe_id));
 
-  return action.subrecipes.map(subrecipe => {
+  return subrecipes.map(subrecipe => {
     const checked = list.includes(subrecipe.child_recipe_id);
-    const custom = action.formatQuantity(subrecipe.numerator, subrecipe.denominator);
+    const custom = formatQuantity(subrecipe.numerator, subrecipe.denominator);
     return { ...subrecipe, quantity: custom, checked: checked };
   });
 };
@@ -42,9 +43,9 @@ const defaultState: RecipeSubrecipesState = [];
 
 const subRecipes = (state = defaultState, action: RecipeSubrecipesAction) => {
   if (action.store === RECIPE_SUBRECIPES_STORE) {
-    switch (action.type) {
+    switch (action.typs) {
       case RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_LOAD:
-        return merge(state, action);
+        return merge(state, action.payload, action.formatQuantity);
       case RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_SERVINGS_UPDATE:
         return state.map(i => {
           const custom = action.formatQuantity(i.numerator, i.denominator);

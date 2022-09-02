@@ -1,7 +1,7 @@
 import * as _ from 'lodash-es';
 
 import { PendingState } from '../../common/store/GenericReducerType';
-import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
+import ReduxHelper, { ACTION, GenericItemReducerAction, toBasicAction } from '../../common/store/ReduxHelper';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 import { RecipeFormAction, RecipeFormActionTypes, RecipeFormState, RECIPE_FORM_STORE } from './types';
 import ingredient, { RecipeIngredientReducerActionTypes, RECIPE_INGREDIENTS_STORE } from '../../recipe/store/IngredientReducer';
@@ -12,26 +12,34 @@ const defaultState: RecipeFormState = ReduxHelper.getItemReducerDefaultState(REC
 
 const reducer = (state = defaultState, action: RecipeFormAction): RecipeFormState => {
   if (RECIPE_FORM_STORE === action.store) {
-    switch (action.type) {
+    switch (action.typs) {
       case ACTION.GET_SUCCESS:
         {
-          const actionRecipe = action.data;
+          const actionRecipe = action.payload;
 
           const isNew = state.item == null || state.item.id !== actionRecipe.id || state.item.ingredientGroups == null;
           const updServings = isNew ? actionRecipe.servings : (state.item?.customServings ?? 1);
           const subRecipes = subrecipes(
             [],
-            { subrecipes:     actionRecipe.subrecipes,
+            {
+              ...toBasicAction(
+                RECIPE_SUBRECIPES_STORE,
+                RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_LOAD
+              ),
+              payload: actionRecipe.subrecipes,
               formatQuantity: fq.bind(this, updServings, actionRecipe.servings),
-              store: RECIPE_SUBRECIPES_STORE,
-              type:  RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_LOAD }
+            }
           );
           const ingredients = ingredient(
             [],
-            { ingredientGroups: actionRecipe.ingredientGroups,
-              formatQuantity:   fq.bind(this, updServings, actionRecipe.servings),
-              store: RECIPE_INGREDIENTS_STORE,
-              type:  RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD }
+            {
+              ...toBasicAction(
+                RECIPE_INGREDIENTS_STORE,
+                RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD
+              ),
+              payload: actionRecipe.ingredientGroups,
+              formatQuantity: fq.bind(this, updServings, actionRecipe.servings),
+            }
           );
 
           const updItem: Recipe = {
@@ -46,7 +54,7 @@ const reducer = (state = defaultState, action: RecipeFormAction): RecipeFormStat
          {
            const newState = _.cloneDeep(defaultState);
 
-           newState.item  = action.data as Recipe;
+           newState.item  = action.payload as Recipe;
            newState.pending = PendingState.INITIAL;
            return newState;
          }
@@ -55,22 +63,26 @@ const reducer = (state = defaultState, action: RecipeFormAction): RecipeFormStat
           const newState = _.clone(state);
 
           const newItem  = _.clone(newState.item) ?? {} as Recipe;
-          _.set(newItem, action.name, action.value);
+          _.set(newItem, action.payload.name, action.payload.value);
 
           if (state.item?.ingredientGroups !== newItem.ingredientGroups && newItem.ingredientGroups) {
             const ingredients = ingredient(
               [],
-              { ingredientGroups: newItem.ingredientGroups,
-                formatQuantity:   fq.bind(this, newItem.servings ?? 1, newItem.servings ?? 1),
-                store: RECIPE_INGREDIENTS_STORE,
-                type:  RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD }
+              {
+                ...toBasicAction(
+                  RECIPE_INGREDIENTS_STORE,
+                  RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD
+                ),
+                payload: newItem.ingredientGroups,
+                formatQuantity: fq.bind(this, newItem.servings ?? 1, newItem.servings ?? 1),
+              }
             );
             newItem.ingredientGroups = ingredients;
           }
 
           newState.item   = newItem;
           newState.dirty  = true;
-          ReduxHelper.doSetValidation(newState, action.validation, 'merge');
+          ReduxHelper.doSetValidation(newState, action.payload.validation, 'merge');
 
           return newState;
         }
@@ -78,7 +90,7 @@ const reducer = (state = defaultState, action: RecipeFormAction): RecipeFormStat
     }
   }
 
-  return ReduxHelper.caseItemDefaultReducer(state, action, defaultState) as RecipeFormState;
+  return ReduxHelper.caseItemDefaultReducer(state, action as GenericItemReducerAction<Recipe>, defaultState) as RecipeFormState;
 };
 
 export default reducer;

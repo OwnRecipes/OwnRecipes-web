@@ -2,7 +2,7 @@ import { Dispatch as ReduxDispatch } from 'redux';
 
 import { NUMBER_UNDEFINED, STRING_UNDEFINED } from '../../common/constants';
 import ItemReducerType from '../../common/store/ItemReducerType';
-import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
+import { GenericItemReducerAction, PayloadAction } from '../../common/store/ReduxHelper';
 
 export type Quantity = {
   numerator?:   number;
@@ -365,42 +365,45 @@ export enum RecipeActionTypes {
 
 export const RECIPE_STORE = '@@recipe';
 
-export interface IRecipeSlugAction {
+export type IRecipeSlugAction = {
   store: typeof RECIPE_STORE;
-  type:  typeof RecipeActionTypes.RECIPE_DELETE;
-  data:  { slug: string };
-}
+  typs:  typeof RecipeActionTypes.RECIPE_DELETE;
+} & PayloadAction<{ slug: string }>;
 
-export interface IRecipeIngredientUpdateServingAction {
+export type IRecipeIngredientUpdateServingAction = {
   store: typeof RECIPE_STORE;
-  type:  typeof RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_UPDATE;
+  typs:  typeof RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_UPDATE;
+} & PayloadAction<{
   recipeSlug:     string;
   customServings: number;
-}
+}>;
 
-export interface IRecipeIngredientServingSimpleAction {
+export type IRecipeIngredientServingSimpleAction = {
   store: typeof RECIPE_STORE;
-  type: typeof RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_RESET
+  typs: typeof RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_RESET
       | typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_ALL
       | typeof RecipeActionTypes.RECIPE_INGREDIENT_UNCHECK_ALL;
-  recipeSlug: string;
-}
+} & PayloadAction<{
+  recipeSlug: string
+}>;
 
-export interface IRecipeIngredientCheckIngredientAction {
+export type IRecipeIngredientCheckIngredientAction = {
   store: typeof RECIPE_STORE;
-  type:  typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_INGREDIENT;
+  typs:  typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_INGREDIENT;
+} & PayloadAction<{
   recipeSlug: string;
   id:    number;
   value: boolean;
-}
+}>;
 
-export interface IRecipeIngredientCheckSubRecipeAction {
+export type IRecipeIngredientCheckSubRecipeAction = {
   store: typeof RECIPE_STORE;
-  type:  typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_SUBRECIPE;
+  typs:  typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_SUBRECIPE;
+} & PayloadAction<{
   recipeSlug: string;
   id:    number;
   value: boolean;
-}
+}>;
 
 export type RecipeState     = ItemReducerType<Recipe>;
 export type RecipeAction    = IRecipeSlugAction | IRecipeIngredientUpdateServingAction

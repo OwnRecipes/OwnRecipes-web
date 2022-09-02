@@ -1,5 +1,6 @@
 import { Dispatch as ReduxDispatch } from 'redux';
 import { LanguageCode } from '../../../common/language';
+import { BasicAction, PayloadAction } from '../../../common/store/ReduxHelper';
 
 export enum ThemeMode {
   DARK = 'dark',
@@ -31,18 +32,17 @@ export const SETTINGS_STORE = '@@settings';
 export const SETTING_THEME_STORAGE_KEY = 'themeMode';
 export const SETTING_LANGUAGE_STORAGE_KEY = 'language';
 
-export interface ISettingsInitAction {
+export type ISettingsInitAction = {
   store: typeof SETTINGS_STORE;
-  type: SettingsActionTypes.INIT;
+  typs:  SettingsActionTypes.INIT;
   tokenId: string | undefined;
-}
+} & BasicAction;
 
-export interface ISettingsDataAction {
+export type ISettingsDataAction = {
   store: typeof SETTINGS_STORE;
-  type: typeof SettingsActionTypes.THEME_MODE | typeof SettingsActionTypes.LANGUAGE;
-  data: string;
+  typs:  typeof SettingsActionTypes.THEME_MODE | typeof SettingsActionTypes.LANGUAGE;
   tokenId: string | undefined;
-}
+} & PayloadAction<string>;
 
 export type SettingsState    = Settings;
 export type SettingsAction   = ISettingsInitAction | ISettingsDataAction;

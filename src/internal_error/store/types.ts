@@ -1,8 +1,7 @@
 import { Dispatch as ReduxDispatch } from 'redux';
-import { ACTION, GenericResetAction } from '../../common/store/ReduxHelper';
+import { ACTION, GenericResetAction, PayloadAction } from '../../common/store/ReduxHelper';
 
 export type InternalError = {
-  /** Store-Ident */
   store: string;
 
   name:    string;
@@ -19,11 +18,10 @@ export type InternalError = {
 
 export const INTERNAL_ERROR_STORE = '@@INTERNAL_ERROR_STORE';
 
-interface IInternalErrorSetAction {
+type IInternalErrorSetAction = {
   store: typeof INTERNAL_ERROR_STORE;
-  type:  ACTION.ERROR;
-  data:  InternalError;
-}
+  typs:  ACTION.ERROR;
+} & PayloadAction<InternalError>;
 
 export type InternalErrorAction = IInternalErrorSetAction | GenericResetAction;
 export type InternalErrorDispatch = ReduxDispatch<InternalErrorAction>;

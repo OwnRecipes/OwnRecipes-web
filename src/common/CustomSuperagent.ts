@@ -7,7 +7,7 @@ import moment from 'moment';
 import store from './store/store';
 import { serverURLs } from './config';
 import { AccountAction, AccountActionTypes, ACCOUNT_STORE, LoginDto, toUserAccount } from '../account/store/types';
-import { ACTION } from './store/ReduxHelper';
+import { ACTION, toBasicAction } from './store/ReduxHelper';
 import * as InternalErrorActions from '../internal_error/store/actions';
 import { logUserOut } from '../account/store/actions';
 import { toValidationErrors, ValidationError } from './store/Validation';
@@ -45,11 +45,11 @@ export const refreshToken = (() => {
       .then(res => {
         blocking = false;
         const data: LoginDto = res.body;
-        store.dispatch({ store: ACCOUNT_STORE, type: AccountActionTypes.LOGIN, user: toUserAccount(data) } as AccountAction);
+        store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data) } as AccountAction);
       })
       .catch(() => {
         blocking = false;
-        store.dispatch({ store: ACCOUNT_STORE, type: AccountActionTypes.LOGOUT } as AccountAction);
+        store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) } as AccountAction);
       });
   };
 
@@ -80,7 +80,7 @@ export const request = (): SuperAgentStatic => {
     if (decodedToken == null || decodedToken.exp == null) {
       // If the token is undefined.
       // Log the user out and direct them to the login page.
-      store.dispatch({ store: ACCOUNT_STORE, type: AccountActionTypes.LOGOUT });
+      store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
     } else if (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp)) {
       // If it is then call for a refreshed token.
       // If the token is to old, the request will fail and
@@ -108,15 +108,19 @@ export const handleError = (error: Error, storeIdent: string): any => (dispatch:
     if (respErr.response != null && (respErr.response.status === 400 || respErr.response.status === 409)) {
       // Validation Error
       dispatch({
-        store:   storeIdent,
-        type:    ACTION.VALIDATION,
-        data:    toValidationErrors(respErr),
+        ...toBasicAction(
+          storeIdent,
+          ACTION.VALIDATION
+        ),
+        payload: toValidationErrors(respErr),
       });
     } else if (_.get(respErr.response, 'req.method') === 'get' && respErr.response != null && respErr.response.status === 404) {
       dispatch({
-        store:   storeIdent,
-        type:    ACTION.GET_SUCCESS,
-        data:    undefined,
+        ...toBasicAction(
+          storeIdent,
+          ACTION.GET_SUCCESS
+        ),
+        payload: undefined,
       });
     } else if (respErr.response != null && respErr.response.status === 401) {
       // Invalid token
@@ -129,29 +133,32 @@ export const handleError = (error: Error, storeIdent: string): any => (dispatch:
       const validationError: ValidationError = { code: '500', message: respErr.message, sourceError: respErr };
       dispatch(InternalErrorActions.setInternalError(storeIdent, error));
       dispatch({
-        store: storeIdent,
-        type:  ACTION.ERROR,
-        data:  validationError,
+        ...toBasicAction(
+          storeIdent,
+          ACTION.ERROR
+        ),
+        payload: validationError,
       });
     }
 
     dispatch({
-      store:   storeIdent,
-      type:    ACTION.ERROR,
-      data:    error,
+      ...toBasicAction(
+        storeIdent,
+        ACTION.ERROR
+      ),
+      payload: error,
     });
   } else if (isNetworkError(error)) {
-    dispatch({
-      store:   storeIdent,
-      type:    ACTION.NO_CONNECTION,
-    });
+    dispatch({ ...toBasicAction(storeIdent, ACTION.NO_CONNECTION) });
   } else {
     // Unknown internal error
     dispatch(InternalErrorActions.setInternalError(storeIdent, error));
     dispatch({
-      store: storeIdent,
-      type:  ACTION.ERROR,
-      data:  error,
+      ...toBasicAction(
+        storeIdent,
+        ACTION.ERROR
+      ),
+      payload: error,
     });
   }
 };

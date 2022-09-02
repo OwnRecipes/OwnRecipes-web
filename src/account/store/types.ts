@@ -2,7 +2,7 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { Dispatch as ReduxDispatch } from 'redux';
 
 import ItemReducerType from '../../common/store/ItemReducerType';
-import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
+import { BasicAction, GenericItemReducerAction, PayloadAction } from '../../common/store/ReduxHelper';
 import UserRole from '../../common/types/UserRole';
 
 export type LoginDto = {
@@ -58,16 +58,15 @@ export enum AccountActionTypes {
 export const ACCOUNT_STORE = '@@account';
 export const ACCOUNT_TOKEN_STORAGE_KEY = 'token';
 
-export interface IAccountLoginAction {
+export type IAccountLoginAction = {
   store: typeof ACCOUNT_STORE;
-  type:  typeof AccountActionTypes.LOGIN;
-  user:  UserAccount;
-}
+  typs:  typeof AccountActionTypes.LOGIN;
+} & PayloadAction<UserAccount>;
 
-export interface IAccountLogoutAction {
+export type IAccountLogoutAction = {
   store: typeof ACCOUNT_STORE;
-  type:  typeof AccountActionTypes.LOGOUT;
-}
+  typs:  typeof AccountActionTypes.LOGOUT;
+} & BasicAction;
 
 export type AccountState    = ItemReducerType<UserAccount>;
 export type AccountAction   = IAccountLoginAction | IAccountLogoutAction | GenericItemReducerAction<UserAccount>;

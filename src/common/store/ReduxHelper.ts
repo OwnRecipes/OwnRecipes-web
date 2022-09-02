@@ -31,102 +31,102 @@ export enum ACTION {
   NO_CONNECTION = 'NO_CONNECTION',
 }
 
-export type GenericCreateStartAction = {
-  store: string;
-  type:  typeof ACTION.CREATE_START;
+export type BasicReduxAction = {
+  /** @deprecated */
+  type: string;
 }
+
+export type BasicAction = {
+  store: string;
+  // typs: string; // uncommented to not generalize the typ-ids
+} & BasicReduxAction;
+
+export type PayloadAction<T> = {
+  payload: T;
+} & BasicAction;
+
+export function toBasicAction<TStore extends string, TTyps>(store: TStore, typs: TTyps): {
+  store: TStore,
+  type:  string,
+  typs:  TTyps,
+} {
+  return {
+    store: store,
+    type:  `${store}/${typs}`,
+    typs:  typs,
+  };
+}
+
+export type GenericCreateStartAction = {
+  typs: typeof ACTION.CREATE_START;
+} & BasicAction;
 
 export type ItemCreateSuccessAction<T> = {
-  store: string;
-  type:  typeof ACTION.CREATE_SUCCESS;
-  data:  T;
-}
+  typs: typeof ACTION.CREATE_SUCCESS;
+} & PayloadAction<T>;
 
 export type GenericDeleteStartAction = {
-  store: string;
-  type:  typeof ACTION.DELETE_START;
-}
+  typs: typeof ACTION.DELETE_START;
+} & BasicAction;
 
 export type ItemDeleteSuccessAction = {
-  store: string;
-  type:  typeof ACTION.DELETE_SUCCESS;
-  data:  { id: number }
-}
+  typs: typeof ACTION.DELETE_SUCCESS;
+} & PayloadAction<{ id: number }>;
 
 export type GenericErrorAction = {
-  store: string;
-  type:  typeof ACTION.ERROR;
-  data?: ValidationResult | Error;
-}
+  typs: typeof ACTION.ERROR;
+} & BasicAction & Partial<PayloadAction<ValidationResult | Error>>;
 
 export type GenericGetStartAction = {
-  store: string;
-  type:  typeof ACTION.GET_START;
-}
+  typs: typeof ACTION.GET_START;
+} & BasicAction;
 
 export type ArrayGetSuccessAction<T> = {
-  store: string;
-  type:  typeof ACTION.GET_SUCCESS;
-  data:  Array<T>;
-}
+  typs: typeof ACTION.GET_SUCCESS;
+} & PayloadAction<Array<T>>;
 
 export type ItemGetSuccessAction<T> = {
-  store: string;
-  type:  typeof ACTION.GET_SUCCESS;
-  data:  T;
-}
+  typs: typeof ACTION.GET_SUCCESS;
+} & PayloadAction<T>;
 
 export type MapGetSuccessAction<T> = {
-  store: string;
-  type:  typeof ACTION.GET_SUCCESS;
-  id:    string | number;
-  data:  T;
-}
+  typs: typeof ACTION.GET_SUCCESS;
+  id:   string | number;
+} & PayloadAction<T>;
 
 export type GenericLoadingAction = {
-  store: string;
-  type:  typeof ACTION.LOADING;
-}
+  typs: typeof ACTION.LOADING;
+} & BasicAction;
 
 export type GenericNoConnectionAction = {
-  store: string;
-  type:  typeof ACTION.NO_CONNECTION;
-}
+  typs: typeof ACTION.NO_CONNECTION;
+} & BasicAction;
 
 export type GenericPreloadAction<T> = {
-  store: string;
-  type:  typeof ACTION.PRELOAD;
-  data:  Partial<T>;
-}
+  typs: typeof ACTION.PRELOAD;
+} & PayloadAction<Partial<T>>;
 
 export type GenericResetAction = {
-  store: string;
-  type:  typeof ACTION.RESET;
-}
+  typs: typeof ACTION.RESET;
+} & BasicAction;
 
 export type GenericSoftResetAction = {
-  store: string;
-  type:  typeof ACTION.SOFT_RESET;
-}
+  typs: typeof ACTION.SOFT_RESET;
+} & BasicAction;
 
 export type GenericUpdateStartAction = {
-  store: string;
-  type:  typeof ACTION.UPDATE_START;
-}
+  typs: typeof ACTION.UPDATE_START;
+} & BasicAction;
 
 export type ItemUpdateSuccessAction<T> = {
-  store: string;
-  type:  typeof ACTION.UPDATE_SUCCESS;
+  typs: typeof ACTION.UPDATE_SUCCESS;
   oldId: number;
-  data:  T;
-}
+} & PayloadAction<T>;
 
 export type ValidationResultAction = {
-  store: string;
-  type:  typeof ACTION.VALIDATION;
-  data?: ValidationResult;
+  typs:  typeof ACTION.VALIDATION;
   mode?: 'overwrite' | 'merge';
-}
+} & BasicAction & Partial<PayloadAction<ValidationResult>>;
 
 export type GenericReducerAction         = GenericErrorAction | GenericLoadingAction | GenericNoConnectionAction | GenericResetAction | GenericSoftResetAction;
 export type GenericItemReducerAction<T>  = ItemCreateSuccessAction<T> | ItemDeleteSuccessAction | ItemGetSuccessAction<T> | ItemUpdateSuccessAction<T> | ValidationResultAction | GenericCreateStartAction | GenericDeleteStartAction | GenericGetStartAction | GenericPreloadAction<T> | GenericUpdateStartAction | GenericReducerAction;
@@ -312,9 +312,9 @@ export default class ReduxHelper {
     return newState;
   };
 
-  static caseItemDefaultReducer = <T>(state: ItemReducerType<T>, action: AnyAction, defaultState: ItemReducerType<T>): ItemReducerType<T> => {
+  static caseItemDefaultReducer = <T>(state: ItemReducerType<T>, action: GenericItemReducerAction<T>, defaultState: ItemReducerType<T>): ItemReducerType<T> => {
     if (state.ident === action.store) {
-      switch (action.type) {
+      switch (action.typs) {
         case ACTION.CREATE_START:
         case ACTION.UPDATE_START:
           return ReduxHelper.setPending(state, PendingState.SAVING);
@@ -324,17 +324,17 @@ export default class ReduxHelper {
           return ReduxHelper.setPending(state, PendingState.LOADING);
 
         case ACTION.CREATE_SUCCESS:
-          return ReduxHelper.setItem(state, action.data);
+          return ReduxHelper.setItem(state, action.payload);
         case ACTION.DELETE_SUCCESS:
           return defaultState;
         case ACTION.GET_SUCCESS:
         case ACTION.UPDATE_SUCCESS:
-          return ReduxHelper.setItem(state, action.data);
+          return ReduxHelper.setItem(state, action.payload);
 
         case ACTION.PRELOAD:
-            return ReduxHelper.preloadItem(state, action.data);
+            return ReduxHelper.preloadItem(state, action.payload);
         case ACTION.VALIDATION:
-            return ReduxHelper.setValidation(state, action.data, action.mode);
+            return ReduxHelper.setValidation(state, action.payload, action.mode);
         default:
           break;
       }
@@ -343,15 +343,15 @@ export default class ReduxHelper {
     return ReduxHelper.caseDefaultReducer(state, action, defaultState);
   };
 
-  static caseArrayDefaultReducer = <T>(state: ArrayReducerType<T>, action: AnyAction, defaultState: ArrayReducerType<T>, itemStoreIdent?: string): ArrayReducerType<T> => {
+  static caseArrayDefaultReducer = <T>(state: ArrayReducerType<T>, action: GenericArrayReducerAction<T>, defaultState: ArrayReducerType<T>, itemStoreIdent?: string): ArrayReducerType<T> => {
     if (itemStoreIdent === action.store) {
       const itemAction: GenericItemReducerAction<T> = action as GenericItemReducerAction<T>;
-      switch (itemAction.type) {
+      switch (itemAction.typs) {
         case ACTION.CREATE_SUCCESS:
         case ACTION.GET_SUCCESS:
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const itemId = (itemAction.data as any)?.id;
+            const itemId = (itemAction.payload as any)?.id;
             if (itemId == null) return state;
 
             const updState = { ...state };
@@ -360,9 +360,9 @@ export default class ReduxHelper {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const oldIndex = updItems.findIndex(updItem => (updItem as any).id === itemId);
             if (oldIndex > -1) {
-              updItems.splice(oldIndex, 1, itemAction.data);
+              updItems.splice(oldIndex, 1, itemAction.payload);
             } else {
-              updItems.push(itemAction.data);
+              updItems.push(itemAction.payload);
             }
 
             updState.items = updItems;
@@ -370,11 +370,11 @@ export default class ReduxHelper {
           }
         case ACTION.DELETE_SUCCESS:
           {
-            if (itemAction.data == null || state.items == null) return state;
+            if (itemAction.payload == null || state.items == null) return state;
 
             const updState = { ...state };
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const updItems = [...state.items].filter((item: any) => item.id === itemAction.data);
+            const updItems = [...state.items].filter((item: any) => item.id === itemAction.payload);
             if (updItems.length < state.items.length) {
               updState.items = updItems;
               return updState;
@@ -385,12 +385,12 @@ export default class ReduxHelper {
         case ACTION.UPDATE_SUCCESS:
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (itemAction.data == null || (itemAction.data as any).id == null) return state;
+            if (itemAction.payload == null || (itemAction.payload as any).id == null) return state;
 
             const updState = { ...state };
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const updItems = state.items != null ? [...state.items].filter((item: any) => item.id === itemAction.data) : [];
-            updItems.push(itemAction.data);
+            const updItems = state.items != null ? [...state.items].filter((item: any) => item.id === itemAction.payload) : [];
+            updItems.push(itemAction.payload);
             updState.items = updItems;
             return updState;
           }
@@ -399,13 +399,13 @@ export default class ReduxHelper {
     }
 
     if (state.ident === action.store) {
-      switch (action.type) {
+      switch (action.typs) {
         case ACTION.GET_START:
           return ReduxHelper.setPending(state, PendingState.LOADING);
         case ACTION.GET_SUCCESS:
           {
-            if (action.data == null) return state;
-            return ReduxHelper.setArray(state, action.data);
+            if (action.payload == null) return state;
+            return ReduxHelper.setArray(state, action.payload);
           }
         default:
           break;
@@ -415,29 +415,29 @@ export default class ReduxHelper {
     return ReduxHelper.caseDefaultReducer(state, action, defaultState);
   };
 
-  static caseMapDefaultReducer = <T>(state: MapReducerType<T>, action: AnyAction, defaultState: MapReducerType<T>, itemStoreIdent?: string): MapReducerType<T> => {
+  static caseMapDefaultReducer = <T>(state: MapReducerType<T>, action: GenericMapReducerAction<T>, defaultState: MapReducerType<T>, itemStoreIdent?: string): MapReducerType<T> => {
     if (itemStoreIdent === action.store) {
       const itemAction: GenericItemReducerAction<T> = action as GenericItemReducerAction<T>;
-      switch (itemAction.type) {
+      switch (itemAction.typs) {
         case ACTION.GET_SUCCESS:
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (itemAction.data == null || (itemAction.data as any).id == null) return state;
+            if (itemAction.payload == null || (itemAction.payload as any).id == null) return state;
 
             const updState = { ...state };
             const updItems = state.items != null ? _.clone(state.items) : {};
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            _.set(updItems, (itemAction.data as any).id, itemAction.data);
+            _.set(updItems, (itemAction.payload as any).id, itemAction.payload);
             updState.items = updItems;
             return updState;
           }
         case ACTION.DELETE_SUCCESS:
           {
-            if (itemAction.data == null || state.items == null || itemAction.data.id == null) return state;
+            if (itemAction.payload == null || state.items == null || itemAction.payload.id == null) return state;
 
             const updState = { ...state };
             const updItems = _.clone(state.items);
-            if (_.unset(updItems, String(itemAction.data.id))) {
+            if (_.unset(updItems, String(itemAction.payload.id))) {
               updState.items = updItems;
               return updState;
             } else {
@@ -449,11 +449,11 @@ export default class ReduxHelper {
     }
 
     if (state.ident === action.store) {
-      switch (action.type) {
+      switch (action.typs) {
         case ACTION.GET_START:
           return ReduxHelper.setPending(state, PendingState.LOADING);
         case ACTION.GET_SUCCESS:
-          return ReduxHelper.setMapItem(state, String(action.id), action.data);
+          return ReduxHelper.setMapItem(state, String(action.id), action.payload);
         default:
           break;
       }
@@ -464,7 +464,7 @@ export default class ReduxHelper {
 
   static caseDefaultReducer = <T extends GenericReducerType>(state: T, action: AnyAction, defaultState: T): T => {
     if (state.ident === action.store) {
-      switch (action.type) {
+      switch (action.typs) {
         case ACTION.LOADING:       return ReduxHelper.setPending(state, PendingState.LOADING);
         case ACTION.ERROR:         return ReduxHelper.setError(state, action.data);
 
@@ -475,6 +475,9 @@ export default class ReduxHelper {
 
         default: break;
       }
+
+      // eslint-disable-next-line no-console
+      console.warn(`Unhandled action occured (type = ${action.type}. This is most likely a bug and not intended.)`);
     }
 
     return state;

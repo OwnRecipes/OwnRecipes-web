@@ -35,11 +35,11 @@ function deleteRating(state: RatingsState, recipe: string, ratingId: number): Ra
 const reducer = (state = defaultState, action: RatingsAction): RatingsState => {
   if (RATING_STORE === action.store) {
     const ratingAction = action as RatingAction;
-    switch (ratingAction.type) {
+    switch (ratingAction.typs) {
       case ACTION.CREATE_SUCCESS:
-        return addRating(state, (ratingAction as IRatingAddAction).recipe, ratingAction.data);
+        return addRating(state, (ratingAction as IRatingAddAction).payload.recipe, (ratingAction as IRatingAddAction).payload.rating);
       case ACTION.DELETE_SUCCESS:
-        return deleteRating(state, (ratingAction as IRatingDeleteAction).recipe, (ratingAction as IRatingDeleteAction).ratingId);
+        return deleteRating(state, (ratingAction as IRatingDeleteAction).payload.recipe, (ratingAction as IRatingDeleteAction).payload.ratingId);
       default:
         return ReduxHelper.caseMapDefaultReducer(state, action, defaultState);
     }

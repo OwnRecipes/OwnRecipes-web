@@ -25,7 +25,7 @@ function removeItem(state: SearchState, slug: string): SearchState {
 const searchReducer = (state = defaultState, action: SearchAction): SearchState => {
   if (action.store === RECIPE_FORM_STORE) {
     const formAction: RecipeFormAction = action as RecipeFormAction;
-    switch (formAction.type) {
+    switch (formAction.typs) {
       case ACTION.CREATE_SUCCESS:
       case ACTION.UPDATE_SUCCESS:
         return defaultState;
@@ -33,9 +33,9 @@ const searchReducer = (state = defaultState, action: SearchAction): SearchState 
     }
   } else if (action.store === RECIPE_STORE) {
     const formAction: RecipeAction = action as RecipeAction;
-    switch (formAction.type) {
+    switch (formAction.typs) {
       case RecipeActionTypes.RECIPE_DELETE:
-        return removeItem(state, formAction.data.slug);
+        return removeItem(state, formAction.payload.slug);
       default: break;
     }
   }

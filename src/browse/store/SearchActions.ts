@@ -1,7 +1,7 @@
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { BROWSER_SEARCH_STORE, SearchDispatch, SearchResultDto, toSearchResult } from './SearchTypes';
-import { ACTION } from '../../common/store/ReduxHelper';
+import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
 import { objToSearchString } from '../../common/utility';
 
 const FILTER_QUERY_PARAMETER_MAPPING: Record<string, string> = {
@@ -11,7 +11,7 @@ const FILTER_QUERY_PARAMETER_MAPPING: Record<string, string> = {
 };
 
 export const loadRecipes = (filters: Record<string, string>) => (dispatch: SearchDispatch) => {
-  dispatch({ store: BROWSER_SEARCH_STORE, type: ACTION.LOADING });
+  dispatch({ ...toBasicAction(BROWSER_SEARCH_STORE, ACTION.LOADING) });
 
   const parsedFilters: Record<string, string> = {};
   Object.keys(filters).forEach(f => {
@@ -26,17 +26,19 @@ export const loadRecipes = (filters: Record<string, string>) => (dispatch: Searc
     .then(res => {
       const resDto: SearchResultDto = res.body;
       dispatch({
-        store: BROWSER_SEARCH_STORE,
-        type:  ACTION.GET_SUCCESS,
-        id:    objToSearchString(filters),
-        data:  toSearchResult(resDto),
+        ...toBasicAction(
+          BROWSER_SEARCH_STORE,
+          ACTION.GET_SUCCESS
+        ),
+        id: objToSearchString(filters),
+        payload: toSearchResult(resDto),
       });
     })
     .catch(err => { dispatch(handleError(err, BROWSER_SEARCH_STORE)); });
 };
 
 export const loadRandomRecipes = (filters: Record<string, string>) => (dispatch: SearchDispatch) => {
-  dispatch({ store: BROWSER_SEARCH_STORE, type: ACTION.LOADING });
+  dispatch({ ...toBasicAction(BROWSER_SEARCH_STORE, ACTION.LOADING) });
 
   const parsedFilters: Record<string, string> = {};
   Object.keys(filters).forEach(f => {
@@ -51,10 +53,12 @@ export const loadRandomRecipes = (filters: Record<string, string>) => (dispatch:
     .then(res => {
       const resDto: SearchResultDto = res.body;
       dispatch({
-        store: BROWSER_SEARCH_STORE,
-        type:  ACTION.GET_SUCCESS,
-        id:    objToSearchString(filters),
-        data:  toSearchResult(resDto),
+        ...toBasicAction(
+          BROWSER_SEARCH_STORE,
+          ACTION.GET_SUCCESS
+        ),
+        id: objToSearchString(filters),
+        payload: toSearchResult(resDto),
       });
     })
     .catch(err => { dispatch(handleError(err, BROWSER_SEARCH_STORE)); });

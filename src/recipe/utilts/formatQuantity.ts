@@ -2,6 +2,7 @@
 import { GCD } from './gcd';
 
 export default (servings: number, customServings: number, numerator: number | undefined, denominator: number): string => {
+  debugger;
   if (numerator == null) return '';
 
   // If there isn't a denominator.
