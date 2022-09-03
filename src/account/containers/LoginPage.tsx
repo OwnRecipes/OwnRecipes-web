@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 import '../../common/css/modal.css';
 
 import * as AuthActions from '../store/actions';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import LoginForm from '../components/LoginForm';
 import { CombinedStore } from '../../app/Store';
 import PageWrapper from '../../common/components/PageWrapper';

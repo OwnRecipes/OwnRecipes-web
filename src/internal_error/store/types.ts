@@ -1,5 +1,6 @@
 import { Dispatch as ReduxDispatch } from 'redux';
-import { ACTION, GenericResetAction, PayloadAction } from '../../common/store/ReduxHelper';
+import { ACTION, GenericResetAction } from '../../common/store/ReduxHelper';
+import { PayloadAction } from '../../common/store/redux';
 
 export type InternalError = {
   store: string;

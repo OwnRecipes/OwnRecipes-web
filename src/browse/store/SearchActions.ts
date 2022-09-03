@@ -1,8 +1,9 @@
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { BROWSER_SEARCH_STORE, SearchDispatch, SearchResultDto, toSearchResult } from './SearchTypes';
-import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
+import { ACTION } from '../../common/store/ReduxHelper';
 import { objToSearchString } from '../../common/utility';
+import { toBasicAction } from '../../common/store/redux';
 
 const FILTER_QUERY_PARAMETER_MAPPING: Record<string, string> = {
   cuisine: 'cuisine__slug',

@@ -1,11 +1,12 @@
 import * as _ from 'lodash-es';
 
-import ReduxHelper, { ACTION, GenericItemReducerAction, toBasicAction } from '../../common/store/ReduxHelper';
+import ReduxHelper, { ACTION, GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 import { RecipeFormAction, RecipeFormActionTypes, RecipeFormState, RECIPE_FORM_STORE } from './types';
 import ingredient, { RecipeIngredientReducerActionTypes, RECIPE_INGREDIENTS_STORE } from '../../recipe/store/IngredientReducer';
 import subrecipes, { RecipeSubrecipesReducerActionTypes, RECIPE_SUBRECIPES_STORE } from '../../recipe/store/SubRecipeReducer';
 import fq from '../../recipe/utilts/formatQuantity';
+import { toBasicAction } from '../../common/store/redux';
 
 const defaultState: RecipeFormState = ReduxHelper.getItemReducerDefaultState(RECIPE_FORM_STORE) as RecipeFormState;
 
@@ -49,14 +50,6 @@ const reducer = (state = defaultState, action: RecipeFormAction): RecipeFormStat
           };
           return ReduxHelper.setItem(state, updItem);
         }
-      case RecipeFormActionTypes.RECIPE_FORM_INIT:
-         {
-           const newState = _.cloneDeep(defaultState);
-
-           newState.item  = action.payload as Recipe;
-
-           return newState;
-         }
       case RecipeFormActionTypes.RECIPE_FORM_UPDATE:
         {
           const newState = ReduxHelper.cloneState(state);

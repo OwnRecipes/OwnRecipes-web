@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import * as _ from 'lodash-es';
 
 import Icon from '../../common/components/Icon';
-import Input from '../../common/components/Input';
+import Input from '../../common/components/Input/Input';
 
 export interface ISearchBarProps {
   value:  string;

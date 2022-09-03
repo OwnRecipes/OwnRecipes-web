@@ -11,7 +11,7 @@ import { Recipe, RecipeList } from '../../recipe/store/RecipeTypes';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
 import ListRecipes from '../components/ListRecipes';
 import * as MiniBrowseActions from '../store/MiniBrowseActions';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import Icon from '../../common/components/Icon';
 import Tooltip from '../../common/components/Tooltip';
 

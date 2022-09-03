@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Input from '../../common/components/Input';
+import Input from '../../common/components/Input/Input';
 import NavigationPrompt from '../../common/components/NavigationPrompt';
 import { updateFormData } from '../../common/utility';
 import { RatingCreate } from '../store/types';

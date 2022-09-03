@@ -8,7 +8,7 @@ import * as RecipeActions from '../../recipe/store/RecipeActions';
 import * as SearchActions from '../../browse/store/SearchActions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
 import { CombinedStore } from '../../app/Store';

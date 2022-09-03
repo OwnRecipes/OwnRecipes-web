@@ -33,7 +33,7 @@ const ConnectionObserver: React.FC = () => {
   return (
     <Container
         className = 'no-connection'
-        style = {{ marginTop: `${(dynamicHeightContext?.toolbarHeight ?? 0) + 5}px`, marginBottom: `-${dynamicHeightContext?.toolbarHeight ?? 0}px` }}>
+        style = {{ marginTop: `${(dynamicHeightContext.toolbarHeight) + 5}px`, marginBottom: `-${dynamicHeightContext.toolbarHeight}px` }}>
       <Alert severity='danger' title={formatMessage(messages.no_connection_title)}>
         {formatMessage(messages.no_connection_message)}
       </Alert>

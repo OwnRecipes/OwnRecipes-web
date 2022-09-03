@@ -56,7 +56,7 @@
   "filter.reset_filters": "Reset Filters",
   "filter.show_filters": "Show Filters",
   "filter.title": "Title",
-  "filter.x_stars": "{rating, number} stars",
+  "filter.x_stars": "{rating, plural, =0 {None} other {# stars}}",
   "footer.about.credits": "Credits",
   "footer.about.developers": "Developers",
   "footer.about.technical info": "Version info",

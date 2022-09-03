@@ -2,13 +2,13 @@ import Datetime from 'react-datetime';
 import moment from 'moment';
 import { Form } from 'react-bootstrap';
 
-import BaseComponent, { IBaseComponentProps } from './BaseComponent';
-import Tooltip from './Tooltip';
-import ConditionalWrapper from './ConditionalWrapper';
+import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
+import Tooltip from '../Tooltip';
+import ConditionalWrapper from '../ConditionalWrapper';
 
 require('react-datetime/css/react-datetime.css');
 
-interface IDateTimeProps extends IBaseComponentProps {
+interface IDateTimeProps extends IBaseInputComponentProps {
   name:  string;
   label: string;
   timeFormat?: string;
@@ -21,7 +21,7 @@ interface IDateTimeState {
   value: moment.MomentInput,
 }
 
-export default class DateTime extends BaseComponent<IDateTimeProps, IDateTimeState> {
+export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTimeState> {
   handleChange = (date: moment.MomentInput) => {
     this.setState({
       value: date,

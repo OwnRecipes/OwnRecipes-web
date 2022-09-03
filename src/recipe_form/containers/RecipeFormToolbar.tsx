@@ -6,7 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { CombinedStore } from '../../app/Store';
 import { getResourcePath, isDemoMode } from '../../common/utility';
-import { PendingState } from '../../common/store/GenericReducerType';
+import { FormSpy } from 'react-final-form';
 
 const RecipeFormToolbar: React.FC = () => {
   const intl = useIntl();
@@ -29,22 +29,30 @@ const RecipeFormToolbar: React.FC = () => {
     },
   });
 
-  const recipeFormState = useSelector((state: CombinedStore) => state.recipeForm);
+  const recipeState = useSelector((state: CombinedStore) => state.recipe);
 
-  const id = recipeFormState.item?.id;
+  const id = recipeState.item?.id;
   const isNew = id == null || id === 0;
-  const showViewButton = !isNew && !recipeFormState.meta.dirty && recipeFormState.item?.slug != null;
+
+  // eslint-disable-next-line arrow-body-style
+  const showViewButton = (pristine: boolean) => {
+    return !isNew && pristine;
+  };
 
   return (
-    <Button
-        variant  = 'primary'
-        type     = {showViewButton ? 'button' : 'submit'}
-        disabled = {recipeFormState.meta.pending === PendingState.SAVING || (isDemoMode() && !showViewButton)}
-        as = {showViewButton ? Link as any : undefined} // eslint-disable-line @typescript-eslint/no-explicit-any
-        to = {showViewButton ? getResourcePath(`/recipe/${recipeFormState.item?.slug}`) : null}
-        accessKey = {showViewButton ? undefined : 's'}>
-      {formatMessage(showViewButton ? messages.view : messages.submit)}
-    </Button>
+    <FormSpy subscription={{ pristine: true, submitting: true }}>
+      {({ pristine, submitting }) => (
+        <Button
+            variant  = 'primary'
+            type     = {showViewButton(pristine) ? 'button' : 'submit'}
+            disabled = {submitting || (isDemoMode() && !showViewButton)}
+            as = {showViewButton(pristine) ? Link as any : undefined} // eslint-disable-line @typescript-eslint/no-explicit-any
+            to = {showViewButton(pristine) ? getResourcePath(`/recipe/${recipeState.item?.slug}`) : null}
+            accessKey = {showViewButton(pristine) ? undefined : 's'}>
+          {formatMessage(showViewButton(pristine) ? messages.view : messages.submit)}
+        </Button>
+      )}
+    </FormSpy>
   );
 };
 

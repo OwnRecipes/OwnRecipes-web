@@ -41,24 +41,24 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
   const dataFormatted: Array<EnhancedFilterData> = useMemo(() => {
     let res = (data
       ?.map(item => {
-        let active = false;
-        if (qs[qsTitle]) {
-          if (qs[qsTitle].split(',').includes(item.slug)) {
-            active = true;
+          let active = false;
+          if (qs[qsTitle]) {
+            if (qs[qsTitle].split(',').includes(item.slug)) {
+              active = true;
+            }
           }
-        }
 
-        if (!active && (item.total == null || item.total === 0)) {
-          return undefined as unknown as EnhancedFilterData;
-        }
+          if (!active && (item.total == null || item.total === 0)) {
+            return undefined as unknown as EnhancedFilterData;
+          }
 
-        return ({
-          ...item,
-          label: optionallyFormatMessage(intl, `${qsTitle}.`, item.title),
-          active: active,
-        });
-    }) ?? [])
-    .filter(item => item != null);
+          return ({
+            ...item,
+            label: optionallyFormatMessage(intl, `${qsTitle}.`, item.title),
+            active: active,
+          });
+        }) ?? [])
+      .filter(item => item != null);
 
     if (sort == null || sort === 'on') {
       res = res.sort(sortByLabel);

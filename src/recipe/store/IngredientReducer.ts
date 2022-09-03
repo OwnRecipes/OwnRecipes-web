@@ -1,5 +1,5 @@
 import { Dispatch as ReduxDispatch } from 'redux';
-import { BasicAction, PayloadAction } from '../../common/store/ReduxHelper';
+import { BasicAction, PayloadAction } from '../../common/store/redux';
 import { Ingredient, IngredientGroup } from './RecipeTypes';
 
 export const RECIPE_INGREDIENTS_STORE = '@@recipeIngredients';
@@ -27,9 +27,9 @@ export type RecipeIngredientsState = Array<IngredientGroup>;
 export type RecipeIngredientsAction = IRecipeIngredientLoadAction | IRecipeIngredientServingsUpdateAction;
 export type RecipeIngredientsDispatch  = ReduxDispatch<RecipeIngredientsAction>;
 
-type IngredientReduceFunction = (ingr: Ingredient) => Ingredient;
+type RecalcFunction<T> = (ingr: T) => T;
 
-const ingredients = (state: RecipeIngredientsState, cb: IngredientReduceFunction): RecipeIngredientsState => state.map(ig => ({
+const ingredients = (igs: Array<IngredientGroup>, cb: RecalcFunction<Ingredient>): Array<IngredientGroup> => igs.map(ig => ({
   ...ig,
   ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
 }));
@@ -53,7 +53,7 @@ const merge = (state: RecipeIngredientsState, ingredientGroups: Array<Ingredient
 
 const defaultState: RecipeIngredientsState = [];
 
-const recipes = (state = defaultState, action: RecipeIngredientsAction): RecipeIngredientsState => {
+const ingredient = (state = defaultState, action: RecipeIngredientsAction): RecipeIngredientsState => {
   if (action.store === RECIPE_INGREDIENTS_STORE) {
     switch (action.typs) {
       case RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD:
@@ -84,4 +84,4 @@ const recipes = (state = defaultState, action: RecipeIngredientsAction): RecipeI
   return state;
 };
 
-export default recipes;
+export default ingredient;

@@ -9,7 +9,7 @@ import '../css/browse.css';
 import Search from '../components/Search';
 import * as SearchActions from '../store/SearchActions';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
 import { CombinedStore } from '../../app/Store';

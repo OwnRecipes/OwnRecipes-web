@@ -7,7 +7,6 @@ import { optionallyFormatMessage } from '../utility';
 export type ValidationErrorType = {
   code:         string;
   message:      string;
-  attribute?:   string;
   sourceError?: Error;
 }
 
@@ -54,7 +53,6 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
       result[attr] = {
         code:      toCode(nextVal),
         message:   nextVal,
-        attribute: attr,
       };
     }
   });
@@ -72,7 +70,7 @@ export function createValidationResult(): ValidationResult {
 export const isValidationResult = (obj: unknown): obj is ValidationResult => (obj != null && typeof obj === 'object' && (obj as any).__isValidationResult === true); // eslint-disable-line no-underscore-dangle, @typescript-eslint/no-explicit-any
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ValueValidatorFunction = (name: string, value: any, obj?: any) => ValidationErrorType | undefined;
+export type ValueValidatorFunction = (value: any, data?: any) => ValidationErrorType | undefined;
 
 export type FieldValidatorType = {
   name: string;
@@ -87,10 +85,10 @@ export function formatValidation(intl: IntlShape, validation: ValidationError | 
   let errors = '';
   if (Array.isArray(validation)) {
     validation.forEach(v => {
-      errors += optionallyFormatMessage(intl, baseMessageId, v.code, { field: v.attribute });
+      errors += optionallyFormatMessage(intl, baseMessageId, v.code);
     });
   } else {
-    errors += optionallyFormatMessage(intl, baseMessageId, validation.code, { field: validation.attribute });
+    errors += optionallyFormatMessage(intl, baseMessageId, validation.code);
   }
 
   return errors.length ? errors : undefined;
@@ -101,7 +99,7 @@ export function runFieldValidator(result: ValidationResult, valueValidations: Va
   let hasError = false;
 
   valueValidations.forEach(f => {
-    const valResult: ValidationErrorType | undefined = f(name, value, data);
+    const valResult: ValidationErrorType | undefined = f(value, data);
     if (valResult) {
       hasError = true;
       _.set(result, name, valResult);
@@ -131,31 +129,36 @@ export function hasValidationError(result: ValidationResult): boolean {
   return keys.find(key => result[key] !== undefined) != null;
 }
 
-export const urlValidator = (name: string, val: string | undefined): ValidationErrorType | undefined => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const urlValidator: ValueValidatorFunction = (val: string | undefined): ValidationErrorType | undefined => {
   if (val == null || val.length === 0) return undefined;
   const isUrl = val.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g);
   return !isUrl ? {
     code:      'url',
     message:   'Please enter a valid URL.',
-    attribute: name,
   } : undefined;
 };
 
-export const requiredValidator = (name: string, val: string): ValidationErrorType | undefined => (
-  !val ? {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, arrow-body-style
+export const requiredValidator: ValueValidatorFunction = (val: string | undefined): ValidationErrorType | undefined => {
+  return (val == null || val.length === 0 || (val.trim && val.trim().length === 0)) ? {
     code:      'required',
-    message:   'This Field is Required.',
-    attribute: name,
-  } : undefined
-);
+    message:   'Please enter a value.',
+  } : undefined;
+};
 
-export const numberValidator = (name: string, val: string): ValidationErrorType | undefined => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const numberValidator: ValueValidatorFunction = (val: string): ValidationErrorType | undefined => {
   const isNumber = val != null && val.length > 0 ? /^-?\d*\.?\d+$/.test(val) : true;
   return (
     !isNumber ? {
       code:      'number',
-      message:   'This Field must be a Number.',
-      attribute: name,
+      message:   'Please enter a number',
     } : undefined
   );
 };
+
+export const composeValidators = (...validators: Array<ValueValidatorFunction>) => (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (value: any, data: any | undefined) => validators.reduce((error: ValidationErrorType | undefined, validator: ValueValidatorFunction) => error || validator(value, data), undefined)
+);

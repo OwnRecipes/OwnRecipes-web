@@ -1,19 +1,19 @@
 import { createRef } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 
-import BaseComponent, { IBaseComponentProps } from './BaseComponent';
-import ConditionalWrapper from './ConditionalWrapper';
-import Icon from './Icon';
-import Tooltip from './Tooltip';
+import ConditionalWrapper from '../ConditionalWrapper';
+import Icon from '../Icon';
+import Tooltip from '../Tooltip';
+import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
 
-interface IFileSelectProps extends IBaseComponentProps {
+export interface IFileSelectProps extends IBaseInputComponentProps {
   accept?: string;
   value?:  string;
 
   onChange?: (name: string, newValue: File | undefined) => void;
 }
 
-class FileBase extends BaseComponent<IFileSelectProps> {
+class FileSelect extends BaseInputComponent<IFileSelectProps> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
 
@@ -45,6 +45,8 @@ class FileBase extends BaseComponent<IFileSelectProps> {
   };
 
   render() {
+    // console.log(`[FileSelect] name=${this.props.name}`);
+
     return (
       <Form.Group
           controlId = {this.props.name}
@@ -63,6 +65,8 @@ class FileBase extends BaseComponent<IFileSelectProps> {
                 readOnly = {this.props.readOnly}
                 disabled = {this.props.disabled}
                 onChange = {this.handleChange}
+                onBlur   = {this.props.onBlur}
+                onFocus  = {this.props.onFocus}
                 ref = {this.ref} />
             {!this.props.readOnly && !this.props.disabled && this.props.onChange
                 && (this.props.value != null || (this.ref.current != null && this.ref.current.value !== '')) && (
@@ -77,5 +81,4 @@ class FileBase extends BaseComponent<IFileSelectProps> {
   }
 }
 
-const FileSelect = FileBase;
 export default FileSelect;

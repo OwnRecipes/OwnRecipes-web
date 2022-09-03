@@ -8,7 +8,7 @@ import '../css/recipe.css';
 import Loading from '../../common/components/Loading';
 // import MenuItemModal from '../../menu/components/modals/MenuItemModal';
 import RecipeScheme from '../components/RecipeScheme';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import * as RecipeActions from '../store/RecipeActions';
 import * as RecipeFormActions from '../../recipe_form/store/actions';
 // import * as MenuItemActions from '../../menu/actions/MenuItemActions';
@@ -25,7 +25,6 @@ const RecipeContainer: React.FC = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
   const params = useParams();
-  const crash = useCrash();
 
   const paramsRecipe = params.recipe;
   // Load Recipe
@@ -58,11 +57,6 @@ const RecipeContainer: React.FC = () => {
   const recipeSlug = params.recipe ?? '';
   const showEditLink = (userId != null && userId === recipe?.author);
 
-  const handlePreloadRecipe = () => {
-    if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
-    dispatch(RecipeFormActions.preload(recipe));
-  };
-
   // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, [dispatch]);
   const deleteRecipe = useCallback(() => {
     setIsDeleting(true);
@@ -77,11 +71,6 @@ const RecipeContainer: React.FC = () => {
       nav(getResourcePath('/browser'));
     }
   }, [recipe]);
-
-  // componentWillUnmount
-  useEffect(() => () => {
-    dispatch(RecipeActions.reset());
-  }, []);
 
   // TODO Lists
   // const bulkAdd = useCallback((listId: number) => { /* RecipeActions.bulkAdd(recipe, listId) */ }, [dispatch]);
@@ -112,7 +101,6 @@ const RecipeContainer: React.FC = () => {
 
             showEditLink = {showEditLink}
 
-            onEditRecipe = {handlePreloadRecipe}
             deleteRecipe = {deleteRecipe}
 
             // lists={lists}

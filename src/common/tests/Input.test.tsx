@@ -1,6 +1,6 @@
 import renderer from 'react-test-renderer';
 
-import Input from '../components/Input';
+import Input from '../components/Input/Input';
 
 test('Input type text', () => {
   const handleChange = jest.fn();

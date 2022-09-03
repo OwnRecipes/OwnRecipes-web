@@ -1,7 +1,8 @@
 import * as _ from 'lodash-es';
 
 import { isResponseError, ResponseError } from '../../common/CustomSuperagent';
-import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
+import { toBasicAction } from '../../common/store/redux';
+import { ACTION } from '../../common/store/ReduxHelper';
 import { InternalErrorDispatch, InternalError, INTERNAL_ERROR_STORE } from './types';
 
 export const setInternalError = (store: string, error: Error | ResponseError) => (dispatch: InternalErrorDispatch) => {

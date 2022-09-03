@@ -4,19 +4,21 @@ import { useIntl } from 'react-intl';
 
 import * as RecipeFormActions from '../store/actions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import { CombinedStore } from '../../app/Store';
 
 import useSingle from '../../common/hooks/useSingle';
-import { CreatableSelect, ICreatableSelectValues } from '../../common/components/Select';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
-import { Course, Cuisine } from '../../recipe/store/RecipeTypes';
+import { Cuisine } from '../../recipe/store/RecipeTypes';
+import ReCreatableSelect from '../../common/components/ReduxForm/ReCreatableSelect';
 
-export interface ICuisineSelectContainerProps extends ICreatableSelectValues {
-  onChange?: (name: string, newValue: Course | undefined) => void;
+export interface ICuisineSelectContainerProps {
+  name: string;
+  label: string;
 }
 
-const CuisineSelectContainer: React.FC<ICuisineSelectContainerProps> = ({ onChange, ...rest }: ICuisineSelectContainerProps) => {
+const CuisineSelectContainer: React.FC<ICuisineSelectContainerProps> = ({
+    name, label }: ICuisineSelectContainerProps) => {
   const intl = useIntl();
   const dispatch = useDispatch();
 
@@ -28,21 +30,29 @@ const CuisineSelectContainer: React.FC<ICuisineSelectContainerProps> = ({ onChan
       ?.map(c => ({ value: c.title, label: optionallyFormatMessage(intl, 'cuisine.', c.title) }))
       .sort(sortByLabel), [cuisines, intl.locale]);
 
-  const handleChange = (name: string, newValue: string | undefined) => {
-    if (onChange) {
-      if (newValue == null) {
-        onChange(name, undefined);
-      } else {
-        onChange(name, cuisines?.find(c => c.title === newValue) ?? { title: newValue ?? '' } as Cuisine);
-      }
+  const parser = (newValue: string | undefined): Cuisine | undefined => {
+    if (newValue == null) {
+      return undefined;
+    } else {
+      return cuisines?.find(c => c.title === newValue) ?? { title: newValue ?? '' } as Cuisine;
+    }
+  };
+
+  const formatter = (value: Array<Cuisine> | Cuisine): Array<string> | string => {
+    if (Array.isArray(value)) {
+      return value.map(v => v.title);
+    } else {
+      return value.title;
     }
   };
 
   return (
-    <CreatableSelect
-        {...rest}
+    <ReCreatableSelect
+        name = {name}
+        label = {label}
         data = {data}
-        onChange = {handleChange}
+        parser = {parser}
+        formatter = {formatter}
         />
   );
 };

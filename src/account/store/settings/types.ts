@@ -1,6 +1,6 @@
 import { Dispatch as ReduxDispatch } from 'redux';
 import { LanguageCode } from '../../../common/language';
-import { BasicAction, PayloadAction } from '../../../common/store/ReduxHelper';
+import { BasicAction, PayloadAction } from '../../../common/store/redux';
 
 export enum ThemeMode {
   DARK = 'dark',

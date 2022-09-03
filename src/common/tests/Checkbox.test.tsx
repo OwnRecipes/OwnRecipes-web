@@ -1,6 +1,6 @@
 import renderer from 'react-test-renderer';
 
-import Checkbox from '../components/Checkbox';
+import Checkbox from '../components/Input/Checkbox';
 
 test('Checkbox', () => {
   const component = renderer.create(

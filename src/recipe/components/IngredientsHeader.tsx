@@ -6,7 +6,7 @@ import { Recipe } from '../store/RecipeTypes';
 
 // import IngredientButtons from './IngredientButtons';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
-import Input from '../../common/components/Input';
+import Input from '../../common/components/Input/Input';
 import { updateFormData } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 

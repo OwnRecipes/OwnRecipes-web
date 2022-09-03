@@ -1,6 +1,6 @@
 import { CombinedStore } from '../../../app/Store';
 import { LanguageCode } from '../../../common/language';
-import { toBasicAction } from '../../../common/store/ReduxHelper';
+import { toBasicAction } from '../../../common/store/redux';
 import { ThemeMode, SettingsDispatch, SETTINGS_STORE, SettingsActionTypes, SettingsAction } from './types';
 
 export const init = (tokenId: string | undefined): SettingsAction => ({

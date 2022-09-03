@@ -6,7 +6,7 @@ import '../css/internal_error.css';
 
 import Modal from '../../common/components/Modal';
 import P from '../../common/components/P';
-import Input from '../../common/components/Input';
+import Input from '../../common/components/Input/Input';
 import { InternalError } from '../../internal_error/store/types';
 
 function getResponseText(internalError: InternalError | undefined): string | undefined {

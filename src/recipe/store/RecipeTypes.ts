@@ -2,7 +2,8 @@ import { Dispatch as ReduxDispatch } from 'redux';
 
 import { NUMBER_UNDEFINED, STRING_UNDEFINED } from '../../common/constants';
 import ItemReducerType from '../../common/store/ItemReducerType';
-import { GenericItemReducerAction, PayloadAction } from '../../common/store/ReduxHelper';
+import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
+import { PayloadAction } from '../../common/store/redux';
 
 export type Quantity = {
   numerator?:   number;

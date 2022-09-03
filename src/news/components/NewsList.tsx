@@ -7,7 +7,7 @@ import { Carousel } from 'react-bootstrap';
 
 import { CombinedStore } from '../../app/Store';
 import * as NewsActions from '../store/actions';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 
 import P from '../../common/components/P';
 import { PendingState } from '../../common/store/GenericReducerType';

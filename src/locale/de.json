@@ -56,7 +56,7 @@
   "filter.reset_filters": "Filter anzeigen",
   "filter.show_filters": "Filter anzeigen",
   "filter.title": "Titel",
-  "filter.x_stars": "{rating, number} Sterne",
+  "filter.x_stars": "{rating, plural, =0 {Ohne} other {# Sterne}}",
   "footer.about.credits": "Credits",
   "footer.about.developers": "Mitwirkende",
   "footer.about.technical info": "Technisches",

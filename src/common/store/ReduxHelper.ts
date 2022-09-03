@@ -1,11 +1,12 @@
-import { AnyAction } from 'redux';
+import { AnyAction, Dispatch } from 'redux';
 import * as _ from 'lodash-es';
 
 import GenericReducerType, { PendingState } from './GenericReducerType';
 import ArrayReducerType from './ArrayReducerType';
 import ItemReducerType from './ItemReducerType';
 import MapReducerType from './MapReducerType';
-import { createValidationResult, isValidationResult, ValidationResult } from './Validation';
+import { createValidationResult, isValidationResult, runValidators, ValidationResult, ValidatorsType } from './Validation';
+import { BasicAction, PayloadAction, toBasicAction } from './redux';
 
 export enum ACTION {
   CREATE_START   = 'CREATE_START',
@@ -29,32 +30,6 @@ export enum ACTION {
   SOFT_RESET = 'SOFT_RESET',
 
   NO_CONNECTION = 'NO_CONNECTION',
-}
-
-export type BasicReduxAction = {
-  /** @deprecated */
-  type: string;
-}
-
-export type BasicAction = {
-  store: string;
-  // typs: string; // uncommented to not generalize the typ-ids
-} & BasicReduxAction;
-
-export type PayloadAction<T> = {
-  payload: T;
-} & BasicAction;
-
-export function toBasicAction<TStore extends string, TTyps>(store: TStore, typs: TTyps): {
-  store: TStore,
-  type:  string,
-  typs:  TTyps,
-} {
-  return {
-    store: store,
-    type:  `${store}/${typs}`,
-    typs:  typs,
-  };
 }
 
 export type GenericCreateStartAction = {
@@ -318,6 +293,22 @@ export default class ReduxHelper {
     }
 
     return updState;
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static validate = <TEntity>(store: string, data: TEntity, validations: ValidatorsType): any => (dispatch: Dispatch) => {
+    const valResult: ValidationResult = runValidators(validations, data);
+
+    if (Object.keys(valResult).length) {
+      dispatch({
+        ...toBasicAction(
+          store,
+          ACTION.VALIDATION
+        ),
+        payload: valResult,
+        mode:    'overwrite',
+      });
+    }
   };
 
   static caseItemDefaultReducer = <T>(state: ItemReducerType<T>, action: GenericItemReducerAction<T>, defaultState: ItemReducerType<T>): ItemReducerType<T> => {

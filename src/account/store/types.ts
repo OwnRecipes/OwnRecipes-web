@@ -2,7 +2,8 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { Dispatch as ReduxDispatch } from 'redux';
 
 import ItemReducerType from '../../common/store/ItemReducerType';
-import { BasicAction, GenericItemReducerAction, PayloadAction } from '../../common/store/ReduxHelper';
+import { BasicAction, PayloadAction } from '../../common/store/redux';
+import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import UserRole from '../../common/types/UserRole';
 
 export type LoginDto = {

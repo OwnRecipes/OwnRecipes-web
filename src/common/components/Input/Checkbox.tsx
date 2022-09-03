@@ -1,20 +1,20 @@
 import { createRef } from 'react';
 import { Form } from 'react-bootstrap';
 
-import '../css/checkbox.css';
+import '../../css/checkbox.css';
 
-import BaseComponent, { IBaseComponentProps } from './BaseComponent';
-import Tooltip from './Tooltip';
-import ConditionalWrapper from './ConditionalWrapper';
-import Icon from './Icon';
+import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
+import Tooltip from '../Tooltip';
+import ConditionalWrapper from '../ConditionalWrapper';
+import Icon from '../Icon';
 
-interface ICheckboxProps extends IBaseComponentProps {
+export interface ICheckboxProps extends IBaseInputComponentProps {
   value?: boolean;
 
   onChange?: (name: string, newValue: boolean) => void;
 }
 
-export default class Checkbox extends BaseComponent<ICheckboxProps> {
+export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
 
@@ -52,6 +52,8 @@ export default class Checkbox extends BaseComponent<ICheckboxProps> {
   };
 
   render() {
+    // console.log(`[Checkbox] name=${this.props.name}`);
+
     return (
       <Form.Group
           controlId = {this.props.name}
@@ -72,6 +74,8 @@ export default class Checkbox extends BaseComponent<ICheckboxProps> {
               autoFocus = {this.props.autoFocus}
 
               onChange  = {this.handleChange}
+              onBlur    = {this.props.onBlur}
+              onFocus   = {this.props.onFocus}
               ref = {this.ref} />
         </ConditionalWrapper>
       </Form.Group>

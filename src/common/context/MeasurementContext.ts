@@ -7,6 +7,6 @@ export interface IMeasurementContext {
   parser: Record<string, string>;
 }
 
-const MeasurementContext = createContext<IMeasurementContext | null>(null);
+const MeasurementContext = createContext<IMeasurementContext>({} as IMeasurementContext);
 
 export default MeasurementContext;

@@ -1,6 +1,7 @@
 import { Dispatch as ReduxDispatch } from 'redux';
 import MapReducerType from '../../common/store/MapReducerType';
-import { ACTION, GenericItemReducerAction, GenericMapReducerAction, PayloadAction } from '../../common/store/ReduxHelper';
+import { ACTION, GenericItemReducerAction, GenericMapReducerAction } from '../../common/store/ReduxHelper';
+import { PayloadAction } from '../../common/store/redux';
 
 export const RATING_STORE  = '@@rating';
 

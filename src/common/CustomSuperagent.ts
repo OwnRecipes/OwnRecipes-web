@@ -7,11 +7,12 @@ import moment from 'moment';
 import store from './store/store';
 import { serverURLs } from './config';
 import { AccountAction, AccountActionTypes, ACCOUNT_STORE, LoginDto, toUserAccount } from '../account/store/types';
-import { ACTION, toBasicAction } from './store/ReduxHelper';
+import { ACTION } from './store/ReduxHelper';
 import * as InternalErrorActions from '../internal_error/store/actions';
 import { logUserOut } from '../account/store/actions';
 import { toValidationErrors, ValidationError } from './store/Validation';
 import { isDemoMode } from './utility';
+import { AnyDispatch, toBasicAction } from './store/redux';
 
 export type ResponseError = superRequest.ResponseError;
 export const isResponseError = (obj: unknown): obj is ResponseError => (
@@ -161,6 +162,63 @@ export const handleError = (error: Error, storeIdent: string): any => (dispatch:
       payload: error,
     });
   }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent: string): any => {
+  if (isResponseError(error)) {
+    const respErr: ResponseError = error;
+    if (respErr.response != null && (respErr.response.status === 400 || respErr.response.status === 409)) {
+      return toValidationErrors(respErr);
+    } else if (_.get(respErr.response, 'req.method') === 'get' && respErr.response != null && respErr.response.status === 404) {
+      dispatch({
+        ...toBasicAction(
+          storeIdent,
+          ACTION.GET_SUCCESS
+        ),
+        payload: undefined,
+      });
+    } else if (respErr.response != null && respErr.response.status === 401) {
+      // Invalid token
+      dispatch(logUserOut());
+    } else if (respErr.response != null && respErr.response.status === 403) {
+      // Forbidden
+      dispatch(InternalErrorActions.setInternalError(storeIdent, error));
+    } else {
+      // Internal server error
+      const validationError: ValidationError = { code: '500', message: respErr.message, sourceError: respErr };
+      dispatch(InternalErrorActions.setInternalError(storeIdent, error));
+      dispatch({
+        ...toBasicAction(
+          storeIdent,
+          ACTION.ERROR
+        ),
+        payload: validationError,
+      });
+    }
+
+    dispatch({
+      ...toBasicAction(
+        storeIdent,
+        ACTION.ERROR
+      ),
+      payload: error,
+    });
+  } else if (isNetworkError(error)) {
+    dispatch({ ...toBasicAction(storeIdent, ACTION.NO_CONNECTION) });
+  } else {
+    // Unknown internal error
+    dispatch(InternalErrorActions.setInternalError(storeIdent, error));
+    dispatch({
+      ...toBasicAction(
+        storeIdent,
+        ACTION.ERROR
+      ),
+      payload: error,
+    });
+  }
+
+  return null;
 };
 
 export default request;

@@ -1,5 +1,5 @@
 import { Dispatch as ReduxDispatch } from 'redux';
-import { BasicAction, PayloadAction } from '../../common/store/ReduxHelper';
+import { BasicAction, PayloadAction } from '../../common/store/redux';
 import { QuantityFormatter } from './IngredientReducer';
 import { SubRecipe } from './RecipeTypes';
 

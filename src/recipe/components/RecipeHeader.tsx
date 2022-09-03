@@ -23,14 +23,12 @@ export interface IRecipeHeaderProps {
   recipe:       Recipe | undefined;
   showEditLink: boolean;
 
-  onEditRecipe: () => void;
   deleteRecipe: () => void;
   // onAddToMenuClick: () => void;
 }
 
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, showEditLink,
-    onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+    recipe, showEditLink, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -102,8 +100,6 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     },
   });
 
-  const handleEditClick    = () => { onEditRecipe(); };
-
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
   const handleDeleteClick  = () => { setShowDeleteConfirm(true); };
   const handleDeleteAccept = () => { deleteRecipe(); };
@@ -111,7 +107,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
 
   const editLink = showEditLink ? (
     <Tooltip id='edit tooltip' tooltip={formatMessage(messages.edit_tooltip)}>
-      <Link to={getResourcePath(`/recipe/edit/${recipe?.slug}`)} onClick={handleEditClick}>
+      <Link to={getResourcePath(`/recipe/edit/${recipe?.slug}`)}>
         <Button variant='outline-primary' size='sm'>
           <i className='bi bi-pencil-fill' />
         </Button>

@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { FormSpy } from 'react-final-form';
 import { defineMessages, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
+import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import ReInput from '../../common/components/ReduxForm/ReInput';
+import { formatValidation } from '../../common/store/Validation';
 
-import Input from '../../common/components/Input';
 import Directions from '../../recipe/components/Directions';
 import TabbedView from './TabbedView';
 
 export interface IDirectionBox {
   name:       string;
-  directions: string;
-  errors:     string | undefined;
-  onChange:   (name: string, value: unknown) => void;
 }
 
 const DirectionBox: React.FC<IDirectionBox> = ({
-    name, directions, errors, onChange }: IDirectionBox) => {
+    name }: IDirectionBox) => {
   const intl = useIntl();
   const { formatMessage } = intl;
   const messages = defineMessages({
@@ -45,28 +45,44 @@ const DirectionBox: React.FC<IDirectionBox> = ({
   }, [location.pathname]);
 
   return (
-    <TabbedView
-        id        = 'directions'
-        labels    = {[formatMessage(messages.directions_label)]}
+    <FormSpy subscription={{ errors: true }}>
+      {({ errors }) => (
+        <TabbedView
+            id        = 'directions'
+            labels    = {[formatMessage(messages.directions_label)]}
 
-        activeTab = {activeTab}
-        onSelect  = {setActiveTab}
+            activeTab = {activeTab}
+            onSelect  = {setActiveTab}
 
-        errors    = {errors}
-        tooltips  = {[formatMessage(messages.directions_tooltip)]}>
-      <Input
-          name     = {name}
-          rows     = {8}
-          value    = {directions}
-          placeholder = {formatMessage(messages.directions_placeholder)}
-          onChange = {onChange} />
-      <div className='recipe-details'>
-        <div className='recipe-schema'>
-          <Directions data={directions} />
-        </div>
-      </div>
-    </TabbedView>
+            errors    = {formatValidation(intl, errors?.[name])}
+            tooltips  = {[formatMessage(messages.directions_tooltip)]}>
+          <ReInput
+              name = {name}
+              rows     = {8}
+              placeholder = {formatMessage(messages.directions_placeholder)} />
+          <FieldSpyValues fieldNames={[name]}>
+            {values => (
+              <>
+                {activeTab === 'preview' && <DirectionsPreview directions={values[name] ?? ''} />}
+              </>
+            )}
+          </FieldSpyValues>
+        </TabbedView>
+      )}
+    </FormSpy>
   );
 };
+
+interface IDirectionsPreviewProps {
+  directions: string;
+}
+
+const DirectionsPreview: React.FC<IDirectionsPreviewProps> = ({ directions }: IDirectionsPreviewProps) => (
+  <div className='recipe-details'>
+    <div className='recipe-schema'>
+      <Directions data={directions} />
+    </div>
+  </div>
+);
 
 export default DirectionBox;

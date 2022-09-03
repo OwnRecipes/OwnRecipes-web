@@ -5,18 +5,20 @@ import { useIntl } from 'react-intl';
 import * as RecipeFormActions from '../store/actions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { CombinedStore } from '../../app/Store';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
-import { CreatableSelect, ICreatableSelectValues } from '../../common/components/Select';
 import { Tag } from '../../recipe/store/RecipeTypes';
+import ReCreatableSelect from '../../common/components/ReduxForm/ReCreatableSelect';
 
-export interface ITagSelectContainerProps extends ICreatableSelectValues {
-  onChange?: (name: string, newValue: Array<Tag> | undefined) => void;
+export interface ITagListContainerProps {
+  name: string;
+  label: string;
 }
 
-const TagListContainer: React.FC<ITagSelectContainerProps> = ({ onChange, ...rest }: ITagSelectContainerProps) => {
+const TagListContainer: React.FC<ITagListContainerProps> = ({
+    name, label }: ITagListContainerProps) => {
   const intl = useIntl();
   const dispatch = useDispatch();
 
@@ -29,27 +31,35 @@ const TagListContainer: React.FC<ITagSelectContainerProps> = ({ onChange, ...res
       .map(t => ({ value: t.title, label: optionallyFormatMessage(intl, 'tag.', t.title) }))
       .sort(sortByLabel), [tags, intl.locale]);
 
-  const handleChange = (name: string, newValue: Array<string> | undefined) => {
-    if (onChange) {
-      if (newValue == null) {
-        onChange(name, undefined);
-      } else {
-        const selected: Array<Tag> = [];
-        newValue.forEach(v => {
-          const tag = tags?.find(t => t.title === v);
-          selected.push(tag ?? { title: v } as Tag);
-        });
+  const parser = (newValue: Array<string> | undefined): Array<Tag> | undefined => {
+    if (newValue == null) {
+      return undefined;
+    } else {
+      const selected: Array<Tag> = [];
+      newValue.forEach(v => {
+        const tag = tags?.find(t => t.title === v);
+        selected.push(tag ?? { title: v } as Tag);
+      });
 
-        onChange(name, selected);
-      }
+      return selected;
+    }
+  };
+
+  const formatter = (value: Array<Tag> | Tag): Array<string> | string => {
+    if (Array.isArray(value)) {
+      return value.map(v => v.title);
+    } else {
+      return value.title;
     }
   };
 
   return (
-    <CreatableSelect
-        {...rest}
+    <ReCreatableSelect
+        name = {name}
+        label = {label}
         data = {data}
-        onChange = {handleChange}
+        parser = {parser}
+        formatter = {formatter}
         isMulti
         />
   );

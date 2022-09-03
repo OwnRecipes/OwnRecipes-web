@@ -5,7 +5,7 @@ import * as _ from 'lodash-es';
 import classNames from 'classnames';
 
 import Icon from '../../common/components/Icon';
-import Input from '../../common/components/Input';
+import Input from '../../common/components/Input/Input';
 import { getResourcePath } from '../../common/utility';
 import NavLink from './NavLink';
 

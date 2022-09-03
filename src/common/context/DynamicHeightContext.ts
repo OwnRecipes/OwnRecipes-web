@@ -5,6 +5,6 @@ export interface IDynamicHeightContext {
   setToolbarHeight: (height: number) => void;
 }
 
-const DynamicHeightContext = createContext<IDynamicHeightContext | null>(null);
+const DynamicHeightContext = createContext<IDynamicHeightContext>({} as IDynamicHeightContext);
 
 export default DynamicHeightContext;

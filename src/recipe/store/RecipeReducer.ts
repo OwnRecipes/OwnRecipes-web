@@ -3,8 +3,9 @@ import * as _ from 'lodash-es';
 import ingredient, { RecipeIngredientReducerActionTypes, RECIPE_INGREDIENTS_STORE } from './IngredientReducer';
 import subrecipes, { RecipeSubrecipesReducerActionTypes, RECIPE_SUBRECIPES_STORE } from './SubRecipeReducer';
 import fq from '../utilts/formatQuantity';
-import ReduxHelper, { ACTION, GenericItemReducerAction, toBasicAction } from '../../common/store/ReduxHelper';
+import ReduxHelper, { ACTION, GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import { Recipe, RecipeAction, RecipeActionTypes, RecipeState, RECIPE_STORE } from './RecipeTypes';
+import { toBasicAction } from '../../common/store/redux';
 
 const defaultState: RecipeState = ReduxHelper.getItemReducerDefaultState<Recipe>(RECIPE_STORE);
 

@@ -5,7 +5,7 @@ import '../css/theme.css';
 
 import { ThemeMode } from '../../account/store/settings/types';
 import * as SettingsActions from '../../account/store/settings/actions';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import { CombinedStore } from '../Store';
 
 const ThemeProvider: React.FC = () => {

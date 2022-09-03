@@ -1,7 +1,8 @@
 import { RatingCreate, RatingDispatch, RatingsDispatch, RATINGS_STORE, RATING_STORE, toRating } from './types';
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import ReduxHelper, { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
+import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
+import { toBasicAction } from '../../common/store/redux';
 
 export const load = (recipeSlug: string) => (dispatch: RatingsDispatch) => {
   dispatch({ ...toBasicAction(RATINGS_STORE, ACTION.GET_START) });

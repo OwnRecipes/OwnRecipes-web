@@ -6,7 +6,7 @@ import * as _ from 'lodash-es';
 import '../css/login.css';
 
 import Icon from '../../common/components/Icon';
-import Input from '../../common/components/Input';
+import Input from '../../common/components/Input/Input';
 import Alert from './Alert';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 

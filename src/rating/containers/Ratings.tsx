@@ -5,7 +5,7 @@ import RatingsWrapper from '../components/RatingsWrapper';
 import * as RatingsActions from '../store/actions';
 import { RatingCreate } from '../store/types';
 import { CombinedStore } from '../../app/Store';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch } from '../../common/store/redux';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
 
 const Ratings: React.FC = () => {

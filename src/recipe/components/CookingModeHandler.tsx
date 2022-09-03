@@ -70,9 +70,11 @@ const CookingModeHandler: React.FC = () => {
     timer = setTimeout(() => setAskIfStillActive(true), 1000 * 60 * 30);
   };
 
-  const clearTimer = () => {
-    setShowCookingModeToast(false);
-    setAskIfStillActive(false);
+  const clearTimer = (resetState = true) => {
+    if (resetState) {
+      setShowCookingModeToast(false);
+      setAskIfStillActive(false);
+    }
     if (timer != null) {
       clearTimeout(timer);
     }
@@ -97,7 +99,7 @@ const CookingModeHandler: React.FC = () => {
 
   // componentWillUnmount
   useEffect(() => () => {
-    clearTimer();
+    clearTimer(false);
     if (released === false) release();
   }, []);
 

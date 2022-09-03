@@ -2,17 +2,16 @@ import { createRef } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import '../css/input.css';
+import '../../css/input.css';
 
+import { isNumber } from '../../utility';
 import DebounceInput from './DebounceInput';
-import BaseComponent, { IBaseComponentProps } from './BaseComponent';
-import Tooltip from './Tooltip';
-import ConditionalWrapper from './ConditionalWrapper';
-import { isNumber } from '../utility';
+import Tooltip from '../Tooltip';
+import ConditionalWrapper from '../ConditionalWrapper';
+import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
 
-interface IInputProps extends IBaseComponentProps {
+export interface IInputProps extends IBaseInputComponentProps {
   label?: string;
-  pushOnChange?: boolean;
 
   placeholder?:  string;
   autoComplete?: string;
@@ -25,16 +24,17 @@ interface IInputProps extends IBaseComponentProps {
   onChange?: (name: string, newValue: string) => void;
 }
 
-type ITextInputProps = {
+export type ITextInputProps = {
   type?:  'text' | 'password';
   rows?:  number;
 
   value?: string;
+  saveValue?: string;
 
   onChange?: (name: string, newValue: string) => void;
-} & IBaseComponentProps & IInputProps;
+} & IBaseInputComponentProps & IInputProps;
 
-type INumberInputProps = {
+export type INumberInputProps = {
   type?:  'number';
 
   placeholder?:  string;
@@ -43,50 +43,20 @@ type INumberInputProps = {
   inputAdornmentStart?: React.ReactNode;
 
   value?: string | number;
+  saveValue?: string;
   min?:   number;
   max?:   number;
 
-  onChange?: (name: string, newValue: string) => void;
-} & IBaseComponentProps & IInputProps;
+  onChange?: (name: string, newValue: number) => void;
+} & IBaseInputComponentProps & IInputProps;
 
-interface IInputState {
-  initValue: string | number;
-  saveValue: string | number;
-  value:     string | number;
-
-  isChanged: boolean;
-}
-
-type IAnyInputProps = ITextInputProps | INumberInputProps;
+export type IAnyInputProps = ITextInputProps | INumberInputProps;
 export const isTextInput   = (inp: IAnyInputProps): inp is ITextInputProps => (inp as ITextInputProps).type == null || (inp as ITextInputProps).type === 'text' || (inp as ITextInputProps).type === 'password';
 export const isNumberInput = (inp: IAnyInputProps): inp is INumberInputProps => (inp as INumberInputProps).type === 'number';
 
-export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
+export default class Input extends BaseInputComponent<IAnyInputProps> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
-
-  constructor(props: IAnyInputProps) {
-    super(props);
-
-    this.state = {
-      initValue: props.value ?? '',
-      saveValue: props.value ?? '',
-      value:     props.value ?? '',
-
-      isChanged: false,
-    };
-  }
-
-  static getDerivedStateFromProps(nextProps: IAnyInputProps, currentState: IInputState): Partial<IInputState> | null { // eslint-disable-line react/sort-comp
-    if ((nextProps.value ?? '') !== currentState.initValue) {
-      return {
-        saveValue: (currentState.saveValue == null || currentState.saveValue === '') && !currentState.isChanged ? (nextProps.value ?? '') : currentState.saveValue,
-        initValue: nextProps.value ?? '',
-        value:     nextProps.value ?? '',
-      };
-    }
-    return null;
-  }
 
   focus(): boolean { // eslint-disable-line react/no-unused-class-component-methods
     if (this.ref != null && this.ref.current) {
@@ -94,13 +64,6 @@ export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
       return true;
     }
     return false;
-  }
-
-  pushChange(value: string | number) {
-    const { name, onChange } = this.props;
-    if (!onChange) return;
-    if (this.state.initValue === value) return;
-    onChange(name, value);
   }
 
   formatValue(value: string, trim = false): string | number {
@@ -137,16 +100,11 @@ export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
     if (this.props.readOnly || this.props.disabled) return;
 
     const value = this.formatValue(event.target.value);
-    if (value === this.state.value) return;
 
-    if (this.props.pushOnChange || this.props.debounceTimeout || !this.state.isChanged || this.props.errors) {
-      this.pushChange(value);
+    const { name, onChange } = this.props;
+    if (onChange) {
+      onChange(name, value as any);
     }
-
-    this.setState({
-      isChanged: true,
-      value: value,
-    });
   };
 
   handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -181,25 +139,31 @@ export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
       }
 
       if (this.props.onChange && newVal != null && newVal !== value) {
-        this.props.onChange(this.props.name, newVal);
+        this.props.onChange(this.props.name, newVal as any);
       }
     }
 
-    if (event.key === 'Enter' && !isTextArea) {
+    if (this.props.onChange && event.key === 'Enter' && !isTextArea) {
       const valueS = this.formatValue(String(value), true);
-      this.pushChange(valueS);
+      this.props.onChange(this.props.name, valueS as any);
     }
   };
 
   handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    if (this.props.readOnly || this.props.disabled) return;
+    if (this.props.onBlur) {
+      this.props.onBlur(event);
+    }
+    if (!this.props.onChange || this.props.readOnly || this.props.disabled) return;
     const value = this.formatValue(event.target.value, true);
-    this.pushChange(value);
+    this.props.onChange(this.props.name, value as any);
   };
 
   render() {
+    // console.log(`[Input] name=${this.props.name}`);
+
     const type = this.props.type ?? 'text';
     const isDebounce = this.props.debounceTimeout != null && this.props.debounceTimeout > 0;
+
     return (
       <Form.Group
           controlId = {this.props.name}
@@ -218,7 +182,9 @@ export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
                   debounceTimeout = {this.props.debounceTimeout}
 
                   name  = {this.props.name}
-                  value = {this.state.value}
+                  element = {isTextInput(this.props) && type === 'text' && this.props.rows != null ? 'textarea' : undefined}
+                  value = {this.props.value ?? ''}
+                  rows  = {isTextInput(this.props) && type === 'text' ? this.props.rows : undefined}
                   min   = {isNumberInput(this.props) ? this.props.min : undefined}
                   max   = {isNumberInput(this.props) ? this.props.max : undefined}
 
@@ -231,6 +197,7 @@ export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
                   onChange  = {this.handleChange}
                   onKeyDown = {this.handleKeyPress}
                   onBlur    = {this.handleBlur}
+                  onFocus   = {this.props.onFocus}
 
                   className = {classNames('form-control', {
                     'adorned-start': this.props.inputAdornmentStart,
@@ -243,7 +210,7 @@ export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
                   name  = {this.props.name}
                   type  = {type === 'number' ? 'text' : type}
                   as    = {isTextInput(this.props) && type === 'text' && this.props.rows != null ? 'textarea' : undefined}
-                  value = {this.state.value}
+                  value = {this.props.value ?? ''}
                   rows  = {isTextInput(this.props) && type === 'text' ? this.props.rows : undefined}
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
@@ -264,6 +231,7 @@ export default class Input extends BaseComponent<IAnyInputProps, IInputState> {
                   onChange  = {this.handleChange}
                   onKeyDown = {this.handleKeyPress}
                   onBlur    = {this.handleBlur}
+                  onFocus   = {this.props.onFocus}
 
                   ref = {this.ref} />
               )}

@@ -4,8 +4,9 @@ import moment from 'moment';
 import { handleError, refreshToken, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { AccountActionTypes, ACCOUNT_STORE, AccountDispatch, ACCOUNT_TOKEN_STORAGE_KEY, UserAccount, LoginDto, toUserAccount } from './types';
-import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
+import { ACTION } from '../../common/store/ReduxHelper';
 import LocalStorageHelper from '../../common/LocalStorageHelper';
+import { toBasicAction } from '../../common/store/redux';
 
 export const getToken = (username: string, pass: string) => (dispatch: AccountDispatch) => {
   dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.GET_START) });

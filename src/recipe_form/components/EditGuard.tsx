@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
@@ -14,26 +14,25 @@ const EditGuard: React.FC = () => {
   const isNew = recipeSlug === 'create';
 
   const accountState = useSelector((state: CombinedStore) => state.account);
-  const recipeFormState = useSelector((state: CombinedStore) => state.recipeForm);
-  const recipeForm = recipeFormState.item;
-  const { pending } = recipeFormState.meta;
+  const recipeState = useSelector((state: CombinedStore) => state.recipe);
+  const recipe = recipeState.item;
+  const { pending } = recipeState.meta;
+  const wasRenderedRef = useRef<boolean>(false);
 
   const user = accountState.item;
-  const mayEdit = user != null && (isNew || (recipeForm != null && user.id === recipeForm.author));
+  const mayEdit = user != null && (isNew || (user.id === recipe?.author));
 
   useEffect(() => {
-    if (user != null && pending === PendingState.COMPLETED && recipeForm != null && !mayEdit) {
+    if (user != null && pending === PendingState.COMPLETED && recipe != null && !mayEdit) {
       nav(getResourcePath(`/recipe/${recipeSlug}`));
     }
-  }, [user, recipeFormState, recipeForm, mayEdit]);
+  }, [user, recipeState, mayEdit]);
 
   useEffect(() => {
-    if (recipeForm == null) return;
-    if (pending === PendingState.COMPLETED) {
-      if (isNew) {
-        nav(getResourcePath(`/recipe/edit/${recipeForm.slug}`));
-      }
+    if (recipe?.slug != null && pending === PendingState.COMPLETED && isNew && wasRenderedRef.current) {
+      nav(getResourcePath(`/recipe/edit/${recipe.slug}`));
     }
+    wasRenderedRef.current = true;
   }, [pending]);
 
   return null;

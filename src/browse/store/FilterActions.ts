@@ -1,8 +1,9 @@
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { ACTION, toBasicAction } from '../../common/store/ReduxHelper';
+import { ACTION } from '../../common/store/ReduxHelper';
 import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_RATING_STORE, BROWSE_FILTER_TAGS_STORE, FilterDispatch } from './FilterTypes';
 import { objToSearchString } from '../../common/utility';
+import { toBasicAction } from '../../common/store/redux';
 
 const parsedFilter = (filters: Record<string, string>): Record<string, string> => {
   const parsedFilters: Record<string, string> = {};

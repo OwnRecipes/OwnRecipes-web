@@ -35,7 +35,7 @@ const Ingredients: React.FC<IIngredientsProps> = ({
     const quantityString    = ingredient.quantity;
     let measurementString: string;
     if (ingredient.measurement != null) {
-      const measurementParserId = measurementsContext?.formatter[measurementsContext?.parser[ingredient.measurement]];
+      const measurementParserId = measurementsContext.formatter[measurementsContext.parser[ingredient.measurement]];
       if (measurementParserId != null) {
         measurementString = optionallyFormatMessage(intl, 'measurement.', measurementParserId, { itemCount: ingredient.quantity });
       } else {
