@@ -18,6 +18,8 @@ import { CombinedStore } from '../../app/Store';
 import { Recipe } from '../store/RecipeTypes';
 import { getResourcePath } from '../../common/utility';
 import useCrash from '../../common/hooks/useCrash';
+import CookingModeContextProvider from '../context/CookingModeContextProvider';
+import CookingModeHandler from '../components/CookingModeHandler';
 
 const RecipeContainer: React.FC = () => {
   const dispatch = useDispatch();
@@ -93,7 +95,7 @@ const RecipeContainer: React.FC = () => {
 
   if (recipe != null) {
     return (
-      <>
+      <CookingModeContextProvider>
         {/* TODO Lists
         <MenuItemModal
             id={0}
@@ -123,7 +125,8 @@ const RecipeContainer: React.FC = () => {
             // checkSubRecipe={checkSubRecipe}
 
             updateServings = {updateServings} />
-      </>
+        <CookingModeHandler />
+      </CookingModeContextProvider>
     );
   } else {
     return (<Loading message='Loading' />);
