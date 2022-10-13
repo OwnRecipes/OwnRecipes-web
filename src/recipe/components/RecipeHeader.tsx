@@ -17,6 +17,7 @@ import WidthHeightRatio from '../../common/components/WidthHeightRatio';
 import Image from '../../common/components/Image';
 import Tooltip from '../../common/components/Tooltip';
 import ImageViewer from '../../common/components/ImageViewer';
+import CookingModeButton from './CookingModeButton';
 
 export interface IRecipeHeaderProps {
   recipe:       Recipe | undefined;
@@ -27,7 +28,9 @@ export interface IRecipeHeaderProps {
   // onAddToMenuClick: () => void;
 }
 
-const RecipeHeader: React.FC<IRecipeHeaderProps> = ({ recipe, showEditLink, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
+    recipe, showEditLink,
+    onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -109,7 +112,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({ recipe, showEditLink, onEd
   const editLink = showEditLink ? (
     <Tooltip id='edit tooltip' tooltip={formatMessage(messages.edit_tooltip)}>
       <Link to={getResourcePath(`/recipe/edit/${recipe?.slug}`)} onClick={handleEditClick}>
-        <Button variant='primary' size='sm'>
+        <Button variant='outline-primary' size='sm'>
           <i className='bi bi-pencil-fill' />
         </Button>
       </Link>
@@ -132,6 +135,14 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({ recipe, showEditLink, onEd
     hostname = a.hostname;
   }
 
+  const printButton = (
+    <Tooltip id='print tooltip' tooltip={formatMessage(messages.print_tooltip)}>
+      <Button variant='outline-primary' aria-label='Print receipt' onClick={window.print}>
+        <Icon icon='printer' />
+      </Button>
+    </Tooltip>
+  );
+
   const optionButtons = (
     <div className='options print-hidden'>
       <div className='options-wrapper'>
@@ -146,11 +157,8 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({ recipe, showEditLink, onEd
             <Icon icon='calendar' />
           </Button>
         */}
-        <Tooltip id='print tooltip' tooltip={formatMessage(messages.print_tooltip)}>
-          <Button variant='outline-primary' aria-label='Print receipt' onClick={window.print}>
-            <Icon icon='printer' />
-          </Button>
-        </Tooltip>
+        <CookingModeButton />
+        {printButton}
       </div>
     </div>
   );
