@@ -203,7 +203,7 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
 
 .table {
   color: var(--primaryText);
-  height: '1px'; /* HACK: Fix height issues in older browser. */
+  height: 1px; /* HACK: Fix height issues in older browser. */
 }
 .table > thead.hideme {
   height: 1px;
