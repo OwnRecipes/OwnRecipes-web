@@ -48,6 +48,20 @@ export function isNumber(str: string): boolean {
   return !isNaN(str as unknown as number) && !isNaN(parseFloat(str));
 }
 
+export function toNumberDefault(val: string | undefined, defIfNull: number): number {
+  if (val == null) return defIfNull;
+
+  try {
+    const parsedVal = parseInt(val);
+    if (Number.isNaN(parsedVal)) {
+      return defIfNull;
+    }
+    return parsedVal;
+  } catch (_err) {
+    return defIfNull;
+  }
+}
+
 export function objToSearchString(params: Record<string, string | number | boolean | undefined>): string {
   const paramsStrings: Record<string, string> = {};
   Object.keys(params).forEach(key => {

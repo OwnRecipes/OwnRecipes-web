@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
-import { useLocation } from 'react-router';
 
 import '../css/random.css';
 
@@ -20,16 +19,16 @@ import RandomHeader from '../components/RandomHeader';
 import useSingle from '../../common/hooks/useSingle';
 import SearchResults from '../../browse/containers/SearchResults';
 import { objToSearchString } from '../../common/utility';
+import { useSearchParams } from 'react-router-dom';
 
 const RandomPage: React.FC = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
 
   const search   = useSelector((state: CombinedStore) => state.browse.search.items);
 
-  const locationSearch = location.search;
-  const qs = Object.fromEntries(new URLSearchParams(locationSearch));
+  const qs = Object.fromEntries(searchParams);
   const qsMergedDefaults = mergeDefaultFilters(DefaultFilters, qs);
   const qsMergedString = objToSearchString(qsMergedDefaults);
 
@@ -47,7 +46,7 @@ const RandomPage: React.FC = () => {
 
   useEffect(() => {
     reloadData();
-  }, [locationSearch]);
+  }, [searchParams]);
 
   const handleBuildUrl = useCallback((name: string, value: string, multiSelect = false) => (
     buildSearchUrl('random', qs, name, value, multiSelect)

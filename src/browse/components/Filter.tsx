@@ -21,7 +21,7 @@ export interface IFilterProps {
   title:   string;
   qsTitle: string;
   qs:      Record<string, string>;
-  data:    Array<RecipeFilter>;
+  data:    Array<RecipeFilter> | undefined;
   multiSelect?: boolean;
   buildUrl: (qsTitle: string, recipeSlug: string, multiSelect?: boolean) => string;
 
@@ -40,7 +40,7 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
 
   const dataFormatted: Array<EnhancedFilterData> = useMemo(() => {
     let res = (data
-      .map(item => {
+      ?.map(item => {
         let active = false;
         if (qs[qsTitle]) {
           if (qs[qsTitle].split(',').includes(item.slug)) {
@@ -84,7 +84,7 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
     )) ?? []
   ), [dataFormatted, qsTitle, multiSelect, buildUrl]);
 
-  if (items.length === 0) return null;
+  if (data != null && items.length === 0) return null;
 
   return (
     <Accordion.Item eventKey={qsTitle} className={classNames('filter-group', cssClass)}>

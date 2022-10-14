@@ -4,8 +4,13 @@ export type PaginationProps = {
   count:  number;
 }
 
-const defaultFilters: Partial<PaginationProps> = {
+export type DefaultFilterProps = {
+  ordering: string;
+} & PaginationProps;
+
+const defaultFilters: Partial<DefaultFilterProps> = {
   limit: 12,
+  ordering: '-pub_date',
 };
 
 export default defaultFilters;
