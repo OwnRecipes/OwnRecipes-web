@@ -2,6 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 
+import '../../recipe/css/recipe.css';
 import '../css/recipe_form.css';
 
 import Checkbox from '../../common/components/Checkbox';
