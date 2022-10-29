@@ -1,8 +1,8 @@
 import { RatingCreate, RatingDispatch, RatingsDispatch, RATINGS_STORE, RATING_STORE, toRating } from './types';
-import { handleError, request } from '../../common/CustomSuperagent';
+import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
-import { toBasicAction } from '../../common/store/redux';
+import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 
 export const load = (recipeSlug: string) => (dispatch: RatingsDispatch) => {
   dispatch({ ...toBasicAction(RATINGS_STORE, ACTION.GET_START) });
@@ -36,9 +36,9 @@ export const remove = (recipeSlug: string, id: number) => (dispatch: RatingDispa
     .catch(err => handleError(err, RATINGS_STORE));
 };
 
-export const add = (recipeSlug: string, rating: RatingCreate) => (dispatch: RatingDispatch) => {
+export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: RatingCreate) => {
   dispatch({ ...toBasicAction(RATING_STORE, ACTION.CREATE_START) });
-  request()
+  return request()
     .post(serverURLs.ratings)
     .send({
       recipe:  recipeSlug,
@@ -46,15 +46,18 @@ export const add = (recipeSlug: string, rating: RatingCreate) => (dispatch: Rati
       comment: rating.comment,
       author:  rating.userId,
     })
-    .then(res => dispatch({
-      ...toBasicAction(
-        RATING_STORE,
-        ACTION.CREATE_SUCCESS
-      ),
-      payload: {
-        recipe: recipeSlug,
-        rating:   toRating(res.body),
-      },
-    }))
-    .catch(err => handleError(err, RATINGS_STORE));
+    .then(res => {
+      dispatch({
+        ...toBasicAction(
+          RATING_STORE,
+          ACTION.CREATE_SUCCESS
+        ),
+        payload: {
+          recipe: recipeSlug,
+          rating:   toRating(res.body),
+        },
+      });
+      return null;
+    })
+    .catch(err => handleFormError(dispatch, err, RATINGS_STORE));
 };

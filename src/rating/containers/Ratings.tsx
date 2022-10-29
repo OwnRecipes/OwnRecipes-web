@@ -18,8 +18,9 @@ const Ratings: React.FC = () => {
   const recipeSlug = recipe?.slug;
   const recipeRating = recipe?.rating;
 
-  const addRatingCallback    = useCallback((recSlug, rating: RatingCreate) => dispatch(RatingsActions.add(recSlug, rating)), [dispatch]);
-  const removeRatingCallback = useCallback((recSlug, ratingId: number)     => dispatch(RatingsActions.remove(recSlug, ratingId)), [dispatch]);
+  // TODO Should those be callbacks?
+  const addRating    = useCallback(async (recSlug: string, rating: RatingCreate) => RatingsActions.add(dispatch, recSlug, rating), [dispatch]);
+  const removeRatingCallback = useCallback((recSlug, ratingId: number) => dispatch(RatingsActions.remove(recSlug, ratingId)), [dispatch]);
 
   useEffect(() => {
     if (recipeSlug == null || recipeRating == null || recipeRating === 0) return;
@@ -38,7 +39,7 @@ const Ratings: React.FC = () => {
           ratings    = {ratings}
           pending    = {ratingsState.meta.pending}
 
-          addRating  = {addRatingCallback}
+          addRating  = {addRating}
           removeRating = {removeRatingCallback} />
     </ErrorBoundary>
   );

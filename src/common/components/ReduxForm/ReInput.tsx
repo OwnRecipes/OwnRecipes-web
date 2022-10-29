@@ -45,7 +45,7 @@ const ReInput = forwardRef<Input, IReInputProps>(({
             onFocus  = {(event: React.FocusEvent<HTMLElement, Element>) => { fprops.input.onFocus(event); onFocus?.(event); }}
             onBlur   = {(event: React.FocusEvent<HTMLElement, Element>) => { fprops.input.onBlur(event);  onBlur?.(event); }}
             ref = {ref} />
-            )}
+      )}
     </Field>
   );
 });

@@ -6,20 +6,20 @@ import { Form as ReduxForm } from 'react-final-form';
 import '../../recipe/css/recipe.css';
 import '../css/recipe_form.css';
 
-import IngredientGroupsBox, { ingredientsFormatter, ingredientsParser, subrecipesFormatter, subrecipesParser } from './IngredientGroupsBox';
-import DirectionBox from './DirectionBox';
-import Status from './Status';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 import TagListContainer from '../containers/TagListContainer';
 import CourseSelectContainer from '../containers/CourseSelectContainer';
 import CuisineSelectContainer from '../containers/CuisineSelectContainer';
 import RecipeFormToolbar from '../containers/RecipeFormToolbar';
-import RecipeFormImageRow from './RecipeFormImageRow';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
 import MeasurementContext from '../../common/context/MeasurementContext';
+import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
+import RecipeFormImageRow from './RecipeFormImageRow';
+import IngredientGroupsBox, { ingredientsFormatter, ingredientsParser, subrecipesFormatter, subrecipesParser } from './IngredientGroupsBox';
+import DirectionBox from './DirectionBox';
 
 export interface IRecipeFormProps {
   recipe: Recipe | undefined;
@@ -131,7 +131,7 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
         subscription = {{}}
         render = {({ form, handleSubmit: renderSubmit }) => (
           <Form className='recipe-form' onSubmit={renderSubmit}>
-            <Status />
+            <ReFormStatus />
             <InitialValuesResetter form={form} initialValues={initialValues} />
             <Container>
               <Row>
