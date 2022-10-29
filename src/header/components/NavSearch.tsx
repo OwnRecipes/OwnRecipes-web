@@ -1,20 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import * as _ from 'lodash-es';
 import classNames from 'classnames';
+import { Form as ReduxForm } from 'react-final-form';
 
 import Icon from '../../common/components/Icon';
-import Input from '../../common/components/Input/Input';
 import { getResourcePath } from '../../common/utility';
+import ReInput from '../../common/components/ReduxForm/ReInput';
+import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 import NavLink from './NavLink';
 
 export interface INavSearchProps {
   onExpandSearch?: (expanded: boolean) => void;
-}
-
-interface INavSearchData {
-  search: string;
 }
 
 const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProps) => {
@@ -29,14 +26,6 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
 
   const urlRef = useRef(null);
   const searchRef = useRef(null);
-  const [formData, setFormData] = useState<INavSearchData>({ search: '' });
-  const handleChange = (attr: string, value: string) => {
-    setFormData(prev => {
-      const newState = _.cloneDeep(prev);
-      _.set(newState, attr, value);
-      return newState;
-    });
-  };
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [islgUp, setIsLgUp] = useState<boolean>(false);
@@ -78,8 +67,7 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
       handleSetExpanded(false);
     }
   };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = () => {
     if (!islgUp) {
       handleSetExpanded(false);
     }
@@ -89,28 +77,47 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
     }
   };
 
-  const buildUrl = (): string => (getResourcePath(formData.search ? `/browser?search=${formData.search}` : '/browser'));
+  return (
+    <ReduxForm
+        onSubmit = {handleSubmit}
+        subscription = {{}}
+        render = {({ handleSubmit: renderSubmit }) => (
+          <Form onBlur={handleBlur} onSubmit={renderSubmit}>
+            <ReInput
+                name = 'search'
+                placeholder = {formatMessage(messages.search_placeholder)}
+                className = {classNames('search', { expanded: isExpanded })}
+                aria-label = {formatMessage(messages.search_placeholder)}
+                inputAdornmentEnd = {(
+                  <FieldSpyValues fieldNames={['search']}>
+                    {values => (
+                      <SearchButton isExpanded={isExpanded} searchValue={values.search} onSearchClick={handleSearchClick} onExpandClick={handleExpandClick} ref={urlRef} />
+                    )}
+                  </FieldSpyValues>
+                )}
+                ref = {searchRef}
+                />
+          </Form>
+    )} />
+  );
+};
 
-  const searchButton = (
-    <NavLink id='search-button' as={isExpanded ? undefined : 'button'} to={isExpanded ? buildUrl() : undefined} onClick={isExpanded ? handleSearchClick : handleExpandClick} accessKey='b' ref={urlRef}>
+interface ISearchButtonProps {
+  isExpanded: boolean;
+  searchValue: string | undefined;
+  onSearchClick: () => void;
+  onExpandClick: () => void;
+}
+
+const SearchButton = forwardRef<HTMLAnchorElement, ISearchButtonProps>(({
+    isExpanded, searchValue, onSearchClick, onExpandClick }: ISearchButtonProps, ref) => {
+  const buildUrl: string = useMemo(() => getResourcePath(searchValue ? `/browser?search=${searchValue}` : '/browser'), [searchValue]);
+
+  return (
+    <NavLink id='search-button' as={isExpanded ? undefined : 'button'} to={isExpanded ? buildUrl : undefined} onClick={isExpanded ? onSearchClick : onExpandClick} accessKey='b' ref={ref}>
       <Icon icon='search' variant='light' size='2x' />
     </NavLink>
   );
-
-  return (
-    <Form onBlur={handleBlur} onSubmit={handleSubmit}>
-      <Input
-          name = 'search'
-          type = 'text'
-          placeholder = {formatMessage(messages.search_placeholder)}
-          className = {classNames('search', { expanded: isExpanded })}
-          aria-label = {formatMessage(messages.search_placeholder)}
-          inputAdornmentEnd = {searchButton}
-          onChange = {handleChange}
-          ref = {searchRef}
-      />
-    </Form>
-  );
-};
+});
 
 export default NavSearch;
