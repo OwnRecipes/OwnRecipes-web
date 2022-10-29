@@ -1,13 +1,12 @@
 import { defineMessages, useIntl } from 'react-intl';
 
 import Alert from '../../common/components/Alert';
-import { ReducerMeta } from '../../common/store/GenericReducerType';
 
 export interface ILoginAlert {
-  reducerMeta: ReducerMeta;
+  submitError: boolean;
 }
 
-const LoginAlert: React.FC<ILoginAlert> = ({ reducerMeta }: ILoginAlert) => {
+const LoginAlert: React.FC<ILoginAlert> = ({ submitError }: ILoginAlert) => {
   const { formatMessage } = useIntl();
 
   const messages = defineMessages({
@@ -23,16 +22,12 @@ const LoginAlert: React.FC<ILoginAlert> = ({ reducerMeta }: ILoginAlert) => {
     },
   });
 
-  const { error } = reducerMeta;
+  if (!submitError) return null;
 
   return (
-    <>
-      {error && (
-        <Alert severity='danger' title={formatMessage(messages.errorTitle)}>
-          {formatMessage(messages.errorMessage)}
-        </Alert>
-      )}
-    </>
+    <Alert severity='danger' title={formatMessage(messages.errorTitle)}>
+      {formatMessage(messages.errorMessage)}
+    </Alert>
   );
 };
 

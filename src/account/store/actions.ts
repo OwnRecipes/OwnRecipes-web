@@ -1,25 +1,26 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import moment from 'moment';
 
-import { handleError, refreshToken, request } from '../../common/CustomSuperagent';
+import { handleFormError, refreshToken, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { AccountActionTypes, ACCOUNT_STORE, AccountDispatch, ACCOUNT_TOKEN_STORAGE_KEY, UserAccount, LoginDto, toUserAccount } from './types';
 import { ACTION } from '../../common/store/ReduxHelper';
 import LocalStorageHelper from '../../common/LocalStorageHelper';
-import { toBasicAction } from '../../common/store/redux';
+import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 
-export const getToken = (username: string, pass: string) => (dispatch: AccountDispatch) => {
+export const getToken = async (dispatch: AnyDispatch, username: string, pass: string) => {
   dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.GET_START) });
 
   const url = serverURLs.auth_token;
-  request()
+  return request()
     .post(url)
     .send({ username: username, password: pass })
     .then(res => {
       const data: LoginDto = res.body;
       dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data) });
+      return null;
     })
-    .catch(err => dispatch(handleError(err, ACCOUNT_STORE)));
+    .catch(err => handleFormError(dispatch, err, ACCOUNT_STORE));
 };
 
 export const tryAutoLogin = () => (dispatch: AccountDispatch) => {

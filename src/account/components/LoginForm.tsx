@@ -1,27 +1,25 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import * as _ from 'lodash-es';
+import { Form as ReduxForm, FormSpy } from 'react-final-form';
 
 import '../css/login.css';
 
 import Icon from '../../common/components/Icon';
-import Input from '../../common/components/Input/Input';
-import Alert from './Alert';
-import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
+import LoginAlert from './LoginAlert';
+import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReduxForm/ReInput';
 
 export interface ILoginFormProps {
-  accountMeta: ReducerMeta;
-
   onLogin: (username: string, password: string) => void;
 }
 
-interface ILoginFormData {
+type LoginFormData = {
   username: string;
   password: string;
 }
 
-const LoginForm: React.FC<ILoginFormProps> = ({ accountMeta, onLogin }: ILoginFormProps) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ onLogin }: ILoginFormProps) => {
   const intl = useIntl();
 
   const { formatMessage } = intl;
@@ -48,48 +46,48 @@ const LoginForm: React.FC<ILoginFormProps> = ({ accountMeta, onLogin }: ILoginFo
     },
   });
 
-  const [formData, setFormData] = useState<ILoginFormData>({ username: '', password: '' });
+  const handleSubmit = (form: LoginFormData) => onLogin(form.username, form.password);
 
-  const handleChange = (attr: string, value: string) => {
-    setFormData(prev => {
-      const newState = _.cloneDeep(prev);
-      _.set(newState, attr, value);
-      return newState;
-    });
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onLogin(formData.username, formData.password);
-  };
+  const initialValues = useMemo(() => ({}), []);
 
   return (
-    <Form className='form-signin' onSubmit={handleSubmit}>
-      <Alert reducerMeta={accountMeta} />
+    <ReduxForm
+        initialValues = {initialValues}
+        onSubmit = {handleSubmit}
+        subscription = {{}}
+        render = {({ form, handleSubmit: renderSubmit }) => (
+          <Form className='form-signin' onSubmit={renderSubmit}>
+            <InitialValuesResetter form={form} initialValues={initialValues} />
+            <FormSpy subscription={{ submitError: true }}>
+              {({ submitError }) => (
+                <LoginAlert submitError={submitError} />
+              )}
+            </FormSpy>
 
-      <h2 className='form-signin-heading'>{formatMessage(messages.please_sign_in)}</h2>
-      <Input
-          name  = 'username'
-          value = {formData.username}
-          placeholder = {formatMessage(messages.username)}
-          autoComplete = 'username'
-          required
-          inputAdornmentStart = {<Icon icon='person' size='2x' />}
-          onChange = {handleChange} />
-      <Input
-          name  = 'password'
-          value = {formData.password}
-          type  = 'password'
-          placeholder = {formatMessage(messages.password)}
-          autoComplete = 'password'
-          required
-          inputAdornmentStart = {<Icon icon='key' size='2x' />}
-          onChange = {handleChange} />
+            <h2 className='form-signin-heading'>{formatMessage(messages.please_sign_in)}</h2>
+            <ReInput
+                name  = 'username'
+                placeholder = {formatMessage(messages.username)}
+                autoComplete = 'username'
+                required
+                inputAdornmentStart = {<Icon icon='person' size='2x' />} />
+            <ReInput
+                name  = 'password'
+                type  = 'password'
+                placeholder = {formatMessage(messages.password)}
+                autoComplete = 'password'
+                required
+                inputAdornmentStart = {<Icon icon='key' size='2x' />} />
 
-      <Button variant='primary' type='submit' disabled={accountMeta.pending === PendingState.LOADING}>
-        {formatMessage(messages.sign_in)}
-      </Button>
-    </Form>
+            <FormSpy subscription={{ submitting: true }}>
+              {({ submitting }) => (
+                <Button variant='primary' type='submit' disabled={submitting}>
+                  {formatMessage(messages.sign_in)}
+                </Button>
+              )}
+            </FormSpy>
+          </Form>
+    )} />
   );
 };
 

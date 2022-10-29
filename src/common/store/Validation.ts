@@ -1,5 +1,6 @@
 import { IntlShape } from 'react-intl';
 import * as _ from 'lodash-es';
+import { FORM_ERROR } from 'final-form';
 
 import { ResponseError } from '../CustomSuperagent';
 import { optionallyFormatMessage } from '../utility';
@@ -40,7 +41,12 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
   }
 
   keys.forEach(nextKey => {
-    const attr    = ((/[_-]/).test(nextKey)) ? _.camelCase(nextKey) : nextKey;
+    let attr: string;
+    if (nextKey === 'non_field_errors') {
+      attr = FORM_ERROR;
+    } else {
+      attr = ((/[_-]/).test(nextKey)) ? _.camelCase(nextKey) : nextKey;
+    }
     const nextVal = body[nextKey];
 
     if (Array.isArray(nextVal)) {
