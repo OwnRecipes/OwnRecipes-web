@@ -103,6 +103,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
 
     const { name, onChange } = this.props;
     if (onChange) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onChange(name, value as any);
     }
   };
@@ -139,12 +140,14 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
       }
 
       if (this.props.onChange && newVal != null && newVal !== value) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.props.onChange(this.props.name, newVal as any);
       }
     }
 
     if (this.props.onChange && event.key === 'Enter' && !isTextArea) {
       const valueS = this.formatValue(String(value), true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.props.onChange(this.props.name, valueS as any);
     }
   };
@@ -155,6 +158,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
     }
     if (!this.props.onChange || this.props.readOnly || this.props.disabled) return;
     const value = this.formatValue(event.target.value, true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.props.onChange(this.props.name, value as any);
   };
 

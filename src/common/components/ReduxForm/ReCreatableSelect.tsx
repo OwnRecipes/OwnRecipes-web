@@ -4,7 +4,7 @@ import { Field } from 'react-final-form';
 import { useIntl } from 'react-intl';
 
 import { formatValidation, requiredValidator } from '../../store/Validation';
-import { CreatableSelect, ICreatableSelectValues } from '../Select';
+import { CreatableSelect, ICreatableSelectValues } from '../Input/Select';
 
 export type IReCreatableSelectProps = {
   parser: (newValue: any | null) => any | undefined;
