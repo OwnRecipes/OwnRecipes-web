@@ -1,5 +1,5 @@
 import IngredientButtons from '../components/IngredientButtons';
-import createComponentWithIntlAndRouter from '../../test/createComponentWithIntlAndRouter';
+import create from '../../test/create';
 import { PendingState } from '../../common/store/GenericReducerType';
 
 const lists = [{ id: 1, title: 'title' },{ id: 2, title: 'tütle' }];
@@ -8,7 +8,7 @@ test('Ingredient Buttons Default', () => {
   const bulkAdd = jest.fn();
   const checkAll = jest.fn();
   const unCheckAll = jest.fn();
-  const component = createComponentWithIntlAndRouter(
+  const component = create(
     <IngredientButtons
         pending={PendingState.INITIAL}
         lists={lists}
@@ -25,7 +25,7 @@ test('Ingredient Buttons Loading', () => {
   const bulkAdd = jest.fn();
   const checkAll = jest.fn();
   const unCheckAll = jest.fn();
-  const component = createComponentWithIntlAndRouter(
+  const component = create(
     <IngredientButtons
         pending={PendingState.ABORTED}
         lists={lists}
@@ -42,7 +42,7 @@ test('Ingredient Buttons Complete', () => {
   const bulkAdd = jest.fn();
   const checkAll = jest.fn();
   const unCheckAll = jest.fn();
-  const component = createComponentWithIntlAndRouter(
+  const component = create(
     <IngredientButtons
         pending={PendingState.COMPLETED}
         lists={lists}
@@ -59,7 +59,7 @@ test('Ingredient Buttons Error', () => {
   const bulkAdd = jest.fn();
   const checkAll = jest.fn();
   const unCheckAll = jest.fn();
-  const component = createComponentWithIntlAndRouter(
+  const component = create(
     <IngredientButtons
         pending={PendingState.ABORTED}
         lists={lists}

@@ -1,8 +1,8 @@
 import NoResults from '../components/NoResults';
-import createComponentWithIntl from '../../test/createComponentWithIntl';
+import create from '../../test/create';
 
 test('NoResults component test', () => {
-  const component = createComponentWithIntl(
+  const component = create(
     <NoResults />
   );
   const tree = component.toJSON();

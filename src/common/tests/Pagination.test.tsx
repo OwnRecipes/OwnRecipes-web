@@ -1,9 +1,9 @@
-import createComponentWithIntlAndRouter from '../../test/createComponentWithIntlAndRouter';
+import create from '../../test/create';
 import { PaginationLink } from '../components/Pagination';
 
 test('PaginationLink', () => {
   const buildUrl = (): string => 'http://localhost:8080';
-  const component = createComponentWithIntlAndRouter(
+  const component = create(
     <PaginationLink
         title='17'
         offset={128}
@@ -17,7 +17,7 @@ test('PaginationLink', () => {
 
 test('PaginationLink disabled', () => {
   const buildUrl = (): string => 'http://localhost:8080';
-  const component = createComponentWithIntlAndRouter(
+  const component = create(
     <PaginationLink
         title='<-'
         offset={128}
