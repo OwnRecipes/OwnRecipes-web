@@ -25,6 +25,7 @@ const RecipeContainer: React.FC = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
   const params = useParams();
+  const crash = useCrash();
 
   const paramsRecipe = params.recipe;
   // Load Recipe
@@ -56,6 +57,11 @@ const RecipeContainer: React.FC = () => {
 
   const recipeSlug = params.recipe ?? '';
   const showEditLink = (userId != null && userId === recipe?.author);
+
+  const handlePreloadRecipe = () => {
+    if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
+    dispatch(RecipeFormActions.preload(recipe));
+  };
 
   // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, [dispatch]);
   const deleteRecipe = useCallback(() => {
@@ -101,6 +107,7 @@ const RecipeContainer: React.FC = () => {
 
             showEditLink = {showEditLink}
 
+            onEditRecipe = {handlePreloadRecipe}
             deleteRecipe = {deleteRecipe}
 
             // lists={lists}

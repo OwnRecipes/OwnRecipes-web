@@ -1,12 +1,39 @@
-import { handleFormError, request } from '../../common/CustomSuperagent';
+import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { Recipe, RecipeDto, toRecipe, toRecipeRequest } from '../../recipe/store/RecipeTypes';
 import { COURSES_STORE, CUISINES_STORE, TAGS_STORE } from '../../recipe_groups/store/types';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
-import { RECIPE_FORM_STORE } from './types';
+import { RecipeFormDispatch, RECIPE_FORM_STORE } from './types';
 import { getRecipeSuccess } from '../../recipe/store/RecipeActions';
+
+export const load = (recipeSlug: string) => (dispatch: RecipeFormDispatch) => {
+  dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.GET_START) });
+  request()
+    .get(`${serverURLs.recipe}${recipeSlug}/`)
+    .then(res => {
+      const recipe = toRecipe(res.body);
+      dispatch({
+        ...toBasicAction(
+          RECIPE_FORM_STORE,
+          ACTION.GET_SUCCESS
+        ),
+        payload: recipe,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dispatch(getRecipeSuccess(recipe) as any);
+    })
+    .catch(err => dispatch(handleError(err, RECIPE_FORM_STORE)));
+};
+
+export const preload = (recipe: Partial<Recipe>) => (dispatch: RecipeFormDispatch) => {
+  dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.PRELOAD), payload: recipe });
+};
+
+export const reset = () => (dispatch: RecipeFormDispatch) => {
+  dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.RESET) });
+};
 
 export const save = async (dispatch: AnyDispatch, data: Recipe) => {
   const photo = (typeof data.photo === 'object') ? data.photo : undefined;

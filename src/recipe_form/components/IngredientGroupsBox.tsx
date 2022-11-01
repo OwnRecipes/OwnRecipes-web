@@ -56,7 +56,7 @@ export function ingredientsFormatter(intl: IntlShape, formatter: Record<string, 
   return tr;
 }
 
-export function ingredientsParser(parser: Record<string, string>, value: string): Array<IngredientGroup> {
+export function ingredientsParser(parser: Record<string, string>, value: string | undefined): Array<IngredientGroup> {
   if (!value) return [];
   const dict = [{ title: '', ingredients: [] }];
   let igTitle = '';
@@ -99,7 +99,8 @@ export function subrecipesFormatter(intl: IntlShape, formatter: Record<string, s
   return tr.substring(0, tr.length - 1);
 }
 
-export function subrecipesParser(parser: Record<string, string>, value: string): Array<SubRecipe> {
+export function subrecipesParser(parser: Record<string, string>, value: string | undefined): Array<SubRecipe> {
+  if (!value) return [];
   const ings: Array<SubRecipe> = [];
   const subRecipes = value.split('\n').map(line => normalizeLine(line)).filter(t => t.length > 1 && !t.startsWith(':'));
   subRecipes.forEach(sr => {
@@ -176,8 +177,8 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
   };
 
   return (
-    <FormSpy subscription={{ errors: true, touched: true }}>
-      {({ errors, touched }) => (
+    <FormSpy subscription={{ errors: true, touched: true, initialValues: true }}>
+      {({ errors, touched, initialValues }) => (
         <TabbedView
             id       = 'ingredients'
             labels   = {[formatMessage(messages.ingredients_label), formatMessage(messages.subrecipes_label)]}
@@ -193,8 +194,7 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
                   name     = {nameIg}
                   rows     = {8}
                   placeholder = {formatMessage(messages.ingredients_placeholder)}
-                  required = {(values[nameSub] as string).length === 0}
-                  debounceTimeout = {3000} />
+                  required = {initialValues && !values[nameSub]} />
             )}
           </FieldSpyValues>
           <div className='form-group'>

@@ -56,7 +56,7 @@ export default class TextareaAutocomplete<TListItem extends string | object = Au
   }
 
   render() {
-    console.log(`[TextareaAutocomplete] name=${this.props.name}, value=${this.props.value}`);
+    // console.log(`[TextareaAutocomplete] name=${this.props.name}, value=${this.props.value}`);
 
     return (
       <Form.Group

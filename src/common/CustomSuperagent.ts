@@ -103,6 +103,16 @@ export const request = (): SuperAgentStatic => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getResponseMethod(resp: any): string {
+  const mth = _.get(resp, 'req.method');
+  if (mth) {
+    return String(mth).toLocaleUpperCase();
+  } else {
+    return '';
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const handleError = (error: Error, storeIdent: string): any => (dispatch: any): any => {
   if (isResponseError(error)) {
     const respErr: ResponseError = error;
@@ -115,7 +125,7 @@ export const handleError = (error: Error, storeIdent: string): any => (dispatch:
         ),
         payload: toValidationErrors(respErr),
       });
-    } else if (_.get(respErr.response, 'req.method') === 'get' && respErr.response != null && respErr.response.status === 404) {
+    } else if (getResponseMethod(respErr.response) === 'GET' && respErr.response != null && respErr.response.status === 404) {
       dispatch({
         ...toBasicAction(
           storeIdent,
@@ -170,7 +180,9 @@ export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent:
     const respErr: ResponseError = error;
     if (respErr.response != null && (respErr.response.status === 400 || respErr.response.status === 409)) {
       return toValidationErrors(respErr);
-    } else if (_.get(respErr.response, 'req.method') === 'get' && respErr.response != null && respErr.response.status === 404) {
+    } else if (getResponseMethod(respErr.response) === 'GET' && respErr.response != null && respErr.response.status === 404) {
+      // TODO This is error-prone. GET_SUCCESS should have a payload.
+      // -> Use a new action to set the 404 error state.
       dispatch({
         ...toBasicAction(
           storeIdent,

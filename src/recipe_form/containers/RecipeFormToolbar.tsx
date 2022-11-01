@@ -29,7 +29,7 @@ const RecipeFormToolbar: React.FC = () => {
     },
   });
 
-  const recipeState = useSelector((state: CombinedStore) => state.recipe);
+  const recipeState = useSelector((state: CombinedStore) => state.recipeForm);
 
   const id = recipeState.item?.id;
   const isNew = id == null || id === 0;

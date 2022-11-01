@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
 
 import * as RecipeFormActions from '../store/actions';
-import * as RecipeActions from '../../recipe/store/RecipeActions';
 import { useDispatch } from '../../common/store/redux';
 import { CombinedStore } from '../../app/Store';
 
@@ -28,30 +27,32 @@ const RecipeFormPage: React.FC = () => {
   const location = useLocation();
 
   const fetchRecipeList = RecipeFormActions.fetchRecipeList;
-  const handleSubmit = async (data: Recipe) => RecipeFormActions.save(dispatch, data);
+  const handleSubmit = useCallback(async (data: Recipe) => RecipeFormActions.save(dispatch, data), [dispatch]);
 
-  const recipe = useSelector((state: CombinedStore) => state.recipe.item);
   const recipeSlug = params.recipe ?? '';
   const isNew = recipeSlug === 'create';
-  const paramsRecipe = params.recipe;
+
+  const recipe = useSelector((state: CombinedStore) => state.recipeForm.item);
 
   // Load Recipe / or init.
   useEffect(() => {
-    if (paramsRecipe) {
+    if (recipeSlug) {
       window.scrollTo(0, 0);
-      if (paramsRecipe === 'create') {
-        dispatch(RecipeActions.reset());
+      if (recipeSlug === 'create') {
+        dispatch(RecipeFormActions.reset());
       } else {
-        dispatch(RecipeActions.load(paramsRecipe));
+        dispatch(RecipeFormActions.load(recipeSlug));
       }
     }
-  }, [paramsRecipe, location.key]);
+  }, [recipeSlug, location.key]);
 
   return (
     <PageWrapper title={isNew ? intl.formatMessage(messages.new_recipe) : recipe?.title}>
       <EditGuard />
       <RecipeForm
-          recipe = {isNew ? undefined : recipe}
+          recipe = {recipe}
+          isNew  = {isNew}
+          location = {location.key}
           fetchRecipeList = {fetchRecipeList}
           onSubmit = {handleSubmit} />
     </PageWrapper>

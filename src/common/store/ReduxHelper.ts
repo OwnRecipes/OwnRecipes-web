@@ -465,7 +465,7 @@ export default class ReduxHelper {
     if (state.ident === action.store) {
       switch (action.typs) {
         case ACTION.LOADING:       return ReduxHelper.setPending(state, PendingState.LOADING);
-        case ACTION.ERROR:         return ReduxHelper.setError(state, action.data);
+        case ACTION.ERROR:         return ReduxHelper.setError(state, action.payload);
 
         case ACTION.RESET:         return defaultState;
         case ACTION.SOFT_RESET:    return ReduxHelper.setSoftReset(state);

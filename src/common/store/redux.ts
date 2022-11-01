@@ -4,6 +4,7 @@ import { get as _get } from 'lodash-es';
 
 import useCrash from '../hooks/useCrash';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyDispatch = (dispatch: any) => any;
 
 export function useDispatch() {

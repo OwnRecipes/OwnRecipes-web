@@ -35,9 +35,7 @@ function capitalize(str: string): string {
 
 const Toast: React.FC<IToastProps> = ({ show, autoHide, variant, anchorOrigin, onClose, className, children }: IToastProps) => {
   const handleClose = () => {
-    if (onClose != null) {
-      onClose();
-    }
+    onClose?.();
   };
 
   const autoHideD = autoHide ?? 6000;

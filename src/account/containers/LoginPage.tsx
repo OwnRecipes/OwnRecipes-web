@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 
@@ -14,7 +14,7 @@ const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
 
-  const handleLogin = async (username: string, password: string) => AuthActions.getToken(dispatch, username, password);
+  const handleLogin = useCallback(async (username: string, password: string) => AuthActions.getToken(dispatch, username, password), [dispatch]);
 
   return (
     <PageWrapper title={intl.messages['nav.login.title'] as string}>
@@ -24,8 +24,7 @@ const LoginPage: React.FC = () => {
         </Modal.Header>
 
         <Modal.Body>
-          <LoginForm
-              onLogin={handleLogin} />
+          <LoginForm onSubmit={handleLogin} />
           <hr />
           <SignUpInfo />
         </Modal.Body>

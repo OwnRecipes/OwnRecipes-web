@@ -12,11 +12,7 @@ const InternalErrorDialog = () => {
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (internalError != null) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
+    setOpen(internalError != null);
   }, [internalError]);
 
   const handleClose = () => {

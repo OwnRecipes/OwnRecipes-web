@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
+import * as _ from 'lodash-es';
 
 import { CombinedStore } from '../../app/Store';
 import { PendingState } from '../../common/store/GenericReducerType';
@@ -14,7 +15,7 @@ const EditGuard: React.FC = () => {
   const isNew = recipeSlug === 'create';
 
   const accountState = useSelector((state: CombinedStore) => state.account);
-  const recipeState = useSelector((state: CombinedStore) => state.recipe);
+  const recipeState = useSelector((state: CombinedStore) => state.recipeForm);
   const recipe = recipeState.item;
   const { pending } = recipeState.meta;
   const wasRenderedRef = useRef<boolean>(false);
@@ -30,10 +31,20 @@ const EditGuard: React.FC = () => {
 
   useEffect(() => {
     if (recipe?.slug != null && pending === PendingState.COMPLETED && isNew && wasRenderedRef.current) {
-      nav(getResourcePath(`/recipe/edit/${recipe.slug}`));
+      setTimeout(() => {
+        nav(getResourcePath(`/recipe/edit/${recipe.slug}`));
+      }, 0);
     }
     wasRenderedRef.current = true;
   }, [pending]);
+
+  const recipeMeta = recipeState.meta;
+  // If recipe not found, redirect to NotFound-Page
+  useEffect(() => {
+    if (_.get(recipeMeta.error, 'status') === 404) {
+      nav(getResourcePath('/NotFound'));
+    }
+  }, [recipeMeta.error]);
 
   return null;
 };

@@ -69,7 +69,7 @@ class FileSelect extends BaseInputComponent<IFileSelectProps> {
                 onFocus  = {this.props.onFocus}
                 ref = {this.ref} />
             {!this.props.readOnly && !this.props.disabled && this.props.onChange
-                && (this.props.value != null || (this.ref.current != null && this.ref.current.value !== '')) && (
+                && (this.props.value || (this.ref.current != null && this.ref.current.value)) && (
                   <InputGroup.Text className='input-adornment-end button'>
                     <Button onClick={this.handleClear}><Icon icon='x' variant='light' size='2x' /></Button>
                   </InputGroup.Text>

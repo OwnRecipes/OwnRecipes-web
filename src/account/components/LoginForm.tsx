@@ -11,7 +11,7 @@ import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialVa
 import ReInput from '../../common/components/ReduxForm/ReInput';
 
 export interface ILoginFormProps {
-  onLogin: (username: string, password: string) => void;
+  onSubmit: (username: string, password: string) => void;
 }
 
 type LoginFormData = {
@@ -19,7 +19,7 @@ type LoginFormData = {
   password: string;
 }
 
-const LoginForm: React.FC<ILoginFormProps> = ({ onLogin }: ILoginFormProps) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => {
   const intl = useIntl();
 
   const { formatMessage } = intl;
@@ -46,7 +46,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onLogin }: ILoginFormProps) => {
     },
   });
 
-  const handleSubmit = (form: LoginFormData) => onLogin(form.username, form.password);
+  const handleSubmit = (form: LoginFormData) => onSubmit(form.username, form.password);
 
   const initialValues = useMemo(() => ({}), []);
 

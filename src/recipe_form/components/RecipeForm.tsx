@@ -23,6 +23,8 @@ import DirectionBox from './DirectionBox';
 
 export interface IRecipeFormProps {
   recipe: Recipe | undefined;
+  isNew: boolean;
+  location: string;
 
   fetchRecipeList: (searchTerm: string) => Promise<AutocompleteListItem[]>;
   onSubmit: (form: Recipe) => void;
@@ -34,7 +36,7 @@ type RecipeFormatted = {
 } & Recipe;
 
 const RecipeForm: React.FC<IRecipeFormProps> = ({
-    recipe,
+    recipe, isNew, location,
     fetchRecipeList, onSubmit } : IRecipeFormProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
@@ -109,20 +111,24 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
     subrecipes:        subrecipesParser(measurementsContext.parser, form.subrecipesS),
   });
 
-  const initialValues: Partial<RecipeFormatted> | undefined = useMemo(() => (
-    recipe ? {
-      ...recipe,
-      ingredientGroupsS: ingredientsFormatter(intl, measurementsContext.formatter, recipe.ingredientGroups),
-      subrecipesS:        subrecipesFormatter(intl, measurementsContext.formatter, recipe.subrecipes),
-    } : {
-      slug: '',
-      public: true,
-      servings: 1,
-      ingredientGroupsS: '',
-      subrecipesS: '',
-    }), [recipe]);
+  const initialValues: Partial<RecipeFormatted> | undefined = useMemo(() => {
+    if (isNew && !recipe) {
+      return {
+        slug: '',
+        public: true,
+        servings: 1,
+      };
+    } else {
+      return recipe
+        ? {
+        ...recipe,
+        ingredientGroupsS: ingredientsFormatter(intl, measurementsContext.formatter, recipe.ingredientGroups),
+        subrecipesS:        subrecipesFormatter(intl, measurementsContext.formatter, recipe.subrecipes),
+        } : undefined;
+    }
+    }, [recipe, isNew, location]);
 
-  // console.log(`[RecipeForm] initialValues=${JSON.stringify(initialValues)}`);
+  // console.log(`[RecipeForm] recipe=${JSON.stringify(recipe)}, initialValues=${JSON.stringify(initialValues)}`);
 
   return (
     <ReduxForm

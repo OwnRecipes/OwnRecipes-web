@@ -15,6 +15,7 @@ const recipe = (state = defaultState, action: RecipeAction): RecipeState => {
       case ACTION.GET_SUCCESS:
         {
           const actionRecipe = action.payload;
+          if (!actionRecipe) return ReduxHelper.setItem<Recipe, RecipeState>(state, undefined);
 
           const isNew = state.item == null || state.item.id !== actionRecipe.id || state.item.ingredientGroups == null;
           const updServings = isNew ? actionRecipe.servings : (state.item?.customServings ?? 1);

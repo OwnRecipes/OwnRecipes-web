@@ -13,6 +13,7 @@ interface IRecipeSchemeProps {
   recipeMeta:   ReducerMeta;
   showEditLink: boolean;
 
+  onEditRecipe: () => void;
   deleteRecipe: () => void;
 
   // lists: Array<any>;
@@ -28,11 +29,12 @@ interface IRecipeSchemeProps {
   updateServings: (servings: number) => void;
 }
 
-const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, showEditLink, deleteRecipe, updateServings }: IRecipeSchemeProps) => (
+const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, showEditLink, onEditRecipe, deleteRecipe, updateServings }: IRecipeSchemeProps) => (
   <div className='recipe-details'>
     <RecipeHeader
         recipe = {recipe}
         showEditLink = {showEditLink}
+        onEditRecipe = {onEditRecipe}
         // onAddToMenuClick={props.onAddToMenuClick}
         deleteRecipe = {deleteRecipe} />
 

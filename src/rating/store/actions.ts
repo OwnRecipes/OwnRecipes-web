@@ -19,23 +19,6 @@ export const load = (recipeSlug: string) => (dispatch: RatingsDispatch) => {
     .catch(err => handleError(err, RATINGS_STORE));
 };
 
-export const remove = (recipeSlug: string, id: number) => (dispatch: RatingDispatch) => {
-  dispatch({ ...toBasicAction(RATING_STORE, ACTION.DELETE_START) });
-  request()
-    .delete(`${serverURLs.ratings}${id}/`)
-    .then(() => dispatch({
-      ...toBasicAction(
-        RATING_STORE,
-        ACTION.DELETE_SUCCESS
-      ),
-      payload: {
-        ratingId: id,
-        recipe:   recipeSlug,
-      },
-    }))
-    .catch(err => handleError(err, RATINGS_STORE));
-};
-
 export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: RatingCreate) => {
   dispatch({ ...toBasicAction(RATING_STORE, ACTION.CREATE_START) });
   return request()
@@ -60,4 +43,21 @@ export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: Rat
       return null;
     })
     .catch(err => handleFormError(dispatch, err, RATINGS_STORE));
+};
+
+export const remove = (recipeSlug: string, id: number) => (dispatch: RatingDispatch) => {
+  dispatch({ ...toBasicAction(RATING_STORE, ACTION.DELETE_START) });
+  request()
+    .delete(`${serverURLs.ratings}${id}/`)
+    .then(() => dispatch({
+      ...toBasicAction(
+        RATING_STORE,
+        ACTION.DELETE_SUCCESS
+      ),
+      payload: {
+        ratingId: id,
+        recipe:   recipeSlug,
+      },
+    }))
+    .catch(err => handleError(err, RATINGS_STORE));
 };
