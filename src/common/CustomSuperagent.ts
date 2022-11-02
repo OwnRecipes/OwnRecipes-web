@@ -178,6 +178,15 @@ export const handleError = (error: Error, storeIdent: string): any => (dispatch:
 export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent: string): any => {
   if (isResponseError(error)) {
     const respErr: ResponseError = error;
+
+    dispatch({
+      ...toBasicAction(
+        storeIdent,
+        ACTION.ERROR
+      ),
+      payload: error,
+    });
+
     if (respErr.response != null && (respErr.response.status === 400 || respErr.response.status === 409)) {
       return toValidationErrors(respErr);
     } else if (getResponseMethod(respErr.response) === 'GET' && respErr.response != null && respErr.response.status === 404) {
@@ -208,14 +217,6 @@ export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent:
         payload: validationError,
       });
     }
-
-    dispatch({
-      ...toBasicAction(
-        storeIdent,
-        ACTION.ERROR
-      ),
-      payload: error,
-    });
   } else if (isNetworkError(error)) {
     dispatch({ ...toBasicAction(storeIdent, ACTION.NO_CONNECTION) });
   } else {

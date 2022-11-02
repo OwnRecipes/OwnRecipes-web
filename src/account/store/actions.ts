@@ -9,7 +9,7 @@ import LocalStorageHelper from '../../common/LocalStorageHelper';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 
 export const getToken = async (dispatch: AnyDispatch, username: string, pass: string) => {
-  dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.GET_START) });
+  dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.UPDATE_START) });
 
   const url = serverURLs.auth_token;
   return request()

@@ -78,6 +78,11 @@ const RecipeContainer: React.FC = () => {
     }
   }, [recipe]);
 
+  // componentWillUnmount
+  useEffect(() => () => {
+    dispatch(RecipeActions.reset());
+  }, []);
+
   // TODO Lists
   // const bulkAdd = useCallback((listId: number) => { /* RecipeActions.bulkAdd(recipe, listId) */ }, [dispatch]);
   // const checkAllIngredients = useCallback(() => RecipeActions.checkAll(recipeSlug), [dispatch]);

@@ -57,11 +57,12 @@ class PageVisibility extends React.Component<IPageVisibilityProps, IPageVisibili
     }
     // function as children pattern support
     if (typeof this.props.children === 'function') {
+      const childrenFunc: Function = this.props.children;
       if (!this.state.isSupported) {
         // don't pass any arguments if PageVisibility is not supported
-        return this.props.children();
+        return childrenFunc();
       }
-      return this.props.children(...getHandlerArgs());
+      return childrenFunc(...getHandlerArgs());
     }
 
     return React.Children.only(this.props.children);

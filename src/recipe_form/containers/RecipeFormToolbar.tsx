@@ -6,7 +6,9 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { CombinedStore } from '../../app/Store';
 import { getResourcePath, isDemoMode } from '../../common/utility';
+import * as RecipeActions from '../../recipe/store/RecipeActions';
 import { FormSpy } from 'react-final-form';
+import { useDispatch } from '../../common/store/redux';
 
 const RecipeFormToolbar: React.FC = () => {
   const intl = useIntl();
@@ -29,7 +31,11 @@ const RecipeFormToolbar: React.FC = () => {
     },
   });
 
+  const dispatch = useDispatch();
+
   const recipeState = useSelector((state: CombinedStore) => state.recipeForm);
+
+  const preload = () => { if (recipeState.item) dispatch(RecipeActions.preload(recipeState.item)); };
 
   const id = recipeState.item?.id;
   const isNew = id == null || id === 0;
@@ -48,6 +54,7 @@ const RecipeFormToolbar: React.FC = () => {
             disabled = {submitting || (isDemoMode() && !showViewButton)}
             as = {showViewButton(pristine) ? Link as any : undefined} // eslint-disable-line @typescript-eslint/no-explicit-any
             to = {showViewButton(pristine) ? getResourcePath(`/recipe/${recipeState.item?.slug}`) : null}
+            onClick = {preload}
             accessKey = {showViewButton(pristine) ? undefined : 's'}>
           {formatMessage(showViewButton(pristine) ? messages.view : messages.submit)}
         </Button>

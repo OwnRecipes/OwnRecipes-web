@@ -101,7 +101,7 @@ const RatingComments: React.FC<IRatingCommentsProps> = ({ recipeSlug, ratings, u
       <Modal
           show = {showDeleteConfirm != null}
           title = {intl.messages['recipe.confirm_delete_title'] as string}
-          acceptTitle = {intl.messages['recipe.confirm_delete_accept']}
+          acceptTitle = {intl.messages['recipe.confirm_delete_accept'] as string}
           onAccept = {handleDeleteAccept}
           onClose  = {handleDeleteClose}
           acceptButtonProps = {{ variant: 'danger' }}>

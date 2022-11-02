@@ -33,7 +33,7 @@ const EditGuard: React.FC = () => {
     if (recipe?.slug != null && pending === PendingState.COMPLETED && isNew && wasRenderedRef.current) {
       setTimeout(() => {
         nav(getResourcePath(`/recipe/edit/${recipe.slug}`));
-      }, 0);
+      }, 250);
     }
     wasRenderedRef.current = true;
   }, [pending]);

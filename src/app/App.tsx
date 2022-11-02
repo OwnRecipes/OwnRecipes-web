@@ -32,7 +32,6 @@ const App = () => {
 
 const AppFC: React.FC = () => (
   <>
-    <AutoLogin />
     <div id='content'>
       <Header />
       {isDemoMode() && <DemoAlert />}
@@ -42,6 +41,7 @@ const AppFC: React.FC = () => (
     </div>
     <Footer />
     <InternalErrorDialog />
+    <AutoLogin />
   </>
 );
 

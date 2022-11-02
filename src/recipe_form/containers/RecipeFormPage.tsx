@@ -46,6 +46,11 @@ const RecipeFormPage: React.FC = () => {
     }
   }, [recipeSlug, location.key]);
 
+  // componentWillUnmount
+  useEffect(() => () => {
+    dispatch(RecipeFormActions.reset());
+  }, []);
+
   return (
     <PageWrapper title={isNew ? intl.formatMessage(messages.new_recipe) : recipe?.title}>
       <EditGuard />

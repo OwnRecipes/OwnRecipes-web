@@ -1,6 +1,6 @@
 // Coded by Joris (https://github.com/jorisre/react-screen-wake-lock)
 
-import * as React from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 export interface IWakeLockOptions {
   onError?: (error: Error) => void;
@@ -13,13 +13,13 @@ export const useWakeLock = ({
   onRequest,
   onRelease,
 }: IWakeLockOptions | undefined = {}) => {
-  const [released, setReleased] = React.useState<boolean | undefined>();
-  const wakeLock = React.useRef<WakeLockSentinel | null>(null);
+  const [released, setReleased] = useState<boolean | undefined>();
+  const wakeLock = useRef<WakeLockSentinel | null>(null);
 
   // https://caniuse.com/mdn-api_wakelock
   const isSupported = typeof window !== 'undefined' && 'wakeLock' in navigator;
 
-  const request = React.useCallback(
+  const request = useCallback(
     async (type: WakeLockType = 'screen') => {
       const isWakeLockAlreadyDefined = wakeLock.current != null;
       if (!isSupported) {
@@ -59,7 +59,7 @@ export const useWakeLock = ({
     [isSupported, onRequest, onError, onRelease]
   );
 
-  const release = React.useCallback(async () => {
+  const release = useCallback(async () => {
     const isWakeLockUndefined = wakeLock.current == null;
     if (!isSupported) {
       // eslint-disable-next-line no-console

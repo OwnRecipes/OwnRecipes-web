@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { DefaultRootState, useDispatch as useReduxDispatch, useSelector as useSelectorRedux } from 'react-redux';
+import { useDispatch as useReduxDispatch, useSelector as useSelectorRedux } from 'react-redux';
 import { get as _get } from 'lodash-es';
 
 import useCrash from '../hooks/useCrash';
@@ -11,7 +11,8 @@ export function useDispatch() {
   const dispatch = useReduxDispatch();
   const crash = useCrash();
 
-  return useCallback(disp => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return useCallback((disp: any) => {
     try {
       return dispatch(disp);
     } catch (err) {
@@ -21,7 +22,7 @@ export function useDispatch() {
   }, []);
 }
 
-export function useSelector<TState = DefaultRootState, TSelected = unknown>(
+export function useSelector<TState = {}, TSelected = unknown>(
     selector: (state: TState) => TSelected,
     equalityFn?: (left: TSelected, right: TSelected) => boolean
   ): TSelected {

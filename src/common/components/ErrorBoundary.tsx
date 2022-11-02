@@ -8,6 +8,8 @@ interface IErrorBoundaryProps {
   verbose:    boolean;
   /** Print error stack? */
   printStack: boolean;
+  /** The error. */
+  children: AnyComponent;
 }
 
 interface IErrorBoundaryState {

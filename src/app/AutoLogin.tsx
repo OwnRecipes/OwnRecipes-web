@@ -65,13 +65,16 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
     const currToken = this.props.account.item;
     const originUrl = this.state.originUrl;
 
-    if (prevToken == null && currToken != null) {
+    // console.log(`[AutoLogin] originUrl=${originUrl}, prevUrl=${prevProps.loc.pathname}, nextUrl=${this.props.loc.pathname}, prevToken=${JSON.stringify(prevToken)}, currToken=${JSON.stringify(currToken)}`);
+
+    if ((prevToken == null && currToken != null)
+      || (prevToken != null && currToken != null && this.props.loc.pathname === getResourcePath('/login'))) {
       if (originUrl === getResourcePath('/') || originUrl === getResourcePath('/login')) {
         this.props.nav(getResourcePath('/home'), { replace: true });
       } else if (this.props.loc.pathname !== originUrl) {
         this.props.nav(`${originUrl}${this.state.originSearch}`, { replace: true });
       }
-    } else if (prevToken != null && currToken == null) {
+    }  else if (prevToken != null && currToken == null) {
       setTimeout(() => {
         const isLoginRequired = getEnvAsBoolean('REACT_APP_REQUIRE_LOGIN');
         this.props.nav(getResourcePath(isLoginRequired ? '/login' : '/home'));
