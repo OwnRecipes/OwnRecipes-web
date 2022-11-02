@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IntlProvider as ReactIntlProvider } from 'react-intl';
-import { useSelector } from 'react-redux';
+
+import { useSelector } from '../../common/store/redux';
 import { SETTING_LANGUAGE_STORAGE_KEY } from '../../account/store/settings/types';
 import { getMessagesFromLang, LanguageCode, toLanguageCode } from '../../common/language';
 import LocalStorageHelper from '../../common/LocalStorageHelper';

@@ -1,14 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { CombinedStore } from '../../app/Store';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import { getResourcePath, isDemoMode } from '../../common/utility';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
 import { FormSpy } from 'react-final-form';
-import { useDispatch } from '../../common/store/redux';
 
 const RecipeFormToolbar: React.FC = () => {
   const intl = useIntl();

@@ -82,6 +82,15 @@
     "no-nested-ternary": 1,
     "no-param-reassign": ["error", { "props": false }],
     "no-plusplus": 0,
+    "no-restricted-imports": [
+      "error", {
+        "paths": [{
+          "name": "react-redux",
+          "importNames": ["useDispatch", "useSelector"],
+          "message": "Please import from 'common/store/redux'."
+        }]
+      }
+    ],
     "no-shadow": "off",
     "no-use-before-define": 0,
     "object-curly-newline": 0,

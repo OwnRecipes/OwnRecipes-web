@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import * as FilterActions from '../store/FilterActions';
 import { CombinedStore } from '../../app/Store';
 import SearchMenu from '../components/SearchMenu';
 import { getResourcePath } from '../../common/utility';
-import { useDispatch } from '../../common/store/redux';
+import { useDispatch, useSelector } from '../../common/store/redux';
 
 export interface ISearchMenuContainerProps {
   qs:       Record<string, string>;

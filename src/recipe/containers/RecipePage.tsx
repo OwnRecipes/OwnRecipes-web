@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 
 import { CombinedStore } from '../../app/Store';
+import { useSelector } from '../../common/store/redux';
 import Ratings from '../../rating/containers/Ratings';
 import PageWrapper from '../../common/components/PageWrapper';
 import RecipeFooter from '../components/RecipeFooter';

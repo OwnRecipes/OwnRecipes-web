@@ -1,10 +1,10 @@
 import { ComponentType, lazy, Suspense } from 'react';
 import { Route, Routes as RouterRoutes, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
+import { CombinedStore } from './Store';
+import { useSelector } from '../common/store/redux';
 import { AnyComponent } from '../types/Types';
 import { getEnvAsBoolean, getResourcePath, isDemoMode } from '../common/utility';
-import { CombinedStore } from './Store';
 import UserRole from '../common/types/UserRole';
 import PageSpinner from './components/PageSpinner';
 

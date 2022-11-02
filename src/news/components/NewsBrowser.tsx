@@ -1,10 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/news.css';
 
 import { CombinedStore } from '../../app/Store';
+import { useSelector } from '../../common/store/redux';
 
 import MiniBrowse from '../../browse/containers/MiniBrowse';
 import ErrorBoundary from '../../common/components/ErrorBoundary';

@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { defineMessages, useIntl } from 'react-intl';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
 import '../css/features_overview.css';
 
+import { useSelector } from '../../common/store/redux';
 import { CombinedStore } from '../../app/Store';
 import { optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';

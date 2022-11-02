@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { defineMessages, useIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import { Button } from 'react-bootstrap';
 
 import { CombinedStore } from '../../app/Store';
-
+import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
 
 export interface IToggleNewsButtonProps {

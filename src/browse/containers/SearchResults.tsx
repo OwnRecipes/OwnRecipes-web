@@ -1,5 +1,6 @@
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
+import { useSelector } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import Results from '../components/Results';
 import NoResults from '../components/NoResults';
@@ -7,7 +8,6 @@ import Loading from '../components/Loading';
 import { PendingState } from '../../common/store/GenericReducerType';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { CombinedStore } from '../../app/Store';
-import { useEffect, useState } from 'react';
 import { SearchResult } from '../store/SearchTypes';
 
 export interface ISearchResultsProps {

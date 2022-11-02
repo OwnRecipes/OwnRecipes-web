@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
+import { useSelector } from '../../common/store/redux';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
 import { CombinedStore } from '../Store';
 

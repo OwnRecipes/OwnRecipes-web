@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import * as _ from 'lodash-es';
 
 import { CombinedStore } from '../../app/Store';
+import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
 import { getResourcePath } from '../../common/utility';
 

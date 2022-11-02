@@ -1,12 +1,11 @@
 // import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 
 import NavBar from '../components/NavBar';
 import * as AuthActions from '../../account/store/actions';
 // import * as ListActions from '../../list/store/actions';
 import * as SettingsActions from '../../account/store/settings/actions';
-import { useDispatch } from '../../common/store/redux';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import { CombinedStore } from '../../app/Store';
 // import { ListItemType } from '../components/GroceryListMenuItem';
 import { ThemeMode } from '../../account/store/settings/types';

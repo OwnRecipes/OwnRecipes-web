@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import * as _ from 'lodash-es';
 
@@ -8,7 +7,7 @@ import '../css/recipe.css';
 import Loading from '../../common/components/Loading';
 // import MenuItemModal from '../../menu/components/modals/MenuItemModal';
 import RecipeScheme from '../components/RecipeScheme';
-import { useDispatch } from '../../common/store/redux';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import * as RecipeActions from '../store/RecipeActions';
 import * as RecipeFormActions from '../../recipe_form/store/actions';
 // import * as MenuItemActions from '../../menu/actions/MenuItemActions';

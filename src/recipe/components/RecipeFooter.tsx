@@ -1,9 +1,8 @@
 import { useIntl } from 'react-intl';
-import { useSelector } from 'react-redux';
 
 import { CombinedStore } from '../../app/Store';
+import { useSelector } from '../../common/store/redux';
 import { Recipe } from '../store/RecipeTypes';
-
 import MiniBrowse from '../../browse/containers/MiniBrowse';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
 

@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button } from 'react-bootstrap';
@@ -11,7 +10,7 @@ import { Recipe, RecipeList } from '../../recipe/store/RecipeTypes';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
 import ListRecipes from '../components/ListRecipes';
 import * as MiniBrowseActions from '../store/MiniBrowseActions';
-import { useDispatch } from '../../common/store/redux';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import Icon from '../../common/components/Icon';
 import Tooltip from '../../common/components/Tooltip';
 

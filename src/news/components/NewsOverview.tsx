@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import '../css/news.css';
 
 import LocalStorageHelper from '../../common/LocalStorageHelper';
 import { CombinedStore } from '../../app/Store';
+import { useSelector } from '../../common/store/redux';
 import NewsCarousel from './NewsList';
 import FeaturesOverview from './FeaturesOverview';
 import ToggleNewsButton from './ToggleNewsButton';

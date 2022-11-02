@@ -1,12 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
 import * as RecipeFormActions from '../store/actions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { CombinedStore } from '../../app/Store';
-import { useDispatch } from '../../common/store/redux';
-
+import { useDispatch, useSelector } from '../../common/store/redux';
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import { Tag } from '../../recipe/store/RecipeTypes';
