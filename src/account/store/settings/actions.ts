@@ -16,5 +16,5 @@ export const changeThemeMode = (newThemeMode: ThemeMode) => (dispatch: SettingsD
 };
 
 export const changeLanguage = (newLanguage: LanguageCode) => (dispatch: SettingsDispatch, getState: () => CombinedStore) => {
-  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.THEME_MODE), payload: newLanguage, tokenId: getState().account.item?.username });
+  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.LANGUAGE), payload: newLanguage, tokenId: getState().account.item?.username });
 };
