@@ -102,7 +102,11 @@ const DirectionsPreview: React.FC<IDirectionsPreviewProps> = ({ directions, ingr
   return (
     <div className='recipe-details'>
       <div className='recipe-schema'>
-        <Directions directions={directions} ingredients={igDataFormatted} />
+        <article className='directions-panel'>
+          <div className='direction-groups'>
+            <Directions directions={directions} ingredients={igDataFormatted} />
+          </div>
+        </article>
       </div>
     </div>
   );

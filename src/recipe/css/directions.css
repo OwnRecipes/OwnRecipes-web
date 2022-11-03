@@ -1,27 +1,27 @@
-.recipe-details .directions h2 {
+.recipe-details .directions-panel h2 {
   height: 2.5rem;
   line-height: 2.5rem;
   margin-bottom: 0.2em;
 }
-.recipe-details .directions > .subgroup {
+.recipe-details .directions-panel > .direction-groups .subgroup {
   margin-bottom: 20px;
 }
-.recipe-details .directions > .subgroup:not(:first-of-type) {
+.recipe-details .directions-panel > .direction-groups > .subgroup:not(:first-of-type) {
   margin-top: 40px;
 }
-.recipe-details .directions ol {
+.recipe-details .directions-panel > .direction-groups ol {
   display: block;
 }
-.directions ol {
+.directions-panel > .direction-groups ol {
   list-style: none;
   counter-reset: cupcake;
   padding-left: 0.2rem;
 }
-.directions ol li {
+.directions-panel > .direction-groups ol li {
   counter-increment: cupcake;
   margin-bottom: 1.25rem;
 }
-.directions ol li:before {
+.directions-panel > .direction-groups ol li:before {
   content: counters(cupcake, '.') ' ';
 
   color: var(--secondaryContrast);
@@ -37,17 +37,17 @@
 
 /* INGREDIENTS */
 
-.recipe-details .directions > .subgroup > .ingredients {
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients {
   margin: 0 10px 10px;
 }
 
-.recipe-details .directions > .subgroup > .ingredients > .ingredient-group .ingredients-table {
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table {
   line-height: normal;
   margin-bottom: 0;
   font-style: italic;
 }
 
-.recipe-details .directions > .subgroup > .ingredients > .ingredient-group .ingredients-table > caption {
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > caption {
   display: inline;
   caption-side: top;
   font-size: 0.875em;
@@ -57,15 +57,15 @@
   margin: 0;
 }
 
-.recipe-details .directions > .subgroup > .ingredients > .ingredient-group .ingredients-table > * {
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > * {
   display: inline;
 }
 
-.recipe-details .directions > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr {
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr {
   display: inline-block;
 }
 
-.recipe-details .directions > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td {
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td {
   display: inline-block;
   background-color: transparent;
   border: 0;
@@ -76,23 +76,23 @@
   margin: 0;
 }
 
-.recipe-details .directions > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td > span {
+.recipe-details .directions-panel > .direction-groups > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td > span {
   padding: 0 0 0 0.25em;
 }
 
-.recipe-details .directions > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td.ingredient:after {
+.recipe-details .directions-panel > .direction-groups > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td.ingredient:after {
   content: ", "
 }
-.recipe-details .directions > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr:last-child > td.ingredient:after {
+.recipe-details .directions-panel > .direction-groups > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr:last-child > td.ingredient:after {
   content: ""
 }
 
 @media screen and (min-width: 1200px) {
-  .recipe-details .directions:not(.multi-directions) h2 {
+  .recipe-details .directions-panel:not(.multi-directions) h2 {
     margin-bottom: 0.75em;
   }
 
-  .recipe-details .directions:not(.multi-directions) > .subgroup.default-group > .ingredients {
+  .recipe-details .directions-panel:not(.multi-directions) > .direction-groups > .subgroup.default-group > .ingredients {
     display: none;
   }
 }

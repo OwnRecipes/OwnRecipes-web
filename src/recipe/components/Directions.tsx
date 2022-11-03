@@ -1,11 +1,9 @@
 import { useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import '../css/directions.css';
 
 import { IngredientGroup } from '../store/RecipeTypes';
-import P from '../../common/components/P';
 import IngredientGroups from './IngredientGroups';
 
 export interface IDirectionsProps {
@@ -130,33 +128,13 @@ function formatDirections(directions: DirectionsWithIngredients) {
 }
 
 const Directions: React.FC<IDirectionsProps> = ({ directions: directionsString, ingredients }: IDirectionsProps) => {
-  const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    directions: {
-      id: 'recipe.directions',
-      description: 'Directions',
-      defaultMessage: 'Directions',
-    },
-    no_directions: {
-      id: 'recipe.directions.no_directions',
-      description: 'No directions provided message',
-      defaultMessage: '(This recipe has no directions.)',
-    },
-  });
-
-  const hasData = directionsString.trim().length > 1; // Ignore single fake char.
-
   const directionGroups: DirectionsWithIngredients = useMemo(() => parseDirections(directionsString, ingredients), [directionsString, ingredients]);
   const directionsGroupsJsx: Array<React.ReactNode> = useMemo(() => formatDirections(directionGroups), [directionGroups]);
 
   return (
-    <article className={classNames('directions', { 'multi-directions': directionGroups.length > 1 })}>
-      <h2>{formatMessage(messages.directions)}</h2>
-      {!hasData && (
-        <P className='placeholder'>{formatMessage(messages.no_directions)}</P>
-      )}
-      {hasData && directionsGroupsJsx}
-    </article>
+    <>
+      {directionsGroupsJsx}
+    </>
   );
 };
 

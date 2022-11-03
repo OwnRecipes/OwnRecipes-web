@@ -1,12 +1,12 @@
-import Directions from './Directions';
-import RecipeHeader from './RecipeHeader';
+import { Col, Row } from 'react-bootstrap';
 
 import '../css/recipe.css';
 
 import { Recipe } from '../store/RecipeTypes';
 import { ReducerMeta } from '../../common/store/GenericReducerType';
+import RecipeHeader from './RecipeHeader';
 import IngredientsPanel from './IngredientsPanel';
-import { Col, Row } from 'react-bootstrap';
+import DirectionsPanel from './DirectionsPanel';
 
 interface IRecipeSchemeProps {
   recipe:       Recipe | undefined;
@@ -59,8 +59,9 @@ const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, showEd
       </Col>
       <hr className='d-block d-xl-none' />
       <Col xl={8} lg={12}>
-        <Directions
-            directions = {recipe?.directions ?? ''}
+        <DirectionsPanel
+            directions  = {recipe?.directions ?? ''}
+            recipeMeta  = {recipeMeta}
             ingredients = {recipe?.ingredientGroups ?? []} />
       </Col>
     </Row>
