@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FormSpy } from 'react-final-form';
 import { defineMessages, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
+
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 import ReInput from '../../common/components/ReduxForm/ReInput';
+import MeasurementContext from '../../common/context/MeasurementContext';
 import { formatValidation } from '../../common/store/Validation';
-
 import Directions from '../../recipe/components/Directions';
+import { Ingredient, IngredientGroup } from '../../recipe/store/RecipeTypes';
+import formatQuantity from '../../recipe/utilts/formatQuantity';
+import { ingredientsParser } from './IngredientGroupsBox';
 import TabbedView from './TabbedView';
 
 export interface IDirectionBox {
@@ -35,6 +39,8 @@ const DirectionBox: React.FC<IDirectionBox> = ({
     },
   });
 
+  const measurementsContext = useContext(MeasurementContext);
+
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>('0');
 
@@ -60,10 +66,14 @@ const DirectionBox: React.FC<IDirectionBox> = ({
               name = {name}
               rows     = {8}
               placeholder = {formatMessage(messages.directions_placeholder)} />
-          <FieldSpyValues fieldNames={[name]}>
+          <FieldSpyValues fieldNames={[name, 'ingredientGroupsS']}>
             {values => (
               <>
-                {activeTab === 'preview' && <DirectionsPreview directions={values[name] ?? ''} />}
+                {activeTab === 'preview' && (
+                  <DirectionsPreview
+                      directions = {values[name] ?? ''}
+                      ingredients = {ingredientsParser(measurementsContext.parser, values.ingredientGroupsS)} />
+                )}
               </>
             )}
           </FieldSpyValues>
@@ -75,14 +85,27 @@ const DirectionBox: React.FC<IDirectionBox> = ({
 
 interface IDirectionsPreviewProps {
   directions: string;
+  ingredients: Array<IngredientGroup>;
 }
 
-const DirectionsPreview: React.FC<IDirectionsPreviewProps> = ({ directions }: IDirectionsPreviewProps) => (
-  <div className='recipe-details'>
-    <div className='recipe-schema'>
-      <Directions data={directions} />
+const recurseIngredients = (igs: Array<IngredientGroup>, cb: (ingr: Ingredient) => Ingredient): Array<IngredientGroup> => igs.map(ig => ({
+  ...ig,
+  ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
+}));
+
+const DirectionsPreview: React.FC<IDirectionsPreviewProps> = ({ directions, ingredients }: IDirectionsPreviewProps) => {
+  const igDataFormatted = useMemo(() => recurseIngredients(ingredients, i => {
+    const custom = formatQuantity(1, 1, i.numerator, i.denominator);
+    return { ...i, quantity: custom };
+  }), [ingredients]);
+
+  return (
+    <div className='recipe-details'>
+      <div className='recipe-schema'>
+        <Directions directions={directions} ingredients={igDataFormatted} />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default DirectionBox;

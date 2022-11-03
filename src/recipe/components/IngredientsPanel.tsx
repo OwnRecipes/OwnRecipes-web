@@ -45,7 +45,7 @@ const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta
   return (
     <article className='ingredients-panel'>
       <IngredientsHeader recipe={recipe} recipeMeta={recipeMeta} updateServings={updateServings} />
-      {pending === PendingState.LOADING && <Loading />}
+      {pending === PendingState.LOADING && recipe?.ingredientGroups == null && <Loading />}
       {hasNoIngredients && (
         <P className='placeholder'>{formatMessage(messages.no_ingredients)}</P>
       )}

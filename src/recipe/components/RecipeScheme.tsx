@@ -59,7 +59,9 @@ const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, showEd
       </Col>
       <hr className='d-block d-xl-none' />
       <Col xl={8} lg={12}>
-        <Directions data={recipe?.directions ?? ''} />
+        <Directions
+            directions = {recipe?.directions ?? ''}
+            ingredients = {recipe?.ingredientGroups ?? []} />
       </Col>
     </Row>
   </div>

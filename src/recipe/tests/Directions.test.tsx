@@ -5,7 +5,7 @@ import data from './data';
 
 test('Direction component test', () => {
   const component = create(
-    <Directions data={data.directions} />
+    <Directions directions={data.directions} ingredients={[]} />
   );
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();
