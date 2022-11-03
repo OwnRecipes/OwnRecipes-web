@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+// eslint-disable-next-line no-restricted-imports
 import { useDispatch as useReduxDispatch, useSelector as useSelectorRedux } from 'react-redux';
 import { get as _get } from 'lodash-es';
 
