@@ -52,7 +52,7 @@ export const cuisineCountConfig = {
     allCuisines.forEach(c => {
       cuisineCounts.push({
         id:    c.id,
-        total: resultRecipes.filter(rec => rec.cuisine.title === c.title).length,
+        total: resultRecipes.filter(rec => rec.cuisine?.title === c.title).length,
         title: c.title,
         slug:  c.title,
       });
@@ -87,7 +87,7 @@ export const courseCountConfig = {
     allCourses.forEach(c => {
       courseCounts.push({
         id:    c.id,
-        total: resultRecipes.filter(rec => rec.course.title === c.title).length,
+        total: resultRecipes.filter(rec => rec.course?.title === c.title).length,
         title: c.title,
         slug:  c.title,
       });

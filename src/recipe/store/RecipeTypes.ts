@@ -195,17 +195,17 @@ export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
 });
 
 export type RecipeDto = {
-  username:    string;
-  author:      number;
-  source:      string;
+  username:   string;
+  author:     number;
+  source:     string;
 
-  cook_time: number;
-  prep_time: number;
-  servings:  number;
+  cook_time?: number;
+  prep_time?: number;
+  servings:   number;
 
-  course:  Course;
-  cuisine: Cuisine;
-  tags:    Array<TagDto>;
+  course?:  Course;
+  cuisine?: Cuisine;
+  tags:     Array<TagDto>;
 
   photo?: string | null;
 
@@ -257,8 +257,8 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   prepTime: parseBackendNumber(dto.prep_time),
   servings: dto.servings,
 
-  course:  dto.course.title  === '-' ? undefined : toCourse(dto.course),
-  cuisine: dto.cuisine.title === '-' ? undefined : toCuisine(dto.cuisine),
+  course:  (dto.course == null || dto.course.title  === '-')  ? undefined : toCourse(dto.course),
+  cuisine: (dto.cuisine == null || dto.cuisine.title === '-') ? undefined : toCuisine(dto.cuisine),
   tags:    dto.tags.map(t => toTag(t)),
 
   photo: dto.photo ?? undefined,
@@ -283,13 +283,13 @@ export type RecipeRequest = {
 
   source:     string;
 
-  cook_time:  number;
-  prep_time:  number;
+  cook_time:  number | null;
+  prep_time:  number | null;
   servings:   number;
 
   tags:       Array<TagDto>;
-  course:     CourseDto;
-  cuisine:    CuisineDto;
+  course:     CourseDto | null;
+  cuisine:    CuisineDto | null;
 
   subrecipes: Array<SubRecipeDto>;
   ingredient_groups: Array<IngredientGroupDto>;
@@ -301,16 +301,12 @@ export type RecipeRequest = {
   public:     boolean;
 };
 
-function ifNull<T>(val: T | undefined, d: T): T {
-  if (val == null || (typeof val === 'string' && val === '')) return d;
+function parseBackendNumber(val: number | undefined): number | undefined {
+  if (val == null || val === NUMBER_UNDEFINED) return undefined;
   return val;
 }
-function parseBackendNumber(val: number): number | undefined {
-  if (val === NUMBER_UNDEFINED) return undefined;
-  return val;
-}
-function parseBackendString(str: string): string | undefined {
-  if (str === STRING_UNDEFINED) return undefined;
+function parseBackendString(str: string | undefined): string | undefined {
+  if (str == null || str === STRING_UNDEFINED) return undefined;
   return str;
 }
 
@@ -326,23 +322,27 @@ const toIngredientGroupsDto = (obj: Recipe): Array<IngredientGroupDto> => {
   }
 };
 
+function ifNull<T>(val: T | undefined, d: T): T {
+  if (val == null || (typeof val === 'string' && val === '')) return d;
+  return val;
+}
 export const toRecipeRequest = (obj: Recipe): RecipeRequest => ({
   title:      obj.title,
 
-  source:     obj.source,
+  source:     ifNull(obj.source, ''),
 
-  cook_time:  ifNull(obj.cookTime, NUMBER_UNDEFINED),
-  prep_time:  ifNull(obj.prepTime, NUMBER_UNDEFINED),
+  cook_time:  obj.cookTime ?? null,
+  prep_time:  obj.prepTime ?? null,
   servings:   obj.servings,
 
   tags:       obj.tags,
-  course:     obj.course ? toCourseDto(obj.course) : ({ title: '-' } as CourseDto),
-  cuisine:    obj.cuisine ? toCuisineDto(obj.cuisine) : ({ title: '-' } as CuisineDto),
+  course:     obj.course ? toCourseDto(obj.course) : null,
+  cuisine:    obj.cuisine ? toCuisineDto(obj.cuisine) : null,
 
   subrecipes: obj.subrecipes?.map(sr => toSubRecipeDto(sr)) ?? [],
   ingredient_groups: toIngredientGroupsDto(obj),
-  directions: ifNull(obj.directions, STRING_UNDEFINED),
-  info:       obj.info,
+  directions: ifNull(obj.directions, ''),
+  info:       ifNull(obj.info, ''),
 
   photo:      obj.photo === '' ? '' : undefined,
 
