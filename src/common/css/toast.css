@@ -27,26 +27,23 @@
   padding-left: 0;
   padding-right: 0;
   border-radius: 0.25rem;
-  border: 3px solid var(--primaryMain);
+  border-left: 5px solid var(--infoText);
   background-color: var(--elevation);
   color:            var(--primaryText);
-  box-shadow: 0 0 5px 4px var(--elevationShadow);
+  box-shadow: 0 0 8px 1px var(--elevationShadow);
 
   width: 22em;
 }
 
 .simple-toast.success {
-  border-color:     var(--primaryMain);
-  background-color: var(--primaryMain);
-  color:            var(--primaryContrast);
-  box-shadow: 0 0 5px 4px var(--primaryShadow);
+  border-left-color: var(--primaryMain);
 }
 
 .simple-toast .toast-header {
   background-color: transparent;
   color: inherit;
   border: 0;
-  padding: 0;
+  padding: 0.2em 0 0.2em 0.5em;
   align-items: start;
 }
 
