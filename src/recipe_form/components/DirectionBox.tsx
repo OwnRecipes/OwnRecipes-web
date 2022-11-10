@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FormSpy } from 'react-final-form';
 import { defineMessages, useIntl } from 'react-intl';
@@ -99,10 +100,12 @@ const DirectionsPreview: React.FC<IDirectionsPreviewProps> = ({ directions, ingr
     return { ...i, quantity: custom };
   }), [ingredients]);
 
+  const isMultiDirections = directions.includes(':\n');
+
   return (
     <div className='recipe-details'>
       <div className='recipe-schema'>
-        <article className='directions-panel'>
+        <article className={classNames('directions-panel', { 'multi-directions': isMultiDirections })}>
           <div className='direction-groups'>
             <Directions directions={directions} ingredients={igDataFormatted} />
           </div>
