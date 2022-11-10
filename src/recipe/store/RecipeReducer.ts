@@ -27,7 +27,7 @@ const recipe = (state = defaultState, action: RecipeAction): RecipeState => {
                 RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_LOAD
               ),
               payload: actionRecipe.subrecipes,
-              // TODO this is magic
+              // OPT this is magic
               // just pass updServings and actionRecipe.servings via the payload
               formatQuantity: fq.bind(this, updServings, actionRecipe.servings),
             }

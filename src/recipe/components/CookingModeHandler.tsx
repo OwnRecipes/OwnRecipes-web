@@ -65,21 +65,6 @@ const CookingModeHandler: React.FC = () => {
     }
   }, [isPageVisible]);
 
-  const renewTimer = () => {
-    clearTimer();
-    timer = setTimeout(() => setAskIfStillActive(true), 1000 * 60 * 30);
-  };
-
-  const clearTimer = (resetState = true) => {
-    if (resetState) {
-      setShowCookingModeToast(false);
-      setAskIfStillActive(false);
-    }
-    if (timer != null) {
-      clearTimeout(timer);
-    }
-  };
-
   useEffect(() => {
     if (!isCookingMode) {
       clearTimer();
@@ -100,8 +85,39 @@ const CookingModeHandler: React.FC = () => {
   // componentWillUnmount
   useEffect(() => () => {
     clearTimer(false);
-    if (released === false) release();
+    if (released === false) {
+      release();
+    }
   }, []);
+
+  const pauseLock = () => {
+    release();
+    setAskIfStillActive(true);
+  };
+
+  const renewTimer = () => {
+    clearTimer();
+    timer = setTimeout(() => {
+      pauseLock();
+    }, 1000 * 60 * 30);
+  };
+
+  const clearTimer = (resetState = true) => {
+    if (resetState) {
+      setShowCookingModeToast(false);
+      setAskIfStillActive(false);
+    }
+    if (timer != null) {
+      clearTimeout(timer);
+    }
+  };
+
+  const handleStillActive = () => {
+    request()
+      .then(() => {
+        renewTimer();
+      });
+  };
 
   const handleNotActiveAnymore = (autoClose: boolean) => {
     if (!autoClose) {
@@ -124,7 +140,7 @@ const CookingModeHandler: React.FC = () => {
           title = {formatMessage(messages.still_cooking_modal_title)}
           acceptTitle = {formatMessage(messages.still_cooking_modal_yes)}
           closeTitle = {formatMessage(messages.still_cooking_modal_no)}
-          onAccept = {renewTimer}
+          onAccept = {handleStillActive}
           onClose = {handleNotActiveAnymore}>
         {formatMessage(messages.still_cooking_modal_text)}
       </Modal>
