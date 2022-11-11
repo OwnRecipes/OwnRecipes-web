@@ -45,12 +45,12 @@ const FormErrors: React.FC<IFormErrorsProps> = ({ errors }: IFormErrorsProps) =>
     form_errors_title: {
       id: 'status.form_errors_title',
       description: 'Title for the form error box.',
-      defaultMessage: 'The form contains an error',
+      defaultMessage: 'The form contains an error.',
     },
     form_errors_alert: {
       id: 'status.form_errors_alert',
       description: 'Alert text for the form error box.',
-      defaultMessage: 'Please fix the errors.',
+      defaultMessage: 'Please fix the error(s).',
     },
   });
 

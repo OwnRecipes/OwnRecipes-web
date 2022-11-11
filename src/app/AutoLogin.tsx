@@ -4,6 +4,9 @@ import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { NavigateFunction, useLocation, useNavigate } from 'react-router';
 import { Location } from 'history';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { Beforeunload } from 'react-beforeunload';
 
 import './css/404.css';
 
@@ -31,6 +34,7 @@ interface IAutoLoginClassProps {
 
 interface IDispatchProps {
   tryAutoLogin: () => void;
+  forgetLogin:  () => void;
 }
 
 interface IStateProps {
@@ -74,7 +78,7 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
       } else if (this.props.loc.pathname !== originUrl) {
         this.props.nav(`${originUrl}${this.state.originSearch}`, { replace: true });
       }
-    }  else if (prevToken != null && currToken == null) {
+    } else if (prevToken != null && currToken == null) {
       setTimeout(() => {
         const isLoginRequired = getEnvAsBoolean('REACT_APP_REQUIRE_LOGIN');
         this.props.nav(getResourcePath(isLoginRequired ? '/login' : '/home'));
@@ -83,8 +87,16 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
     }
   }
 
+  handleForgetLogout(): void {
+    if (this.props.account.item != null && !this.props.account.item.remember) {
+      this.props.forgetLogin();
+    }
+  }
+
   render() {
-    return null;
+    return (
+      <Beforeunload onBeforeunload={() => this.handleForgetLogout()} />
+    );
   }
 }
 
@@ -94,6 +106,7 @@ const mapStateToProps = (state: CombinedStore): IStateProps => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<CombinedStore, unknown, AnyAction>): IDispatchProps => ({
   tryAutoLogin:  () => dispatch(AccountActions.tryAutoLogin()),
+  forgetLogin:   () => dispatch(AccountActions.forgetLogin()),
 });
 
 const EnhancedAutoLoginClass = connect(mapStateToProps, mapDispatchToProps)(AutoLoginClass);

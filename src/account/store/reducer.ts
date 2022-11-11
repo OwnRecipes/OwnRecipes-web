@@ -13,6 +13,12 @@ const reducer = (state = defaultState, action: AccountAction): AccountState => {
           LocalStorageHelper.setItem(ACCOUNT_TOKEN_STORAGE_KEY, JSON.stringify(user));
           return ReduxHelper.setItem(state, user);
         }
+      case AccountActionTypes.FORGET_LOGIN:
+          {
+            LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY);
+            // do not reset state to avoid automatic redirect navigation
+            return state;
+          }
       case AccountActionTypes.LOGOUT:
         {
           LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY);

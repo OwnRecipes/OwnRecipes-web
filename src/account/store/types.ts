@@ -17,6 +17,7 @@ export type UserAccount = {
   username: string;
   email:    string;
   role:     UserRole;
+  remember: boolean;
 }
 
 export type OwnrecipesPayload = {
@@ -34,7 +35,7 @@ function getRole(decodedToken: OwnrecipesPayload): UserRole {
   else return UserRole.USER;
 }
 
-export const toUserAccount = (loginDto: LoginDto): UserAccount => {
+export const toUserAccount = (loginDto: LoginDto, remember: boolean): UserAccount => {
   const { token } = loginDto;
   if (token == null) throw new Error('Invalid response: token may not be null');
   const decodedToken: OwnrecipesPayload | undefined = jwtDecode<OwnrecipesPayload>(token);
@@ -48,11 +49,13 @@ export const toUserAccount = (loginDto: LoginDto): UserAccount => {
     username: decodedToken.username,
     email:    decodedToken.email,
     role:     getRole(decodedToken),
+    remember: remember,
   };
 };
 
 export enum AccountActionTypes {
   LOGIN  = 'LOGIN',
+  FORGET_LOGIN = 'FORGET_LOGIN',
   LOGOUT = 'LOGOUT',
 }
 
@@ -64,11 +67,16 @@ export type IAccountLoginAction = {
   typs:  typeof AccountActionTypes.LOGIN;
 } & PayloadAction<UserAccount>;
 
+export type IAccountForgetLoginAction = {
+  store: typeof ACCOUNT_STORE;
+  typs:  typeof AccountActionTypes.FORGET_LOGIN;
+} & BasicAction;
+
 export type IAccountLogoutAction = {
   store: typeof ACCOUNT_STORE;
   typs:  typeof AccountActionTypes.LOGOUT;
 } & BasicAction;
 
 export type AccountState    = ItemReducerType<UserAccount>;
-export type AccountAction   = IAccountLoginAction | IAccountLogoutAction | GenericItemReducerAction<UserAccount>;
+export type AccountAction   = IAccountLoginAction | IAccountForgetLoginAction | IAccountLogoutAction | GenericItemReducerAction<UserAccount>;
 export type AccountDispatch = ReduxDispatch<AccountAction>;

@@ -4,7 +4,7 @@ export default function initValidations() {
   defineMessages({
     validation_error_required: {
       id: 'validation.error.required',
-      defaultMessage: 'Please enter a value.',
+      defaultMessage: 'This field is required.',
     },
     validation_error_number: {
       id: 'validation.error.number',

@@ -1,19 +1,19 @@
 import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { Modal } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import '../../common/css/modal.css';
 import '../css/login.css';
 
 import * as AuthActions from '../store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
-import LoginForm from '../components/LoginForm';
+import { PendingState } from '../../common/store/GenericReducerType';
 import PageWrapper from '../../common/components/PageWrapper';
+import LoginForm from '../components/LoginForm';
 import SignUpInfo from '../components/SignUpInfo';
 import { CombinedStore } from '../../app/Store';
 import PageSpinner from '../../app/components/PageSpinner';
-import { PendingState } from '../../common/store/GenericReducerType';
-import classNames from 'classnames';
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
 
   const accountMeta = useSelector((state: CombinedStore) => state.account.meta);
 
-  const handleLogin = useCallback(async (username: string, password: string) => AuthActions.getToken(dispatch, username, password), [dispatch]);
+  const handleLogin = useCallback(async (username: string, password: string, remember: boolean) => AuthActions.getToken(dispatch, username, password, remember), [dispatch]);
 
   return (
     <PageWrapper title={intl.messages['nav.login.title'] as string}>

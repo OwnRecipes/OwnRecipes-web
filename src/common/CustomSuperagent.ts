@@ -17,9 +17,9 @@ import { AnyDispatch, toBasicAction } from './store/redux';
 export type ResponseError = superRequest.ResponseError;
 export const isResponseError = (obj: unknown): obj is ResponseError => (
   obj != null
-  && (obj as ResponseError).status != null
-  && typeof (obj as ResponseError).status === 'number'
-  && (obj as ResponseError).response != null); // eslint-disable-line no-underscore-dangle, @typescript-eslint/no-explicit-any
+      && (obj as ResponseError).status != null
+      && typeof (obj as ResponseError).status === 'number'
+      && (obj as ResponseError).response != null); // eslint-disable-line no-underscore-dangle, @typescript-eslint/no-explicit-any
 
 export type NetworkError = {
   message: string;
@@ -29,16 +29,16 @@ export type NetworkError = {
 };
 export const isNetworkError = (obj: unknown): obj is NetworkError => (
   obj != null
-  && (obj as NetworkError).status === undefined
-  && ['DELETE', 'GET', 'PATCH', 'PUT', 'POST'].includes((obj as NetworkError).method)
-  && (obj as NetworkError).url != null && (obj as NetworkError).url.length > 0
-  && !isResponseError(obj)
+      && (obj as NetworkError).status === undefined
+      && ['DELETE', 'GET', 'PATCH', 'PUT', 'POST'].includes((obj as NetworkError).method)
+      && (obj as NetworkError).url != null && (obj as NetworkError).url.length > 0
+      && !isResponseError(obj)
 );
 
 export const refreshToken = (() => {
   let blocking = false;
 
-  const refresh = (token: string) => {
+  const refresh = (token: string, remember: boolean) => {
     superRequest
       .post(serverURLs.refresh_token)
       .set('Accept', 'application/json')
@@ -46,7 +46,7 @@ export const refreshToken = (() => {
       .then(res => {
         blocking = false;
         const data: LoginDto = res.body;
-        store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data) } as AccountAction);
+        store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data, remember) } as AccountAction);
       })
       .catch(() => {
         blocking = false;
@@ -55,10 +55,10 @@ export const refreshToken = (() => {
   };
 
   return {
-    instance: (token: string) => {
+    instance: (token: string, remember: boolean) => {
       if (!blocking) {
         blocking = true;
-        refresh(token);
+        refresh(token, remember);
       }
     },
   };
@@ -86,7 +86,7 @@ export const request = (): SuperAgentStatic => {
         // If it is then call for a refreshed token.
         // If the token is to old, the request will fail and
         // the user will be logged-out and redirect to the login screen.
-        refreshToken.instance(account.token);
+        refreshToken.instance(account.token, account.remember);
       }
       customRequest.set('Authorization', `JWT ${account.token}`);
     }

@@ -5,7 +5,8 @@
       "token": "fghjfghj",
       "username": "Demo User",
       "email": "demo@user.web",
-      "role": "user"
+      "role": "user",
+      "remember": "true"
     },
     "ident": "@@account",
     "pending": "COMPLETED",

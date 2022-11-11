@@ -6,17 +6,19 @@ import { Form as ReduxForm, FormSpy } from 'react-final-form';
 import '../css/login.css';
 
 import Icon from '../../common/components/Icon';
-import LoginAlert from './LoginAlert';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import ReInput from '../../common/components/ReduxForm/ReInput';
+import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+import LoginAlert from './LoginAlert';
 
 export interface ILoginFormProps {
-  onSubmit: (username: string, password: string) => void;
+  onSubmit: (username: string, password: string, remember: boolean) => void;
 }
 
 type LoginFormData = {
   username: string;
   password: string;
+  remember: boolean;
 }
 
 const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => {
@@ -39,6 +41,11 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
       description: 'Password placeholder',
       defaultMessage: 'Password',
     },
+    remember: {
+      id: 'login.remember',
+      description: 'Remember checkbox',
+      defaultMessage: 'Remember me for 14 days',
+    },
     sign_in: {
       id: 'login.sign_in',
       description: 'Sign in button',
@@ -46,9 +53,9 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
     },
   });
 
-  const handleSubmit = (form: LoginFormData) => onSubmit(form.username, form.password);
+  const handleSubmit = (form: LoginFormData) => onSubmit(form.username, form.password, form.remember);
 
-  const initialValues = useMemo(() => ({}), []);
+  const initialValues = useMemo(() => ({ remember: true }), []);
 
   return (
     <ReduxForm
@@ -78,6 +85,10 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
                 autoComplete = 'password'
                 required
                 inputAdornmentStart = {<Icon icon='key' size='2x' />} />
+
+            <ReCheckbox
+                name  = 'remember'
+                label = {formatMessage(messages.remember)} />
 
             <FormSpy subscription={{ submitting: true }}>
               {({ submitting }) => (
