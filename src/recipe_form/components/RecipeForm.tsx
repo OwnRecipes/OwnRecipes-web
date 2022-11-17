@@ -1,39 +1,43 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Container, Form, Row } from 'react-bootstrap';
+import { Form as ReduxForm } from 'react-final-form';
 
+import '../../recipe/css/recipe.css';
 import '../css/recipe_form.css';
 
-import Checkbox from '../../common/components/Checkbox';
-import Input from '../../common/components/Input';
-
-import IngredientGroupsBox from './IngredientGroupsBox';
-import DirectionBox from './DirectionBox';
-import Status from '../containers/Status';
 import { Recipe } from '../../recipe/store/RecipeTypes';
-import { AutocompleteListItem } from '../store/types';
-import { formatValidation, ValidationResult } from '../../common/store/Validation';
 import TagListContainer from '../containers/TagListContainer';
 import CourseSelectContainer from '../containers/CourseSelectContainer';
 import CuisineSelectContainer from '../containers/CuisineSelectContainer';
 import RecipeFormToolbar from '../containers/RecipeFormToolbar';
+import ReInput from '../../common/components/ReduxForm/ReInput';
+import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
+import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
+import MeasurementContext from '../../common/context/MeasurementContext';
+import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
 import RecipeFormImageRow from './RecipeFormImageRow';
-import useCrash from '../../common/hooks/useCrash';
+import IngredientGroupsBox, { ingredientsFormatter, ingredientsParser, subrecipesFormatter, subrecipesParser } from './IngredientGroupsBox';
+import DirectionBox from './DirectionBox';
 
 export interface IRecipeFormProps {
-  form:      Recipe | undefined;
-  validation: ValidationResult | undefined;
+  recipe: Recipe | undefined;
+  isNew: boolean;
+  location: string;
 
   fetchRecipeList: (searchTerm: string) => Promise<AutocompleteListItem[]>;
-
-  update:   (name: string, value: unknown) => void;
-  validate: (form: Recipe) => void;
-  save:     (form: Recipe) => void;
+  onSubmit: (form: Recipe) => void;
 }
 
+type RecipeFormatted = {
+  ingredientGroupsS: string;
+  subrecipesS: string;
+} & Recipe;
+
 const RecipeForm: React.FC<IRecipeFormProps> = ({
-    form, validation,
-    fetchRecipeList, update, validate, save } : IRecipeFormProps) => {
+    recipe, isNew, location,
+    fetchRecipeList, onSubmit } : IRecipeFormProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
   const messages = defineMessages({
@@ -99,157 +103,138 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
     },
   });
 
-  const crash = useCrash();
+  const measurementsContext = useContext(MeasurementContext);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (form == null) { crash('Invalid state: form may not be undefined.'); return; }
-    e.preventDefault();
-    save(form);
-  };
+  const handleSubmit = (form: RecipeFormatted) => onSubmit({
+    ...form,
+    ingredientGroups: ingredientsParser(measurementsContext.parser, form.ingredientGroupsS),
+    subrecipes:        subrecipesParser(measurementsContext.parser, form.subrecipesS),
+  });
 
-  const handleInvalid = () => {
-    if (form == null) { crash('Invalid state: form may not be undefined.'); return; }
-    validate(form);
-  };
+  const initialValues: Partial<RecipeFormatted> | undefined = useMemo(() => {
+    if (isNew && !recipe) {
+      return {
+        slug: '',
+        public: true,
+        servings: 1,
+      };
+    } else {
+      return recipe
+        ? {
+        ...recipe,
+        ingredientGroupsS: ingredientsFormatter(intl, measurementsContext.formatter, recipe.ingredientGroups),
+        subrecipesS:        subrecipesFormatter(intl, measurementsContext.formatter, recipe.subrecipes),
+        } : undefined;
+    }
+    }, [recipe, isNew, location]);
+
+  // console.log(`[RecipeForm] recipe=${JSON.stringify(recipe)}, initialValues=${JSON.stringify(initialValues)}`);
 
   return (
-    <Form className='recipe-form' onSubmit={handleSubmit} onInvalid={handleInvalid}>
-      <Container>
-        <Row>
-          <Status />
-        </Row>
-        <Row>
-          <Col id='recipe-meta' md={5} lg={4}>
-            <Row>
-              <Col xs={12}>
-                <Input
-                    name     = 'title'
-                    label    = {formatMessage(messages.name_label)}
-                    value    = {form?.title ?? ''}
-                    required
-                    errors   = {formatValidation(intl, validation?.title)}
-                    onChange = {update} />
-              </Col>
-            </Row>
+    <ReduxForm
+        initialValues = {initialValues}
+        onSubmit = {handleSubmit}
+        subscription = {{}}
+        render = {({ form, handleSubmit: renderSubmit }) => (
+          <Form className='recipe-form' onSubmit={renderSubmit}>
+            <ReFormStatus />
+            <InitialValuesResetter form={form} initialValues={initialValues} />
+            <Container>
+              <Row>
+                <Col id='recipe-meta' md={5} lg={4}>
+                  <Row>
+                    <Col xs={12}>
+                      <ReInput
+                          name      = 'title'
+                          label     = {formatMessage(messages.name_label)}
+                          required
+                          />
+                    </Col>
+                  </Row>
 
-            <RecipeFormImageRow
-                form = {form}
-                update = {update}
-                />
+                  <RecipeFormImageRow />
 
-            <Row>
-              <Col xs={12} sm={6}>
-                <CourseSelectContainer
-                    name     = 'course'
-                    label    = {formatMessage(messages.course_label)}
-                    value    = {form?.course?.title ?? ''}
-                    errors   = {formatValidation(intl, validation?.course)}
-                    onChange = {update} />
-              </Col>
-              <Col xs={12} sm={6}>
-                <CuisineSelectContainer
-                    name     = 'cuisine'
-                    label    = {formatMessage(messages.cuisine_label)}
-                    value    = {form?.cuisine?.title ?? ''}
-                    errors   = {formatValidation(intl, validation?.cuisine)}
-                    onChange = {update} />
-              </Col>
-              <Col xs={12}>
-                <TagListContainer
-                    name     = 'tags'
-                    label    = {formatMessage(messages.tags_label)}
-                    value    = {form?.tags?.map(t => t.title) ?? []}
-                    errors   = {formatValidation(intl, validation?.tags)}
-                    onChange = {update} />
-              </Col>
-            </Row>
+                  <Row>
+                    <Col xs={12} sm={6}>
+                      <CourseSelectContainer
+                          name     = 'course'
+                          label    = {formatMessage(messages.course_label)} />
+                    </Col>
+                    <Col xs={12} sm={6}>
+                      <CuisineSelectContainer
+                          name     = 'cuisine'
+                          label    = {formatMessage(messages.cuisine_label)} />
+                    </Col>
+                    <Col xs={12}>
+                      <TagListContainer
+                          name     = 'tags'
+                          label    = {formatMessage(messages.tags_label)} />
+                    </Col>
+                  </Row>
 
-            <Row>
-              <Col xs={12} sm={6}>
-                <Input
-                    name     = 'prepTime'
-                    type     = 'number'
-                    label    = {formatMessage(messages.prep_time_label)}
-                    value    = {form?.prepTime ?? ''}
-                    min      = {1}
-                    max      = {999}
-                    errors   = {formatValidation(intl, validation?.prepTime)}
-                    onChange = {update} />
-              </Col>
-              <Col xs={12} sm={6}>
-                <Input
-                    name     = 'cookTime'
-                    type     = 'number'
-                    label    = {formatMessage(messages.cooking_time_label)}
-                    value    = {form?.cookTime ?? ''}
-                    errors   = {formatValidation(intl, validation?.cookTime)}
-                    onChange = {update} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <Input
-                    name     = 'servings'
-                    type     = 'number'
-                    label    = {formatMessage(messages.servings_label)}
-                    value    = {form?.servings ?? ''}
-                    min      = {1}
-                    max      = {999}
-                    required
-                    errors   = {formatValidation(intl, validation?.servings)}
-                    onChange = {update} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <Input
-                    name     = 'source'
-                    label    = {formatMessage(messages.source_label)}
-                    tooltip  = {formatMessage(messages.source_tooltip)}
-                    value    = {form?.source ?? ''}
-                    errors   = {formatValidation(intl, validation?.source)}
-                    onChange = {update} />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <Checkbox
-                    name      = 'public'
-                    label     = {formatMessage(messages.public_label)}
-                    value     = {form?.public ?? false}
-                    errors    = {formatValidation(intl, validation?.public)}
-                    onChange  = {update} />
-              </Col>
-            </Row>
+                  <Row>
+                    <Col xs={12} sm={6}>
+                      <ReInput
+                          name     = 'prepTime'
+                          type     = 'number'
+                          label    = {formatMessage(messages.prep_time_label)}
+                          min      = {1}
+                          max      = {999} />
+                    </Col>
+                    <Col xs={12} sm={6}>
+                      <ReInput
+                          name     = 'cookTime'
+                          type     = 'number'
+                          label    = {formatMessage(messages.cooking_time_label)} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <ReInput
+                          name     = 'servings'
+                          type     = 'number'
+                          label    = {formatMessage(messages.servings_label)}
+                          min      = {1}
+                          max      = {999}
+                          required />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <ReInput
+                          name     = 'source'
+                          label    = {formatMessage(messages.source_label)}
+                          tooltip  = {formatMessage(messages.source_tooltip)} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <ReCheckbox
+                          name      = 'public'
+                          label     = {formatMessage(messages.public_label)} />
+                    </Col>
+                  </Row>
 
-          </Col>
-          <Col id='recipe' md={7} lg={8}>
-            <Input
-                name     = 'info'
-                rows     = {3}
-                label    = {formatMessage(messages.information_label)}
-                placeholder = {formatMessage(messages.information_placeholder)}
-                value    = {form?.info ?? ''}
-                errors   = {formatValidation(intl, validation?.info)}
-                onChange = {update} />
-            <IngredientGroupsBox
-                name     = 'ingredientGroups'
-                errors   = {formatValidation(intl, validation?.ingredientGroups) || formatValidation(intl, validation?.subrecipes)}
-                groups   = {form?.ingredientGroups}
-                subrecipes = {form?.subrecipes}
-                fetchRecipeList = {fetchRecipeList}
-                onChange = {update} />
-            <DirectionBox
-                name       = 'directions'
-                directions = {form?.directions ?? ''}
-                errors     = {formatValidation(intl, validation?.directions)}
-                onChange   = {update} />
+                </Col>
+                <Col id='recipe' md={7} lg={8}>
+                  <ReInput
+                      name     = 'info'
+                      rows     = {3}
+                      label    = {formatMessage(messages.information_label)}
+                      placeholder = {formatMessage(messages.information_placeholder)} />
+                  <IngredientGroupsBox
+                      nameIg   = 'ingredientGroupsS'
+                      nameSub  = 'subrecipesS'
+                      fetchRecipeList = {fetchRecipeList} />
+                  <DirectionBox
+                      name       = 'directions' />
 
-            <RecipeFormToolbar />
-          </Col>
-        </Row>
-      </Container>
-    </Form>
+                  <RecipeFormToolbar />
+                </Col>
+              </Row>
+            </Container>
+          </Form>
+    )} />
   );
 };
 

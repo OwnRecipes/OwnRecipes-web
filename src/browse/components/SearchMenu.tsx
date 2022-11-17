@@ -9,7 +9,6 @@ import '../css/filter.css';
 import Filter from './Filter';
 import Icon from '../../common/components/Icon';
 import { CategoryCount, RatingCount } from '../store/FilterTypes';
-import { getResourcePath } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
 
 export interface ISearchMenuProps {
@@ -19,10 +18,18 @@ export interface ISearchMenuProps {
   ratings:  Array<RatingCount>   | undefined;
   tags:     Array<CategoryCount> | undefined;
 
+  hasActiveFilter: boolean;
+  resetFilterUrl: string;
+  openFilters: Array<string>;
+  setOpenFilters: (filters: Array<string>) => void;
+
   buildUrl: (qsTitle: string, recipeSlug: string, multiSelect?: boolean) => string;
 }
 
-const SearchMenu: React.FC<ISearchMenuProps> = ({ qs, courses, cuisines, ratings, tags, buildUrl }: ISearchMenuProps) => {
+const SearchMenu: React.FC<ISearchMenuProps> = ({
+    qs, courses, cuisines, ratings, tags,
+    hasActiveFilter, resetFilterUrl, openFilters, setOpenFilters,
+    buildUrl }: ISearchMenuProps) => {
   const intl = useIntl();
 
   const messages = defineMessages({
@@ -104,17 +111,6 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ qs, courses, cuisines, ratings
     setShowMenu(prev => !prev);
   };
 
-  const getResetFilterUrl = () => {
-    if (!qs.search) {
-      return getResourcePath('/browser');
-    } else {
-      const searchString = new URLSearchParams({ search: qs.search }).toString();
-      return getResourcePath(`/browser?${searchString}`);
-    }
-  };
-
-  const hasActiveFilter = Object.keys(qs).filter(key => !['limit', 'offset', 'search'].includes(key)).length !== 0;
-
   const mobileHeader = (
     <div className='sidebar-header'>
       <Button type='button' variant='transparent' className='filter-header' onClick={toggleMenu}>
@@ -123,13 +119,18 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ qs, courses, cuisines, ratings
       </Button>
       {hasActiveFilter && (
         <div className='filter-header-clear'>
-          <Link className='clear-filter-mobile btn btn-transparent' to={getResetFilterUrl()}>
+          <Link className='clear-filter-mobile btn btn-transparent' to={resetFilterUrl}>
             {intl.formatMessage(messages.reset)}
           </Link>
         </div>
       )}
     </div>
   );
+
+  const handleSelect = (eventKey: string | string[] | null) => {
+    const newOpenFilters: Array<string> = Array.isArray(eventKey) ? eventKey : [(eventKey ?? '')];
+    setOpenFilters(newOpenFilters);
+  };
 
   return (
     <Card>
@@ -140,25 +141,25 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ qs, courses, cuisines, ratings
         {intl.formatMessage(messages.filters)}
         {hasActiveFilter && (
           <Tooltip id='clear-tooltip' tooltip={intl.formatMessage(messages.reset_filters)} placement='bottom'>
-            <Link className='clear-filter-desktop btn btn-transparent' to={getResetFilterUrl()}>
+            <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl}>
               <Icon icon='arrow-counterclockwise' variant='light' />
             </Link>
           </Tooltip>
         )}
       </Card.Header>
       <Card.Text as='div' className={classNames('sidebar', { 'hidden-xs': !showMenu })}>
-        <Accordion defaultActiveKey={['course', 'rating']} flush alwaysOpen className='filter-group-list'>
+        <Accordion activeKey={openFilters} flush alwaysOpen className='filter-group-list' onSelect={handleSelect as any}>
           <Filter
               title    = {intl.formatMessage(messages.filter_course)}
               qsTitle  = 'course'
-              data     = {courses ?? []}
+              data     = {courses}
               qs       = {qs}
               multiSelect
               buildUrl = {buildUrl} />
           <Filter
               title    = {intl.formatMessage(messages.filter_cuisine)}
               qsTitle  = 'cuisine'
-              data     = {cuisines ?? []}
+              data     = {cuisines}
               qs       = {qs}
               multiSelect
               buildUrl = {buildUrl} />
@@ -171,7 +172,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ qs, courses, cuisines, ratings
                   total:  r.total,
                   slug:   String(r.rating),
                   title:  intl.formatMessage(messages.x_stars, { rating: r.rating }),
-              })) ?? []}
+              }))}
               qs       = {qs}
               multiSelect
               buildUrl = {buildUrl}
@@ -179,14 +180,14 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ qs, courses, cuisines, ratings
           <Filter
               title    = {intl.formatMessage(messages.filter_tag)}
               qsTitle  = 'tag'
-              data     = {tags ?? []}
+              data     = {tags}
               qs       = {qs}
               multiSelect
               buildUrl = {buildUrl} />
         </Accordion>
         {hasActiveFilter && (
           <div className='row reset-search-row hidden-xs'>
-            <Link className='btn btn-outline-danger reset-search hidden-xs' to={getResetFilterUrl()}>
+            <Link className='btn btn-outline-danger reset-search hidden-xs' to={resetFilterUrl}>
               {intl.formatMessage(messages.reset)}
             </Link>
           </div>

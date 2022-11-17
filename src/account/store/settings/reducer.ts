@@ -25,9 +25,9 @@ function init(state: SettingsState, action: ISettingsInitAction): SettingsState 
 function setLanguage(state: SettingsState, action: ISettingsDataAction): SettingsState {
   const upd = { ...state };
 
-  LocalStorageHelper.setItem(SETTING_LANGUAGE_STORAGE_KEY, action.data, action.tokenId);
-  LocalStorageHelper.setItem(SETTING_LANGUAGE_STORAGE_KEY, action.data);
-  upd.language = (action.data as LanguageCode);
+  LocalStorageHelper.setItem(SETTING_LANGUAGE_STORAGE_KEY, action.payload, action.tokenId);
+  LocalStorageHelper.setItem(SETTING_LANGUAGE_STORAGE_KEY, action.payload);
+  upd.language = (action.payload as LanguageCode);
 
   return upd;
 }
@@ -35,16 +35,16 @@ function setLanguage(state: SettingsState, action: ISettingsDataAction): Setting
 function setTheme(state: SettingsState, action: ISettingsDataAction): SettingsState {
   const upd = { ...state };
 
-  LocalStorageHelper.setItem(SETTING_THEME_STORAGE_KEY, action.data, action.tokenId);
-  LocalStorageHelper.setItem(SETTING_THEME_STORAGE_KEY, action.data);
-  upd.themeMode = (action.data as ThemeMode);
+  LocalStorageHelper.setItem(SETTING_THEME_STORAGE_KEY, action.payload, action.tokenId);
+  LocalStorageHelper.setItem(SETTING_THEME_STORAGE_KEY, action.payload);
+  upd.themeMode = (action.payload as ThemeMode);
 
   return upd;
 }
 
 const reducer = (state = defaultState, action: SettingsAction): SettingsState => {
   if (action.store === SETTINGS_STORE) {
-    switch (action.type) {
+    switch (action.typs) {
       case SettingsActionTypes.INIT:       return init(state, action);
       case SettingsActionTypes.LANGUAGE:   return setLanguage(state, action);
       case SettingsActionTypes.THEME_MODE: return setTheme(state, action);

@@ -1,7 +1,9 @@
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import Icon from '../../common/components/Icon';
 
+import '../../common/css/modal.css';
+
+import Icon from '../../common/components/Icon';
 import P from '../../common/components/P';
 
 export interface ISearchReloadProps {

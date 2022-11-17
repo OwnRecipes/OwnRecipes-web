@@ -1,16 +1,19 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
-import { AccountState } from '../account/store/types';
 import { ThunkDispatch } from 'redux-thunk';
 import { NavigateFunction, useLocation, useNavigate } from 'react-router';
 import { Location } from 'history';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { Beforeunload } from 'react-beforeunload';
 
 import './css/404.css';
 
-import { getEnvAsBoolean, getResourcePath } from '../common/utility';
 import { CombinedStore } from './Store';
 import * as AccountActions from '../account/store/actions';
+import { AccountState } from '../account/store/types';
+import { getEnvAsBoolean, getResourcePath } from '../common/utility';
 
 const AutoLogin: React.FC = () => {
   const nav = useNavigate();
@@ -31,6 +34,7 @@ interface IAutoLoginClassProps {
 
 interface IDispatchProps {
   tryAutoLogin: () => void;
+  forgetLogin:  () => void;
 }
 
 interface IStateProps {
@@ -49,8 +53,8 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
     super(props);
 
     this.state = {
-      originUrl: this.props.loc.pathname,
-      originSearch: this.props.loc.search,
+      originUrl: props.loc.pathname,
+      originSearch: props.loc.search,
     };
   }
 
@@ -65,7 +69,10 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
     const currToken = this.props.account.item;
     const originUrl = this.state.originUrl;
 
-    if (prevToken == null && currToken != null) {
+    // console.log(`[AutoLogin] originUrl=${originUrl}, prevUrl=${prevProps.loc.pathname}, nextUrl=${this.props.loc.pathname}, prevToken=${JSON.stringify(prevToken)}, currToken=${JSON.stringify(currToken)}`);
+
+    if ((prevToken == null && currToken != null)
+      || (prevToken != null && currToken != null && this.props.loc.pathname === getResourcePath('/login'))) {
       if (originUrl === getResourcePath('/') || originUrl === getResourcePath('/login')) {
         this.props.nav(getResourcePath('/home'), { replace: true });
       } else if (this.props.loc.pathname !== originUrl) {
@@ -80,8 +87,16 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
     }
   }
 
+  handleForgetLogout(): void {
+    if (this.props.account.item != null && !this.props.account.item.remember) {
+      this.props.forgetLogin();
+    }
+  }
+
   render() {
-    return null;
+    return (
+      <Beforeunload onBeforeunload={() => this.handleForgetLogout()} />
+    );
   }
 }
 
@@ -91,6 +106,7 @@ const mapStateToProps = (state: CombinedStore): IStateProps => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<CombinedStore, unknown, AnyAction>): IDispatchProps => ({
   tryAutoLogin:  () => dispatch(AccountActions.tryAutoLogin()),
+  forgetLogin:   () => dispatch(AccountActions.forgetLogin()),
 });
 
 const EnhancedAutoLoginClass = connect(mapStateToProps, mapDispatchToProps)(AutoLoginClass);

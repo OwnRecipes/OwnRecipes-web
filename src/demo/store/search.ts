@@ -13,7 +13,7 @@ function demoFilterRating(resultRecipes: Array<RecipeDto>, queryParams: URLSearc
 }
 
 function demoDoFilterByCourse(resultRecipes: Array<RecipeDto>, courses: Array<string>): Array<RecipeDto> {
-  return resultRecipes.filter(r => courses?.includes(r.course.title.toLocaleLowerCase()));
+  return resultRecipes.filter(r => r.course && courses?.includes(r.course.title.toLocaleLowerCase()));
 }
 function demoFilterCourse(resultRecipes: Array<RecipeDto>, queryParams: URLSearchParams): Array<RecipeDto> {
   if (queryParams.has('course')) {
@@ -28,7 +28,7 @@ function demoFilterCourse(resultRecipes: Array<RecipeDto>, queryParams: URLSearc
 }
 
 function demoDoFilterByCuisine(resultRecipes: Array<RecipeDto>, cuisines: Array<string>): Array<RecipeDto> {
-  return resultRecipes.filter(r => cuisines?.includes(r.cuisine.title.toLocaleLowerCase()));
+  return resultRecipes.filter(r => r.cuisine && cuisines?.includes(r.cuisine.title.toLocaleLowerCase()));
 }
 function demoFilterCuisine(resultRecipes: Array<RecipeDto>, queryParams: URLSearchParams): Array<RecipeDto> {
   if (queryParams.has('cuisine')) {

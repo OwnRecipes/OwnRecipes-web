@@ -1,38 +1,40 @@
 import { Dispatch as ReduxDispatch } from 'redux';
+import { BasicAction, PayloadAction } from '../../common/store/redux';
 import { Ingredient, IngredientGroup } from './RecipeTypes';
 
 export const RECIPE_INGREDIENTS_STORE = '@@recipeIngredients';
+
+export type QuantityFormatter = (numerator: number | undefined, denominator: number) => string;
 
 export enum RecipeIngredientReducerActionTypes {
   RECIPE_INGREDIENTS_LOAD = 'RECIPE_INGREDIENTS_LOAD',
   RECIPE_INGREDIENTS_SERVINGS_UPDATE = 'RECIPE_INGREDIENTS_SERVINGS_UPDATE',
 }
 
-export interface IRecipeIngredientLoadAction {
+export type IRecipeIngredientLoadAction = {
   store: typeof RECIPE_INGREDIENTS_STORE;
-  type: typeof RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD;
-  ingredientGroups: Array<IngredientGroup>;
+  typs: typeof RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD;
   formatQuantity: (numerator: number | undefined, denominator: number) => string;
-}
+} & PayloadAction<Array<IngredientGroup>>;
 
-export interface IRecipeIngredientServingsUpdateAction {
+export type IRecipeIngredientServingsUpdateAction = {
   store: typeof RECIPE_INGREDIENTS_STORE;
-  type: typeof RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_SERVINGS_UPDATE;
+  typs: typeof RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_SERVINGS_UPDATE;
   formatQuantity: (numerator: number | undefined, denominator: number) => string;
-}
+} & BasicAction;
 
 export type RecipeIngredientsState = Array<IngredientGroup>;
 export type RecipeIngredientsAction = IRecipeIngredientLoadAction | IRecipeIngredientServingsUpdateAction;
 export type RecipeIngredientsDispatch  = ReduxDispatch<RecipeIngredientsAction>;
 
-type IngredientReduceFunction = (ingr: Ingredient) => Ingredient;
+type RecalcFunction<T> = (ingr: T) => T;
 
-const ingredients = (state: RecipeIngredientsState, cb: IngredientReduceFunction): RecipeIngredientsState => state.map(ig => ({
+const ingredients = (igs: Array<IngredientGroup>, cb: RecalcFunction<Ingredient>): Array<IngredientGroup> => igs.map(ig => ({
   ...ig,
   ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
 }));
 
-const merge = (state: RecipeIngredientsState, action: IRecipeIngredientLoadAction) => {
+const merge = (state: RecipeIngredientsState, ingredientGroups: Array<IngredientGroup>, formatQuantity: QuantityFormatter) => {
   const list: Array<number> = [];
   state
     .map(ig => ig.ingredients)
@@ -42,20 +44,20 @@ const merge = (state: RecipeIngredientsState, action: IRecipeIngredientLoadActio
         .forEach(ingr => list.push(ingr.id));
     });
 
-  return ingredients(action.ingredientGroups, ingr => {
+  return ingredients(ingredientGroups, ingr => {
     const checked = list.includes(ingr.id);
-    const custom = action.formatQuantity(ingr.numerator, ingr.denominator);
+    const custom = formatQuantity(ingr.numerator, ingr.denominator);
     return { ...ingr, quantity: custom, checked: checked };
   });
 };
 
 const defaultState: RecipeIngredientsState = [];
 
-const recipes = (state = defaultState, action: RecipeIngredientsAction): RecipeIngredientsState => {
+const ingredient = (state = defaultState, action: RecipeIngredientsAction): RecipeIngredientsState => {
   if (action.store === RECIPE_INGREDIENTS_STORE) {
-    switch (action.type) {
+    switch (action.typs) {
       case RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_LOAD:
-        return merge(state, action);
+        return merge(state, action.payload, action.formatQuantity);
       case RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_SERVINGS_UPDATE:
         return ingredients(state, i => {
           const custom = action.formatQuantity(i.numerator, i.denominator);
@@ -82,4 +84,4 @@ const recipes = (state = defaultState, action: RecipeIngredientsAction): RecipeI
   return state;
 };
 
-export default recipes;
+export default ingredient;

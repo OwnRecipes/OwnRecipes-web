@@ -1,6 +1,7 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { isResponseError, ResponseError } from '../../common/CustomSuperagent';
+import { toBasicAction } from '../../common/store/redux';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { InternalErrorDispatch, InternalError, INTERNAL_ERROR_STORE } from './types';
 
@@ -21,9 +22,11 @@ export const setInternalError = (store: string, error: Error | ResponseError) =>
     }
 
     dispatch({
-      store: INTERNAL_ERROR_STORE,
-      type:  ACTION.ERROR,
-      data: {
+      ...toBasicAction(
+        INTERNAL_ERROR_STORE,
+        ACTION.ERROR
+      ),
+      payload: {
         store:   store,
         name:    respErr.name,
         message: errMessage,
@@ -40,9 +43,11 @@ export const setInternalError = (store: string, error: Error | ResponseError) =>
   } else {
     const err = error as Error;
     dispatch({
-      store: INTERNAL_ERROR_STORE,
-      type:  ACTION.ERROR,
-      data: {
+      ...toBasicAction(
+        INTERNAL_ERROR_STORE,
+        ACTION.ERROR
+      ),
+      payload: {
         store:   store,
         name:    err.name,
         message: err.message,
@@ -55,5 +60,5 @@ export const setInternalError = (store: string, error: Error | ResponseError) =>
 };
 
 export const reset = () => (dispatch: InternalErrorDispatch) => {
-  dispatch({ store: INTERNAL_ERROR_STORE, type: ACTION.RESET });
+  dispatch({ ...toBasicAction(INTERNAL_ERROR_STORE, ACTION.RESET) });
 };

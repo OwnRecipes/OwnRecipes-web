@@ -5,14 +5,14 @@ import SelectReact, { MultiValue, SingleValue } from 'react-select';
 import CreatableSelectReact from 'react-select/creatable';
 // import AsyncReact from 'react-select/async';
 
-import '../css/select.css';
+import '../../css/select.css';
 
-import BaseComponent, { IBaseComponentProps } from './BaseComponent';
-import ConditionalWrapper from './ConditionalWrapper';
-import Tooltip from './Tooltip';
+import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
+import ConditionalWrapper from '../ConditionalWrapper';
+import Tooltip from '../Tooltip';
 
 /*
-export class Async extends BaseComponent {
+export class Async extends BaseInputComponent {
   handleChange(data) {
     this.setState({
       value: data,
@@ -45,7 +45,7 @@ export class Async extends BaseComponent {
 
 export type SelectDataType = { value: string, label: string };
 
-interface ISelectProps extends IBaseComponentProps {
+interface ISelectProps extends IBaseInputComponentProps {
   value?: string;
   data?:  Array<SelectDataType>;
 
@@ -53,7 +53,7 @@ interface ISelectProps extends IBaseComponentProps {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export class Select extends BaseComponent<ISelectProps> {
+export class Select extends BaseInputComponent<ISelectProps> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
 
@@ -81,7 +81,7 @@ export class Select extends BaseComponent<ISelectProps> {
       <Form.Group
           controlId = {this.props.name}
           className = {classNames('form-group', this.props.className, {
-            error:    this.hasError(),
+            error:    this.isErrorneous(),
             readonly: this.props.readOnly,
             required: this.props.required && !this.props.readOnly,
           })}>
@@ -104,12 +104,13 @@ export class Select extends BaseComponent<ISelectProps> {
   }
 }
 
-export interface ICreatableSelectValues extends IBaseComponentProps {
+export interface ICreatableSelectValues extends IBaseInputComponentProps {
   value?:   Array<string> | string;
   data?:    Array<SelectDataType>;
   isMulti?: boolean;
 }
 interface ICreatableSelectProps extends ICreatableSelectValues {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (name: string, newValue: any | undefined) => void;
 }
 
@@ -127,7 +128,7 @@ function findSelectedOptions(options: Array<SelectDataType>, value: Array<string
   }
 }
 
-export class CreatableSelect extends BaseComponent<ICreatableSelectProps, ICreatableSelectState> {
+export class CreatableSelect extends BaseInputComponent<ICreatableSelectProps, ICreatableSelectState> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
 
@@ -168,9 +169,10 @@ export class CreatableSelect extends BaseComponent<ICreatableSelectProps, ICreat
 
   handleChange = (data: MultiValue<SelectDataType> | SingleValue<SelectDataType>) => {
     if (this.props.onChange) {
+      const val = data != null && Array.isArray(data) ? data.map(dat => dat.value) : (data as SingleValue<SelectDataType>)?.value;
       this.props.onChange(
         this.props.name,
-        data != null && Array.isArray(data) ? data.map(dat => dat.value) : (data as SingleValue<SelectDataType>)?.value
+        val
       );
     }
   };
@@ -195,6 +197,8 @@ export class CreatableSelect extends BaseComponent<ICreatableSelectProps, ICreat
   };
 
   render() {
+    // console.log(`[Select] name=${this.props.name}, value=${JSON.stringify(this.props.value)}`);
+
     const dataOptions = this.props.data ?? [];
     const options = dataOptions.concat(this.state.options);
     const selectedOptions = findSelectedOptions(options, this.props.value);
@@ -202,7 +206,7 @@ export class CreatableSelect extends BaseComponent<ICreatableSelectProps, ICreat
     return (
       <Form.Group
           className = {classNames('form-group', this.props.className, {
-            error:    this.hasError(),
+            error:    this.isErrorneous(),
             readonly: this.props.readOnly,
             required: this.props.required && !this.props.readOnly,
           })}>
@@ -215,6 +219,8 @@ export class CreatableSelect extends BaseComponent<ICreatableSelectProps, ICreat
           <CreatableSelectReact
               inputId = {`${this.props.name}-input`}
               onChange = {this.handleChange}
+              onBlur   = {this.props.onBlur}
+              onFocus  = {this.props.onFocus}
               isValidNewOption = {isValidNewOption}
               onCreateOption = {this.handleCreate}
               isClearable

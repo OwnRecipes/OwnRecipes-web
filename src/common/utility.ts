@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 import { IntlShape } from 'react-intl';
 
 import env, { EnvType } from '../env';
@@ -46,6 +46,32 @@ export function isNumber(str: string): boolean {
   if (strTimmed.endsWith('.') || strTimmed.endsWith(',')) return false;
   // eslint-disable-next-line no-restricted-globals
   return !isNaN(str as unknown as number) && !isNaN(parseFloat(str));
+}
+
+export function toNumberDefault(val: string | undefined, defIfNull: number): number {
+  if (val == null) return defIfNull;
+
+  try {
+    const parsedVal = parseInt(val);
+    if (Number.isNaN(parsedVal)) {
+      return defIfNull;
+    }
+    return parsedVal;
+  } catch (_err) {
+    return defIfNull;
+  }
+}
+
+export function objToSearchString(params: Record<string, string | number | boolean | undefined>): string {
+  const paramsStrings: Record<string, string> = {};
+  Object.keys(params).forEach(key => {
+    if (params[key] != null) {
+      paramsStrings[key] = String(params[key]);
+    }
+  });
+  const paramss = new URLSearchParams(paramsStrings);
+  paramss.sort();
+  return paramss.toString();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { NavDropdown } from 'react-bootstrap';
 
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import Icon from '../../common/components/Icon';
-import { LanguageDialog } from './LanguageDialog';
-import { ThemeDialog } from './ThemeDialog';
 import { LanguageCode } from '../../common/language';
+import LoadingSpinner from '../../common/components/LoadingSpinner';
+
+const LanguageDialog = lazy(() => import('./LanguageDialog'));
+const ThemeDialog = lazy(() => import('./ThemeDialog'));
 
 export interface ILoginSettingsProps {
   settings: Settings;
@@ -46,17 +48,25 @@ const LoginSettings: React.FC<ILoginSettingsProps> = ({ settings, onChangeLangua
         <NavDropdown.Item onClick={handleChangeThemeClick}>{`${intl.messages['nav.accountmenu.theme']} …`}</NavDropdown.Item>
       </NavDropdown>
 
-      <LanguageDialog
-          show     = {showLanguageDialog}
-          settings = {settings}
-          onChangeLanguage = {handleChangeLanguage}
-          onClose = {handleLanguageDialogClose} />
+      {showLanguageDialog && (
+        <Suspense fallback={<LoadingSpinner position='screen-center' />}>
+          <LanguageDialog
+              show     = {showLanguageDialog}
+              settings = {settings}
+              onChangeLanguage = {handleChangeLanguage}
+              onClose = {handleLanguageDialogClose} />
+        </Suspense>
+      )}
 
-      <ThemeDialog
-          show     = {showThemeDialog}
-          settings = {settings}
-          onChangeTheme = {handleChangeTheme}
-          onClose = {handleThemeDialogClose} />
+      {showThemeDialog && (
+        <Suspense fallback={<LoadingSpinner position='screen-center' />}>
+          <ThemeDialog
+              show     = {showThemeDialog}
+              settings = {settings}
+              onChangeTheme = {handleChangeTheme}
+              onClose = {handleThemeDialogClose} />
+        </Suspense>
+      )}
     </>
   );
 };

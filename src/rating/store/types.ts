@@ -1,6 +1,7 @@
 import { Dispatch as ReduxDispatch } from 'redux';
 import MapReducerType from '../../common/store/MapReducerType';
 import { ACTION, GenericItemReducerAction, GenericMapReducerAction } from '../../common/store/ReduxHelper';
+import { PayloadAction } from '../../common/store/redux';
 
 export const RATING_STORE  = '@@rating';
 
@@ -46,19 +47,21 @@ export const toRating = (dto: RatingDto): Rating => ({
   updateDate: dto.update_date,
 });
 
-export interface IRatingAddAction {
+export type IRatingAddAction = {
   store:  typeof RATING_STORE;
-  type:   ACTION.CREATE_SUCCESS;
+  typs:   ACTION.CREATE_SUCCESS;
+} & PayloadAction<{
   recipe: string;
-  data:   Rating;
-}
+  rating: Rating;
+}>;
 
-export interface IRatingDeleteAction {
+export type IRatingDeleteAction = {
   store:    typeof RATING_STORE;
-  type:     ACTION.DELETE_SUCCESS;
+  typs:     ACTION.DELETE_SUCCESS;
+} & PayloadAction<{
   recipe:   string;
   ratingId: number;
-}
+}>;
 
 export type RatingAction   = IRatingAddAction | IRatingDeleteAction | GenericItemReducerAction<Rating>;
 export type RatingDispatch = ReduxDispatch<RatingAction>;

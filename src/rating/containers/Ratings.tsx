@@ -1,11 +1,10 @@
 import { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 import RatingsWrapper from '../components/RatingsWrapper';
 import * as RatingsActions from '../store/actions';
 import { RatingCreate } from '../store/types';
 import { CombinedStore } from '../../app/Store';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
 
 const Ratings: React.FC = () => {
@@ -18,8 +17,8 @@ const Ratings: React.FC = () => {
   const recipeSlug = recipe?.slug;
   const recipeRating = recipe?.rating;
 
-  const addRatingCallback    = useCallback((recSlug, rating: RatingCreate) => dispatch(RatingsActions.add(recSlug, rating)), [dispatch]);
-  const removeRatingCallback = useCallback((recSlug, ratingId: number)     => dispatch(RatingsActions.remove(recSlug, ratingId)), [dispatch]);
+  const addRating = useCallback(async (recSlug: string, rating: RatingCreate) => RatingsActions.add(dispatch, recSlug, rating), [dispatch]);
+  const removeRatingCallback = useCallback((recSlug: string, ratingId: number) => dispatch(RatingsActions.remove(recSlug, ratingId)), [dispatch]);
 
   useEffect(() => {
     if (recipeSlug == null || recipeRating == null || recipeRating === 0) return;
@@ -36,9 +35,9 @@ const Ratings: React.FC = () => {
           userId     = {account?.id}
           userRole   = {account?.role}
           ratings    = {ratings}
-          pending    = {ratingsState.pending}
+          pending    = {ratingsState.meta.pending}
 
-          addRating  = {addRatingCallback}
+          addRating  = {addRating}
           removeRating = {removeRatingCallback} />
     </ErrorBoundary>
   );

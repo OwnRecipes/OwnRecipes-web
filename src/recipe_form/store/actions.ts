@@ -1,82 +1,41 @@
-import { handleError, request } from '../../common/CustomSuperagent';
+import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import validation from './validation';
-import { RECIPE_FORM_STORE, RecipeFormDispatch, RecipeFormActionTypes, AutocompleteListItem } from './types';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { Recipe, RecipeDto, toRecipe, toRecipeRequest } from '../../recipe/store/RecipeTypes';
-import { createValidationResult, hasValidationError, runFieldValidator, runValidators, ValidationResult } from '../../common/store/Validation';
 import { COURSES_STORE, CUISINES_STORE, TAGS_STORE } from '../../recipe_groups/store/types';
+import { AnyDispatch, toBasicAction } from '../../common/store/redux';
+import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
+import { RecipeFormDispatch, RECIPE_FORM_STORE } from './types';
+import { getRecipeSuccess } from '../../recipe/store/RecipeActions';
 
 export const load = (recipeSlug: string) => (dispatch: RecipeFormDispatch) => {
-  dispatch({ store: RECIPE_FORM_STORE, type: ACTION.GET_START });
+  dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.GET_START) });
   request()
     .get(`${serverURLs.recipe}${recipeSlug}/`)
     .then(res => {
+      const recipe = toRecipe(res.body);
       dispatch({
-        store: RECIPE_FORM_STORE, type: ACTION.GET_SUCCESS, data: toRecipe(res.body) });
+        ...toBasicAction(
+          RECIPE_FORM_STORE,
+          ACTION.GET_SUCCESS
+        ),
+        payload: recipe,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dispatch(getRecipeSuccess(recipe) as any);
     })
     .catch(err => dispatch(handleError(err, RECIPE_FORM_STORE)));
 };
 
-export const update = (name: string, value: unknown) => {
-  const validator = validation.find(v => name === v.name);
-  const valResult: ValidationResult = createValidationResult();
-  if (validator) runFieldValidator(valResult, validator.validators, name, value);
-
-  return (dispatch: RecipeFormDispatch) => {
-    dispatch({
-      store: RECIPE_FORM_STORE,
-      type:  RecipeFormActionTypes.RECIPE_FORM_UPDATE,
-      name:  name,
-      value: value,
-      validation: valResult,
-    });
-  };
+export const preload = (recipe: Partial<Recipe>) => (dispatch: RecipeFormDispatch) => {
+  dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.PRELOAD), payload: recipe });
 };
 
-export const create = () => (dispatch: RecipeFormDispatch) => {
-  dispatch({
-    store: RECIPE_FORM_STORE,
-    type:  RecipeFormActionTypes.RECIPE_FORM_INIT,
-    data:  { slug: '', public: true, servings: 1 } as Recipe,
-  });
+export const reset = () => (dispatch: RecipeFormDispatch) => {
+  dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.RESET) });
 };
 
-export const validate = (data: Recipe) => (dispatch: RecipeFormDispatch) => {
-  const valResult: ValidationResult = runValidators(validation, data);
-
-  if (Object.keys(valResult).length) {
-    dispatch({
-      store:  RECIPE_FORM_STORE,
-      type:   ACTION.VALIDATION,
-      data:   valResult,
-      mode:   'overwrite',
-    });
-  }
-};
-
-export const save = (data: Recipe) => (dispatch: RecipeFormDispatch) => {
-  const monkeypatchPhotoUrls = (response: Recipe): Recipe => {
-    // PATCH Recipe returns incomplete urls, see https://github.com/ownrecipes/ownrecipes-api/issues/7
-    if (data.photo != null && response.photo != null && data.photo.endsWith(response.photo)) {
-      response.photo = data.photo;
-    }
-    if (data.photoThumbnail != null && response.photoThumbnail != null && data.photoThumbnail.endsWith(response.photoThumbnail)) {
-      response.photoThumbnail = data.photoThumbnail;
-    }
-    return response;
-  };
-
-  const valResult: ValidationResult = runValidators(validation, data);
-  dispatch({
-    store: RECIPE_FORM_STORE,
-    type:  ACTION.VALIDATION,
-    data:  valResult,
-  });
-  if (hasValidationError(valResult)) {
-    return;
-  }
-
+export const save = async (dispatch: AnyDispatch, data: Recipe) => {
   const photo = (typeof data.photo === 'object') ? data.photo : undefined;
 
   const isNew = !data.id;
@@ -85,52 +44,63 @@ export const save = (data: Recipe) => (dispatch: RecipeFormDispatch) => {
       : request().patch(`${serverURLs.recipe}${data.slug}/`);
 
   dispatch({
-    store: RECIPE_FORM_STORE,
-    type:  isNew ? ACTION.CREATE_START : ACTION.UPDATE_START,
+    ...toBasicAction(
+      RECIPE_FORM_STORE,
+      isNew ? ACTION.CREATE_START : ACTION.UPDATE_START
+    ),
   });
 
   const dto = toRecipeRequest(data);
-  r.send(dto)
+  return r.send(dto)
     .then(res => {
-      // send the image once the file has been created
       if (photo) {
-        request()
+        return request()
           .patch(`${serverURLs.recipe}${res.body.slug}/`)
           .attach('photo', photo)
           .then(resPhoto => {
+            const recipe = toRecipe(resPhoto.body);
             dispatch({
-              store: RECIPE_FORM_STORE,
-              type:  isNew ? ACTION.CREATE_SUCCESS : ACTION.UPDATE_SUCCESS,
+              ...toBasicAction(
+                RECIPE_FORM_STORE,
+                isNew ? ACTION.CREATE_SUCCESS : ACTION.UPDATE_SUCCESS
+              ),
               oldId: data.id,
-              data:  toRecipe(resPhoto.body),
+              payload: recipe,
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            dispatch(getRecipeSuccess(recipe) as any);
           })
-          .catch(err => dispatch(handleError(err, RECIPE_FORM_STORE)));
-      } else {
-        dispatch({
-          store: RECIPE_FORM_STORE,
-          type:  isNew ? ACTION.CREATE_SUCCESS : ACTION.UPDATE_SUCCESS,
-          oldId: isNew ? (null as any) : data.id, // eslint-disable-line @typescript-eslint/no-explicit-any
-          data:  monkeypatchPhotoUrls(toRecipe(res.body)),
-        });
-      }
-
+          .catch(err => handleFormError(dispatch, err, RECIPE_FORM_STORE));
+        } else {
+          const recipe = toRecipe(res.body);
+          dispatch({
+            ...toBasicAction(
+              RECIPE_FORM_STORE,
+              isNew ? ACTION.CREATE_SUCCESS : ACTION.UPDATE_SUCCESS
+            ),
+            oldId: isNew ? (null as any) : data.id, // eslint-disable-line @typescript-eslint/no-explicit-any
+            payload: recipe,
+          });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          dispatch(getRecipeSuccess(recipe) as any);
+        }
       // OPT HACK: Move this to recipe_groups
       dispatch(invalidateCreatableLists(data, toRecipe(res.body)));
+      return null;
     })
-    .catch(err => dispatch(handleError(err, RECIPE_FORM_STORE)));
+    .catch(err => handleFormError(dispatch, err, RECIPE_FORM_STORE));
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const invalidateCreatableLists = (oldRecipe: Recipe, savedRecipe: Recipe): any => (dispatch: any) => {
+export const invalidateCreatableLists = (oldRecipe: Recipe, savedRecipe: Recipe): any => (dispatch: any) => {
   if (oldRecipe.course?.id !== savedRecipe.course?.id) {
-    dispatch({ store: COURSES_STORE, type: ACTION.RESET });
+    dispatch({ ...toBasicAction(COURSES_STORE, ACTION.RESET) });
   }
   if (oldRecipe.cuisine?.id !== savedRecipe.cuisine?.id) {
-    dispatch({ store: CUISINES_STORE, type: ACTION.RESET });
+    dispatch({ ...toBasicAction(CUISINES_STORE, ACTION.RESET) });
   }
   if (oldRecipe.tags?.map(t => t.id).join('/') !== savedRecipe.tags?.map(t => t.id).join('/')) {
-    dispatch({ store: TAGS_STORE, type: ACTION.RESET });
+    dispatch({ ...toBasicAction(TAGS_STORE, ACTION.RESET) });
   }
 };
 
@@ -138,11 +108,3 @@ export const fetchRecipeList = (searchTerm: string): Promise<Array<AutocompleteL
     .get(`${serverURLs.recipe}?fields=id,title,slug&limit=5&search=${searchTerm}`)
     .then(res => res.body.results.map((recipe: RecipeDto) => ({ key: recipe.slug, name: recipe.slug, char: recipe.title } as AutocompleteListItem)))
     .catch(() => []);
-
-export const preload = (recipe: Partial<Recipe>) => (dispatch: RecipeFormDispatch) => {
-  dispatch({ store: RECIPE_FORM_STORE, type: ACTION.PRELOAD, data: recipe });
-};
-
-export const reset = () => (dispatch: RecipeFormDispatch) => {
-  dispatch({ store: RECIPE_FORM_STORE, type: ACTION.RESET });
-};

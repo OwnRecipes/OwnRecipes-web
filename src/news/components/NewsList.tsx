@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 import classNames from 'classnames';
 
@@ -7,7 +6,7 @@ import { Carousel } from 'react-bootstrap';
 
 import { CombinedStore } from '../../app/Store';
 import * as NewsActions from '../store/actions';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch, useSelector } from '../../common/store/redux';
 
 import P from '../../common/components/P';
 import { PendingState } from '../../common/store/GenericReducerType';
@@ -55,7 +54,7 @@ const NewsCarousel: React.FC = () => {
 
   return (
     <>
-      {news.pending === PendingState.LOADING && (
+      {news.meta.pending === PendingState.LOADING && (
         <Loading />
       )}
       {carouselItems.length > 0 && (

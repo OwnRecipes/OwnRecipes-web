@@ -24,9 +24,8 @@ export interface IRatingsWrapperProps {
 const RatingsWrapper: React.FC<IRatingsWrapperProps> = ({ recipeSlug, ratings, userId, userRole, pending, addRating, removeRating }: IRatingsWrapperProps) => {
   const [showNewRating, setShowNewRating] = useState<boolean>(false);
 
-  const handleAddRating = (rec: string, rating: RatingCreate) => {
+  const handleAddRatingSuccess = () => {
     setShowNewRating(false);
-    addRating(rec, rating);
   };
 
   return (
@@ -34,7 +33,7 @@ const RatingsWrapper: React.FC<IRatingsWrapperProps> = ({ recipeSlug, ratings, u
       <RatingsHeader userRole={userRole} showNewRating={showNewRating} onShowNewRating={() => setShowNewRating(true)} />
       <Card.Body>
         {userId != null && userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
-          <NewRating show={showNewRating} recipeSlug={recipeSlug} userId={userId} addRating={handleAddRating} />
+          <NewRating show={showNewRating} recipeSlug={recipeSlug} userId={userId} addRating={addRating} onAddRatingSuccess={handleAddRatingSuccess} />
         )}
         <RatingComments recipeSlug={recipeSlug} ratings={ratings} pending={pending} userId={userId} removeRating={removeRating} />
       </Card.Body>

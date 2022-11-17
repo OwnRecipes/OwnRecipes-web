@@ -6,24 +6,30 @@ const defaultState: AccountState = ReduxHelper.getItemReducerDefaultState(ACCOUN
 
 const reducer = (state = defaultState, action: AccountAction): AccountState => {
   if (state.ident === action.store) {
-    switch (action.type) {
+    switch (action.typs) {
       case AccountActionTypes.LOGIN:
         {
-          const user = action.user;
+          const user = action.payload;
           LocalStorageHelper.setItem(ACCOUNT_TOKEN_STORAGE_KEY, JSON.stringify(user));
           return ReduxHelper.setItem(state, user);
         }
+      case AccountActionTypes.FORGET_LOGIN:
+          {
+            LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY);
+            // do not reset state to avoid automatic redirect navigation
+            return state;
+          }
       case AccountActionTypes.LOGOUT:
         {
           LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY);
           return defaultState;
         }
       default:
-        break;
+        return ReduxHelper.caseItemDefaultReducer(state, action, defaultState);
     }
   }
 
-  return ReduxHelper.caseItemDefaultReducer(state, action, defaultState);
+  return ReduxHelper.caseDefaultReducer(state, action, defaultState);
 };
 
 export default reducer;

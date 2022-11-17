@@ -1,37 +1,27 @@
 import { RatingCreate, RatingDispatch, RatingsDispatch, RATINGS_STORE, RATING_STORE, toRating } from './types';
-import { handleError, request } from '../../common/CustomSuperagent';
+import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
+import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 
 export const load = (recipeSlug: string) => (dispatch: RatingsDispatch) => {
-  dispatch({ store: RATINGS_STORE, type: ACTION.GET_START });
+  dispatch({ ...toBasicAction(RATINGS_STORE, ACTION.GET_START) });
   request()
     .get(`${serverURLs.ratings}?recipe__slug=${recipeSlug}`)
     .then(res => dispatch({
-      store:  RATINGS_STORE,
-      type:   ACTION.GET_SUCCESS,
-      id:     recipeSlug,
-      data:   ReduxHelper.transformEntities(res.body.results, toRating),
+      ...toBasicAction(
+        RATINGS_STORE,
+        ACTION.GET_SUCCESS
+      ),
+      id: recipeSlug,
+      payload: ReduxHelper.transformEntities(res.body.results, toRating),
     }))
     .catch(err => handleError(err, RATINGS_STORE));
 };
 
-export const remove = (recipeSlug: string, id: number) => (dispatch: RatingDispatch) => {
-  dispatch({ store: RATING_STORE, type: ACTION.DELETE_START });
-  request()
-    .delete(`${serverURLs.ratings}${id}/`)
-    .then(() => dispatch({
-      store:  RATING_STORE,
-      type:   ACTION.DELETE_SUCCESS,
-      ratingId: id,
-      recipe:   recipeSlug,
-    }))
-    .catch(err => handleError(err, RATINGS_STORE));
-};
-
-export const add = (recipeSlug: string, rating: RatingCreate) => (dispatch: RatingDispatch) => {
-  dispatch({ store: RATING_STORE, type: ACTION.CREATE_START });
-  request()
+export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: RatingCreate) => {
+  dispatch({ ...toBasicAction(RATING_STORE, ACTION.CREATE_START) });
+  return request()
     .post(serverURLs.ratings)
     .send({
       recipe:  recipeSlug,
@@ -39,11 +29,35 @@ export const add = (recipeSlug: string, rating: RatingCreate) => (dispatch: Rati
       comment: rating.comment,
       author:  rating.userId,
     })
-    .then(res => dispatch({
-      store:  RATING_STORE,
-      type:   ACTION.CREATE_SUCCESS,
-      recipe: recipeSlug,
-      data:   toRating(res.body),
+    .then(res => {
+      dispatch({
+        ...toBasicAction(
+          RATING_STORE,
+          ACTION.CREATE_SUCCESS
+        ),
+        payload: {
+          recipe: recipeSlug,
+          rating:   toRating(res.body),
+        },
+      });
+      return null;
+    })
+    .catch(err => handleFormError(dispatch, err, RATINGS_STORE));
+};
+
+export const remove = (recipeSlug: string, id: number) => (dispatch: RatingDispatch) => {
+  dispatch({ ...toBasicAction(RATING_STORE, ACTION.DELETE_START) });
+  request()
+    .delete(`${serverURLs.ratings}${id}/`)
+    .then(() => dispatch({
+      ...toBasicAction(
+        RATING_STORE,
+        ACTION.DELETE_SUCCESS
+      ),
+      payload: {
+        ratingId: id,
+        recipe:   recipeSlug,
+      },
     }))
     .catch(err => handleError(err, RATINGS_STORE));
 };

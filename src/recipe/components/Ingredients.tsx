@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Table } from 'react-bootstrap';
-import { defineMessages, useIntl } from 'react-intl';
-import MeasurementContext from '../../common/context/MeasurementContext';
+import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
+import MeasurementContext, { IMeasurementContext } from '../../common/context/MeasurementContext';
 // import { Checkbox } from '../../common/components/FormComponents';
 import { optionallyFormatMessage } from '../../common/utility';
 import { Ingredient } from '../store/RecipeTypes';
@@ -11,6 +11,22 @@ export interface IIngredientsProps {
   caption: string | undefined;
   data: Array<Ingredient>;
   // checkIngredient: (id: number, checked: boolean) => void;
+}
+
+export function formatMeasurement(measurementsContext: IMeasurementContext, measurement: string | undefined, intl: IntlShape, quantity: string | undefined): string {
+  let measurementString: string;
+  if (measurement != null) {
+    const measurementParserId = measurementsContext.formatter[measurementsContext.parser[measurement]];
+    if (measurementParserId != null) {
+      measurementString = optionallyFormatMessage(intl, 'measurement.', measurementParserId, { itemCount: quantity });
+    } else {
+      measurementString = measurement;
+    }
+  } else {
+    measurementString = '';
+  }
+
+  return measurementString;
 }
 
 const Ingredients: React.FC<IIngredientsProps> = ({
@@ -32,19 +48,10 @@ const Ingredients: React.FC<IIngredientsProps> = ({
   const measurementsContext = useContext(MeasurementContext);
 
   const ingredients = data.map((ingredient, index) => {
-    const quantityString    = ingredient.quantity;
-    let measurementString: string;
-    if (ingredient.measurement != null) {
-      const measurementParserId = measurementsContext?.formatter[measurementsContext?.parser[ingredient.measurement]];
-      if (measurementParserId != null) {
-        measurementString = optionallyFormatMessage(intl, 'measurement.', measurementParserId, { itemCount: ingredient.quantity });
-      } else {
-        measurementString = ingredient.measurement;
-      }
-    } else {
-      measurementString = '';
-    }
+    const quantityS    = ingredient.quantity;
+    const measurementString = formatMeasurement(measurementsContext, ingredient.measurement, intl, ingredient.quantity);
     const titleString = ingredient.title;
+    const renderQuantity: boolean = Boolean(quantityS) || Boolean(measurementString);
 
     return (
       <tr className='ingredient' key={String(ingredient.id ?? index)}>
@@ -54,11 +61,13 @@ const Ingredients: React.FC<IIngredientsProps> = ({
             checked = {ingredient.checked ?? false}
             change  = {(name, newValue) => checkIngredient(parseInt(name), newValue)} /> */}
         <td className='quantity'>
-          <span>
-            {quantityString}
-            {quantityString != null && quantityString.length > 0 && measurementString.length > 0 && ' '}
-            {measurementString}
-          </span>
+          {renderQuantity && (
+            <span>
+              {quantityS}
+              {quantityS != null && quantityS.length > 0 && measurementString.length > 0 && ' '}
+              {measurementString}
+            </span>
+          )}
         </td>
         <td className='ingredient'>
           <span>

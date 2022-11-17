@@ -165,10 +165,6 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
   color: var(--secondaryText);
 }
 
-.sk-spinner.sk-circle {
-  color: var(--disabledText);
-}
-
 
 .nav-link {
   color: var(--primaryMain);
@@ -207,7 +203,7 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
 
 .table {
   color: var(--primaryText);
-  height: '1px'; /* HACK: Fix height issues in older browser. */
+  height: 1px; /* HACK: Fix height issues in older browser. */
 }
 .table > thead.hideme {
   height: 1px;

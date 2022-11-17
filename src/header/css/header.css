@@ -98,19 +98,24 @@
   align-self: stretch;
 }
 
-#header-navbar #my-account-dropdown {
+#header-navbar .dropdown-toggle {
   padding-top: 0;
   padding-bottom: 0;
 }
 @media screen and (max-width: 767px) {
-  #header-navbar #my-account-dropdown {
+  #header-navbar .my-account-nav > .nav-link {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  #header-navbar .dropdown-toggle {
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100%;
     color: var(--primaryContrast);
   }
-  #header-navbar #my-account-dropdown:hover {
+  #header-navbar .dropdown-toggle:hover {
     color: var(--primaryContrast);
   }
 }
@@ -124,12 +129,11 @@
     padding-bottom: 0;
   }
 }
-#header-navbar #my-account-dropdown::after,
-#header-navbar #settings-dropdown::after {
+#header-navbar .dropdown-toggle::after {
   display: none;
 }
 @media screen and (min-width: 768px) {
-  #header-navbar #my-account-dropdown::after {
+  #header-navbar .dropdown-toggle::after {
     display: inline-block;
   }
 }

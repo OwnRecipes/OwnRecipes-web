@@ -61,3 +61,7 @@
 .recipe-form .live-editor .tab-pane.active.editor .content {
   border: 0;
 }
+
+.recipe-form .live-editor .form-group.error .error-text {
+  display: none;
+}

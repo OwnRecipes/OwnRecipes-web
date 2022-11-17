@@ -1,5 +1,7 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
+
+import { toNumberDefault } from '../../common/utility';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { PaginationProps } from '../constants/DefaultFilters';
 import { SearchResult } from '../store/SearchTypes';
@@ -13,20 +15,6 @@ export interface IResultsProps {
   defaults: Partial<PaginationProps>;
   buildUrl: (qsTitle: string, recipeSlug: string, multiSelect?: boolean) => string;
   onOpenRecipe: (rec: RecipeList) => void;
-}
-
-function toNumberDefault(val: string | undefined, defIfNull: number): number {
-  if (val == null) return defIfNull;
-
-  try {
-    const parsedVal = parseInt(val);
-    if (Number.isNaN(parsedVal)) {
-      return defIfNull;
-    }
-    return parsedVal;
-  } catch (_err) {
-    return defIfNull;
-  }
 }
 
 const Results: React.FC<IResultsProps> = ({ pending, search, qs, defaults, buildUrl, onOpenRecipe }: IResultsProps) => {

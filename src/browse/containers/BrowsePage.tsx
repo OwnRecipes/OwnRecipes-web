@@ -1,28 +1,31 @@
 import React, { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import queryString from 'query-string';
 import { useIntl } from 'react-intl';
-import { useLocation, useNavigate } from 'react-router';
-import * as _ from 'lodash';
+import { useNavigate } from 'react-router';
+import * as _ from 'lodash-es';
+
+import '../css/browse.css';
 
 import Search from '../components/Search';
-
-import * as RecipeActions from '../../recipe/store/RecipeActions';
 import * as SearchActions from '../store/SearchActions';
-import * as FilterActions from '../store/FilterActions';
-import useDispatch from '../../common/hooks/useDispatch';
+import * as RecipeActions from '../../recipe/store/RecipeActions';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
 import { CombinedStore } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
-import { getResourcePath } from '../../common/utility';
+import { getResourcePath, objToSearchString } from '../../common/utility';
+import { useSearchParams } from 'react-router-dom';
 
 export function mergeDefaultFilters(
-    query: queryString.ParsedQuery<string | number | boolean>,
-    defaultFilters: Record<string, unknown>
-  ): Record<string, unknown> {
-  const filter = { ...defaultFilters };
-  return _.merge(filter, query);
+    defaultFilters: Record<string, unknown>,
+    params: Record<string, string>
+  ): Record<string, string> {
+  const filterS: Record<string, string> = {};
+  Object.keys(defaultFilters).forEach(key => {
+    filterS[key] = String(defaultFilters[key]);
+  });
+
+  return _.merge(filterS, params);
 }
 
 export function buildSearchString(route: string, qs: Record<string, string>, value: string): string {
@@ -35,9 +38,8 @@ export function buildSearchString(route: string, qs: Record<string, string>, val
     delete qsBuilder.search;
   }
 
-  let str = queryString.stringify(qsBuilder);
-  str = getResourcePath(str ? `/${route}?${str}` : `/${route}`);
-  return str;
+  const str = objToSearchString(qsBuilder);
+  return getResourcePath(str ? `/${route}?${str}` : `/${route}`);
 }
 
 export function buildSearchUrl(route: string, qs: Record<string, string>, name: string, value: string, multiSelect = false): string {
@@ -69,62 +71,26 @@ export function buildSearchUrl(route: string, qs: Record<string, string>, name: 
     delete qsBuilder[name];
   }
 
-  const str = queryString.stringify(qsBuilder);
+  const str = objToSearchString(qsBuilder);
   return getResourcePath(str ? `/${route}?${str}` : `/${route}`);
 }
 
 const BrowsePage: React.FC = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
-  const location = useLocation();
   const nav = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const search   = useSelector((state: CombinedStore) => state.browse.search.items);
-  const courses  = useSelector((state: CombinedStore) => state.browse.filters.courses.items);
-  const cuisines = useSelector((state: CombinedStore) => state.browse.filters.cuisines.items);
-  const ratings  = useSelector((state: CombinedStore) => state.browse.filters.ratings.items);
-  const tags     = useSelector((state: CombinedStore) => state.browse.filters.tags.items);
 
-  const locationSearch = location.search;
-  const qs: Record<string, string> = queryString.parse(locationSearch) as Record<string, string>;
-  const qsMergedDefaults = mergeDefaultFilters(qs, DefaultFilters) as Record<string, string>;
-  const qsMergedString = queryString.stringify(qsMergedDefaults);
-
-  const reloadData = () => {
-    window.scrollTo(0, 0);
-    if (search?.[qsMergedString] == null) {
-      dispatch(SearchActions.loadRecipes(qsMergedDefaults));
-      dispatch(FilterActions.loadCourses(qsMergedDefaults));
-      dispatch(FilterActions.loadCuisines(qsMergedDefaults));
-      setTimeout(() => {
-        dispatch(FilterActions.loadRatings(qsMergedDefaults));
-      }, 100);
-      setTimeout(() => {
-        dispatch(FilterActions.loadTags(qsMergedDefaults));
-      }, 200);
-    } else {
-      if (courses?.[qsMergedString] == null) {
-        dispatch(FilterActions.loadCourses(qsMergedDefaults));
-      }
-      if (cuisines?.[qsMergedString] == null) {
-        dispatch(FilterActions.loadCuisines(qsMergedDefaults));
-      }
-      if (ratings?.[qsMergedString] == null) {
-        setTimeout(() => {
-          dispatch(FilterActions.loadRatings(qsMergedDefaults));
-        }, 100);
-      }
-      if (tags?.[qsMergedString] == null) {
-        setTimeout(() => {
-          dispatch(FilterActions.loadTags(qsMergedDefaults));
-        }, 200);
-      }
-    }
-  };
+  const qs = Object.fromEntries(searchParams);
+  const qsMergedDefaults = mergeDefaultFilters(DefaultFilters, qs);
+  const qsMergedString = objToSearchString(qsMergedDefaults);
 
   useEffect(() => {
-    reloadData();
-  }, [locationSearch]);
+    window.scrollTo(0, 0);
+    dispatch(SearchActions.loadRecipes(qsMergedDefaults));
+  }, [searchParams]);
 
   const handleBuildUrl = useCallback((name: string, value: string, multiSelect = false) => (
     buildSearchUrl('browser', qs, name, value, multiSelect)
@@ -142,17 +108,13 @@ const BrowsePage: React.FC = () => {
   return (
     <PageWrapper title={intl.messages['nav.recipes'] as string}>
       <Search
-          qs = {qs}
-          qsString = {qsMergedString}
-          buildUrl = {handleBuildUrl}
-          doSearch = {doSearch}
+          qs        = {qsMergedDefaults}
+          qsString  = {qsMergedString}
+          buildUrl  = {handleBuildUrl}
+          doSearch  = {doSearch}
           onOpenRecipe = {handleOpenRecipe}
 
-          search   = {search}
-          courses  = {courses}
-          cuisines = {cuisines}
-          ratings  = {ratings}
-          tags     = {tags} />
+          search    = {search} />
     </PageWrapper>
   );
 };

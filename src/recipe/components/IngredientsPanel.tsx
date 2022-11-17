@@ -6,14 +6,14 @@ import { Recipe } from '../store/RecipeTypes';
 import SubRecipes from './SubRecipes';
 import IngredientGroups from './IngredientGroups';
 // import IngredientButtons from './IngredientButtons';
-import GenericReducerType, { PendingState } from '../../common/store/GenericReducerType';
+import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 import P from '../../common/components/P';
 import IngredientsHeader from './IngredientsHeader';
 import Loading from '../../common/components/Loading';
 
 export interface IIngredientsPanelProps {
   recipe:      Recipe | undefined;
-  recipeState: GenericReducerType;
+  recipeMeta:  ReducerMeta;
 
   // lists: Array<any>;
 
@@ -27,7 +27,7 @@ export interface IIngredientsPanelProps {
   updateServings: (servings: number) => void;
 }
 
-const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeState, updateServings }: IIngredientsPanelProps) => {
+const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta, updateServings }: IIngredientsPanelProps) => {
   const { formatMessage } = useIntl();
   const messages = defineMessages({
     no_ingredients: {
@@ -37,15 +37,15 @@ const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeStat
     },
   });
 
-  const pending = recipeState.pending;
+  const pending = recipeMeta.pending;
   const hasNoIngredients = pending === PendingState.COMPLETED
       && recipe?.subrecipes != null && recipe.subrecipes.length === 0
       && recipe?.ingredientGroups != null && recipe.ingredientGroups.length === 0;
 
   return (
     <article className='ingredients-panel'>
-      <IngredientsHeader recipe={recipe} recipeState={recipeState} updateServings={updateServings} />
-      {pending === PendingState.LOADING && <Loading />}
+      <IngredientsHeader recipe={recipe} recipeMeta={recipeMeta} updateServings={updateServings} />
+      {pending === PendingState.LOADING && recipe?.ingredientGroups == null && <Loading />}
       {hasNoIngredients && (
         <P className='placeholder'>{formatMessage(messages.no_ingredients)}</P>
       )}

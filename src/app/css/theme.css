@@ -15,7 +15,7 @@ html {
   --midground: #fbfcfd;
   --elevation: #fff;
 
-  --elevationShadow: rgba(33, 33, 33, 0.75);
+  --elevationShadow: rgba(33, 33, 33, 0.5);
   --elevationBorder: rgba(0, 0, 0, 0.2);
 
   --primaryText: #1f1f1f;

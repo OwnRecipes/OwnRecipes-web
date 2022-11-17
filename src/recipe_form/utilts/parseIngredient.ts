@@ -186,5 +186,5 @@ export default (parser: Record<string, string>, line: string): IngredientInput =
 
   const { numerator, denominator } = buildFraction(quantities);
   const title = tags.slice(ix).join(' ');
-  return { numerator: numerator, denominator: denominator, measurement: measurement, title: title };
+  return { numerator: numerator === 0 ? undefined : numerator, denominator: denominator, measurement: measurement, title: title };
 };

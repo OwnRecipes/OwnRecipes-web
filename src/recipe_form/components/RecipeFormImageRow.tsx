@@ -3,19 +3,13 @@ import { useLocation } from 'react-router';
 import { Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Recipe } from '../../recipe/store/RecipeTypes';
-import FileSelect from '../../common/components/FileSelect';
 import { getRecipeImage, getRecipeImagePlaceholder } from '../../common/utility';
 import WidthHeightRatio from '../../common/components/WidthHeightRatio';
 import Image from '../../common/components/Image';
+import ReFileSelect from '../../common/components/ReduxForm/ReFileSelect';
+import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 
-export interface IRecipeFormImageRowProps {
-  form:     Recipe | undefined;
-  update:   (name: string, value: unknown) => void;
-}
-
-const RecipeFormImageRow: React.FC<IRecipeFormImageRowProps> = ({
-    form, update }: IRecipeFormImageRowProps) => {
+const RecipeFormImageRow: React.FC = () => {
   const { formatMessage } = useIntl();
   const messages = defineMessages({
     photo_label: {
@@ -39,16 +33,15 @@ const RecipeFormImageRow: React.FC<IRecipeFormImageRowProps> = ({
     setImageUrl(undefined);
   }, [key]);
 
-  const handleImageChange = (name: string, newValue: File | undefined) => {
+  const handleImageChange = (_name: string, newValue: File | undefined) => {
     setImageUrl(newValue ? URL.createObjectURL(newValue) : '');
-    update(name, newValue);
   };
 
-  const getDisplayImage = () => {
+  const getDisplayImage = (recipePhoto: string | undefined) => {
     if (imageUrl != null) {
       return imageUrl.length > 0 ? imageUrl : getRecipeImagePlaceholder();
     } else {
-      return getRecipeImage(form?.photoThumbnail ?? IMAGE_PLACEHOLDER);
+      return getRecipeImage(recipePhoto || IMAGE_PLACEHOLDER);
     }
   };
 
@@ -57,21 +50,24 @@ const RecipeFormImageRow: React.FC<IRecipeFormImageRowProps> = ({
       <Row>
         <Col xs={12} lg={11} xl={10} xxl={9} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
           <WidthHeightRatio height={66.67} width={100}>
-            <Image
-                src   = {getDisplayImage()}
-                alt   = ''
-                style = {{ objectFit: 'contain' }} />
+            <FieldSpyValues fieldNames={['photo']}>
+              {values => (
+                <Image
+                    src   = {getDisplayImage(values.photo)}
+                    alt   = ''
+                    style = {{ objectFit: 'contain' }} />
+              )}
+            </FieldSpyValues>
           </WidthHeightRatio>
         </Col>
       </Row>
 
       <Row>
         <Col xs={12}>
-          <FileSelect
+          <ReFileSelect
               name     = 'photo'
               label    = {formatMessage(messages.photo_label)}
               accept   = 'image/*'
-              value    = {form?.photo}
               onChange = {handleImageChange}
               ref = {photoInputRef} />
         </Col>

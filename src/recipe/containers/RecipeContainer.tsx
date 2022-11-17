@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
-import * as _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import '../css/recipe.css';
 
 import Loading from '../../common/components/Loading';
 // import MenuItemModal from '../../menu/components/modals/MenuItemModal';
 import RecipeScheme from '../components/RecipeScheme';
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import * as RecipeActions from '../store/RecipeActions';
 import * as RecipeFormActions from '../../recipe_form/store/actions';
 // import * as MenuItemActions from '../../menu/actions/MenuItemActions';
@@ -18,6 +17,8 @@ import { CombinedStore } from '../../app/Store';
 import { Recipe } from '../store/RecipeTypes';
 import { getResourcePath } from '../../common/utility';
 import useCrash from '../../common/hooks/useCrash';
+import CookingModeContextProvider from '../context/CookingModeContextProvider';
+import CookingModeHandler from '../components/CookingModeHandler';
 
 const RecipeContainer: React.FC = () => {
   const dispatch = useDispatch();
@@ -34,27 +35,27 @@ const RecipeContainer: React.FC = () => {
     }
   }, [paramsRecipe]);
 
-  const accountState = useSelector((state: CombinedStore) => state.account);
-  const account = accountState.item;
+  const userId = useSelector((state: CombinedStore) => state.account.item?.id);
   // TODO Lists
   // const listsState   = useSelector((state: CombinedStore) => state.lists);
   // const lists: listsState.items;
-  const recipeState  = useSelector((state: CombinedStore) => state.recipe);
-  const recipe = recipeState.item;
-  const prevRecipe = useRef<Recipe | undefined>();
+  const recipeState = useSelector((state: CombinedStore) => state.recipe);
+  const recipe      = recipeState.item;
+  const recipeMeta  = recipeState.meta;
+  const prevRecipe  = useRef<Recipe | undefined>();
 
   // const [showItemModal, setShowItemModal] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   // If recipe not found, redirect to NotFound-Page
   useEffect(() => {
-    if (_.get(recipeState.error, 'status') === 404) {
+    if (_.get(recipeMeta.error, 'status') === 404) {
       nav(getResourcePath('/NotFound'));
     }
-  }, [recipeState.error]);
+  }, [recipeMeta.error]);
 
   const recipeSlug = params.recipe ?? '';
-  const showEditLink = (account != null && account.id === recipe?.author);
+  const showEditLink = (userId != null && userId === recipe?.author);
 
   const handlePreloadRecipe = () => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
@@ -93,7 +94,7 @@ const RecipeContainer: React.FC = () => {
 
   if (recipe != null) {
     return (
-      <>
+      <CookingModeContextProvider>
         {/* TODO Lists
         <MenuItemModal
             id={0}
@@ -106,7 +107,7 @@ const RecipeContainer: React.FC = () => {
             validation={menuItemValidation} /> */}
         <RecipeScheme
             recipe       = {recipe}
-            recipeState  = {recipeState}
+            recipeMeta   = {recipeMeta}
 
             showEditLink = {showEditLink}
 
@@ -123,7 +124,8 @@ const RecipeContainer: React.FC = () => {
             // checkSubRecipe={checkSubRecipe}
 
             updateServings = {updateServings} />
-      </>
+        <CookingModeHandler />
+      </CookingModeContextProvider>
     );
   } else {
     return (<Loading message='Loading' />);

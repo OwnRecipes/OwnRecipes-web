@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { FormSpy } from 'react-final-form';
 import { defineMessages, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
 
-import Input from '../../common/components/Input';
+import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import ReInput from '../../common/components/ReduxForm/ReInput';
+import MeasurementContext from '../../common/context/MeasurementContext';
+import { formatValidation } from '../../common/store/Validation';
 import Directions from '../../recipe/components/Directions';
+import { Ingredient, IngredientGroup } from '../../recipe/store/RecipeTypes';
+import formatQuantity from '../../recipe/utilts/formatQuantity';
+import { ingredientsParser } from './IngredientGroupsBox';
 import TabbedView from './TabbedView';
 
 export interface IDirectionBox {
   name:       string;
-  directions: string;
-  errors:     string | undefined;
-  onChange:   (name: string, value: unknown) => void;
 }
 
 const DirectionBox: React.FC<IDirectionBox> = ({
-    name, directions, errors, onChange }: IDirectionBox) => {
+    name }: IDirectionBox) => {
   const intl = useIntl();
   const { formatMessage } = intl;
   const messages = defineMessages({
@@ -35,6 +40,8 @@ const DirectionBox: React.FC<IDirectionBox> = ({
     },
   });
 
+  const measurementsContext = useContext(MeasurementContext);
+
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>('0');
 
@@ -45,27 +52,66 @@ const DirectionBox: React.FC<IDirectionBox> = ({
   }, [location.pathname]);
 
   return (
-    <TabbedView
-        id        = 'directions'
-        labels    = {[formatMessage(messages.directions_label)]}
+    <FormSpy subscription={{ errors: true }}>
+      {({ errors }) => (
+        <TabbedView
+            id        = 'directions'
+            labels    = {[formatMessage(messages.directions_label)]}
 
-        activeTab = {activeTab}
-        onSelect  = {setActiveTab}
+            activeTab = {activeTab}
+            onSelect  = {setActiveTab}
 
-        errors    = {errors}
-        tooltips  = {[formatMessage(messages.directions_tooltip)]}>
-      <Input
-          name     = {name}
-          rows     = {8}
-          value    = {directions}
-          placeholder = {formatMessage(messages.directions_placeholder)}
-          onChange = {onChange} />
-      <div className='recipe-details'>
-        <div className='recipe-schema'>
-          <Directions data={directions} />
-        </div>
+            errors    = {formatValidation(intl, errors?.[name])}
+            tooltips  = {[formatMessage(messages.directions_tooltip)]}>
+          <ReInput
+              name = {name}
+              rows     = {8}
+              placeholder = {formatMessage(messages.directions_placeholder)} />
+          <FieldSpyValues fieldNames={[name, 'ingredientGroupsS']}>
+            {values => (
+              <>
+                {activeTab === 'preview' && (
+                  <DirectionsPreview
+                      directions = {values[name] ?? ''}
+                      ingredients = {ingredientsParser(measurementsContext.parser, values.ingredientGroupsS)} />
+                )}
+              </>
+            )}
+          </FieldSpyValues>
+        </TabbedView>
+      )}
+    </FormSpy>
+  );
+};
+
+interface IDirectionsPreviewProps {
+  directions: string;
+  ingredients: Array<IngredientGroup>;
+}
+
+const recurseIngredients = (igs: Array<IngredientGroup>, cb: (ingr: Ingredient) => Ingredient): Array<IngredientGroup> => igs.map(ig => ({
+  ...ig,
+  ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
+}));
+
+const DirectionsPreview: React.FC<IDirectionsPreviewProps> = ({ directions, ingredients }: IDirectionsPreviewProps) => {
+  const igDataFormatted = useMemo(() => recurseIngredients(ingredients, i => {
+    const custom = formatQuantity(1, 1, i.numerator, i.denominator);
+    return { ...i, quantity: custom };
+  }), [ingredients]);
+
+  const isMultiDirections = directions.includes(':\n');
+
+  return (
+    <div className='recipe-details'>
+      <div className='recipe-schema'>
+        <article className={classNames('directions-panel', { 'multi-directions': isMultiDirections })}>
+          <div className='direction-groups'>
+            <Directions directions={directions} ingredients={igDataFormatted} />
+          </div>
+        </article>
       </div>
-    </TabbedView>
+    </div>
   );
 };
 

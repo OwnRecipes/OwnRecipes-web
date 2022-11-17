@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { SearchResult } from '../store/SearchTypes';
 import P from '../../common/components/P';
 import DefaultFilters from '../constants/DefaultFilters';
-import { optionallyFormatMessage } from '../../common/utility';
+import { optionallyFormatMessage, toNumberDefault } from '../../common/utility';
 
 export interface ISearchSummaryProps {
   search:   SearchResult | undefined;
@@ -53,8 +53,8 @@ const SearchSummary: React.FC<ISearchSummaryProps> = ({ search, qs, buildUrl }: 
   );
 
   const resultsCountD: number | undefined = search?.totalRecipes ?? 0;
-  const offset: number = qs.offset != null ? parseInt(qs.offset) : 0;
-  const limit: number  = qs.limit != null ? parseInt(qs.limit) : (DefaultFilters.limit ?? 12);
+  const offset: number = toNumberDefault(qs.offset, 0);
+  const limit: number  = toNumberDefault(qs.limit, DefaultFilters.limit ?? 12);
   const withPagination = search != null && search.totalRecipes > limit;
   const currentSort    = qs.ordering != null ? toSortSlug(qs.ordering) : toSortSlug('-pub_date');
 

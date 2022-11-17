@@ -1,29 +1,29 @@
-.recipe-details .directions h2 {
+.recipe-details .directions-panel h2 {
   height: 2.5rem;
   line-height: 2.5rem;
+  margin-bottom: 0.2em;
 }
-.recipe-details .directions .subgroup {
-  margin-top: 20px;
+.recipe-details .directions-panel > .direction-groups .subgroup {
   margin-bottom: 20px;
 }
-.recipe-details .directions .subgroup:not(:first-of-type) {
+.recipe-details .directions-panel > .direction-groups > .subgroup:not(:first-of-type) {
   margin-top: 40px;
 }
-.recipe-details .directions ol {
+.recipe-details .directions-panel > .direction-groups ol {
   display: block;
 }
-.directions ol {
+.directions-panel > .direction-groups ol {
   list-style: none;
   counter-reset: cupcake;
-  padding-left: 0.5rem;
+  padding-left: 0.2rem;
 }
-.directions ol li {
+.directions-panel > .direction-groups ol li {
   counter-increment: cupcake;
   margin-bottom: 1.25rem;
 }
-.directions ol li:before {
+.directions-panel > .direction-groups ol li:before {
   content: counters(cupcake, '.') ' ';
-  /* Whatever custom styles you want here */
+
   color: var(--secondaryContrast);
   background-color: var(--secondaryMain);
   border-radius: 50%;
@@ -33,4 +33,66 @@
   width: 1.5em;
   margin-right: 10px;
   text-align: center;
+}
+
+/* INGREDIENTS */
+
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients {
+  margin: 0 10px 10px;
+}
+
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table {
+  line-height: normal;
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > caption {
+  display: inline;
+  caption-side: top;
+  font-size: 0.875em;
+  font-weight: normal;
+  line-height: normal;
+  padding: 0 0 0 0.25em;
+  margin: 0;
+}
+
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > * {
+  display: inline;
+}
+
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr {
+  display: inline-block;
+}
+
+.recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td {
+  display: inline-block;
+  background-color: transparent;
+  border: 0;
+  font-size: 0.875em;
+  line-height: normal;
+  color: var(--secondaryText);
+  padding: 2px 0;
+  margin: 0;
+}
+
+.recipe-details .directions-panel > .direction-groups > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td > span {
+  padding: 0 0 0 0.25em;
+}
+
+.recipe-details .directions-panel > .direction-groups > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td.ingredient:after {
+  content: ", "
+}
+.recipe-details .directions-panel > .direction-groups > .subgroup  > .ingredients > .ingredient-group .ingredients-table > tbody > tr:last-child > td.ingredient:after {
+  content: ""
+}
+
+@media screen and (min-width: 1200px) {
+  .recipe-details .directions-panel:not(.multi-directions) h2 {
+    margin-bottom: 0.75em;
+  }
+
+  .recipe-details .directions-panel:not(.multi-directions) > .direction-groups > .subgroup.default-group > .ingredients {
+    display: none;
+  }
 }

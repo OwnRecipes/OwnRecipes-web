@@ -11,7 +11,8 @@ const defaultTagsState    = ReduxHelper.getMapReducerDefaultState<Array<RatingCo
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createFilterWithNamedType(defaultState: any): Reducer<any, FilterAction> {
   return function reducer(state = defaultState, action: FilterAction) {
-    return ReduxHelper.caseMapDefaultReducer(state, action, defaultState);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return ReduxHelper.caseMapDefaultReducer(state, action as any, defaultState);
   };
 }
 

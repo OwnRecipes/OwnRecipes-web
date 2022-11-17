@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import queryString from 'query-string';
 import { useIntl } from 'react-intl';
-import { useLocation } from 'react-router';
 
 import '../css/random.css';
 
@@ -10,7 +7,7 @@ import * as RecipeActions from '../../recipe/store/RecipeActions';
 import * as SearchActions from '../../browse/store/SearchActions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 
-import useDispatch from '../../common/hooks/useDispatch';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
 import { CombinedStore } from '../../app/Store';
@@ -20,18 +17,19 @@ import SearchReload from '../components/SearchReload';
 import RandomHeader from '../components/RandomHeader';
 import useSingle from '../../common/hooks/useSingle';
 import SearchResults from '../../browse/containers/SearchResults';
+import { objToSearchString } from '../../common/utility';
+import { useSearchParams } from 'react-router-dom';
 
 const RandomPage: React.FC = () => {
   const dispatch = useDispatch();
   const intl = useIntl();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
 
   const search   = useSelector((state: CombinedStore) => state.browse.search.items);
 
-  const locationSearch = location.search;
-  const qs: Record<string, string> = queryString.parse(locationSearch) as Record<string, string>;
-  const qsMergedDefaults = mergeDefaultFilters(qs, DefaultFilters) as Record<string, string>;
-  const qsMergedString = queryString.stringify(qsMergedDefaults);
+  const qs = Object.fromEntries(searchParams);
+  const qsMergedDefaults = mergeDefaultFilters(DefaultFilters, qs);
+  const qsMergedString = objToSearchString(qsMergedDefaults);
 
   const fetchCourses = useCallback(() => dispatch(RecipeGroupActions.fetchCourses()) , [dispatch, RecipeGroupActions]);
   const courses  = useSelector((state: CombinedStore) => state.recipeGroups.courses.items);
@@ -47,7 +45,7 @@ const RandomPage: React.FC = () => {
 
   useEffect(() => {
     reloadData();
-  }, [locationSearch]);
+  }, [searchParams]);
 
   const handleBuildUrl = useCallback((name: string, value: string, multiSelect = false) => (
     buildSearchUrl('random', qs, name, value, multiSelect)

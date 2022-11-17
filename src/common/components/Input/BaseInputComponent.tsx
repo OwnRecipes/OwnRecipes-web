@@ -1,13 +1,14 @@
 import { Component } from 'react';
 import { Form } from 'react-bootstrap';
+import { FieldMetaState } from 'react-final-form';
 import classNames from 'classnames';
 
-import '../css/button.css';
-import '../css/form_group.css';
+import '../../css/button.css';
+import '../../css/form_group.css';
 
-import Icon from './Icon';
+import Icon from '../Icon';
 
-export interface IBaseComponentProps {
+export interface IBaseInputComponentProps {
   name:       string;
   label?:     string;
 
@@ -21,16 +22,21 @@ export interface IBaseComponentProps {
   tooltip?:   React.ReactNode;
   errors?:    React.ReactNode;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  meta?:      FieldMetaState<any>;
+
   className?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (name: string, newValue: any) => void;
+  onBlur?:   (event: React.FocusEvent<HTMLElement, Element>) => void;
+  onFocus?:  (event: React.FocusEvent<HTMLElement, Element>) => void;
 }
 
 export type BaseLabelProps = {
   htmlFor?: string;
 }
 
-export default class BaseComponent<P extends IBaseComponentProps, S = {}> extends Component<P, S> {
+export default class BaseInputComponent<P extends IBaseInputComponentProps, S = {}> extends Component<P, S> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleChange = (event: any) => { // eslint-disable-line react/no-unused-class-component-methods
     if (this.props.readOnly || this.props.disabled) return;
@@ -43,8 +49,12 @@ export default class BaseComponent<P extends IBaseComponentProps, S = {}> extend
     return !!this.props.errors;
   }
 
+  isErrorneous(): boolean {
+    return this.hasError() && (this.props.meta == null || this.props.meta.touched === true);
+  }
+
   getErrorMessage() { // eslint-disable-line react/no-unused-class-component-methods
-    return this.hasError() ? <Form.Text className='error-text'>{this.props.errors}</Form.Text> : null;
+    return this.isErrorneous() ? <Form.Text className='error-text'>{this.props.errors}</Form.Text> : null;
   }
 
   getHelpText() { // eslint-disable-line react/no-unused-class-component-methods
@@ -69,7 +79,7 @@ export default class BaseComponent<P extends IBaseComponentProps, S = {}> extend
 
   getFormGroupClassNames() { // eslint-disable-line react/no-unused-class-component-methods
     return classNames('form-group', this.props.className, {
-      error:    this.hasError(),
+      error:    this.isErrorneous(),
       readonly: this.props.readOnly,
       required: this.props.required && !this.props.readOnly,
       'no-label': this.props.label == null,

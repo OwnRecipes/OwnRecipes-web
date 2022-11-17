@@ -1,12 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { CombinedStore } from '../../app/Store';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import { getResourcePath, isDemoMode } from '../../common/utility';
-import { PendingState } from '../../common/store/GenericReducerType';
+import * as RecipeActions from '../../recipe/store/RecipeActions';
+import { FormSpy } from 'react-final-form';
 
 const RecipeFormToolbar: React.FC = () => {
   const intl = useIntl();
@@ -29,22 +30,35 @@ const RecipeFormToolbar: React.FC = () => {
     },
   });
 
-  const recipeFormState = useSelector((state: CombinedStore) => state.recipeForm);
+  const dispatch = useDispatch();
 
-  const id = recipeFormState.item?.id;
+  const recipeState = useSelector((state: CombinedStore) => state.recipeForm);
+
+  const preload = () => { if (recipeState.item) dispatch(RecipeActions.preload(recipeState.item)); };
+
+  const id = recipeState.item?.id;
   const isNew = id == null || id === 0;
-  const showViewButton = !isNew && !recipeFormState.dirty && recipeFormState.item?.slug != null;
+
+  // eslint-disable-next-line arrow-body-style
+  const showViewButton = (pristine: boolean) => {
+    return !isNew && pristine;
+  };
 
   return (
-    <Button
-        variant  = 'primary'
-        type     = {showViewButton ? 'button' : 'submit'}
-        disabled = {recipeFormState.pending === PendingState.SAVING || (isDemoMode() && !showViewButton)}
-        as = {showViewButton ? Link as any : undefined} // eslint-disable-line @typescript-eslint/no-explicit-any
-        to = {showViewButton ? getResourcePath(`/recipe/${recipeFormState.item?.slug}`) : null}
-        accessKey = {showViewButton ? undefined : 's'}>
-      {formatMessage(showViewButton ? messages.view : messages.submit)}
-    </Button>
+    <FormSpy subscription={{ pristine: true, submitting: true }}>
+      {({ pristine, submitting }) => (
+        <Button
+            variant  = 'primary'
+            type     = {showViewButton(pristine) ? 'button' : 'submit'}
+            disabled = {submitting || (isDemoMode() && !showViewButton(pristine))}
+            as = {showViewButton(pristine) ? Link as any : undefined} // eslint-disable-line @typescript-eslint/no-explicit-any
+            to = {showViewButton(pristine) ? getResourcePath(`/recipe/${recipeState.item?.slug}`) : null}
+            onClick = {preload}
+            accessKey = {showViewButton(pristine) ? undefined : 's'}>
+          {formatMessage(showViewButton(pristine) ? messages.view : messages.submit)}
+        </Button>
+      )}
+    </FormSpy>
   );
 };
 

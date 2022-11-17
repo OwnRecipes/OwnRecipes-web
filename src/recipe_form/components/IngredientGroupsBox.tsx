@@ -1,35 +1,40 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
-import ReactTextareaAutocomplete from '@webscopeio/react-textarea-autocomplete';
+import { FormSpy } from 'react-final-form';
+import { ValidationErrors } from 'final-form';
 
 import '../css/smart_text_box.css';
 
-import Input from '../../common/components/Input';
 import IngredientGroups from '../../recipe/components/IngredientGroups';
-import TabbedView from './TabbedView';
 import formatQuantity from '../../recipe/utilts/formatQuantity';
 import parseIngredient from '../utilts/parseIngredient';
 import { Ingredient, IngredientGroup, IngredientInput, SubRecipe } from '../../recipe/store/RecipeTypes';
 import SubRecipes from '../../recipe/components/SubRecipes';
-import { AutocompleteListItem } from '../store/types';
 import MeasurementContext from '../../common/context/MeasurementContext';
-import useCrash from '../../common/hooks/useCrash';
+import { formatValidation } from '../../common/store/Validation';
+import ReInput from '../../common/components/ReduxForm/ReInput';
+import ReTextareaAutocomplete from '../../common/components/ReduxForm/ReTextareaAutocomplete';
+import TabbedView from './TabbedView';
+import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
+import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 
 export interface IIngredientGroupsBoxProps {
-  name:     string;
-  errors:   string | undefined;
-
-  groups:   Array<IngredientGroup> | undefined;
-  subrecipes: Array<SubRecipe> | undefined;
+  nameIg:   string;
+  nameSub:  string;
 
   fetchRecipeList: (searchTerm: string) => Promise<Array<AutocompleteListItem>>;
-  onChange: (name: string, value: unknown) => void;
+}
+
+function normalizeLine(line: string): string {
+  let res = line.replace(/\t/g, ' ');
+  res = res.trim();
+  return res;
 }
 
 /* IngredientGroups */
 
-function igStringify(intl: IntlShape, formatter: Record<string, string>, values: Array<IngredientGroup>): string {
+export function ingredientsFormatter(intl: IntlShape, formatter: Record<string, string>, values: Array<IngredientGroup>): string {
   let tr = '';
   if (values) {
     values.filter(ig => ig.title.trim().length > 0 || ig.ingredients.length > 0).forEach(ig => {
@@ -51,13 +56,7 @@ function igStringify(intl: IntlShape, formatter: Record<string, string>, values:
   return tr;
 }
 
-function normalizeLine(line: string): string {
-  let res = line.replace(/\t/g, ' ');
-  res = res.trim();
-  return res;
-}
-
-function igArrayify(parser: Record<string, string>, value: string): Array<IngredientGroup> {
+export function ingredientsParser(parser: Record<string, string>, value: string | undefined): Array<IngredientGroup> {
   if (!value) return [];
   const dict = [{ title: '', ingredients: [] }];
   let igTitle = '';
@@ -85,27 +84,9 @@ function igArrayify(parser: Record<string, string>, value: string): Array<Ingred
   return dict;
 }
 
-function isSameIgData(oldIg: Array<IngredientGroup> | undefined, newIg: Array<IngredientGroup> | undefined): boolean {
-  const toString = (ing: Ingredient): string => `${String(ing.numerator)} ${String(ing.denominator)} ${ing.measurement} ${ing.title}`;
-
-  const oldIgHash = oldIg?.map(ig => {
-    let hash = ig.title;
-    hash += ig.ingredients?.map(ing => toString(ing)).join(',') ?? '';
-    return hash;
-  }).join(';');
-
-  const newIgHash = newIg?.map(ig => {
-    let hash = ig.title;
-    hash += ig.ingredients?.map(ing => toString(ing)).join(',') ?? '';
-    return hash;
-  }).join(';');
-
-  return oldIgHash === newIgHash;
-}
-
 /* SubRecipe */
 
-function srStringify(intl: IntlShape, formatter: Record<string, string>, values: Array<SubRecipe>) {
+export function subrecipesFormatter(intl: IntlShape, formatter: Record<string, string>, values: Array<SubRecipe>) {
   let tr = '';
   if (values) {
     values.forEach(i => {
@@ -118,7 +99,8 @@ function srStringify(intl: IntlShape, formatter: Record<string, string>, values:
   return tr.substring(0, tr.length - 1);
 }
 
-function srArrayify(parser: Record<string, string>, value: string): Array<SubRecipe> {
+export function subrecipesParser(parser: Record<string, string>, value: string | undefined): Array<SubRecipe> {
+  if (!value) return [];
   const ings: Array<SubRecipe> = [];
   const subRecipes = value.split('\n').map(line => normalizeLine(line)).filter(t => t.length > 1 && !t.startsWith(':'));
   subRecipes.forEach(sr => {
@@ -129,23 +111,13 @@ function srArrayify(parser: Record<string, string>, value: string): Array<SubRec
   return ings;
 }
 
-function isSameSrData(oldSr: Array<SubRecipe> | undefined, newSr: Array<SubRecipe> | undefined): boolean {
-  const toString = (sr: SubRecipe): string => `${String(sr.numerator)} ${String(sr.denominator)} ${sr.measurement} ${sr.title}`;
-
-  const oldSrHash = oldSr?.map(sr => toString(sr)).join(',') ?? '';
-  const newSrHash = newSr?.map(sr => toString(sr)).join(',') ?? '';
-
-  return oldSrHash === newSrHash;
-}
-
 interface IItemProps {
   entity: AutocompleteListItem;
 }
 const Item = ({ entity: { char } }: IItemProps) => <div>{char}</div>;
-const Loading = () => <div className='loading'>Loading...</div>;
 
 const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
-    name, groups, subrecipes, errors, fetchRecipeList, onChange }: IIngredientGroupsBoxProps) => {
+    nameIg, nameSub, fetchRecipeList }: IIngredientGroupsBoxProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
   const messages = defineMessages({
@@ -183,7 +155,7 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
   });
 
   const location = useLocation();
-  const crash = useCrash();
+
   const [activeTab, setActiveTab] = useState<string>('0');
 
   useEffect(() => {
@@ -194,99 +166,99 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
 
   const measurementsContext = useContext(MeasurementContext);
 
-  const [igData, setIgData] = useState<Array<IngredientGroup>>(groups ?? []);
-  const [igText, setIgText] = useState<string>(igStringify(intl, measurementsContext?.formatter ?? {}, groups ?? []));
-
-  const [srData, setSrData] = useState<Array<SubRecipe>>(subrecipes ?? []);
-  const [srText, setSrText] = useState<string>(srStringify(intl, measurementsContext?.formatter ?? {}, subrecipes ?? []));
-
-  useEffect(() => {
-    if (!isSameIgData(igData, groups)) {
-      setIgText(igStringify(intl, measurementsContext?.formatter ?? {}, groups ?? []));
+  const checkErrorneous = (errors: ValidationErrors, touched: Record<string, boolean> | undefined) => {
+    if (touched?.[nameIg] === true && errors?.[nameIg] != null) {
+      return formatValidation(intl, errors?.[nameIg]);
+    } else if (touched?.[nameSub] && errors?.[nameSub] != null) {
+      return formatValidation(intl, errors?.[nameSub]);
+    } else {
+      return undefined;
     }
-    setIgData(groups ?? []);
-  }, [groups, measurementsContext?.formatter]);
-
-  const handleIgChange = (key: string, value: string) => {
-    let list: Array<IngredientGroup>;
-    try {
-      list = igArrayify(measurementsContext?.parser ?? {}, value);
-    } catch (err) {
-      crash(err);
-      return;
-    }
-
-    setIgData(list);
-    const text = igStringify(intl, measurementsContext?.formatter ?? {}, list);
-    setIgText(text);
-
-    onChange(key, list);
-  };
-
-  useEffect(() => {
-    if (!isSameSrData(srData, subrecipes)) {
-      setSrText(srStringify(intl, measurementsContext?.formatter ?? {}, subrecipes ?? []));
-    }
-    setSrData(subrecipes ?? []);
-  }, [subrecipes, measurementsContext?.formatter]);
-
-  const handleSrChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val  = event.target.value;
-    if (val === srText) return;
-    const list = srArrayify(measurementsContext?.parser ?? {}, val);
-
-    setSrData(list);
-    setSrText(val);
-
-    onChange(event.target.name, list);
   };
 
   return (
-    <TabbedView
-        id       = 'ingredients'
-        labels   = {[formatMessage(messages.ingredients_label), formatMessage(messages.subrecipes_label)]}
+    <FormSpy subscription={{ errors: true, touched: true, initialValues: true }}>
+      {({ errors, touched, initialValues }) => (
+        <TabbedView
+            id       = 'ingredients'
+            labels   = {[formatMessage(messages.ingredients_label), formatMessage(messages.subrecipes_label)]}
 
-        activeTab = {activeTab}
-        onSelect  = {setActiveTab}
+            activeTab = {activeTab}
+            onSelect  = {setActiveTab}
 
-        errors   = {errors}
-        tooltips = {[formatMessage(messages.ingredients_tooltip), formatMessage(messages.subrecipes_tooltip)]}>
-      <Input
-          name     = {name}
-          value    = {igText}
-          rows     = {8}
-          placeholder = {formatMessage(messages.ingredients_placeholder)}
-          required = {srData.length === 0}
-          onChange = {handleIgChange} />
-      <div className='form-group'>
-        <ReactTextareaAutocomplete<AutocompleteListItem>
-            name = 'subrecipes'
-            value = {srText}
-            onChange = {handleSrChange}
-            rows = {8}
-            placeholder = {formatMessage(messages.subrecipes_placeholder)}
-            loadingComponent = {Loading}
-            className = 'form-control'
-            movePopupAsYouType
-            trigger={{
-            ':': {
-              dataProvider: token => fetchRecipeList(token),
-              component: Item,
-              output: item => item.char,
-            },
-          }} />
+            errors   = {checkErrorneous(errors, touched)}
+            tooltips = {[formatMessage(messages.ingredients_tooltip), formatMessage(messages.subrecipes_tooltip)]}>
+          <FieldSpyValues fieldNames={[nameSub]}>
+            {values => (
+              <ReInput
+                  name     = {nameIg}
+                  rows     = {8}
+                  placeholder = {formatMessage(messages.ingredients_placeholder)}
+                  required = {initialValues && !values[nameSub]} />
+            )}
+          </FieldSpyValues>
+          <div className='form-group'>
+            <ReTextareaAutocomplete
+                name  = {nameSub}
+                rows = {8}
+                placeholder = {formatMessage(messages.subrecipes_placeholder)}
+                trigger={{
+                ':': {
+                  dataProvider: token => fetchRecipeList(token),
+                  component: Item,
+                  output: item => item.char,
+                },
+              }} />
+          </div>
+          <FieldSpyValues fieldNames={[nameIg, nameSub]}>
+            {values => (
+              <>
+                {activeTab === 'preview' && (
+                  <IngredientsPreview
+                      igData = {ingredientsParser(measurementsContext.parser, values[nameIg])}
+                      srData = {subrecipesParser(measurementsContext.parser,  values[nameSub])} />
+                )}
+              </>
+            )}
+          </FieldSpyValues>
+        </TabbedView>
+      )}
+    </FormSpy>
+  );
+};
+
+interface IIngredientsPreviewProps {
+  igData: Array<IngredientGroup>;
+  srData: Array<SubRecipe>;
+}
+
+const recurseIngredients = (igs: Array<IngredientGroup>, cb: (ingr: Ingredient) => Ingredient): Array<IngredientGroup> => igs.map(ig => ({
+  ...ig,
+  ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
+}));
+
+const IngredientsPreview: React.FC<IIngredientsPreviewProps> = ({ igData, srData }: IIngredientsPreviewProps) => {
+  const igDataFormatted = useMemo(() => recurseIngredients(igData, i => {
+      const custom = formatQuantity(1, 1, i.numerator, i.denominator);
+      return { ...i, quantity: custom };
+    }), [igData]);
+
+  const srDataFormatted = useMemo(() => srData.map(i => {
+    const custom = formatQuantity(1, 1, i.numerator, i.denominator);
+    return { ...i, quantity: custom };
+  }), [igData]);
+
+  return (
+    <div className='recipe-details'>
+      <div className='recipe-schema'>
+        <article className='ingredients-panel'>
+          <div className='ingredient-groups'>
+            <SubRecipes subRecipes={srDataFormatted} />
+            <IngredientGroups groups={igDataFormatted} hasSubrecipes={srData.length > 0} />
+          </div>
+        </article>
       </div>
-      <div className='recipe-details'>
-        <div className='recipe-schema'>
-          <article className='ingredients-panel'>
-            <div className='ingredient-groups'>
-              <SubRecipes subRecipes={srData} />
-              <IngredientGroups groups={igData} hasSubrecipes={srData.length > 0} />
-            </div>
-          </article>
-        </div>
-      </div>
-    </TabbedView>
+    </div>
   );
 };
 

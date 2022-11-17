@@ -63,3 +63,5 @@ const LanguageDialogContent: React.FC<ILanguageDialogContentProps> = ({
     </ListGroup>
   );
 };
+
+export default LanguageDialog;

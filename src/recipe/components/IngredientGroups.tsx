@@ -1,3 +1,5 @@
+import '../css/ingredients_panel.css';
+
 import { IngredientGroup } from '../store/RecipeTypes';
 
 import Ingredients from './Ingredients';

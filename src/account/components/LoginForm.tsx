@@ -1,28 +1,27 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import * as _ from 'lodash';
+import { Form as ReduxForm, FormSpy } from 'react-final-form';
 
 import '../css/login.css';
 
-import { AccountState } from '../store/types';
 import Icon from '../../common/components/Icon';
-import Input from '../../common/components/Input';
-import Alert from './Alert';
-import { PendingState } from '../../common/store/GenericReducerType';
+import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReduxForm/ReInput';
+import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+import LoginAlert from './LoginAlert';
 
 export interface ILoginFormProps {
-  accountState: AccountState;
-
-  onLogin: (username: string, password: string) => void;
+  onSubmit: (username: string, password: string, remember: boolean) => void;
 }
 
-interface ILoginFormData {
+type LoginFormData = {
   username: string;
   password: string;
+  remember: boolean;
 }
 
-const LoginForm: React.FC<ILoginFormProps> = ({ accountState, onLogin }: ILoginFormProps) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => {
   const intl = useIntl();
 
   const { formatMessage } = intl;
@@ -42,6 +41,11 @@ const LoginForm: React.FC<ILoginFormProps> = ({ accountState, onLogin }: ILoginF
       description: 'Password placeholder',
       defaultMessage: 'Password',
     },
+    remember: {
+      id: 'login.remember',
+      description: 'Remember checkbox',
+      defaultMessage: 'Remember me for 14 days',
+    },
     sign_in: {
       id: 'login.sign_in',
       description: 'Sign in button',
@@ -49,48 +53,52 @@ const LoginForm: React.FC<ILoginFormProps> = ({ accountState, onLogin }: ILoginF
     },
   });
 
-  const [formData, setFormData] = useState<ILoginFormData>({ username: '', password: '' });
+  const handleSubmit = (form: LoginFormData) => onSubmit(form.username, form.password, form.remember);
 
-  const handleChange = (attr: string, value: string) => {
-    setFormData(prev => {
-      const newState = _.cloneDeep(prev);
-      _.set(newState, attr, value);
-      return newState;
-    });
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onLogin(formData.username, formData.password);
-  };
+  const initialValues = useMemo(() => ({ remember: true }), []);
 
   return (
-    <Form className='form-signin' onSubmit={handleSubmit}>
-      <Alert reducerState={accountState} />
+    <ReduxForm
+        initialValues = {initialValues}
+        onSubmit = {handleSubmit}
+        subscription = {{}}
+        render = {({ form, handleSubmit: renderSubmit }) => (
+          <Form className='form-signin' onSubmit={renderSubmit}>
+            <InitialValuesResetter form={form} initialValues={initialValues} />
+            <FormSpy subscription={{ submitError: true }}>
+              {({ submitError }) => (
+                <LoginAlert submitError={submitError} />
+              )}
+            </FormSpy>
 
-      <h2 className='form-signin-heading'>{formatMessage(messages.please_sign_in)}</h2>
-      <Input
-          name  = 'username'
-          value = {formData.username}
-          placeholder = {formatMessage(messages.username)}
-          autoComplete = 'username'
-          required
-          inputAdornmentStart = {<Icon icon='person' size='2x' />}
-          onChange = {handleChange} />
-      <Input
-          name  = 'password'
-          value = {formData.password}
-          type  = 'password'
-          placeholder = {formatMessage(messages.password)}
-          autoComplete = 'password'
-          required
-          inputAdornmentStart = {<Icon icon='key' size='2x' />}
-          onChange = {handleChange} />
+            <h2 className='form-signin-heading'>{formatMessage(messages.please_sign_in)}</h2>
+            <ReInput
+                name  = 'username'
+                placeholder = {formatMessage(messages.username)}
+                autoComplete = 'username'
+                required
+                inputAdornmentStart = {<Icon icon='person' size='2x' />} />
+            <ReInput
+                name  = 'password'
+                type  = 'password'
+                placeholder = {formatMessage(messages.password)}
+                autoComplete = 'password'
+                required
+                inputAdornmentStart = {<Icon icon='key' size='2x' />} />
 
-      <Button variant='primary' type='submit' disabled={accountState.pending === PendingState.LOADING}>
-        {formatMessage(messages.sign_in)}
-      </Button>
-    </Form>
+            <ReCheckbox
+                name  = 'remember'
+                label = {formatMessage(messages.remember)} />
+
+            <FormSpy subscription={{ submitting: true }}>
+              {({ submitting }) => (
+                <Button variant='primary' type='submit' disabled={submitting}>
+                  {formatMessage(messages.sign_in)}
+                </Button>
+              )}
+            </FormSpy>
+          </Form>
+    )} />
   );
 };
 

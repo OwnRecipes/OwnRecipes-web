@@ -1,17 +1,22 @@
 {
   "account": {
+    "ident": "@@account",
     "item": {
       "id": 99,
       "token": "fghjfghj",
       "username": "Demo User",
       "email": "demo@user.web",
-      "role": "user"
+      "role": "user",
+      "remember": "true"
     },
-    "ident": "@@account",
-    "pending": "COMPLETED",
-    "hasConnection": true
+    "meta": {
+      "ident": "@@account",
+      "pending": "COMPLETED",
+      "hasConnection": true
+    }
   },
   "news": {
+    "ident": "@@news",
     "items": [
       {
         "id": 1,
@@ -28,8 +33,10 @@
         "frontpage": true
       }
     ],
-    "ident": "@@news",
-    "pending": "COMPLETED",
-    "hasConnection": true
+    "meta": {
+      "ident": "@@news",
+      "pending": "COMPLETED",
+      "hasConnection": true
+    }
   }
 }

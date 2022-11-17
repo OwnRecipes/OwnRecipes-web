@@ -1,3 +1,7 @@
+.login-form-wrapper.autologin {
+  display: none;
+}
+
 #content > .container.login {
   background-color: transparent;
 }

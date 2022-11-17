@@ -1,16 +1,16 @@
-import Directions from './Directions';
-import RecipeHeader from './RecipeHeader';
+import { Col, Row } from 'react-bootstrap';
 
 import '../css/recipe.css';
 
 import { Recipe } from '../store/RecipeTypes';
-import GenericReducerType from '../../common/store/GenericReducerType';
+import { ReducerMeta } from '../../common/store/GenericReducerType';
+import RecipeHeader from './RecipeHeader';
 import IngredientsPanel from './IngredientsPanel';
-import { Col, Row } from 'react-bootstrap';
+import DirectionsPanel from './DirectionsPanel';
 
 interface IRecipeSchemeProps {
   recipe:       Recipe | undefined;
-  recipeState:  GenericReducerType;
+  recipeMeta:   ReducerMeta;
   showEditLink: boolean;
 
   onEditRecipe: () => void;
@@ -29,7 +29,7 @@ interface IRecipeSchemeProps {
   updateServings: (servings: number) => void;
 }
 
-const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeState, showEditLink, onEditRecipe, deleteRecipe, updateServings }: IRecipeSchemeProps) => (
+const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, showEditLink, onEditRecipe, deleteRecipe, updateServings }: IRecipeSchemeProps) => (
   <div className='recipe-details'>
     <RecipeHeader
         recipe = {recipe}
@@ -44,7 +44,7 @@ const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeState, showE
       <Col xl={4} lg={12}>
         <IngredientsPanel
             recipe = {recipe}
-            recipeState = {recipeState}
+            recipeMeta = {recipeMeta}
 
             // lists = {lists}
 
@@ -59,7 +59,10 @@ const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeState, showE
       </Col>
       <hr className='d-block d-xl-none' />
       <Col xl={8} lg={12}>
-        <Directions data={recipe?.directions ?? ''} />
+        <DirectionsPanel
+            directions  = {recipe?.directions ?? ''}
+            recipeMeta  = {recipeMeta}
+            ingredients = {recipe?.ingredientGroups ?? []} />
       </Col>
     </Row>
   </div>

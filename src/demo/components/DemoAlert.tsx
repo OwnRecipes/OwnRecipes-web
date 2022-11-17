@@ -21,7 +21,7 @@ const Demo = () => {
   return (
     <div
         className = 'list-error'
-        style = {{ marginTop: `${(dynamicHeightContext?.toolbarHeight ?? 0) + 5}px`, marginBottom: `-${dynamicHeightContext?.toolbarHeight ?? 0}px` }}>
+        style = {{ marginTop: `${(dynamicHeightContext.toolbarHeight) + 5}px`, marginBottom: `-${dynamicHeightContext.toolbarHeight}px` }}>
       <Alert severity='info' className='demo-alert demo-no-margin' title={formatMessage(messages.demoAlertTitle)}>
         {/* eslint-disable-next-line react/jsx-curly-brace-presence */}
         {''}
