@@ -50,7 +50,7 @@ const RecipeFormToolbar: React.FC = () => {
         <Button
             variant  = 'primary'
             type     = {showViewButton(pristine) ? 'button' : 'submit'}
-            disabled = {submitting || (isDemoMode() && !showViewButton)}
+            disabled = {submitting || (isDemoMode() && !showViewButton(pristine))}
             as = {showViewButton(pristine) ? Link as any : undefined} // eslint-disable-line @typescript-eslint/no-explicit-any
             to = {showViewButton(pristine) ? getResourcePath(`/recipe/${recipeState.item?.slug}`) : null}
             onClick = {preload}
