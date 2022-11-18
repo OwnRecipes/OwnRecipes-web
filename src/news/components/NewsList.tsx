@@ -27,9 +27,8 @@ const NewsCarousel: React.FC = () => {
   const newsList = news.items;
 
   useEffect(() => {
-    if (newsList != null && newsList.length !== 0) return;
     dispatch(NewsActions.load());
-  }, [newsList]);
+  }, []);
 
   const carouselItems = useMemo(() => {
     const translateContent = (intll: IntlShape, entryContent: string) => {
