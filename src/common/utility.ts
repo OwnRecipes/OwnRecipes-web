@@ -8,8 +8,7 @@ export function isDemoMode(): boolean {
 }
 
 export function getRecipeImagePlaceholder(): string {
-  const publicUrl = getEnv('PUBLIC_URL') ?? '.';
-  return publicUrl.length > 1 ? `${publicUrl}/images/fried-eggs.jpg` : '/images/fried-eggs.jpg';
+  return './images/fried-eggs.jpg';
 }
 
 export function getRecipeImage(photoThumbnail: string | undefined, loadingError = false) {
@@ -17,8 +16,12 @@ export function getRecipeImage(photoThumbnail: string | undefined, loadingError 
 }
 
 export function getResourcePath(path: string): string {
-  const publicUrl = getEnv('PUBLIC_URL') ?? '.';
-  return publicUrl.length > 1 ? `${publicUrl}${path}` : path;
+  const res = `.${path}`;
+  return res;
+}
+
+export function getRoutePath(path: string): string {
+  return path;
 }
 
 export function getEnv(key: keyof EnvType, ifNull?: string): string | undefined {

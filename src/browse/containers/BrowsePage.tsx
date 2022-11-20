@@ -13,7 +13,7 @@ import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
 import { CombinedStore } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
-import { getResourcePath, objToSearchString } from '../../common/utility';
+import { getRoutePath, objToSearchString } from '../../common/utility';
 import { useSearchParams } from 'react-router-dom';
 
 export function mergeDefaultFilters(
@@ -39,11 +39,11 @@ export function buildSearchString(route: string, qs: Record<string, string>, val
   }
 
   const str = objToSearchString(qsBuilder);
-  return getResourcePath(str ? `/${route}?${str}` : `/${route}`);
+  return getRoutePath(str ? `/${route}?${str}` : `/${route}`);
 }
 
 export function buildSearchUrl(route: string, qs: Record<string, string>, name: string, value: string, multiSelect = false): string {
-  if (!name) return getResourcePath(`/${route}`);
+  if (!name) return getRoutePath(`/${route}`);
 
   const qsBuilder = _.cloneDeep(qs);
 
@@ -72,7 +72,7 @@ export function buildSearchUrl(route: string, qs: Record<string, string>, name: 
   }
 
   const str = objToSearchString(qsBuilder);
-  return getResourcePath(str ? `/${route}?${str}` : `/${route}`);
+  return getRoutePath(str ? `/${route}?${str}` : `/${route}`);
 }
 
 const BrowsePage: React.FC = () => {

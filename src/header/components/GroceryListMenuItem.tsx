@@ -1,7 +1,7 @@
 import { useIntl, defineMessages } from 'react-intl';
 import { NavDropdown } from 'react-bootstrap';
 
-import { getResourcePath } from '../../common/utility';
+import { getRoutePath } from '../../common/utility';
 
 export type ListItemType = {
   id:    string;
@@ -24,7 +24,7 @@ const GroceryListMenuItem: React.FC<IGroceryListMenuItemProps> = (props: IGrocer
   });
 
   const lists = props.data?.map(list => (
-    <NavDropdown.Item href={getResourcePath(`/list/${list.slug}`)} key={list.id}>
+    <NavDropdown.Item href={getRoutePath(`/list/${list.slug}`)} key={list.id}>
       {list.title}
     </NavDropdown.Item>
   ));
@@ -35,7 +35,7 @@ const GroceryListMenuItem: React.FC<IGroceryListMenuItemProps> = (props: IGrocer
         id='basic-nav-dropdown'>
       {lists}
       {props.data != null && props.data.length > 0 && <NavDropdown.Divider />}
-      <NavDropdown.Item href={getResourcePath('/list')}>{formatMessage(messages.grocery_list)}</NavDropdown.Item>
+      <NavDropdown.Item href={getRoutePath('/list')}>{formatMessage(messages.grocery_list)}</NavDropdown.Item>
     </NavDropdown>
 
   );

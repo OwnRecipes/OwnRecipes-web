@@ -4,7 +4,7 @@ import { Route, Routes as RouterRoutes, Navigate } from 'react-router-dom';
 import { CombinedStore } from './Store';
 import { useSelector } from '../common/store/redux';
 import { AnyComponent } from '../types/Types';
-import { getEnvAsBoolean, getResourcePath, isDemoMode } from '../common/utility';
+import { getEnvAsBoolean, getRoutePath, isDemoMode } from '../common/utility';
 import UserRole from '../common/types/UserRole';
 import PageSpinner from './components/PageSpinner';
 
@@ -138,31 +138,31 @@ const Routes: React.FC = () => {
   let routesList: Array<React.ReactNode>;
   if (isAuthenticated) {
     routesList = PrivateRoutes.filter(r => hasRequiredRole(r.restriction, role)).map(r => (
-      <Route path={getResourcePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
+      <Route path={getRoutePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
     ));
     routesList.push(
-      <Route path={getResourcePath('/')} key='/' element={<Navigate replace to={getResourcePath('/home')} />} />
+      <Route path={getRoutePath('/')} key='/' element={<Navigate replace to={getRoutePath('/home')} />} />
     );
     routesList.push(
-      <Route path='*' key='*' element={<Navigate replace to={getResourcePath(isDemoMode() ? '/home' : '/NotFound')} />} />
+      <Route path='*' key='*' element={<Navigate replace to={getRoutePath(isDemoMode() ? '/home' : '/NotFound')} />} />
     );
   } else if (isLoginRequired) {
     routesList = PublicRoutesIfRequireLogin.map(r => (
-      <Route path={getResourcePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
+      <Route path={getRoutePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
     ));
     routesList.push(
-      <Route path='*' key='*' element={<Navigate replace to={getResourcePath('/login')} />} />
+      <Route path='*' key='*' element={<Navigate replace to={getRoutePath('/login')} />} />
     );
   } else {
     routesList = PublicRoutes.map(r => (
-      <Route path={getResourcePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
+      <Route path={getRoutePath(r.path)} key={r.path} element={toPageComponent(r.component)} />
     ));
-    const defaultPath = getResourcePath('/home');
+    const defaultPath = getRoutePath('/home');
     // console.log(`[Routes] registering default path as "${defaultPath}"`);
     routesList.push(
-      <Route path={getResourcePath('/')} key='/' element={<Navigate replace to={defaultPath} />} />
+      <Route path={getRoutePath('/')} key='/' element={<Navigate replace to={defaultPath} />} />
     );
-    const fallbackPath = getResourcePath('/login');
+    const fallbackPath = getRoutePath('/login');
     // console.log(`[Routes] registering fallback path as "${fallbackPath}"`);
     routesList.push(
       <Route path='*' key='*' element={<Navigate replace to={fallbackPath} />} />

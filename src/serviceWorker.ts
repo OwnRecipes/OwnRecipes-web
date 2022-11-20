@@ -29,9 +29,11 @@ type Config = {
 
 export function register(config?: Config) {
   if (requireEnv('NODE_ENV') === 'production' && 'serviceWorker' in navigator) {
+    // TODO This is probably broken
+
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(
-      getEnv('PUBLIC_URL') ?? '',
+      '.',
       window.location.href
     );
     if (publicUrl.origin !== window.location.origin) {
@@ -42,7 +44,7 @@ export function register(config?: Config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${getEnv('PUBLIC_URL')}/service-worker.js`;
+      const swUrl = `./service-worker.js`;
 
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.

@@ -13,7 +13,7 @@ import './css/404.css';
 import { CombinedStore } from './Store';
 import * as AccountActions from '../account/store/actions';
 import { AccountState } from '../account/store/types';
-import { getEnvAsBoolean, getResourcePath } from '../common/utility';
+import { getEnvAsBoolean, getRoutePath } from '../common/utility';
 
 const AutoLogin: React.FC = () => {
   const nav = useNavigate();
@@ -72,16 +72,22 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
     // console.log(`[AutoLogin] originUrl=${originUrl}, prevUrl=${prevProps.loc.pathname}, nextUrl=${this.props.loc.pathname}, prevToken=${JSON.stringify(prevToken)}, currToken=${JSON.stringify(currToken)}`);
 
     if ((prevToken == null && currToken != null)
-      || (prevToken != null && currToken != null && this.props.loc.pathname === getResourcePath('/login'))) {
-      if (originUrl === getResourcePath('/') || originUrl === getResourcePath('/login')) {
-        this.props.nav(getResourcePath('/home'), { replace: true });
+      || (prevToken != null && currToken != null && this.props.loc.pathname === getRoutePath('/login'))) {
+      if (originUrl === getRoutePath('/') || originUrl === getRoutePath('/login')) {
+        const path = getRoutePath('/home');
+        // console.log(`[AutoLogin::componentDidUpdate] user is logged in, forward to home ("${path}")`);
+        this.props.nav(path, { replace: true });
       } else if (this.props.loc.pathname !== originUrl) {
-        this.props.nav(`${originUrl}${this.state.originSearch}`, { replace: true });
+        const path = `${originUrl}${this.state.originSearch}`;
+        // console.log(`[AutoLogin::componentDidUpdate] user is logged in, forward to origin url ("${path}")`);
+        this.props.nav(path, { replace: true });
       }
     } else if (prevToken != null && currToken == null) {
       setTimeout(() => {
         const isLoginRequired = getEnvAsBoolean('REACT_APP_REQUIRE_LOGIN');
-        this.props.nav(getResourcePath(isLoginRequired ? '/login' : '/home'));
+        const path = getRoutePath(isLoginRequired ? '/login' : '/home');
+        // console.log(`[AutoLogin::componentDidUpdate] user has logged out, forward to "${path}"`);
+        this.props.nav(path);
         this.props.nav(0);
       }, 500);
     }

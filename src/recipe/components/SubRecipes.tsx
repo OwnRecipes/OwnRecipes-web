@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 // import { Checkbox } from '../../common/components/FormComponents';
-import { getResourcePath, optionallyFormatMessage } from '../../common/utility';
+import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import { SubRecipe } from '../store/RecipeTypes';
 
 export interface ISubRecipesProps {
@@ -62,7 +62,7 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes /* , checkSubRecipe
         )}
         <td className={classNames('ingredient last-col', { 'first-col': showQuantityCol })}>
           <span>
-            <Link to={getResourcePath(`/recipe/${subRecipe.slug}`)} className='title'>{titleString}</Link>
+            <Link to={getRoutePath(`/recipe/${subRecipe.slug}`)} className='title'>{titleString}</Link>
           </span>
         </td>
       </tr>

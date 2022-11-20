@@ -1,6 +1,6 @@
 import { defineMessages, useIntl } from 'react-intl';
 
-import { getResourcePath } from '../../common/utility';
+import { getRoutePath } from '../../common/utility';
 import NavLink from './NavLink';
 
 const MenuMenuItem: React.FC = () => {
@@ -14,7 +14,7 @@ const MenuMenuItem: React.FC = () => {
   });
 
   return (
-    <NavLink to={getResourcePath('/menu')}>{formatMessage(messages.menu)}</NavLink>
+    <NavLink to={getRoutePath('/menu')}>{formatMessage(messages.menu)}</NavLink>
   );
 };
 

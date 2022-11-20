@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Form as ReduxForm } from 'react-final-form';
 
 import Icon from '../../common/components/Icon';
-import { getResourcePath } from '../../common/utility';
+import { getRoutePath } from '../../common/utility';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 import NavLink from './NavLink';
@@ -111,7 +111,7 @@ interface ISearchButtonProps {
 
 const SearchButton = forwardRef<HTMLAnchorElement, ISearchButtonProps>(({
     isExpanded, searchValue, onSearchClick, onExpandClick }: ISearchButtonProps, ref) => {
-  const buildUrl: string = useMemo(() => getResourcePath(searchValue ? `/browser?search=${searchValue}` : '/browser'), [searchValue]);
+  const buildUrl: string = useMemo(() => getRoutePath(searchValue ? `/browser?search=${searchValue}` : '/browser'), [searchValue]);
 
   return (
     <NavLink id='search-button' as={isExpanded ? undefined : 'button'} to={isExpanded ? buildUrl : undefined} onClick={isExpanded ? onSearchClick : onExpandClick} accessKey='b' ref={ref}>

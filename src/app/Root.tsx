@@ -9,13 +9,15 @@ import ThemeProvider from './components/ThemeProvider';
 import App from './App';
 import { isDemoMode } from '../common/utility';
 
+const basename = process.env.PUBLIC_URL;
+
 const Root = () => (
   <Suspense fallback={<PageSpinner />}>
     <Provider store={store}>
       <ThemeProvider />
       <ContextProvider>
-        {!isDemoMode() && <BrowserRouter><App /></BrowserRouter>}
-        { isDemoMode() && <HashRouter><App /></HashRouter>}
+        {!isDemoMode() && <BrowserRouter basename={basename}><App /></BrowserRouter>}
+        { isDemoMode() && <HashRouter basename={basename}><App /></HashRouter>}
       </ContextProvider>
     </Provider>
   </Suspense>

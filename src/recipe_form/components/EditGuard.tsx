@@ -5,7 +5,7 @@ import * as _ from 'lodash-es';
 import { CombinedStore } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
-import { getResourcePath } from '../../common/utility';
+import { getRoutePath } from '../../common/utility';
 
 const EditGuard: React.FC = () => {
   const params = useParams();
@@ -25,14 +25,14 @@ const EditGuard: React.FC = () => {
 
   useEffect(() => {
     if (user != null && pending === PendingState.COMPLETED && recipe != null && !mayEdit) {
-      nav(getResourcePath(`/recipe/${recipeSlug}`));
+      nav(getRoutePath(`/recipe/${recipeSlug}`));
     }
   }, [user, recipeState, mayEdit]);
 
   useEffect(() => {
     if (recipe?.slug != null && pending === PendingState.COMPLETED && isNew && wasRenderedRef.current) {
       setTimeout(() => {
-        nav(getResourcePath(`/recipe/edit/${recipe.slug}`));
+        nav(getRoutePath(`/recipe/edit/${recipe.slug}`));
       }, 250);
     }
     wasRenderedRef.current = true;
@@ -42,7 +42,7 @@ const EditGuard: React.FC = () => {
   // If recipe not found, redirect to NotFound-Page
   useEffect(() => {
     if (_.get(recipeMeta.error, 'status') === 404) {
-      nav(getResourcePath('/NotFound'));
+      nav(getRoutePath('/NotFound'));
     }
   }, [recipeMeta.error]);
 
