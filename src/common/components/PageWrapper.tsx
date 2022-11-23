@@ -6,7 +6,7 @@ import { AnyComponent } from '../../types/Types';
 import DynamicHeightContext from '../context/DynamicHeightContext';
 import ArrayReducerType from '../store/ArrayReducerType';
 import ItemReducerType from '../store/ItemReducerType';
-import { getEnv, getResourcePath } from '../utility';
+import { getEnv, getRoutePath } from '../utility';
 import ErrorBoundary from './ErrorBoundary';
 
 /** {@link PageTitleFixer} Props. */
@@ -56,7 +56,9 @@ function toCleanLocationPath(path: string): string {
 
   useEffect(() => {
     if (error && id == null) {
-      nav(getResourcePath('/NotFound'));
+      const p = getRoutePath('/NotFound');
+      // console.log(`[PageWrapper] nav to "${p}"`);
+      nav(p);
     }
   }, [id, error]);
 

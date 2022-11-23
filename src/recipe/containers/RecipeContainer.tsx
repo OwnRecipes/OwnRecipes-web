@@ -15,7 +15,7 @@ import * as RecipeFormActions from '../../recipe_form/store/actions';
 // import { menuItemValidation } from '../../menu/actions/validation';
 import { CombinedStore } from '../../app/Store';
 import { Recipe } from '../store/RecipeTypes';
-import { getResourcePath } from '../../common/utility';
+import { getRoutePath } from '../../common/utility';
 import useCrash from '../../common/hooks/useCrash';
 import CookingModeContextProvider from '../context/CookingModeContextProvider';
 import CookingModeHandler from '../components/CookingModeHandler';
@@ -50,7 +50,7 @@ const RecipeContainer: React.FC = () => {
   // If recipe not found, redirect to NotFound-Page
   useEffect(() => {
     if (_.get(recipeMeta.error, 'status') === 404) {
-      nav(getResourcePath('/NotFound'));
+      nav(getRoutePath('/NotFound'));
     }
   }, [recipeMeta.error]);
 
@@ -73,7 +73,7 @@ const RecipeContainer: React.FC = () => {
     if (prevRecipe.current == null) {
       prevRecipe.current = recipe;
     } else if (isDeleting && prevRecipe.current != null && recipe == null) {
-      nav(getResourcePath('/browser'));
+      nav(getRoutePath('/browser'));
     }
   }, [recipe]);
 

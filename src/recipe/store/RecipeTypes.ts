@@ -336,8 +336,8 @@ export const toRecipeRequest = (obj: Recipe): RecipeRequest => ({
   servings:   obj.servings,
 
   tags:       obj.tags,
-  course:     obj.course ? toCourseDto(obj.course) : null,
-  cuisine:    obj.cuisine ? toCuisineDto(obj.cuisine) : null,
+  course:     obj.course ? toCourseDto(obj.course) : {} as CourseDto,
+  cuisine:    obj.cuisine ? toCuisineDto(obj.cuisine) : {} as CuisineDto,
 
   subrecipes: obj.subrecipes?.map(sr => toSubRecipeDto(sr)) ?? [],
   ingredient_groups: toIngredientGroupsDto(obj),

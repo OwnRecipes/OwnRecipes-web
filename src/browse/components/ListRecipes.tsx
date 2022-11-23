@@ -7,7 +7,7 @@ import '../css/list-recipes.css';
 
 import Ratings from '../../rating/components/Ratings';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
-import { getRecipeImagePlaceholder, getResourcePath } from '../../common/utility';
+import { getRecipeImagePlaceholder, getResourcePath, getRoutePath } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
 
 export interface IListRecipes {
@@ -28,7 +28,7 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipe
   };
 
   const recipes = data?.map(recipe => {
-    const link = getResourcePath(`/recipe/${recipe.slug}`);
+    const link = getRoutePath(`/recipe/${recipe.slug}`);
     return (
       <Col key={recipe.id}>
         <Card className={classNames('recipe', 'print-hidden')}>

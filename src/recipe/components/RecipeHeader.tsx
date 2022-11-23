@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 import '../css/recipe_header.css';
 
-import { getResourcePath, optionallyFormatMessage } from '../../common/utility';
+import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 import Chip from '../../common/components/Chip';
 import Ratings from '../../rating/components/Ratings';
@@ -109,7 +109,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
 
   const editLink = showEditLink ? (
     <Tooltip id='edit tooltip' tooltip={formatMessage(messages.edit_tooltip)}>
-      <Link to={getResourcePath(`/recipe/edit/${recipe?.slug}`)} onClick={handleEditClick}>
+      <Link to={getRoutePath(`/recipe/edit/${recipe?.slug}`)} onClick={handleEditClick}>
         <Button variant='outline-primary' size='sm'>
           <i className='bi bi-pencil-fill' />
         </Button>

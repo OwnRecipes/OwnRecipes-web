@@ -14,7 +14,7 @@ import CreateRecipeMenuItem from './CreateRecipeMenuItem';
 // import GroceryListMenuItem, { ListItemType } from './GroceryListMenuItem';
 // import MenuMenuItem from './MenuMenuItem';
 import { AccountMenuMenuItem, AccountLoginMenuItem } from './MyAccountMenuItem';
-import { getEnvAsBoolean, getResourcePath } from '../../common/utility';
+import { getEnvAsBoolean, getResourcePath, getRoutePath } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import LoginSettings from './LoginSettings';
@@ -110,7 +110,7 @@ const NavBar: React.FC<INavBarProps> = ({
       <Container className={classNames({ 'search-expanded': isSearchExpanded })}>
         <Navbar.Toggle><Icon icon='list' variant='light' size='2x' /></Navbar.Toggle>
         <Navbar.Brand>
-          <Link to={getResourcePath('/home')} title={formatMessage(messages.home)}>
+          <Link to={getRoutePath('/home')} title={formatMessage(messages.home)}>
             <Image alt='Brand' src={getResourcePath('/images/chef.png')} width='30' height='30' className='d-inline-block align-top' />
           </Link>
         </Navbar.Brand>
@@ -131,12 +131,12 @@ const NavBar: React.FC<INavBarProps> = ({
         <Navbar.Collapse>
           <Nav className={classNames('header-nav', { 'collapse-d-lg': isSearchExpanded })}>
             {(!isLoginRequired || isAuthenticated) && (!isScreenMdUp || locationPath.endsWith('/browser')) && (
-              <NavLink to={getResourcePath('/browser')} active={locationPath.endsWith('/browser')}>
+              <NavLink to={getRoutePath('/browser')} active={locationPath.endsWith('/browser')}>
                 <Icon icon='search' variant='light' className='d-md-inline-block d-none' />
                 <span className='d-inline-block d-md-none'>{formatMessage(messages.recipes)}</span>
               </NavLink>
             )}
-            {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getResourcePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
+            {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getRoutePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
             {/* isAuthenticated && <MenuMenuItem /> */}
             {isAuthenticated && isPrivilegedUser && <CreateRecipeMenuItem />}
             {/* isAuthenticated && <GroceryListMenuItem data={props.lists} /> */}

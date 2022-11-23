@@ -2,7 +2,7 @@ import { lazy, Suspense, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { NavDropdown, Button } from 'react-bootstrap';
 
-import { getEnv, getResourcePath } from '../../common/utility';
+import { getEnv, getRoutePath } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import Icon from '../../common/components/Icon';
@@ -23,7 +23,7 @@ export const AccountLoginMenuItem: React.FC = () => {
   });
 
   return (
-    <Button id='login-button' variant='primary' href={getResourcePath('/login')} className='nav-link'>
+    <Button id='login-button' variant='primary' href={getRoutePath('/login')} className='nav-link'>
       <Icon icon='box-arrow-in-right' variant='light' size='2x' className='visible-xs' />
       <span className='hidden-xs'>{formatMessage(messages.label)}</span>
     </Button>
@@ -108,8 +108,12 @@ export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
         <NavDropdown.Item onClick={handleChangeLanguageClick}>{`${formatMessage(messages.language)} …`}</NavDropdown.Item>
         <NavDropdown.Item onClick={handleChangeThemeClick}>{`${formatMessage(messages.theme)} …`}</NavDropdown.Item>
         <NavDropdown.Divider />
-        {account.role === 'admin' && <NavDropdown.Item href={getEnv('REACT_APP_ADMIN_URL', '/admin')}>{`➝ ${formatMessage(messages.admin)}`}</NavDropdown.Item>}
-        {account.role === 'admin' && <NavDropdown.Divider />}
+        {account.role === 'admin' && (
+          <>
+            <NavDropdown.Item href={`${getEnv('REACT_APP_ADMIN_URL', '/admin')}/`}>{`➝ ${formatMessage(messages.admin)}`}</NavDropdown.Item>
+            <NavDropdown.Divider />
+          </>
+        )}
         <NavDropdown.Item onClick={onLogoutClick}>{formatMessage(messages.logout)}</NavDropdown.Item>
       </NavDropdown>
 

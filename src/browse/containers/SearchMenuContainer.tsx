@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import * as FilterActions from '../store/FilterActions';
 import { CombinedStore } from '../../app/Store';
 import SearchMenu from '../components/SearchMenu';
-import { getResourcePath } from '../../common/utility';
+import { getRoutePath } from '../../common/utility';
 import { useDispatch, useSelector } from '../../common/store/redux';
 
 export interface ISearchMenuContainerProps {
@@ -63,10 +63,10 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
 
   const resetFilterUrl = useMemo(() => {
     if (!qs.search) {
-      return getResourcePath('/browser');
+      return getRoutePath('/browser');
     } else {
       const searchString = new URLSearchParams({ search: qs.search }).toString();
-      return getResourcePath(`/browser?${searchString}`);
+      return getRoutePath(`/browser?${searchString}`);
     }
   }, [qs]);
 
