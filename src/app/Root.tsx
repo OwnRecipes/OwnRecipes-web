@@ -17,7 +17,7 @@ const Root = () => (
       <ThemeProvider />
       <ContextProvider>
         {!isDemoMode() && <BrowserRouter basename={basename}><App /></BrowserRouter>}
-        { isDemoMode() && <HashRouter basename={basename}><App /></HashRouter>}
+        { isDemoMode() && <HashRouter><App /></HashRouter>}
       </ContextProvider>
     </Provider>
   </Suspense>
