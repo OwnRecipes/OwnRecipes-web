@@ -3,11 +3,13 @@ import { createIntl, createIntlCache, defineMessages, IntlShape } from 'react-in
 import localeDe from '../locale/de.json';
 import localeEn from '../locale/en.json';
 import localeEs from '../locale/es.json';
+import localeFr from '../locale/fr.json';
 
 export enum LanguageCode {
   DE = 'de',
   EN = 'en',
   ES = 'es',
+  FR = 'fr',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,6 +18,7 @@ export function getMessagesFromLang(lang: LanguageCode): any {
     case LanguageCode.DE: return localeDe;
     case LanguageCode.EN: return localeEn;
     case LanguageCode.ES: return localeEs;
+    case LanguageCode.FR: return localeFr;
     default: return localeEn;
   }
 }

@@ -11,7 +11,7 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
-    "locales": "NODE_ENV=development extract-messages -l=de,en,es -o src/locale -d en --flat true 'src/**/!(*.test).{ts,tsx}'"
+    "locales": "NODE_ENV=development extract-messages -l=de,en,es,fr -o src/locale -d en --flat true 'src/**/!(*.test).{ts,tsx}'"
   },
   "author": {
     "name": "Frank \"Roy\" Hartung"
