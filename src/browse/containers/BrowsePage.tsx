@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import * as _ from 'lodash-es';
 
 import '../css/browse.css';
@@ -14,7 +15,6 @@ import PageWrapper from '../../common/components/PageWrapper';
 import { CombinedStore } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { getRoutePath, objToSearchString } from '../../common/utility';
-import { useSearchParams } from 'react-router-dom';
 
 export function mergeDefaultFilters(
     defaultFilters: Record<string, unknown>,

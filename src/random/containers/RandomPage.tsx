@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
+import { useSearchParams } from 'react-router-dom';
 
 import '../css/random.css';
 
@@ -18,7 +19,6 @@ import RandomHeader from '../components/RandomHeader';
 import useSingle from '../../common/hooks/useSingle';
 import SearchResults from '../../browse/containers/SearchResults';
 import { objToSearchString } from '../../common/utility';
-import { useSearchParams } from 'react-router-dom';
 
 const RandomPage: React.FC = () => {
   const dispatch = useDispatch();

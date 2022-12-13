@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import * as _ from 'lodash-es';
+import { useSearchParams } from 'react-router-dom';
 
 import '../css/recipe.css';
 
@@ -25,6 +26,7 @@ const RecipeContainer: React.FC = () => {
   const nav = useNavigate();
   const params = useParams();
   const crash = useCrash();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const paramsRecipe = params.recipe;
   // Load Recipe
@@ -90,7 +92,26 @@ const RecipeContainer: React.FC = () => {
   // const checkIngredient = useCallback((id: number, checked: boolean) => RecipeActions.checkIngredient(recipeSlug, id, checked), [dispatch]);
   // const checkSubRecipe  = useCallback((id: number, checked: boolean) => RecipeActions.checkSubRecipe(recipeSlug, id, checked), [dispatch]);
 
-  const updateServings = useCallback((servings: number) => dispatch(RecipeActions.updateServings(recipeSlug, servings)), [dispatch]);
+  const updateServings = useCallback((servings: number) => {
+    setSearchParams({ ...searchParams, servings: String(servings) });
+    return dispatch(RecipeActions.updateServings(recipeSlug, servings));
+  }, [dispatch]);
+
+  const locationServings = useMemo(() => {
+    const serv = searchParams.get('servings');
+    if (!serv) return undefined;
+    const servNumber = Number.parseFloat(serv);
+    if (Number.isNaN(servNumber)) return undefined;
+    return servNumber;
+  }, [searchParams]);
+
+  const customServings = recipe?.customServings;
+
+  useEffect(() => {
+    if (locationServings && locationServings !== customServings) {
+      updateServings(locationServings);
+    }
+  }, [locationServings, customServings]);
 
   if (recipe != null) {
     return (
