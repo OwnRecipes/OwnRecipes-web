@@ -17,6 +17,7 @@ import InternalErrorDialog from './components/InternalErrorDialog';
 import IntlMessagesCreator from './components/IntlMessagesCreator';
 import { isDemoMode } from '../common/utility';
 import PageSpinner from './components/PageSpinner';
+import PageScroller from '../common/components/PageScroller';
 
 const App = () => {
   const main = (
@@ -42,6 +43,7 @@ const AppFC: React.FC = () => (
     <Footer />
     <InternalErrorDialog />
     <AutoLogin />
+    <PageScroller />
   </>
 );
 

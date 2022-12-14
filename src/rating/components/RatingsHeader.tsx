@@ -1,6 +1,7 @@
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
+import HeaderLink from '../../common/components/HeaderLink';
 import UserRole from '../../common/types/UserRole';
 
 export interface IRatingsHeaderProps {
@@ -28,7 +29,10 @@ const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ userRole, showNewRating,
     <Card.Header>
       <Row>
         <Col className='ratings-heading-col'>
-          <h2>{formatMessage(messages.title)}</h2>
+          <h2 id='ratings-heading'>
+            {formatMessage(messages.title)}
+            <HeaderLink linkFor='ratings-heading' />
+          </h2>
         </Col>
         {!showNewRating && userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
           <Col xs='auto'>

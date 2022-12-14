@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import '../css/directions.css';
 
+import HeaderLink from '../../common/components/HeaderLink';
 import { IngredientGroup } from '../store/RecipeTypes';
 import IngredientGroups from './IngredientGroups';
 
@@ -115,7 +116,12 @@ function formatDirections(directions: DirectionsWithIngredients) {
       return (
         <div key={di.heading ?? ''} className={classNames('subgroup', di.heading || 'default-group')}>
           {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-          {di.heading && <h3>{di.heading}:</h3>}
+          {di.heading && (
+            <h3 id={`direction-${di.heading}`}>
+              {`${di.heading}:`}
+              <HeaderLink linkFor={`direction-${di.heading}`} />
+            </h3>
+          )}
           {di.ingredients && di.ingredients.length > 0 && (
             <div className='ingredients'>
               <IngredientGroups groups={di.ingredients} hasSubrecipes={isDefaultGroup && directions.length > 1} />

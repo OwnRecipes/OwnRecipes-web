@@ -10,9 +10,17 @@ Array [
     >
       <caption
         className="subheading h3"
+        id="ingredients-Chili"
       >
-        Chili
-        :
+        Chili:
+        <a
+          className="headerlink"
+          href="/#ingredients-Chili"
+          onClick={[Function]}
+          title="Permalink to this headline"
+        >
+          ¶
+        </a>
       </caption>
       <thead
         className="hideme"
@@ -62,9 +70,17 @@ Array [
     >
       <caption
         className="subheading h3"
+        id="ingredients-Spices"
       >
-        Spices
-        :
+        Spices:
+        <a
+          className="headerlink"
+          href="/#ingredients-Spices"
+          onClick={[Function]}
+          title="Permalink to this headline"
+        >
+          ¶
+        </a>
       </caption>
       <thead
         className="hideme"

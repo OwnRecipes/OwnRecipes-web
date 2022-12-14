@@ -7,6 +7,7 @@ import { IngredientGroup } from '../store/RecipeTypes';
 import P from '../../common/components/P';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 import Loading from '../../common/components/Loading';
+import HeaderLink from '../../common/components/HeaderLink';
 import Directions from './Directions';
 
 export interface IDirectionsPanelProps {
@@ -39,7 +40,10 @@ const DirectionsPanel: React.FC<IDirectionsPanelProps> = ({
 
   return (
     <article className={classNames('directions-panel', { 'multi-directions': isMultiDirections })}>
-      <h2>{formatMessage(messages.directions)}</h2>
+      <h2 id='directions-heading'>
+        {formatMessage(messages.directions)}
+        <HeaderLink linkFor='directions-heading' />
+      </h2>
       {pending === PendingState.LOADING && directionsString === '' && <Loading />}
       {hasNoData && (
         <P className='placeholder'>{formatMessage(messages.no_directions)}</P>

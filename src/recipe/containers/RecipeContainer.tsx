@@ -33,7 +33,6 @@ const RecipeContainer: React.FC = () => {
   useEffect(() => {
     if (paramsRecipe) {
       dispatch(RecipeActions.load(paramsRecipe));
-      window.scrollTo(0, 0);
     }
   }, [paramsRecipe]);
 

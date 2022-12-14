@@ -201,4 +201,7 @@
   th.visible-sm, td.visible-sm {
     display: table-cell !important;
  }
+ a.headerlink {
+  display: none !important;
+ }
 }

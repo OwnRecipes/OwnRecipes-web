@@ -4,6 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 // import { Checkbox } from '../../common/components/FormComponents';
+import HeaderLink from '../../common/components/HeaderLink';
 import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import { SubRecipe } from '../store/RecipeTypes';
 
@@ -75,7 +76,10 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes /* , checkSubRecipe
     <div className='subgroup ingredient-group'>
       <Table striped size='sm' className='table ingredients-table'>
         {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-        <caption className='subheading h3'>{intl.formatMessage(messages.subrecipes)}:</caption>
+        <caption id='subrecipes' className='subheading h3'>
+          {`${intl.formatMessage(messages.subrecipes)}:`}
+          <HeaderLink linkFor='subrecipes' />
+        </caption>
         <thead className='hideme'>
           <tr>
             {showQuantityCol && <th><span>{intl.formatMessage(messages.quantity)}</span></th>}

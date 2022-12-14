@@ -73,56 +73,53 @@ const NewRating: React.FC<INewRatingProps> = ({ show, recipeSlug, userId, addRat
   if (!show) return null;
 
   return (
-    <>
-      <ReduxForm
-          initialValues = {initialValues}
-          onSubmit = {handleSubmit}
-          subscription = {{}}
-          render = {({ form, handleSubmit: renderSubmit }) => (
-            <Form onSubmit={renderSubmit} className='new-rating'>
-              <ReFormStatus onSubmitSuccess={onAddRatingSuccess} />
+    <ReduxForm
+        initialValues = {initialValues}
+        onSubmit = {handleSubmit}
+        subscription = {{}}
+        render = {({ form, handleSubmit: renderSubmit }) => (
+          <Form onSubmit={renderSubmit} className='new-rating'>
+            <ReFormStatus onSubmitSuccess={onAddRatingSuccess} />
 
-              <InitialValuesResetter form={form} initialValues={initialValues} />
-              <fieldset>
-                <legend className='new-rating-heading'>{formatMessage(messages.new_rating_title)}</legend>
-                <Row>
-                  <Col className='form-group required'>
-                    <div className='form-label'>{formatMessage(messages.rating_label)}</div>
-                    <Field name='rating' validate={requiredValidator} validateFields={[]}>
-                      {fprops => (
-                        <Ratings
-                            stars = {fprops.input.value}
-                            onChange = {(value: number) => { fprops.input.onChange(value); }} />
-                      )}
-                    </Field>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <ReInput
-                        name   = 'comment'
-                        rows   = {4}
-                        label  = {formatMessage(messages.rating_comment_label)}
-                        placeholder = {formatMessage(messages.rating_comment_placeholder)}
-                        required />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12}>
-                    <FormSpy subscription={{ values: true, submitting: true }}>
-                      {({ values, submitting }) => (
-                        <Button type='submit' variant='primary' disabled={!values.rating || !values.comment || submitting}>
-                          {formatMessage(messages.submit)}
-                        </Button>
-                      )}
-                    </FormSpy>
-                  </Col>
-                </Row>
-              </fieldset>
-            </Form>
-          )} />
-      <hr />
-    </>
+            <InitialValuesResetter form={form} initialValues={initialValues} />
+            <fieldset>
+              <legend className='new-rating-heading'>{formatMessage(messages.new_rating_title)}</legend>
+              <Row>
+                <Col className='form-group required'>
+                  <div className='form-label'>{formatMessage(messages.rating_label)}</div>
+                  <Field name='rating' validate={requiredValidator} validateFields={[]}>
+                    {fprops => (
+                      <Ratings
+                          stars = {fprops.input.value}
+                          onChange = {(value: number) => { fprops.input.onChange(value); }} />
+                    )}
+                  </Field>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <ReInput
+                      name   = 'comment'
+                      rows   = {4}
+                      label  = {formatMessage(messages.rating_comment_label)}
+                      placeholder = {formatMessage(messages.rating_comment_placeholder)}
+                      required />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <FormSpy subscription={{ values: true, submitting: true }}>
+                    {({ values, submitting }) => (
+                      <Button type='submit' variant='primary' disabled={!values.rating || !values.comment || submitting}>
+                        {formatMessage(messages.submit)}
+                      </Button>
+                    )}
+                  </FormSpy>
+                </Col>
+              </Row>
+            </fieldset>
+          </Form>
+        )} />
   );
 };
 

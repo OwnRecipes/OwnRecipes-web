@@ -35,7 +35,6 @@ const RecipeFormPage: React.FC = () => {
   // Load Recipe / or init.
   useEffect(() => {
     if (recipeSlug) {
-      window.scrollTo(0, 0);
       if (recipeSlug === 'create') {
         dispatch(RecipeFormActions.reset());
       } else {

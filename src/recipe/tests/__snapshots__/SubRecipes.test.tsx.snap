@@ -9,9 +9,17 @@ exports[`Test Sub Recipes 1`] = `
   >
     <caption
       className="subheading h3"
+      id="subrecipes"
     >
-      Subrecipes
-      :
+      Subrecipes:
+      <a
+        className="headerlink"
+        href="/#subrecipes"
+        onClick={[Function]}
+        title="Permalink to this headline"
+      >
+        ¶
+      </a>
     </caption>
     <thead
       className="hideme"

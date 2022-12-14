@@ -98,6 +98,28 @@ export function optionallyFormatMessage(intl: IntlShape, baseMessageId: string, 
   }
 }
 
+export function scrollToElement(element: Element, offset: number) {
+  function getElementOffset(elementt: Element) {
+    if (elementt?.getBoundingClientRect == null) {
+      // All current browsers and even IE11 should implement this, but you never know.
+      // eslint-disable-next-line no-console
+      console.warn('Attempted to query getBoundingClientRect, but element does not provide this function.');
+      return undefined;
+    }
+
+    return elementt.getBoundingClientRect().top + window.scrollY;
+  }
+
+  const elementOffset = getElementOffset(element);
+  if (elementOffset == null) return;
+  const offsetPosition = elementOffset - offset;
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth',
+  });
+}
+
 export function sortByLabel(a: { label: string }, b: { label: string}): number {
   return a.label.localeCompare(b.label);
 }

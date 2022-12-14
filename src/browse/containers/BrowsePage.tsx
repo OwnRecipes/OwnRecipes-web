@@ -88,7 +88,6 @@ const BrowsePage: React.FC = () => {
   const qsMergedString = objToSearchString(qsMergedDefaults);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     dispatch(SearchActions.loadRecipes(qsMergedDefaults));
   }, [searchParams]);
 

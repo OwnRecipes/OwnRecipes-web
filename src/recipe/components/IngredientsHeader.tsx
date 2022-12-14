@@ -10,6 +10,7 @@ import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType
 import Icon from '../../common/components/Icon';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import ReInput from '../../common/components/ReduxForm/ReInput';
+import HeaderLink from '../../common/components/HeaderLink';
 
 export interface IIngredientsHeaderProps {
   recipe:      Recipe | undefined;
@@ -73,11 +74,17 @@ const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({
 
   return (
     <>
-      {(hasNoIngredients || servings === 0) && <h2>{formatMessage(messages.ingredients)}</h2>}
+      {(hasNoIngredients || servings === 0) && (
+        <h2 id='ingredients-heading'>
+          {formatMessage(messages.ingredients)}
+          <HeaderLink linkFor='ingredients-heading' />
+        </h2>
+      )}
       {!hasNoIngredients && servings > 0 && (
         <div className='ingredients-for-servings-row'>
-          <h2>
+          <h2 id='ingredients-heading'>
             {formatMessage(messages.ingredients_for_servings)}
+            <HeaderLink linkFor='ingredients-heading' />
             <span className='print-only'>{`: ${recipe?.customServings ?? ''} ${formatMessage(messages.servings)}`}</span>
           </h2>
           <div className='custom-servings print-hidden'>

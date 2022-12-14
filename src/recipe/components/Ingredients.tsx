@@ -3,6 +3,7 @@ import { Table } from 'react-bootstrap';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
 import MeasurementContext, { IMeasurementContext } from '../../common/context/MeasurementContext';
+import HeaderLink from '../../common/components/HeaderLink';
 // import { Checkbox } from '../../common/components/FormComponents';
 import { optionallyFormatMessage } from '../../common/utility';
 import { Ingredient } from '../store/RecipeTypes';
@@ -81,7 +82,12 @@ const Ingredients: React.FC<IIngredientsProps> = ({
   return (
     <Table striped size='sm' className='table ingredients-table'>
       {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-      {caption && <caption className='subheading h3'>{caption}:</caption>}
+      {caption && (
+        <caption id={`ingredients-${caption}`} className='subheading h3'>
+          {`${caption}:`}
+          <HeaderLink linkFor={`ingredients-${caption}`} />
+        </caption>
+      )}
       <thead className='hideme'>
         <tr>
           <th><span>{intl.formatMessage(messages.quantity)}</span></th>
