@@ -170,6 +170,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
 
     return (
       <Form.Group
+          {...this.getGroupProps()}
           controlId = {this.props.name}
           className = {this.getFormGroupClassNames()}>
         <ConditionalWrapper

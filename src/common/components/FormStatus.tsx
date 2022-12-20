@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/form_errors.css';
@@ -6,6 +6,7 @@ import '../css/form_errors.css';
 import { ValidationError } from '../store/Validation';
 import Alert from './Alert';
 import NavigationPrompt from './NavigationPrompt';
+import P from './P';
 import Toast from './Toast';
 
 interface IFormStatusProps {
@@ -26,6 +27,29 @@ const FormStatus: React.FC<IFormStatusProps> = ({
       <FormErrors errors={errors} />
       <SubmitSuccess dirty={dirty} submitting={submitting} onSubmitSuccess={onSubmitSuccess} errors={errors} />
     </>
+  );
+};
+
+interface IFormErrorRowErrorProps {
+  name: string;
+  err: ValidationError;
+}
+
+const FormErrorRowError: React.FC<IFormErrorRowErrorProps> = ({ name, err }: IFormErrorRowErrorProps) => {
+  const label = document.querySelector(`[data-api-field="${name}"] > label`)?.textContent ?? name;
+
+  const messages: Array<string> = [];
+  if (Array.isArray(err)) {
+    messages.push(...(err.map(errr => errr.message)));
+  } else {
+    messages.push(err.message);
+  }
+
+  return (
+    <tr>
+      <td>{label}</td>
+      <td>{messages.join('. ')}</td>
+    </tr>
   );
 };
 
@@ -50,21 +74,59 @@ const FormErrors: React.FC<IFormErrorsProps> = ({ errors }: IFormErrorsProps) =>
     form_errors_alert: {
       id: 'status.form_errors_alert',
       description: 'Alert text for the form error box.',
-      defaultMessage: 'Please fix the error(s).',
+      defaultMessage: 'Please fix the described error(s) and continue.',
+    },
+    form_errors_table_heading_error: {
+      id: 'status.form_errors_table_heading_error',
+      description: 'The form-errors will be displayed as table, with an error column. This is the column\'s title.',
+      defaultMessage: 'Error',
+    },
+    form_errors_table_heading_message: {
+      id: 'status.form_errors_table_heading_message',
+      description: 'The form-errors will be displayed as table, with a message column. This is the column\'s title.',
+      defaultMessage: 'Message',
     },
   });
 
-  if (!errors || Object.keys(errors).length === 0) return null;
-  const visibleErrors = useMemo(() => getVisibleErrors(errors), [errors]);
-  if (Object.keys(visibleErrors).length === 0) return null;
+  const visibleErrors = useMemo(() => (
+    errors != null ? getVisibleErrors(errors) : undefined
+  ), [errors]);
+
+  const errorTableRowsJsx = useMemo(() => {
+    if (visibleErrors == null || Object.keys(visibleErrors).length === 0) return [];
+    const res: Array<React.ReactNode> = [];
+    Object.keys(visibleErrors).forEach(key => {
+      const nextErr = visibleErrors[key];
+      res.push(<FormErrorRowError key={key} name={key} err={nextErr} />);
+    });
+    return res;
+  }, [visibleErrors]);
+
+  if (visibleErrors == null || Object.keys(visibleErrors).length === 0) return null;
+
   // console.log(`[FormErrors] ${JSON.stringify(visibleErrors)}`);
+
+  const errorTableJsx = (
+    <table>
+      <thead>
+        <tr>
+          <th>{formatMessage(messages.form_errors_table_heading_error)}</th>
+          <th>{formatMessage(messages.form_errors_table_heading_message)}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {errorTableRowsJsx}
+      </tbody>
+    </table>
+  );
 
   return (
     <Alert
         severity = 'danger'
         className = 'form-errors'
         title = {formatMessage(messages.form_errors_title)}>
-      {JSON.stringify(visibleErrors)}
+      {errorTableJsx}
+      <P className='alert-post-message'>{formatMessage(messages.form_errors_alert)}</P>
     </Alert>
   );
 };

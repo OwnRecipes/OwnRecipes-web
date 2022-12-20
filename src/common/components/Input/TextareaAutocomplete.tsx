@@ -60,6 +60,7 @@ export default class TextareaAutocomplete<TListItem extends string | object = Au
 
     return (
       <Form.Group
+          {...this.getGroupProps()}
           controlId = {this.props.name}
           className = {this.getFormGroupClassNames()}>
         <ConditionalWrapper

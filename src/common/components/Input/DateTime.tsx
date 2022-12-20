@@ -35,6 +35,7 @@ export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTi
   render() {
     return (
       <Form.Group
+          {...this.getGroupProps()}
           controlId = {this.props.name}
           className = {this.getFormGroupClassNames()}>
         <ConditionalWrapper

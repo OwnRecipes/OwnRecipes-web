@@ -137,9 +137,9 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
         subscription = {{}}
         render = {({ form, handleSubmit: renderSubmit }) => (
           <Form className='recipe-form' onSubmit={renderSubmit}>
-            <ReFormStatus />
             <InitialValuesResetter form={form} initialValues={initialValues} />
             <Container>
+              <ReFormStatus />
               <Row>
                 <Col id='recipe-meta' md={5} lg={4}>
                   <Row>

@@ -262,6 +262,8 @@
   "sort_by.rating": "Bewertung",
   "sort_by.title": "Titel",
   "status.form_errors_alert": "Bitte beheben Sie die Fehler.",
+  "status.form_errors_table_heading_error": "Fehler",
+  "status.form_errors_table_heading_message": "Meldung",
   "status.form_errors_title": "Das Formular enthält Fehler.",
   "status.save_success": "Änderungen gespeichert.",
   "subrecipes.subrecipes heading": "Teilrezepte",

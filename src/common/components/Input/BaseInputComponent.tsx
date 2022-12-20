@@ -57,6 +57,12 @@ export default class BaseInputComponent<P extends IBaseInputComponentProps, S = 
     return this.isErrorneous() ? <Form.Text className='error-text'>{this.props.errors}</Form.Text> : null;
   }
 
+  getGroupProps() { // eslint-disable-line react/no-unused-class-component-methods
+    return ({
+      'data-api-field': this.props.name,
+    });
+  }
+
   getHelpText() { // eslint-disable-line react/no-unused-class-component-methods
     return this.props.helpText ? <Form.Text className='help-text'>{this.props.helpText}</Form.Text> : null;
   }

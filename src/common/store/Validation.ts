@@ -15,6 +15,12 @@ export type ValidationError = ValidationErrorType | Array<ValidationErrorType>;
 
 export const INTERNAL_ERROR_KEY = '$$-internal-error-$$';
 
+export function createInternalHiddenValidationResult(code: string, message: string, sourceError?: Error): ValidationResult {
+  const result = createValidationResult();
+  result[`_${code}`] = { code: code, message: message ?? code, sourceError: sourceError };
+  return result;
+}
+
 export function toValidationErrors(error: ResponseError): ValidationResult | undefined {
   const toCode = (msg: string): string => {
     if (msg === 'This item is required.') {

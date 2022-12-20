@@ -56,6 +56,7 @@ export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
 
     return (
       <Form.Group
+          {...this.getGroupProps()}
           controlId = {this.props.name}
           className = {this.getFormGroupClassNames()}>
         <ConditionalWrapper

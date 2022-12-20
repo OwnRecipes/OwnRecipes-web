@@ -262,6 +262,8 @@
   "sort_by.rating": "Évaluation",
   "sort_by.title": "Titre",
   "status.form_errors_alert": "Veuillez corriger les erreurs.",
+  "status.form_errors_table_heading_error": "Erreur",
+  "status.form_errors_table_heading_message": "Message",
   "status.form_errors_title": "Le formulaire contient des erreurs.",
   "status.save_success": "Modifications enregistrées.",
   "subrecipes.subrecipes heading": "Recettes partielles",

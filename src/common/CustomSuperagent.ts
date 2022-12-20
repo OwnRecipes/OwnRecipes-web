@@ -10,7 +10,7 @@ import { AccountAction, AccountActionTypes, ACCOUNT_STORE, LoginDto, toUserAccou
 import { ACTION } from './store/ReduxHelper';
 import * as InternalErrorActions from '../internal_error/store/actions';
 import { logUserOut } from '../account/store/actions';
-import { toValidationErrors, ValidationError } from './store/Validation';
+import { createInternalHiddenValidationResult, toValidationErrors, ValidationError } from './store/Validation';
 import { isDemoMode } from './utility';
 import { AnyDispatch, toBasicAction } from './store/redux';
 
@@ -202,9 +202,11 @@ export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent:
     } else if (respErr.response != null && respErr.response.status === 401) {
       // Invalid token
       dispatch(logUserOut());
+      return createInternalHiddenValidationResult('401', 'token_invalid', error);
     } else if (respErr.response != null && respErr.response.status === 403) {
       // Forbidden
       dispatch(InternalErrorActions.setInternalError(storeIdent, error));
+      return createInternalHiddenValidationResult('403', 'forbidden', error);
     } else {
       // Internal server error
       const validationError: ValidationError = { code: '500', message: respErr.message, sourceError: respErr };
@@ -216,9 +218,11 @@ export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent:
         ),
         payload: validationError,
       });
+      return createInternalHiddenValidationResult('500', respErr.message, error);
     }
   } else if (isNetworkError(error)) {
     dispatch({ ...toBasicAction(storeIdent, ACTION.NO_CONNECTION) });
+    return createInternalHiddenValidationResult('Connection', 'NetworkError', error);
   } else {
     // Unknown internal error
     dispatch(InternalErrorActions.setInternalError(storeIdent, error));
@@ -229,6 +233,7 @@ export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent:
       ),
       payload: error,
     });
+    return createInternalHiddenValidationResult('500', 'Internal error', error);
   }
 
   return null;

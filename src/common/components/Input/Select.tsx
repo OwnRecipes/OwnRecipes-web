@@ -79,6 +79,7 @@ export class Select extends BaseInputComponent<ISelectProps> {
     const selectedOption = this.props.data?.find(o => o.value === this.props.value);
     return (
       <Form.Group
+          {...this.getGroupProps()}
           controlId = {this.props.name}
           className = {classNames('form-group', this.props.className, {
             error:    this.isErrorneous(),

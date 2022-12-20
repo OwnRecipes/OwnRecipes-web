@@ -49,6 +49,7 @@ class FileSelect extends BaseInputComponent<IFileSelectProps> {
 
     return (
       <Form.Group
+          {...this.getGroupProps()}
           controlId = {this.props.name}
           className = {this.getFormGroupClassNames()}>
         <ConditionalWrapper
