@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
+import classNames from 'classnames';
 import { Button, Col, Row } from 'react-bootstrap';
 
 import { Rating } from '../store/types';
 import Icon from '../../common/components/Icon';
 import P from '../../common/components/P';
 import Modal from '../../common/components/Modal';
-import Ratings from './Ratings';
-import { Link } from 'react-router-dom';
 import PageScroller from '../../common/components/PageScroller';
-import { useLocation } from 'react-router';
-import classNames from 'classnames';
+import Ratings from './Ratings';
 
 export interface IRatingCommentProps {
   rating:     Rating;
@@ -36,11 +36,25 @@ interface IRatingCommentCommentProps {
   rating: Rating;
 }
 
-const RatingCommentComment: React.FC<IRatingCommentCommentProps> = ({ rating }: IRatingCommentCommentProps) => (
-  <P>
-    {rating.comment}
-  </P>
-);
+const RatingCommentComment: React.FC<IRatingCommentCommentProps> = ({ rating }: IRatingCommentCommentProps) => {
+  const markup: Array<React.ReactNode> = [];
+
+  const pList = rating.comment.split('\n').filter(Boolean);
+  pList.forEach((p, index) => {
+    markup.push(
+      // eslint-disable-next-line react/no-array-index-key
+      <P key={`${index}-p`}>
+        {p}
+      </P>
+    );
+  });
+
+  return (
+    <>
+      {markup}
+    </>
+  );
+};
 
 const RatingComment: React.FC<IRatingCommentProps> = ({
     rating, onDelete }: IRatingCommentProps) => {
