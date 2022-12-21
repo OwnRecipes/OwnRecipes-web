@@ -75,7 +75,7 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
             condition = {item.label.length > 10}
             render = {childr => <Tooltip id={item.title} tooltip={item.label} placement='bottom' className='filter-title-tooltip'>{childr}</Tooltip>}>
           <Link to={buildUrl(qsTitle, item.slug, multiSelect)} className={classNames('list-group-item list-group-item-action', { active: item.active })}>
-            <div className='name'>{item.label}</div>
+            <span className='name'>{item.label}</span>
             <span className='count'>{`(${item.total})`}</span>
             {item.active && <Icon icon='x-square' variant='light' />}
           </Link>

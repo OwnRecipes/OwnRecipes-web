@@ -63,7 +63,7 @@ function toCleanLocationPath(path: string): string {
   }, [id, error]);
 
   return (
-    <Container id='main-container' className={toCleanLocationPath(location.pathname)} style={{ marginTop: `${dynamicHeightContext.toolbarHeight}px` }}>
+    <Container id='main-container' as='main' className={toCleanLocationPath(location.pathname)} style={{ marginTop: `${dynamicHeightContext.toolbarHeight}px` }}>
       <ErrorBoundary verbose printStack>
         {children}
       </ErrorBoundary>
