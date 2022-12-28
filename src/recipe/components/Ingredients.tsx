@@ -11,6 +11,7 @@ import { Ingredient } from '../store/RecipeTypes';
 export interface IIngredientsProps {
   caption: string | undefined;
   data: Array<Ingredient>;
+  withHeaderLink?: boolean;
   // checkIngredient: (id: number, checked: boolean) => void;
 }
 
@@ -31,7 +32,7 @@ export function formatMeasurement(measurementsContext: IMeasurementContext, meas
 }
 
 const Ingredients: React.FC<IIngredientsProps> = ({
-    caption, data /* , checkIngredient */ }: IIngredientsProps) => {
+    caption, data, withHeaderLink /* , checkIngredient */ }: IIngredientsProps) => {
   const intl = useIntl();
   const messages = defineMessages({
     quantity: {
@@ -83,9 +84,9 @@ const Ingredients: React.FC<IIngredientsProps> = ({
     <Table striped size='sm' className='table ingredients-table'>
       {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
       {caption && (
-        <caption id={`ingredients-${caption}`} className='subheading h3'>
+        <caption id={withHeaderLink ? `ingredients-${caption}` : undefined} className='subheading h3'>
           {`${caption}:`}
-          <HeaderLink linkFor={`ingredients-${caption}`} />
+          {withHeaderLink && <HeaderLink linkFor={`ingredients-${caption}`} />}
         </caption>
       )}
       <thead className='hideme'>

@@ -10,11 +10,11 @@ import { SubRecipe } from '../store/RecipeTypes';
 
 export interface ISubRecipesProps {
   subRecipes: Array<SubRecipe> | undefined;
-
+  withHeaderLink?: boolean;
   // checkSubRecipe: (id: number, checked: boolean) => void;
 }
 
-const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes /* , checkSubRecipe */ }: ISubRecipesProps) => {
+const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes, withHeaderLink /* , checkSubRecipe */ }: ISubRecipesProps) => {
   const intl = useIntl();
 
   const messages = defineMessages({
@@ -76,9 +76,9 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes /* , checkSubRecipe
     <div className='subgroup ingredient-group'>
       <Table striped size='sm' className='table ingredients-table'>
         {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-        <caption id='subrecipes' className='subheading h3'>
+        <caption id={withHeaderLink ? 'subrecipes' : undefined} className='subheading h3'>
           {`${intl.formatMessage(messages.subrecipes)}:`}
-          <HeaderLink linkFor='subrecipes' />
+          {withHeaderLink && <HeaderLink linkFor='subrecipes' />}
         </caption>
         <thead className='hideme'>
           <tr>

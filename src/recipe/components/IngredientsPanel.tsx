@@ -53,10 +53,12 @@ const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta
         <>
           <div className='ingredient-groups'>
             <SubRecipes
+                withHeaderLink
                 subRecipes = {recipe?.subrecipes}
                 // checkSubRecipe = {checkSubRecipe}
                 />
             <IngredientGroups
+                withHeaderLink
                 groups  = {recipe?.ingredientGroups}
                 hasSubrecipes = {recipe?.subrecipes != null && recipe?.subrecipes.length > 0}
                 // checkIngredient = {checkIngredient}
