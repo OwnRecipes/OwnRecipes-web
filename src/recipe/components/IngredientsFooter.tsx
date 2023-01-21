@@ -10,6 +10,7 @@ import Icon from '../../common/components/Icon';
 import ConditionalWrapper from '../../common/components/ConditionalWrapper';
 import { IngredientGroup, SubRecipe } from '../store/RecipeTypes';
 import AddToGroceryListModal from './AddToGroceryListModal';
+import Toast from '../../common/components/Toast';
 
 export interface IIngredientsFooterProps {
   subrecipes: Array<SubRecipe> | undefined;
@@ -26,6 +27,11 @@ const IngredientsFooter: React.FC<IIngredientsFooterProps> = ({
       description: 'Add groceries to list',
       defaultMessage: 'Add to grocery list',
     },
+    add_groceries_success_toast: {
+      id: 'recipe.recipe_ingredient_button.success_toast',
+      description: 'Add groceries to list success toast',
+      defaultMessage: 'Groceries added to the list.',
+    },
   });
 
   const [showGroceriesModal, setShowGroceriesModal] = useState<boolean>(false);
@@ -35,6 +41,12 @@ const IngredientsFooter: React.FC<IIngredientsFooterProps> = ({
   const handleGroceriesModalClose = () => {
     setShowGroceriesModal(false);
   };
+
+  const [showGroceriesSuccessToast, setShowGroceriesSuccessToast] = useState<boolean>(false);
+  const handleAddToGroceryListSuccess = () => {
+    setShowGroceriesSuccessToast(true);
+  };
+  const handleCloseAddGroceryListToast = () => { setShowGroceriesSuccessToast(false); };
 
   return (
     <div className='ingredients-footer'>
@@ -52,7 +64,16 @@ const IngredientsFooter: React.FC<IIngredientsFooterProps> = ({
           subrecipes = {subrecipes}
           ingredients = {ingredients}
           onClose = {handleGroceriesModalClose}
+          onSaveSuccess = {handleAddToGroceryListSuccess}
           />
+
+      <Toast
+          show = {showGroceriesSuccessToast}
+          variant = 'success'
+          anchorOrigin = {{ horizontal: 'center', vertical: 'bottom' }}
+          onClose = {handleCloseAddGroceryListToast}>
+        {formatMessage(messages.add_groceries_success_toast)}
+      </Toast>
     </div>
   );
 };

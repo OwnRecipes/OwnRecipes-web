@@ -264,6 +264,7 @@
   "recipe.print_tooltip": "Print this recipe",
   "recipe.recipe_ingredient_button.add_groceries": "Add to grocery list",
   "recipe.recipe_ingredient_button.no_ingredients": "(This recipe has no ingredients.)",
+  "recipe.recipe_ingredient_button.success_toast": "Groceries added to the list.",
   "recipe.servings": "Servings",
   "recipe.servings_input_tooltip": "Amount of servings",
   "recipe.source": "Source",

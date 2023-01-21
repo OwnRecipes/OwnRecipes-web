@@ -22,11 +22,13 @@ import { FormApi } from 'final-form';
 import Checkbox from '../../common/components/Input/Checkbox';
 import useCrash from '../../common/hooks/useCrash';
 import Icon from '../../common/components/Icon';
+import Tooltip from '../../common/components/Tooltip';
 
 export interface IAddToGroceryListModalProps {
   show: boolean;
   subrecipes: Array<SubRecipe> | undefined;
   ingredients: Array<IngredientGroup> | undefined;
+  onSaveSuccess: () => void;
   onClose: () => void;
 }
 
@@ -37,7 +39,7 @@ type AddToGroceryListData = {
 };
 
 const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
-    show, subrecipes, ingredients, onClose }: IAddToGroceryListModalProps) => {
+    show, subrecipes, ingredients, onSaveSuccess, onClose }: IAddToGroceryListModalProps) => {
   const intl = useIntl();
   const dispatch = useDispatch();
 
@@ -77,7 +79,13 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
     return bulkAdd(form.list, bulkAddData);
   };
   const handleSubmitSuccess = () => {
+    onSaveSuccess();
     onClose();
+  };
+  const handleModalClose = (autoClose: boolean) => {
+    if (!autoClose) {
+      onClose();
+    }
   };
 
   if (!show || lists == null || subrecipes == null || ingredients == null) return null;
@@ -87,7 +95,7 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
         show = {show}
         title = {intl.messages['recipe.recipe_ingredient_button.add_groceries'] as string}
         onAccept = {handleEditSubmit}
-        onClose  = {onClose}
+        onClose  = {handleModalClose}
         className = 'add-to-grocery-list-modal'>
       <AddToGroceryListForm
           lists = {lists}
@@ -304,9 +312,11 @@ const ListRow: React.FC<IListRowProps> = ({
             data   = {lists.map(l => ({ value: String(l.id), label: l.title }))}
             readOnly = {lists.length < 2} />
         {!addedNewList && (
-          <Button type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' aria-label='Add list'>
-            <Icon icon='plus-lg' variant='light' size='2x' />
-          </Button>
+          <Tooltip id='add-list-button-tooltip' tooltip={intl.messages['nav.grocery_list_create'] as string}>
+            <Button type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' aria-label='Add list'>
+              <Icon icon='plus-lg' variant='light' size='2x' />
+            </Button>
+          </Tooltip>
         )}
       </Col>
     </Row>
@@ -320,6 +330,7 @@ interface IToggleAllCheckboxProps {
 
 const ToggleAllCheckbox: React.FC<IToggleAllCheckboxProps> = ({
     name, form }: IToggleAllCheckboxProps) => {
+  const intl = useIntl();
   const [value, setValue] = useState<boolean>(true);
 
   const handleChange = (_name: string, newValue: boolean) => {
@@ -340,7 +351,7 @@ const ToggleAllCheckbox: React.FC<IToggleAllCheckboxProps> = ({
   return (
     <Checkbox
         name   = {name}
-        label  = 'Toggle all'
+        label  = {intl.messages['grocery_list.items.toggle_all'] as string}
         value  = {value}
         onChange = {handleChange} />
   );

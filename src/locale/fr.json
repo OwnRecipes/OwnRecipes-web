@@ -271,6 +271,7 @@
   "recipe.print_tooltip": "Imprimer la recette",
   "recipe.recipe_ingredient_button.add_groceries": "",
   "recipe.recipe_ingredient_button.no_ingredients": "(Aucun ingrédient n'a été saisi pour cette recette.)",
+  "recipe.recipe_ingredient_button.success_toast": "",
   "recipe.servings": "Portions",
   "recipe.servings_input_tooltip": "Nombre de portions",
   "recipe.source": "Source",
