@@ -21,7 +21,7 @@ import CookingModeButton from './CookingModeButton';
 
 export interface IRecipeHeaderProps {
   recipe:       Recipe | undefined;
-  showEditLink: boolean;
+  userIsAuthor: boolean;
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
@@ -29,7 +29,7 @@ export interface IRecipeHeaderProps {
 }
 
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, showEditLink, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+    recipe, userIsAuthor, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -107,7 +107,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   const handleDeleteAccept = () => { deleteRecipe(); };
   const handleDeleteClose  = () => { setShowDeleteConfirm(false); };
 
-  const editLink = showEditLink ? (
+  const editLink = userIsAuthor ? (
     <Tooltip id='edit tooltip' tooltip={formatMessage(messages.edit_tooltip)}>
       <Link to={getRoutePath(`/recipe/edit/${recipe?.slug}`)} onClick={handleEditClick}>
         <Button variant='outline-primary' size='sm'>
@@ -117,7 +117,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     </Tooltip>
   ) : null;
 
-  const deleteLink = showEditLink ? (
+  const deleteLink = userIsAuthor ? (
     <Tooltip id='trash tooltip' tooltip={formatMessage(messages.delete_tooltip)}>
       <Button variant='outline-danger' size='sm' onClick={handleDeleteClick}>
         <Icon icon='trash' />
@@ -144,7 +144,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   const optionButtons = (
     <div className='options print-hidden'>
       <div className='options-wrapper'>
-        {showEditLink && (
+        {userIsAuthor && (
           <>
             {editLink}
             {deleteLink}

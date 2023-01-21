@@ -4,28 +4,18 @@ import { Button, Form } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';
 
 import { Recipe } from '../store/RecipeTypes';
-
-// import IngredientButtons from './IngredientButtons';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 import Icon from '../../common/components/Icon';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import HeaderLink from '../../common/components/HeaderLink';
+import { ValidationResult } from '../../common/store/Validation';
 
 export interface IIngredientsHeaderProps {
   recipe:      Recipe | undefined;
   recipeMeta:  ReducerMeta;
 
-  // lists: Array<any>;
-
-  // bulkAdd: (listId: number) => void;
-  // checkAllIngredients: () => void;
-  // uncheckAllIngredients: () => void;
-
-  // checkIngredient: (id: number, checked: boolean) => void;
-  // checkSubRecipe:  (id: number, checked: boolean) => void;
-
-  updateServings: (servings: number) => void;
+  updateServings: (servings: number) => Promise<ValidationResult>;
 }
 
 export interface IFormDataProps {

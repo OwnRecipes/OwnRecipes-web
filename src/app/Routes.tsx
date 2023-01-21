@@ -15,15 +15,16 @@ function lazyJsx<T extends ComponentType<any>>(
   return lazy(factory) as unknown as AnyComponent;
 }
 
-const NewsPage       = lazyJsx(() => import('../news/container/NewsPage'));
-const LoginPage      = lazyJsx(() => import('../account/containers/LoginPage'));
-const BrowsePage     = lazyJsx(() => import('../browse/containers/BrowsePage'));
-const RecipeFormPage = lazyJsx(() => import('../recipe_form/containers/RecipeFormPage'));
-const RecipePage     = lazyJsx(() => import('../recipe/containers/RecipePage'));
-// const ListPage    = lazyJsx(() => import('../../list/containers/ListPage'));
-// const MenuPage    = lazyJsx(() => import('../../menu/containers/MenuPage'));
-const NotFoundPage   = lazyJsx(() => import('./components/NotFoundPage'));
-const RandomPage     = lazyJsx(() => import('../random/containers/RandomPage'));
+const BrowsePage       = lazyJsx(() => import('../browse/containers/BrowsePage'));
+const NewsPage         = lazyJsx(() => import('../news/container/NewsPage'));
+const LoginPage        = lazyJsx(() => import('../account/containers/LoginPage'));
+const GroceryListPage  = lazyJsx(() => import('../groceryList/containers/GroceryListPage'));
+const GroceryListsPage = lazyJsx(() => import('../groceryList/containers/GroceryListsPage'));
+// const MenuPage      = lazyJsx(() => import('../../menu/containers/MenuPage'));
+const NotFoundPage     = lazyJsx(() => import('./components/NotFoundPage'));
+const RandomPage       = lazyJsx(() => import('../random/containers/RandomPage'));
+const RecipePage       = lazyJsx(() => import('../recipe/containers/RecipePage'));
+const RecipeFormPage   = lazyJsx(() => import('../recipe_form/containers/RecipeFormPage'));
 
 export type IRouteType = {
   /** URL path. Should start with a slash. */
@@ -43,6 +44,14 @@ const PrivateRoutes: Array<IRouteType> = [
     component: BrowsePage,
   },
   {
+    path:      '/grocery-lists/:list',
+    component: GroceryListPage,
+  },
+  {
+    path:      '/grocery-lists',
+    component: GroceryListsPage,
+  },
+  {
     path:      '/random',
     component: RandomPage,
   },
@@ -56,14 +65,6 @@ const PrivateRoutes: Array<IRouteType> = [
     component: RecipePage,
   },
   /*
-  {
-    path:      '/list/:list',
-    component: List,
-  },
-  {
-    path:      '/list',
-    component: List,
-  },
   {
     path:      '/Menu',
     component: Menu,

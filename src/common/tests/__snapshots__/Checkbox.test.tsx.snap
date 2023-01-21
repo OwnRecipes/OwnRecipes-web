@@ -6,7 +6,7 @@ exports[`Checkbox 1`] = `
   data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
@@ -51,7 +51,7 @@ exports[`Checkbox complex 1`] = `
       Oh no!
     </small>
     <div
-      className="form-check"
+      className="form-check form-check"
     >
       <input
         checked={true}
@@ -85,7 +85,7 @@ exports[`Checkbox disabled 1`] = `
   data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
@@ -119,7 +119,7 @@ exports[`Checkbox error 1`] = `
     Oh no!
   </small>
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
@@ -148,7 +148,7 @@ exports[`Checkbox readonly 1`] = `
   data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
@@ -178,7 +178,7 @@ exports[`Checkbox required 1`] = `
   data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}

@@ -24,13 +24,6 @@ const HeaderContent: React.FC = () => {
 
   const accountState = useSelector((state: CombinedStore) => state.account);
   const settings = useSelector((state: CombinedStore) => state.settings);
-  // const listState = useSelector((state: CombinedStore) => state.list.lists);
-  // const listState: Array<ListItemType> = [];
-
-  /* TODO Lists
-  useEffect(() => {
-    dispatch(ListActions.load());
-  }, []); */
 
   const handleChangeLanguage = (language: LanguageCode) => {
     dispatch(SettingsActions.changeLanguage(language));
@@ -48,7 +41,6 @@ const HeaderContent: React.FC = () => {
     <NavBar
         account  = {accountState.item}
         settings = {settings}
-        // lists    = {listState}
 
         locationPath = {location.pathname}
 

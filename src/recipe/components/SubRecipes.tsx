@@ -3,20 +3,20 @@ import { Table } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-// import { Checkbox } from '../../common/components/FormComponents';
 import HeaderLink from '../../common/components/HeaderLink';
+import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import { SubRecipe } from '../store/RecipeTypes';
 
 export interface ISubRecipesProps {
   subRecipes: Array<SubRecipe> | undefined;
   withHeaderLink?: boolean;
-  // checkSubRecipe: (id: number, checked: boolean) => void;
+  selectable?: boolean;
 }
 
-const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes, withHeaderLink /* , checkSubRecipe */ }: ISubRecipesProps) => {
+const SubRecipes: React.FC<ISubRecipesProps> = ({
+    subRecipes, withHeaderLink, selectable }: ISubRecipesProps) => {
   const intl = useIntl();
-
   const messages = defineMessages({
     subrecipes: {
       id: 'subrecipes.subrecipes heading',
@@ -47,11 +47,12 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes, withHeaderLink /* 
 
     return (
       <tr className='ingredient' key={String(subRecipe.child_recipe_id ?? index)}>
-        {/*
-        <Checkbox
-            name    = {String(subRecipe.child_recipe_id)}
-            checked = {subRecipe.checked ?? false}
-            change  = {(_id, checked) => checkSubRecipe(subRecipe.child_recipe_id, checked)} /> */}
+        {selectable && (
+          <td className='selection'>
+            <ReCheckbox
+                name    = {`subrecipes.cb-${subRecipe.child_recipe_id}`} />
+          </td>
+        )}
         {showQuantityCol && (
           <td className='quantity first-col'>
             <span>
@@ -75,13 +76,15 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes, withHeaderLink /* 
   return (
     <div className='subgroup ingredient-group'>
       <Table striped size='sm' className='table ingredients-table'>
-        {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
         <caption id={withHeaderLink ? 'subrecipes' : undefined} className='subheading h3'>
           {`${intl.formatMessage(messages.subrecipes)}:`}
           {withHeaderLink && <HeaderLink linkFor='subrecipes' />}
         </caption>
         <thead className='hideme'>
           <tr>
+            {selectable && (
+              <th><span>Selection</span></th>
+            )}
             {showQuantityCol && <th><span>{intl.formatMessage(messages.quantity)}</span></th>}
             <th><span>{intl.formatMessage(messages.subrecipe)}</span></th>
           </tr>

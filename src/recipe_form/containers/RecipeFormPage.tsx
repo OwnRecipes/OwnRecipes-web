@@ -35,7 +35,7 @@ const RecipeFormPage: React.FC = () => {
   // Load Recipe / or init.
   useEffect(() => {
     if (recipeSlug) {
-      if (recipeSlug === 'create') {
+      if (isNew) {
         dispatch(RecipeFormActions.reset());
       } else {
         dispatch(RecipeFormActions.load(recipeSlug));

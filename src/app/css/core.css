@@ -86,12 +86,16 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
 }
 
 
+.dropdown-menu {
+  color: var(--primaryText);
+}
 .dropdown-menu.show {
   background-color: var(--elevation);
   max-height: 66vh;
   overflow-y: auto;
 }
-.dropdown-item {
+.dropdown-item,
+.dropdown-menu.show > .nav-item > a {
   color: var(--primaryText);
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -122,6 +126,9 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
   color: var(--primaryContrast);
   background-color: var(--primaryLight);
 }
+.dropdown-menu > .dropstart > .dropdown-toggle::after {
+  display: none;
+}
 
 .list-group-item {
   color: var(--primaryText);
@@ -131,7 +138,7 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
   height:      3em;
   line-height: 3em;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 768px), print {
   .list-group-item {
     height:      2.5em;
     line-height: 2.5em;
@@ -258,4 +265,9 @@ html[data-theme="dark"] img {
 }
 html[data-theme="dark"] img:hover {
   opacity: 1.0;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+  height: 1px;
 }

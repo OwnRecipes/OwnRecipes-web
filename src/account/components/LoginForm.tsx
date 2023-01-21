@@ -10,9 +10,10 @@ import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialVa
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import LoginAlert from './LoginAlert';
+import { ValidationResult } from '../../common/store/Validation';
 
 export interface ILoginFormProps {
-  onSubmit: (username: string, password: string, remember: boolean) => void;
+  onSubmit: (username: string, password: string, remember: boolean) => Promise<ValidationResult>;
 }
 
 type LoginFormData = {

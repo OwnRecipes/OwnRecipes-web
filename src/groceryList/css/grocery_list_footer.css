@@ -1,0 +1,8 @@
+.grocery-list-footer .btn {
+  margin-left: 10px;
+}
+
+.grocery-list-footer .btn.check {
+  padding: 0;
+  margin-left: 0;
+}

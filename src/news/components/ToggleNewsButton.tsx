@@ -42,7 +42,7 @@ const ToggleNewsButton: React.FC<IToggleNewsButtonProps> = ({ showNews, onClick 
         id = 'toggle-news-button'
         variant = 'outline-primary'
         onClick = {onClick}
-        className = {classNames({
+        className = {classNames('print-hidden', {
           show: !showNews,
           hide:  showNews,
         })}>

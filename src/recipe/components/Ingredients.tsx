@@ -4,15 +4,16 @@ import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
 import MeasurementContext, { IMeasurementContext } from '../../common/context/MeasurementContext';
 import HeaderLink from '../../common/components/HeaderLink';
-// import { Checkbox } from '../../common/components/FormComponents';
 import { optionallyFormatMessage } from '../../common/utility';
-import { Ingredient } from '../store/RecipeTypes';
+import { Ingredient, IngredientGroup } from '../store/RecipeTypes';
+import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 
 export interface IIngredientsProps {
-  caption: string | undefined;
+  showCaptions: boolean;
+  group: IngredientGroup;
   data: Array<Ingredient>;
   withHeaderLink?: boolean;
-  // checkIngredient: (id: number, checked: boolean) => void;
+  selectable?: boolean;
 }
 
 export function formatMeasurement(measurementsContext: IMeasurementContext, measurement: string | undefined, intl: IntlShape, quantity: string | undefined): string {
@@ -32,7 +33,7 @@ export function formatMeasurement(measurementsContext: IMeasurementContext, meas
 }
 
 const Ingredients: React.FC<IIngredientsProps> = ({
-    caption, data, withHeaderLink /* , checkIngredient */ }: IIngredientsProps) => {
+    showCaptions, group, data, withHeaderLink, selectable }: IIngredientsProps) => {
   const intl = useIntl();
   const messages = defineMessages({
     quantity: {
@@ -48,6 +49,7 @@ const Ingredients: React.FC<IIngredientsProps> = ({
   });
 
   const measurementsContext = useContext(MeasurementContext);
+  const caption = showCaptions && group.title ? group.title : undefined;
 
   const ingredients = data.map((ingredient, index) => {
     const quantityS    = ingredient.quantity;
@@ -57,11 +59,12 @@ const Ingredients: React.FC<IIngredientsProps> = ({
 
     return (
       <tr className='ingredient' key={String(ingredient.id ?? index)}>
-        {/*
-        <Checkbox
-            name    = {String(ingredient.id)}
-            checked = {ingredient.checked ?? false}
-            change  = {(name, newValue) => checkIngredient(parseInt(name), newValue)} /> */}
+        {selectable && (
+          <td className='selection'>
+            <ReCheckbox
+                name    = {`ingredients.${group.slug}.cb-${ingredient.id}`} />
+          </td>
+        )}
         <td className='quantity'>
           {renderQuantity && (
             <span>
@@ -82,7 +85,6 @@ const Ingredients: React.FC<IIngredientsProps> = ({
 
   return (
     <Table striped size='sm' className='table ingredients-table'>
-      {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
       {caption && (
         <caption id={withHeaderLink ? `ingredients-${caption}` : undefined} className='subheading h3'>
           {`${caption}:`}
@@ -91,6 +93,9 @@ const Ingredients: React.FC<IIngredientsProps> = ({
       )}
       <thead className='hideme'>
         <tr>
+          {selectable && (
+            <th><span>Selection</span></th>
+          )}
           <th><span>{intl.formatMessage(messages.quantity)}</span></th>
           <th><span>{intl.formatMessage(messages.ingredient)}</span></th>
         </tr>

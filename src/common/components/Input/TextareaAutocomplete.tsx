@@ -89,6 +89,7 @@ export default class TextareaAutocomplete<TListItem extends string | object = Au
                 onChange  = {this.handleChange}
                 onBlur    = {this.props.onBlur}
                 onFocus   = {this.props.onFocus}
+                onKeyDown = {this.props.onKeyDown}
               />
           </InputGroup>
         </ConditionalWrapper>

@@ -68,6 +68,7 @@ class FileSelect extends BaseInputComponent<IFileSelectProps> {
                 onChange = {this.handleChange}
                 onBlur   = {this.props.onBlur}
                 onFocus  = {this.props.onFocus}
+                onKeyDown = {this.props.onKeyDown}
                 ref = {this.ref} />
             {!this.props.readOnly && !this.props.disabled && this.props.onChange
                 && (this.props.value || (this.ref.current != null && this.ref.current.value)) && (

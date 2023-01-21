@@ -9,6 +9,7 @@ import { Rating, RatingCreate } from '../store/types';
 import RatingComments from './RatingComments';
 import NewRating from './NewRating';
 import RatingsHeader from './RatingsHeader';
+import { ValidationResult } from '../../common/store/Validation';
 
 export interface IRatingsWrapperProps {
   recipeSlug: string;
@@ -17,7 +18,7 @@ export interface IRatingsWrapperProps {
   userRole:   UserRole | undefined;
   pending:    PendingState;
 
-  addRating: (recipeSlug: string, rating: RatingCreate) => void;
+  addRating: (recipeSlug: string, rating: RatingCreate) => Promise<ValidationResult>;
   removeRating: (recipeSlug: string, ratingId: number) => void;
 }
 

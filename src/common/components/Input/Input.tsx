@@ -108,8 +108,10 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
     }
   };
 
-  handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return;
+  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.defaultPrevented) return;
+    this.props.onKeyDown?.(event);
+    if (event.ctrlKey || event.shiftKey) return;
 
     const value = this.formatValue((event.target as HTMLInputElement).value, true);
     const type  = this.props.type ?? 'text';
@@ -200,7 +202,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
                   autoFocus = {this.props.autoFocus}
 
                   onChange  = {this.handleChange}
-                  onKeyDown = {this.handleKeyPress}
+                  onKeyDown = {this.handleKeyDown}
                   onBlur    = {this.handleBlur}
                   onFocus   = {this.props.onFocus}
 
@@ -234,7 +236,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
                   })}
 
                   onChange  = {this.handleChange}
-                  onKeyDown = {this.handleKeyPress}
+                  onKeyDown = {this.handleKeyDown}
                   onBlur    = {this.handleBlur}
                   onFocus   = {this.props.onFocus}
 

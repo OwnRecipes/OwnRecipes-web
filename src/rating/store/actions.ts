@@ -16,7 +16,7 @@ export const load = (recipeSlug: string) => (dispatch: RatingsDispatch) => {
       id: recipeSlug,
       payload: ReduxHelper.transformEntities(res.body.results, toRating),
     }))
-    .catch(err => handleError(err, RATINGS_STORE));
+    .catch(err => dispatch(handleError(err, RATINGS_STORE)));
 };
 
 export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: RatingCreate) => {
@@ -59,5 +59,5 @@ export const remove = (recipeSlug: string, id: number) => (dispatch: RatingDispa
         recipe:   recipeSlug,
       },
     }))
-    .catch(err => handleError(err, RATINGS_STORE));
+    .catch(err => dispatch(handleError(err, RATINGS_STORE)));
 };

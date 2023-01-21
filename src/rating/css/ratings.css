@@ -15,7 +15,7 @@
   font-size: 2rem;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 768px), print {
   .rating-stars .btn.rating {
     padding: 0;
   }

@@ -20,6 +20,7 @@ import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
 import RecipeFormImageRow from './RecipeFormImageRow';
 import IngredientGroupsBox, { ingredientsFormatter, ingredientsParser, subrecipesFormatter, subrecipesParser } from './IngredientGroupsBox';
 import DirectionBox from './DirectionBox';
+import { ValidationResult } from '../../common/store/Validation';
 
 export interface IRecipeFormProps {
   recipe: Recipe | undefined;
@@ -27,7 +28,7 @@ export interface IRecipeFormProps {
   location: string;
 
   fetchRecipeList: (searchTerm: string) => Promise<AutocompleteListItem[]>;
-  onSubmit: (form: Recipe) => void;
+  onSubmit: (form: Recipe) => Promise<ValidationResult>;
 }
 
 type RecipeFormatted = {

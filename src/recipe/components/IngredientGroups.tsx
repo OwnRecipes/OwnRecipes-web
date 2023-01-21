@@ -8,19 +8,20 @@ export interface IIngredientGroupsProps {
   groups: Array<IngredientGroup> | undefined;
   hasSubrecipes: boolean;
   withHeaderLink?: boolean;
-  // checkIngredient: (id: number, checked: boolean) => void;
+  selectable?: boolean;
 }
 
 const IngredientGroups: React.FC<IIngredientGroupsProps> = ({
-    groups, hasSubrecipes, withHeaderLink /* , checkIngredient */ }: IIngredientGroupsProps) => {
+    groups, hasSubrecipes, withHeaderLink, selectable }: IIngredientGroupsProps) => {
   const showCaptions = hasSubrecipes || (groups != null && groups.length > 1);
   const ingredientGroups = groups?.filter(group => group.title || group.ingredients.length > 0).map(group => (
-    <div className='subgroup ingredient-group' key={group.title}>
+    <div className='subgroup ingredient-group' key={group.slug || group.title}>
       <Ingredients
-          caption = {showCaptions && group.title ? group.title : undefined}
+          showCaptions = {showCaptions}
+          group = {group}
           withHeaderLink = {withHeaderLink}
           data = {group.ingredients}
-          // checkIngredient = {checkIngredient}
+          selectable = {selectable}
           />
     </div>
   ));

@@ -46,7 +46,13 @@ export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTi
           {this.getErrorMessage()}
           <Datetime
               value = {!this.props.timeFormat ? moment(this.state.value).format('ddd, ll') : moment(this.state.value).format('llll')}
-              inputProps = {{ name: this.props.name, className: 'form-control' }}
+              inputProps = {{
+                name:    this.props.name,
+                className: 'form-control',
+                onBlur:  this.props.onBlur,
+                onFocus: this.props.onFocus,
+                onKeyDown: this.props.onKeyDown,
+              }}
               dateFormat ={this.props.dateFormat || 'ddd, ll'}
               timeFormat ={this.props.timeFormat}
               onChange   = {this.handleChange} />

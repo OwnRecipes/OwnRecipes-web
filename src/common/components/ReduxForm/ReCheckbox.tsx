@@ -24,7 +24,7 @@ const ReCheckbox = forwardRef<Checkbox, IReCheckboxProps>(({
             required = {required}
 
             name     = {fprops.input.name}
-            value    = {fprops.input.value ?? false}
+            value    = {fprops.input.value}
             errors   = {formatValidation(intl, fprops.meta.error || (!fprops.meta.dirtySinceLastSubmit ? fprops.meta.submitError : undefined))}
             meta     = {fprops.meta}
             onChange = {(namee: string, value: boolean) => { fprops.input.onChange(value); onChange?.(namee, value); }}

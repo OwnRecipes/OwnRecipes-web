@@ -30,6 +30,7 @@ export interface IBaseInputComponentProps {
   onChange?: (name: string, newValue: any) => void;
   onBlur?:   (event: React.FocusEvent<HTMLElement, Element>) => void;
   onFocus?:  (event: React.FocusEvent<HTMLElement, Element>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
 }
 
 export type BaseLabelProps = {

@@ -110,7 +110,7 @@ export type GenericMapReducerAction<T>   = GenericGetStartAction | MapGetSuccess
 
 export default class ReduxHelper {
   static transformEntities<TDto, TEntity>(arr: Array<TDto>, toEntity: (dto: TDto) => TEntity): Array<TEntity> {
-    return arr.map(it => toEntity(it));
+    return arr.map(toEntity);
   }
 
   static getItemReducerDefaultState = <T>(ident: string): ItemReducerType<T> => {
@@ -373,7 +373,7 @@ export default class ReduxHelper {
 
             const updState = { ...state };
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const updItems = [...state.items].filter((item: any) => item.id === itemAction.payload);
+            const updItems = [...state.items].filter((item: any) => item.id !== itemAction.payload.id);
             if (updItems.length < state.items.length) {
               updState.items = updItems;
               return updState;
@@ -384,12 +384,20 @@ export default class ReduxHelper {
         case ACTION.UPDATE_SUCCESS:
           {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            if (itemAction.payload == null || (itemAction.payload as any).id == null) return state;
+            const itemId = (itemAction.payload as any)?.id;
+            if (itemId == null) return state;
 
             const updState = { ...state };
+            const updItems = state.items != null ? [...state.items] : [];
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const updItems = state.items != null ? [...state.items].filter((item: any) => item.id === itemAction.payload) : [];
-            updItems.push(itemAction.payload);
+            const oldIndex = updItems.findIndex(updItem => (updItem as any).id === itemId);
+            if (oldIndex > -1) {
+              updItems.splice(oldIndex, 1, itemAction.payload);
+            } else {
+              updItems.push(itemAction.payload);
+            }
+
             updState.items = updItems;
             return updState;
           }

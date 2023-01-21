@@ -1,0 +1,64 @@
+.grocery-list-title-bar {
+  display: flex;
+}
+
+.grocery-list-title-bar > h2 {
+  flex: 1;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+#grocery-header-option-menu::after {
+  display: none;
+}
+
+#grocery-header-option-menu-dropdown .nav-link {
+  color: var(--primaryText);
+}
+#grocery-header-option-menu-dropdown .nav-link:hover {
+  text-decoration: underline;
+}
+
+.change-grocery-list-title-form .title-group {
+  display: flex;
+}
+.change-grocery-list-title-form .title-group > .form-group {
+  flex: 1;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.change-grocery-list-title-form .title-group > button {
+  height: 100%;
+  padding: 0;
+}
+
+
+.grocery-list-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.grocery-list-summary p {
+  margin-bottom: 0;
+  padding-left: 10px;
+}
+
+.grocery-list-summary.filter-by-dropdown {
+  padding-right: 4px;
+}
+.grocery-list-summary #filter-by-button {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-color: var(--inputBorder);
+}
+@media screen and (min-width: 768px), print {
+  .grocery-list-summary #filter-by-button {
+    min-height: unset;
+  }
+}
+
+.grocery-list-summary #filter-by-button:hover, .grocery-list-summary #filter-by-button:focus {
+  border-color: var(--primaryMain);
+}

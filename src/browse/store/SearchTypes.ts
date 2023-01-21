@@ -17,7 +17,7 @@ export type SearchResult = {
 }
 
 export const toSearchResult = (dto: SearchResultDto): SearchResult => ({
-  recipes:      dto.results.map(recListDto => toRecipeList(recListDto)),
+  recipes:      dto.results.map(toRecipeList),
   totalRecipes: dto.count,
 });
 

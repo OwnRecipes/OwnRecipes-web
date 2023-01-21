@@ -33,7 +33,7 @@ const SearchReload: React.FC<ISearchReloadProps> = ({ onReloadClick }: ISearchRe
   });
 
   return (
-    <div className='search-reload reload-container'>
+    <div className='search-reload reload-container print-hidden'>
       <div className='search-reload modal-content'>
         <div className='search-reload-box'>
           <h2>{formatMessage(messages.search_nothing_found_yet_heading)}</h2>

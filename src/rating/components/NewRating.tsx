@@ -6,7 +6,7 @@ import { Field, Form as ReduxForm, FormSpy } from 'react-final-form';
 import { RatingCreate } from '../store/types';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import ReInput from '../../common/components/ReduxForm/ReInput';
-import { requiredValidator } from '../../common/store/Validation';
+import { requiredValidator, ValidationResult } from '../../common/store/Validation';
 import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
 import Ratings from './Ratings';
 
@@ -15,7 +15,7 @@ export interface INewRatingProps {
   recipeSlug: string;
   userId: number;
 
-  addRating: (recipeSlug: string, rating: RatingCreate) => void;
+  addRating: (recipeSlug: string, rating: RatingCreate) => Promise<ValidationResult>;
   onAddRatingSuccess: () => void;
 }
 

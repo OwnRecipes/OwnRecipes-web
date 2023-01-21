@@ -3,6 +3,37 @@ import { IntlShape } from 'react-intl';
 
 import env, { EnvType } from '../env';
 
+export function copyToClipboard(text: string): boolean {
+  // Code by Greg Lowe, https://stackoverflow.com/a/33928558
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const anyWindow: any = window;
+  if (anyWindow.clipboardData && anyWindow.clipboardData.setData) {
+    // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
+    return anyWindow.clipboardData.setData('Text', text);
+  } else  if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
+    const textarea = document.createElement('textarea');
+    textarea.textContent = text;
+    textarea.style.position = 'fixed';  // Prevent scrolling to bottom of page in Microsoft Edge.
+    document.body.appendChild(textarea);
+
+    textarea.select();
+    textarea.setSelectionRange(0, 99999);
+
+    try {
+      return document.execCommand('copy'); // Security exception may be thrown by some browsers.
+    } catch (ex) {
+      return false;
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
+
+  // eslint-disable-next-line no-console
+  console.error('Copy to clipboard failed. The browser does not support any of the implemented methods.');
+  return false;
+}
+
 export function isDemoMode(): boolean {
   return getEnvAsBoolean('REACT_APP_DEMO', false);
 }

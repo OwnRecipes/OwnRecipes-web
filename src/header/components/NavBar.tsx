@@ -11,20 +11,18 @@ import DynamicHeightContext from '../../common/context/DynamicHeightContext';
 import useWindowSize from '../../common/hooks/useWindowSize';
 import Icon from '../../common/components/Icon';
 import CreateRecipeMenuItem from './CreateRecipeMenuItem';
-// import GroceryListMenuItem, { ListItemType } from './GroceryListMenuItem';
-// import MenuMenuItem from './MenuMenuItem';
 import { AccountMenuMenuItem, AccountLoginMenuItem } from './MyAccountMenuItem';
 import { getEnvAsBoolean, getResourcePath, getRoutePath } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import LoginSettings from './LoginSettings';
+// import MenuMenuItem from './MenuMenuItem';
 import NavSearch from './NavSearch';
 import NavLink from './NavLink';
 
 export interface INavBarProps {
   account:  UserAccount | undefined;
   settings: Settings;
-  // lists:    Array<ListItemType> | undefined;
 
   locationPath: string;
 
@@ -52,6 +50,11 @@ const NavBar: React.FC<INavBarProps> = ({
       id: 'nav.randomRecipe',
       description: 'Random Recipe',
       defaultMessage: 'Random',
+    },
+    groceryLists: {
+      id: 'nav.groceryLists',
+      description: 'Grocery Lists',
+      defaultMessage: 'Groceries',
     },
   });
 
@@ -108,7 +111,7 @@ const NavBar: React.FC<INavBarProps> = ({
   return (
     <Navbar id='header-navbar' collapseOnSelect className='header' expand='md' fixed='top' ref={navbarRef}>
       <Container className={classNames({ 'search-expanded': isSearchExpanded })}>
-        <Navbar.Toggle><Icon icon='list' variant='light' size='2x' /></Navbar.Toggle>
+        <Navbar.Toggle className='print-hidden'><Icon icon='list' variant='light' size='2x' /></Navbar.Toggle>
         <Navbar.Brand>
           <Link to={getRoutePath('/home')} title={formatMessage(messages.home)}>
             <Image alt='Brand' src={getResourcePath('/images/chef.png')} width='30' height='30' className='d-inline-block align-top' />
@@ -139,7 +142,6 @@ const NavBar: React.FC<INavBarProps> = ({
             {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getRoutePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
             {/* isAuthenticated && <MenuMenuItem /> */}
             {isAuthenticated && isPrivilegedUser && <CreateRecipeMenuItem />}
-            {/* isAuthenticated && <GroceryListMenuItem data={props.lists} /> */}
           </Nav>
           {isScreenMdUp && (
             <div className='header-nav my-account-nav'>

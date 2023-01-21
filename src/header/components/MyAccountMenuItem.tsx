@@ -2,12 +2,13 @@ import { lazy, Suspense, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { NavDropdown, Button } from 'react-bootstrap';
 
-import { getEnv, getRoutePath } from '../../common/utility';
+import { getEnv, getRoutePath, isDemoMode } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import Icon from '../../common/components/Icon';
 import { LanguageCode } from '../../common/language';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
+import GroceryListMenuItem from './GroceryListMenuItem';
 
 const LanguageDialog = lazy(() => import('./LanguageDialog'));
 const ThemeDialog = lazy(() => import('./ThemeDialog'));
@@ -104,7 +105,10 @@ export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
             </>
           )}
           align = 'end'
+          className = 'header-dropdown my-account-dropdown'
           id='my-account-dropdown'>
+        {!isDemoMode() && <GroceryListMenuItem />}
+        <NavDropdown.Divider />
         <NavDropdown.Item onClick={handleChangeLanguageClick}>{`${formatMessage(messages.language)} …`}</NavDropdown.Item>
         <NavDropdown.Item onClick={handleChangeThemeClick}>{`${formatMessage(messages.theme)} …`}</NavDropdown.Item>
         <NavDropdown.Divider />

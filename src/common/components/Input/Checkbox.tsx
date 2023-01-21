@@ -68,6 +68,7 @@ export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
               name  = {this.props.name}
               checked = {this.props.value}
               label = {this.getLabel()}
+              className = 'form-check' // BUG: always set form-check
 
               required  = {this.props.required}
               readOnly  = {this.props.readOnly}
@@ -77,6 +78,7 @@ export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
               onChange  = {this.handleChange}
               onBlur    = {this.props.onBlur}
               onFocus   = {this.props.onFocus}
+              onKeyDown = {this.props.onKeyDown}
               ref = {this.ref} />
         </ConditionalWrapper>
       </Form.Group>

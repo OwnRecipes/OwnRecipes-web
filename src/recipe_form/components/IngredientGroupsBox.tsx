@@ -9,15 +9,16 @@ import '../css/smart_text_box.css';
 import IngredientGroups from '../../recipe/components/IngredientGroups';
 import formatQuantity from '../../recipe/utilts/formatQuantity';
 import parseIngredient from '../utilts/parseIngredient';
-import { Ingredient, IngredientGroup, IngredientInput, SubRecipe } from '../../recipe/store/RecipeTypes';
+import { Ingredient, IngredientGroup, IngredientInput, slugify, SubRecipe } from '../../recipe/store/RecipeTypes';
 import SubRecipes from '../../recipe/components/SubRecipes';
 import MeasurementContext from '../../common/context/MeasurementContext';
 import { formatValidation } from '../../common/store/Validation';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReTextareaAutocomplete from '../../common/components/ReduxForm/ReTextareaAutocomplete';
-import TabbedView from './TabbedView';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import { NEW_ITEM_URL_ID } from '../../common/constants';
+import TabbedView from './TabbedView';
 
 export interface IIngredientGroupsBoxProps {
   nameIg:   string;
@@ -58,12 +59,12 @@ export function ingredientsFormatter(intl: IntlShape, formatter: Record<string, 
 
 export function ingredientsParser(parser: Record<string, string>, value: string | undefined): Array<IngredientGroup> {
   if (!value) return [];
-  const dict = [{ title: '', ingredients: [] }];
+  const dict = [{ slug: 'default', title: '', ingredients: [] }];
   let igTitle = '';
   let ings: Array<IngredientInput> | undefined = dict.find(t => t.title === '')?.ingredients; // Should always exist, as it is the init group.
   if (ings == null) throw new Error('Invalid state: ings may not be null.');
   if (value) {
-    const tags = value.split('\n').map(line => normalizeLine(line)).filter(t => t.length > 0);
+    const tags = value.split('\n').map(normalizeLine).filter(t => t.length > 0);
     tags.forEach(line => {
       if (line.length > 0) {
         // Check if the line is an IG title
@@ -71,7 +72,7 @@ export function ingredientsParser(parser: Record<string, string>, value: string 
         // Else add ing to the current ig group
         if (line.endsWith(':') && line.length > 1) {
           igTitle = line.substring(0, line.length - 1);
-          dict.push({ title: igTitle, ingredients: [] });
+          dict.push({ slug: slugify(igTitle), title: igTitle, ingredients: [] });
           ings = dict.find(t => t.title === igTitle)?.ingredients; // Should always exist, as we just pushed it.
           if (ings == null) throw new Error('Invalid state: The create ings may not be null.');
         } else {
@@ -102,7 +103,7 @@ export function subrecipesFormatter(intl: IntlShape, formatter: Record<string, s
 export function subrecipesParser(parser: Record<string, string>, value: string | undefined): Array<SubRecipe> {
   if (!value) return [];
   const ings: Array<SubRecipe> = [];
-  const subRecipes = value.split('\n').map(line => normalizeLine(line)).filter(t => t.length > 1 && !t.startsWith(':'));
+  const subRecipes = value.split('\n').map(normalizeLine).filter(t => t.length > 1 && !t.startsWith(':'));
   subRecipes.forEach(sr => {
     if (sr.length > 0) {
       ings.push(parseIngredient(parser, sr) as SubRecipe);
@@ -159,7 +160,7 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
   const [activeTab, setActiveTab] = useState<string>('0');
 
   useEffect(() => {
-    if (location.pathname.endsWith('/create')) {
+    if (location.pathname.endsWith(`/${NEW_ITEM_URL_ID}`)) {
       setActiveTab('0');
     }
   }, [location.pathname]);
@@ -234,7 +235,7 @@ interface IIngredientsPreviewProps {
 
 const recurseIngredients = (igs: Array<IngredientGroup>, cb: (ingr: Ingredient) => Ingredient): Array<IngredientGroup> => igs.map(ig => ({
   ...ig,
-  ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
+  ingredients: ig.ingredients.map(cb),
 }));
 
 const IngredientsPreview: React.FC<IIngredientsPreviewProps> = ({ igData, srData }: IIngredientsPreviewProps) => {

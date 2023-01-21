@@ -186,7 +186,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
               buildUrl = {buildUrl} />
         </Accordion>
         {hasActiveFilter && (
-          <div className='row reset-search-row hidden-xs'>
+          <div className='row reset-search-row print-hidden hidden-xs'>
             <Link className='btn btn-outline-danger reset-search hidden-xs' to={resetFilterUrl}>
               {intl.formatMessage(messages.reset)}
             </Link>

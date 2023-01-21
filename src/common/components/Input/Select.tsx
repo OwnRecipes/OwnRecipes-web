@@ -45,7 +45,7 @@ export class Async extends BaseInputComponent {
 
 export type SelectDataType = { value: string, label: string };
 
-interface ISelectProps extends IBaseInputComponentProps {
+export interface ISelectProps extends IBaseInputComponentProps {
   value?: string;
   data?:  Array<SelectDataType>;
 
@@ -89,14 +89,19 @@ export class Select extends BaseInputComponent<ISelectProps> {
         <ConditionalWrapper
             condition = {this.props.tooltip != null}
             render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
-          {this.getLabel({ htmlFor: `${this.props.name}-input` })}
+          {this.getLabel()}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <SelectReact
-              name     = {this.props.name}
-              value    = {selectedOption}
-              options  = {this.props.data}
-              onChange = {this.handleChange}
+              name        = {this.props.name}
+              value       = {selectedOption}
+              options     = {this.props.data}
+              onChange    = {this.handleChange}
+              onBlur      = {this.props.onBlur}
+              onFocus     = {this.props.onFocus}
+              onKeyDown   = {this.props.onKeyDown}
+              className = 'react-select-container'
+              classNamePrefix = 'creatable-select'
               placeholder = ''
               ref = {this.ref} />
         </ConditionalWrapper>
@@ -222,6 +227,7 @@ export class CreatableSelect extends BaseInputComponent<ICreatableSelectProps, I
               onChange = {this.handleChange}
               onBlur   = {this.props.onBlur}
               onFocus  = {this.props.onFocus}
+              onKeyDown = {this.props.onKeyDown}
               isValidNewOption = {isValidNewOption}
               onCreateOption = {this.handleCreate}
               isClearable

@@ -15,7 +15,6 @@ export type IngredientInput = {
   title:        string;
 
   quantity?:    string;
-  checked?:     boolean;
 } & Partial<Quantity>;
 
 export type IngredientDto = {
@@ -27,7 +26,6 @@ export type Ingredient = {
   title:        string;
 
   quantity?:    string;
-  checked?:     boolean;
 } & Quantity;
 export const toIngredientDto = (obj: Ingredient): IngredientDto => ({
   id:    obj.id,
@@ -51,16 +49,21 @@ export type IngredientGroupDto = {
   ingredients: Array<IngredientDto>;
 }
 export type IngredientGroup = {
+  slug:        string;
   title:       string;
   ingredients: Array<Ingredient>;
 }
 export const toIngredientGroupDto = (obj: IngredientGroup): IngredientGroupDto => ({
   title:       obj.title,
-  ingredients: obj.ingredients.map(i => toIngredientDto(i)),
+  ingredients: obj.ingredients.map(toIngredientDto),
 });
+export function slugify(title: string): string {
+  return (title.replace(/ /g, '-').replace(/\./g, '') || 'default').toLocaleLowerCase();
+}
 export const toIngredientGroup = (dto: IngredientGroupDto): IngredientGroup => ({
+  slug:        slugify(dto.title),
   title:       dto.title,
-  ingredients: dto.ingredients.map(i => toIngredient(i)),
+  ingredients: dto.ingredients.map(toIngredient),
 });
 
 export type SubRecipeDto = {
@@ -80,7 +83,6 @@ export type SubRecipe = {
   measurement?: string;
 
   quantity?:   string;
-  checked?:    boolean;
 } & Quantity;
 export const toSubRecipeDto = (obj: SubRecipe): SubRecipeDto => ({
   title: obj.title,
@@ -259,13 +261,13 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
 
   course:  (dto.course == null || dto.course.title  === '-')  ? undefined : toCourse(dto.course),
   cuisine: (dto.cuisine == null || dto.cuisine.title === '-') ? undefined : toCuisine(dto.cuisine),
-  tags:    dto.tags.map(t => toTag(t)),
+  tags:    dto.tags.map(toTag),
 
   photo: dto.photo ?? undefined,
   photoThumbnail: dto.photo_thumbnail ?? undefined,
 
-  subrecipes: dto.subrecipes.map(sr => toSubRecipe(sr)),
-  ingredientGroups: dto.ingredient_groups.filter(ig => ig.title !== '-' && ig.ingredients.length > 0).map(ig => toIngredientGroup(ig)),
+  subrecipes: dto.subrecipes.map(toSubRecipe),
+  ingredientGroups: dto.ingredient_groups.filter(ig => ig.title !== '-' && ig.ingredients.length > 0).map(toIngredientGroup),
 
   directions: parseBackendString(dto.directions) ?? '',
   info: dto.info,
@@ -318,7 +320,7 @@ const toIngredientGroupsDto = (obj: Recipe): Array<IngredientGroupDto> => {
       return [];
     }
   } else {
-    return obj.ingredientGroups.filter(ig => ig.ingredients.length > 0).map(ig => toIngredientGroupDto(ig));
+    return obj.ingredientGroups.filter(ig => ig.ingredients.length > 0).map(toIngredientGroupDto);
   }
 };
 
@@ -339,7 +341,7 @@ export const toRecipeRequest = (obj: Recipe): RecipeRequest => ({
   course:     obj.course ? toCourseDto(obj.course) : {} as CourseDto,
   cuisine:    obj.cuisine ? toCuisineDto(obj.cuisine) : {} as CuisineDto,
 
-  subrecipes: obj.subrecipes?.map(sr => toSubRecipeDto(sr)) ?? [],
+  subrecipes: obj.subrecipes?.map(toSubRecipeDto) ?? [],
   ingredient_groups: toIngredientGroupsDto(obj),
   directions: ifNull(obj.directions, ''),
   info:       ifNull(obj.info, ''),
@@ -352,12 +354,7 @@ export const toRecipeRequest = (obj: Recipe): RecipeRequest => ({
 export enum RecipeActionTypes {
   RECIPE_DELETE = 'RECIPE_DELETE',
   RECIPE_INGREDIENT = 'RECIPE_INGREDIENT',
-  RECIPE_INGREDIENT_CHECK_INGREDIENT = 'RECIPE_INGREDIENT_CHECK_INGREDIENT',
-  RECIPE_INGREDIENT_CHECK_SUBRECIPE = 'RECIPE_INGREDIENT_CHECK_SUBRECIPE',
-  RECIPE_INGREDIENT_CHECK_ALL = 'RECIPE_INGREDIENT_CHECK_ALL',
-  RECIPE_INGREDIENT_UNCHECK_ALL = 'RECIPE_INGREDIENT_UNCHECK_ALL',
   RECIPE_INGREDIENT_SERVINGS_UPDATE = 'RECIPE_INGREDIENT_SERVINGS_UPDATE',
-  RECIPE_INGREDIENT_SERVINGS_RESET = 'RECIPE_INGREDIENT_SERVINGS_RESET',
   RECIPE_LIST_BLANK = 'RECIPE_LIST_BLANK',
   RECIPE_LIST_LOADING = 'RECIPE_LIST_LOADING',
   RECIPE_LIST_COMPLETE = 'RECIPE_LIST_COMPLETE',
@@ -369,7 +366,7 @@ export const RECIPE_STORE = '@@recipe';
 export type IRecipeSlugAction = {
   store: typeof RECIPE_STORE;
   typs:  typeof RecipeActionTypes.RECIPE_DELETE;
-} & PayloadAction<{ slug: string }>;
+} & PayloadAction<{ id: number }>;
 
 export type IRecipeIngredientUpdateServingAction = {
   store: typeof RECIPE_STORE;
@@ -379,34 +376,6 @@ export type IRecipeIngredientUpdateServingAction = {
   customServings: number;
 }>;
 
-export type IRecipeIngredientServingSimpleAction = {
-  store: typeof RECIPE_STORE;
-  typs: typeof RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_RESET
-      | typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_ALL
-      | typeof RecipeActionTypes.RECIPE_INGREDIENT_UNCHECK_ALL;
-} & PayloadAction<{
-  recipeSlug: string
-}>;
-
-export type IRecipeIngredientCheckIngredientAction = {
-  store: typeof RECIPE_STORE;
-  typs:  typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_INGREDIENT;
-} & PayloadAction<{
-  recipeSlug: string;
-  id:    number;
-  value: boolean;
-}>;
-
-export type IRecipeIngredientCheckSubRecipeAction = {
-  store: typeof RECIPE_STORE;
-  typs:  typeof RecipeActionTypes.RECIPE_INGREDIENT_CHECK_SUBRECIPE;
-} & PayloadAction<{
-  recipeSlug: string;
-  id:    number;
-  value: boolean;
-}>;
-
 export type RecipeState     = ItemReducerType<Recipe>;
-export type RecipeAction    = IRecipeSlugAction | IRecipeIngredientUpdateServingAction
-   | IRecipeIngredientServingSimpleAction | IRecipeIngredientCheckIngredientAction | IRecipeIngredientCheckSubRecipeAction | GenericItemReducerAction<Recipe>;
+export type RecipeAction    = IRecipeSlugAction | IRecipeIngredientUpdateServingAction | GenericItemReducerAction<Recipe>;
 export type RecipeDispatch  = ReduxDispatch<RecipeAction>;

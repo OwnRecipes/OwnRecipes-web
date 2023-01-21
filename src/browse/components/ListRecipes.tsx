@@ -31,7 +31,7 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipe
     const link = getRoutePath(`/recipe/${recipe.slug}`);
     return (
       <Col key={recipe.id}>
-        <Card className={classNames('recipe', 'print-hidden')}>
+        <Card className={classNames('recipe')}>
           <Link to={link} onClick={() => onOpenRecipe(recipe)}>
             <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' placeholder={IMAGE_PLACEHOLDER} />
             <Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'><Card.Title as='h3'>{recipe.title}</Card.Title></Tooltip>

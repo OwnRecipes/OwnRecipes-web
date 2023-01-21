@@ -66,7 +66,7 @@ const recipe = (state = defaultState, action: RecipeAction): RecipeState => {
             {
               ...toBasicAction(
                 RECIPE_SUBRECIPES_STORE,
-                RecipeSubrecipesReducerActionTypes.RECIPE_SUBRECIPES_SERVINGS_UPDATE
+                RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_UPDATE
               ),
               formatQuantity: fq.bind(this, updItem.servings, customServings),
             }
@@ -76,7 +76,7 @@ const recipe = (state = defaultState, action: RecipeAction): RecipeState => {
             {
               ...toBasicAction(
                 RECIPE_INGREDIENTS_STORE,
-                RecipeIngredientReducerActionTypes.RECIPE_INGREDIENTS_SERVINGS_UPDATE
+                RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_UPDATE
               ),
               formatQuantity: fq.bind(this, updItem.servings, customServings),
             }
@@ -90,24 +90,6 @@ const recipe = (state = defaultState, action: RecipeAction): RecipeState => {
 
           return ReduxHelper.setItem(state, updItem);
         }
-      /*
-      case RecipeActionTypes.RECIPE_INGREDIENT:
-      case RecipeActionTypes.RECIPE_INGREDIENT_CHECK_INGREDIENT:
-      case RecipeActionTypes.RECIPE_INGREDIENT_CHECK_SUBRECIPE:
-      case RecipeActionTypes.RECIPE_INGREDIENT_CHECK_ALL:
-      case RecipeActionTypes.RECIPE_INGREDIENT_UNCHECK_ALL:
-      case RecipeActionTypes.RECIPE_INGREDIENT_SERVINGS_RESET:
-        return state.items?.map(recipe => {
-          if (recipe.slug === action.payload.recipeSlug) {
-            return {
-              ...recipe,
-              subrecipes: subrecipes(recipe.subrecipes, action),
-              ingredient_groups: ingredient(recipe.ingredient_groups, action),
-            };
-          }
-          return recipe;
-        });
-        return state; */
       default: break;
     }
   }

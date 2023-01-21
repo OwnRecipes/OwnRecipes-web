@@ -5,13 +5,13 @@ import { BROWSER_SEARCH_STORE, SearchAction, SearchResult, SearchState } from '.
 
 const defaultState: SearchState = ReduxHelper.getMapReducerDefaultState<SearchResult>(BROWSER_SEARCH_STORE);
 
-function removeItem(state: SearchState, slug: string): SearchState {
+function removeItem(state: SearchState, id: number): SearchState {
   const upd = { ...state };
   const updItems = { ...upd.items };
 
   Object.keys(updItems).forEach(key => {
     const items = updItems[key];
-    const recipeIx = items.recipes.findIndex(r => r.slug === slug);
+    const recipeIx = items.recipes.findIndex(r => r.id === id);
     if (recipeIx !== -1) {
       items.recipes.splice(recipeIx, 1);
       items.totalRecipes -= 1;
@@ -35,7 +35,7 @@ const searchReducer = (state = defaultState, action: SearchAction): SearchState 
     const formAction: RecipeAction = action as RecipeAction;
     switch (formAction.typs) {
       case RecipeActionTypes.RECIPE_DELETE:
-        return removeItem(state, formAction.payload.slug);
+        return removeItem(state, formAction.payload.id);
       default: break;
     }
   }
