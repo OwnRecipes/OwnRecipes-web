@@ -13,12 +13,13 @@ function getResponseText(internalError: InternalError | undefined): string | und
   if (internalError == null || internalError.response == null) return undefined;
   const resp: string | undefined = _.get(internalError.response, 'text');
   if (resp == null) return undefined;
+  const respS: string = resp;
 
-  const ixBodyOpen  = resp.indexOf('<body>');
-  const ixBodyClose = resp.indexOf('</body>');
+  const ixBodyOpen  = respS.indexOf('<body>');
+  const ixBodyClose = respS.indexOf('</body>');
   if (ixBodyOpen === -1 || ixBodyClose === -1 || ixBodyClose < ixBodyOpen) return resp;
 
-  return resp.substring(ixBodyOpen + 6, ixBodyClose).trim();
+  return respS.substring(ixBodyOpen + 6, ixBodyClose).trim();
 }
 
 interface IInternalErrorDialogFCProps {
