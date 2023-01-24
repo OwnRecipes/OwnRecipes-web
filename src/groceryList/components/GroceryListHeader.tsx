@@ -61,6 +61,10 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
       id: 'grocery_list.header.delete_list_button',
       defaultMessage: 'Delete',
     },
+    back_to_lists: {
+      id: 'grocery_list.header.back_to_lists',
+      defaultMessage: 'To my grocery lists',
+    },
   });
 
   const location = useLocation();
@@ -141,7 +145,7 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
         <div className='grocery-list-title-bar' tabIndex={-1} ref={titleRef}>
           {list && !isNew && !editMode && (
             <>
-              <Tooltip id='to-grocery-lists' tooltip='To my grocery lists' placement='bottom'>
+              <Tooltip id='to-grocery-lists' tooltip={formatMessage(messages.back_to_lists)} placement='bottom'>
                 <NavButton variant='transparent' to={getRoutePath('/grocery-lists')} className='print-hidden'><Icon icon='caret-left' /></NavButton>
               </Tooltip>
               <h2>{list.title}</h2>

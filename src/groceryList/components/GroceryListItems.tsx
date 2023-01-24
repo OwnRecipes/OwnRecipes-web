@@ -51,9 +51,14 @@ const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
     },
   });
 
-  if (!list || isNew || items == null) return null;
+  const filteredItems = useMemo(() => filterListItems(items ?? [], filter), [filterListItems, items, filter]);
 
-  const filteredItems = useMemo(() => filterListItems(items, filter), [filterListItems, items, filter]);
+  const handleToggleItemsClick = useCallback(() => {
+    const allItemsCompleted = filteredItems.find(i => !i.completed) == null;
+    onToggleItems(filteredItems, !allItemsCompleted);
+  }, [onToggleItems, filteredItems]);
+
+  if (!list || isNew || items == null) return null;
 
   const itemsJsx: Array<React.ReactNode> = filteredItems.map(i => (
     <li key={`${i.listId}-${i.id}`}>
@@ -69,11 +74,6 @@ const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
 
   const hasUncheckedItem = items.find(i => !i.completed) != null;
   const numberOfHiddenItems = items.length - filteredItems.length;
-
-  const handleToggleItemsClick = useCallback(() => {
-    const allItemsCompleted = filteredItems.find(i => !i.completed) == null;
-    onToggleItems(filteredItems, !allItemsCompleted);
-  }, [onToggleItems, filteredItems]);
 
   return (
     <>
