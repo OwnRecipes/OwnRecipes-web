@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { defineMessages, useIntl } from 'react-intl';
@@ -30,8 +30,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
     qs, courses, cuisines, ratings, tags,
     hasActiveFilter, resetFilterUrl, openFilters, setOpenFilters,
     buildUrl }: ISearchMenuProps) => {
-  const intl = useIntl();
-
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     reset: {
       id: 'filter.reset',
@@ -107,30 +106,30 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setShowMenu(prev => !prev);
-  };
+  }, []);
 
   const mobileHeader = (
     <div className='sidebar-header'>
       <Button type='button' variant='transparent' className='filter-header' onClick={toggleMenu}>
-        {showMenu ? intl.formatMessage(messages.hide_filters) : intl.formatMessage(messages.show_filters)}
+        {showMenu ? formatMessage(messages.hide_filters) : formatMessage(messages.show_filters)}
         <Icon icon={showMenu ? 'chevron-up' : 'chevron-down'} variant='light' className={classNames({ 'reset-margin': hasActiveFilter })} />
       </Button>
       {hasActiveFilter && (
         <div className='filter-header-clear'>
           <Link className='clear-filter-mobile btn btn-transparent' to={resetFilterUrl}>
-            {intl.formatMessage(messages.reset)}
+            {formatMessage(messages.reset)}
           </Link>
         </div>
       )}
     </div>
   );
 
-  const handleSelect = (eventKey: string | string[] | null) => {
+  const handleSelect = useCallback((eventKey: string | string[] | null) => {
     const newOpenFilters: Array<string> = Array.isArray(eventKey) ? eventKey : [(eventKey ?? '')];
     setOpenFilters(newOpenFilters);
-  };
+  }, []);
 
   return (
     <Card>
@@ -138,9 +137,9 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
         {mobileHeader}
       </Card.Header>
       <Card.Header className='hidden-xs filter-title'>
-        {intl.formatMessage(messages.filters)}
+        {formatMessage(messages.filters)}
         {hasActiveFilter && (
-          <Tooltip id='clear-tooltip' tooltip={intl.formatMessage(messages.reset_filters)} placement='bottom'>
+          <Tooltip id='clear-tooltip' tooltip={formatMessage(messages.reset_filters)} placement='bottom'>
             <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl}>
               <Icon icon='arrow-counterclockwise' variant='light' />
             </Link>
@@ -150,35 +149,35 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
       <Card.Text as='div' className={classNames('sidebar', { 'hidden-xs': !showMenu })}>
         <Accordion activeKey={openFilters} flush alwaysOpen className='filter-group-list' onSelect={handleSelect as any}>
           <Filter
-              title    = {intl.formatMessage(messages.filter_course)}
+              title    = {formatMessage(messages.filter_course)}
               qsTitle  = 'course'
               data     = {courses}
               qs       = {qs}
               multiSelect
               buildUrl = {buildUrl} />
           <Filter
-              title    = {intl.formatMessage(messages.filter_cuisine)}
+              title    = {formatMessage(messages.filter_cuisine)}
               qsTitle  = 'cuisine'
               data     = {cuisines}
               qs       = {qs}
               multiSelect
               buildUrl = {buildUrl} />
           <Filter
-              title    = {intl.formatMessage(messages.filter_rating)}
+              title    = {formatMessage(messages.filter_rating)}
               qsTitle  = 'rating'
               data     = {ratings?.map(r => ({
                   id:     r.rating,
                   rating: r.rating,
                   total:  r.total,
                   slug:   String(r.rating),
-                  title:  intl.formatMessage(messages.x_stars, { rating: r.rating }),
+                  title:  formatMessage(messages.x_stars, { rating: r.rating }),
               }))}
               qs       = {qs}
               multiSelect
               buildUrl = {buildUrl}
               sort = 'off' />
           <Filter
-              title    = {intl.formatMessage(messages.filter_tag)}
+              title    = {formatMessage(messages.filter_tag)}
               qsTitle  = 'tag'
               data     = {tags}
               qs       = {qs}
@@ -188,7 +187,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
         {hasActiveFilter && (
           <div className='row reset-search-row print-hidden hidden-xs'>
             <Link className='btn btn-outline-danger reset-search hidden-xs' to={resetFilterUrl}>
-              {intl.formatMessage(messages.reset)}
+              {formatMessage(messages.reset)}
             </Link>
           </div>
         )}

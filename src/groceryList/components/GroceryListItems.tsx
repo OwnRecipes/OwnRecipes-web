@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/grocery_list_items.css';
@@ -39,8 +39,7 @@ export function filterListItems(items: Array<GroceryListItem>, filter: GROCERY_L
 
 const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
     list, isNew, items, filter, onAddItem, onToggleItem, onToggleItems, onUpdateItem, onDeleteItem }: IGroceryListItemsProps) => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     toggle_all: {
       id: 'grocery_list.items.toggle_all',
@@ -54,7 +53,7 @@ const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
 
   if (!list || isNew || items == null) return null;
 
-  const filteredItems = filterListItems(items, filter);
+  const filteredItems = useMemo(() => filterListItems(items, filter), [filterListItems, items, filter]);
 
   const itemsJsx: Array<React.ReactNode> = filteredItems.map(i => (
     <li key={`${i.listId}-${i.id}`}>
@@ -71,10 +70,10 @@ const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
   const hasUncheckedItem = items.find(i => !i.completed) != null;
   const numberOfHiddenItems = items.length - filteredItems.length;
 
-  const handleToggleItemsClick = () => {
+  const handleToggleItemsClick = useCallback(() => {
     const allItemsCompleted = filteredItems.find(i => !i.completed) == null;
     onToggleItems(filteredItems, !allItemsCompleted);
-  };
+  }, [onToggleItems, filteredItems]);
 
   return (
     <>

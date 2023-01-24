@@ -1,4 +1,4 @@
-import { Children, isValidElement, useState } from 'react';
+import { Children, isValidElement, useCallback, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import classNames from 'classnames';
 
@@ -20,8 +20,8 @@ const ImageViewer: React.FC<IImageViewerProps> = ({
     style, className, children }: IImageViewerProps) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const handleOpenModal  = () => { setOpenModal(true); };
-  const handleCloseModal = () => { setOpenModal(false); };
+  const handleOpenModal  = useCallback(() => { setOpenModal(true); }, []);
+  const handleCloseModal = useCallback(() => { setOpenModal(false); }, []);
 
   return (
     <ErrorBoundary verbose={false} printStack={false}>

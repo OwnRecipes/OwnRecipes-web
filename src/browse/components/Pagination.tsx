@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo } from 'react';
 import { Pagination as BootstraPagination } from 'react-bootstrap';
 
 import { PaginationLink } from '../../common/components/Pagination';
@@ -146,7 +146,7 @@ const PaginationNumbersList: React.FC<IPaginationNumbersListProps> = ({ offset, 
   const numOfPages = Math.ceil(count / limit);
   const currentPage = Math.ceil(offset / limit) + 1;
 
-  const pageList = generatePageList(currentPage, numOfPages);
+  const pageList = useMemo(() => generatePageList(currentPage, numOfPages), [currentPage, numOfPages]);
 
   const pageListJsx: Array<React.ReactNode> = pageList.map(p => (
     <PaginationLink title={String(p.index)} offset={limit * (p.index - 1)} key={String(p.index)} active={currentPage === p.index} buildUrl={buildUrl} className={p.role} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 
@@ -18,8 +18,7 @@ export interface IRatingCommentsProps {
 }
 
 const RatingComments: React.FC<IRatingCommentsProps> = ({ recipeSlug, ratings, userId, pending, removeRating }: IRatingCommentsProps) => {
-  const intl = useIntl();
-
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     no_comments: {
       id: 'rating_comments.no_comments',
@@ -28,7 +27,7 @@ const RatingComments: React.FC<IRatingCommentsProps> = ({ recipeSlug, ratings, u
     },
   });
 
-  const handleDeleteAccept = (ratingId: number) => removeRating(recipeSlug, ratingId);
+  const handleDeleteAccept = useCallback((ratingId: number) => removeRating(recipeSlug, ratingId), [removeRating, recipeSlug]);
 
   const ratingsList = ratings?.map(rating => (
     <RatingComment
@@ -37,14 +36,12 @@ const RatingComments: React.FC<IRatingCommentsProps> = ({ recipeSlug, ratings, u
         onDelete = {rating.userId === userId ? handleDeleteAccept : undefined} />
   )) ?? [];
 
-  const beTheFirst = (
-    <Row key='be-the-first'><Col><P className='placeholder'>{intl.formatMessage(messages.no_comments)}</P></Col></Row>
-  );
-
   return (
     <>
       {pending === PendingState.LOADING && <CircularProgress variant='three-bounce' />}
-      {ratingsList.length === 0 && beTheFirst}
+      {ratingsList.length === 0 && (
+        <Row key='be-the-first'><Col><P className='placeholder'>{formatMessage(messages.no_comments)}</P></Col></Row>
+      )}
       {ratingsList}
     </>
   );

@@ -1,5 +1,5 @@
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import React, { useContext, useEffect, useState } from 'react';
 
 import '../css/recipe_header.css';
 
@@ -112,18 +112,18 @@ const CookingModeHandler: React.FC = () => {
     }
   };
 
-  const handleStillActive = () => {
+  const handleStillActive = useCallback(() => {
     request()
       .then(() => {
         renewTimer();
       });
-  };
+  }, [request, renewTimer]);
 
-  const handleNotActiveAnymore = (autoClose: boolean) => {
+  const handleNotActiveAnymore = useCallback((autoClose: boolean) => {
     if (!autoClose) {
       cookingModeContext?.setCookingMode(false);
     }
-  };
+  }, [cookingModeContext?.setCookingMode]);
 
   return (
     <>

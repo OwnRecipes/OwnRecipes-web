@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button } from 'react-bootstrap';
 
@@ -22,8 +22,7 @@ export interface IGroceryListFooterProps {
 
 const GroceryListFooter: React.FC<IGroceryListFooterProps> = ({
     list, isNew, items, onClearCompleted, isClearPending, onCopyToClipboard }: IGroceryListFooterProps) => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     clear_completed_tooltip: {
       id: 'grocery_list.footer.clear_completed_tooltip',
@@ -41,13 +40,13 @@ const GroceryListFooter: React.FC<IGroceryListFooterProps> = ({
 
   const [showCopyToast, setShowCopyToast] = useState<boolean>(false);
 
-  const handleCopyToClipboard = () => {
+  const handleCopyToClipboard = useCallback(() => {
     onCopyToClipboard();
     setTimeout(() => {
       setShowCopyToast(true);
     }, 0);
-  };
-  const handleCloseCopyToast = () => { setShowCopyToast(false); };
+  }, [onCopyToClipboard]);
+  const handleCloseCopyToast = useCallback(() => { setShowCopyToast(false); }, []);
 
   if (!list || isNew) return null;
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Card } from 'react-bootstrap';
 
 import '../css/recipe-rating-wrapper.css';
@@ -25,9 +25,9 @@ export interface IRatingsWrapperProps {
 const RatingsWrapper: React.FC<IRatingsWrapperProps> = ({ recipeSlug, ratings, userId, userRole, pending, addRating, removeRating }: IRatingsWrapperProps) => {
   const [showNewRating, setShowNewRating] = useState<boolean>(false);
 
-  const handleAddRatingSuccess = () => {
+  const handleAddRatingSuccess = useCallback(() => {
     setShowNewRating(false);
-  };
+  }, []);
 
   return (
     <Card className='rating-panel' as='article'>

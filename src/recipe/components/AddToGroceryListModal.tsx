@@ -54,10 +54,10 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
 
   const submitRef = useRef<HTMLButtonElement>(null);
 
-  const handleEditSubmit = () => {
+  const handleEditSubmit = useCallback(() => {
     submitRef.current?.click();
-  };
-  const handleSubmit = async (form: AddToGroceryListData) => {
+  }, [submitRef.current]);
+  const handleSubmit = useCallback(async (form: AddToGroceryListData) => {
     const allIngredients = ingredients?.flatMap(ig => ig.ingredients) ?? [];
     const allSubrecipes  = subrecipes != null ? [...subrecipes] : [];
 
@@ -77,16 +77,16 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
     };
 
     return bulkAdd(form.list, bulkAddData);
-  };
-  const handleSubmitSuccess = () => {
+  }, [ingredients, subrecipes, bulkAdd]);
+  const handleSubmitSuccess = useCallback(() => {
     onSaveSuccess();
     onClose();
-  };
-  const handleModalClose = (autoClose: boolean) => {
+  }, [onSaveSuccess, onClose]);
+  const handleModalClose = useCallback((autoClose: boolean) => {
     if (!autoClose) {
       onClose();
     }
-  };
+  }, [onClose]);
 
   if (!show || lists == null || subrecipes == null || ingredients == null) return null;
 
@@ -158,7 +158,7 @@ const AddToGroceryListForm = forwardRef<HTMLFormElement, IAddToGroceryListProps>
   });
   // console.log(`initialValues=${JSON.stringify(initialValues, undefined, 2)}`);
 
-  const handleSubmit = async (form: IAddToGroceryListFormDataProps): Promise<ValidationResult> => {
+  const handleSubmit = useCallback(async (form: IAddToGroceryListFormDataProps): Promise<ValidationResult> => {
     /*
       form is something like:
 
@@ -203,7 +203,7 @@ const AddToGroceryListForm = forwardRef<HTMLFormElement, IAddToGroceryListProps>
       subrecipes:  uniquify(addSubrecipes),
     };
     return onSubmit(upd);
-  };
+  }, [ingredients, onSubmit]);
 
   return (
     <ReduxForm
@@ -276,7 +276,7 @@ const ListRow: React.FC<IListRowProps> = ({
   const [addedNewList, setAddedNewList] = useState<boolean>(false);
   const prevListIds = useRef<Array<number>>([]);
 
-  const handleAddListClick = () => {
+  const handleAddListClick = useCallback(() => {
     const newListTitle = `${formatMessage(messages.new_title)}`;
     const suffixes = lists
         .filter(l => l.title.startsWith(newListTitle))
@@ -290,7 +290,7 @@ const ListRow: React.FC<IListRowProps> = ({
         .then(() => {
           setAddedNewList(true);
         });
-  };
+  }, [lists, onAddList, formatMessage]);
 
   useEffect(() => {
     if (prevListIds.current.length === 0) return;
@@ -333,7 +333,7 @@ const ToggleAllCheckbox: React.FC<IToggleAllCheckboxProps> = ({
   const intl = useIntl();
   const [value, setValue] = useState<boolean>(true);
 
-  const handleChange = (_name: string, newValue: boolean) => {
+  const handleChange = useCallback((_name: string, newValue: boolean) => {
     setValue(newValue);
 
     const registeredFields = form.getRegisteredFields();
@@ -346,7 +346,7 @@ const ToggleAllCheckbox: React.FC<IToggleAllCheckboxProps> = ({
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       form.change(cbKey as any, newValue);
     });
-  };
+  }, [form]);
 
   return (
     <Checkbox

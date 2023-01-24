@@ -35,6 +35,7 @@ export function formatMeasurement(measurementsContext: IMeasurementContext, meas
 const Ingredients: React.FC<IIngredientsProps> = ({
     showCaptions, group, data, withHeaderLink, selectable }: IIngredientsProps) => {
   const intl = useIntl();
+  const { formatMessage } = intl;
   const messages = defineMessages({
     quantity: {
       id: 'ingredients.table.quantity',
@@ -96,8 +97,8 @@ const Ingredients: React.FC<IIngredientsProps> = ({
           {selectable && (
             <th><span>Selection</span></th>
           )}
-          <th><span>{intl.formatMessage(messages.quantity)}</span></th>
-          <th><span>{intl.formatMessage(messages.ingredient)}</span></th>
+          <th><span>{formatMessage(messages.quantity)}</span></th>
+          <th><span>{formatMessage(messages.ingredient)}</span></th>
         </tr>
       </thead>
       <tbody>

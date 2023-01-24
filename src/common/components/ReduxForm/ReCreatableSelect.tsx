@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { forwardRef } from 'react';
+import { forwardRef, useCallback } from 'react';
 import { Field } from 'react-final-form';
 import { useIntl } from 'react-intl';
 
@@ -17,13 +17,13 @@ const ReCreatableSelect = forwardRef<CreatableSelect, IReCreatableSelectProps>((
     onFocus, onBlur, ...rest }: IReCreatableSelectProps, ref) => {
   const intl = useIntl();
 
-  const formatValue = (value: Array<any> | any | undefined) => {
+  const formatValue = useCallback((value: Array<any> | any | undefined) => {
     if (value == null) {
       return isMulti ? [] : undefined;
     } else {
       return formatter(value);
     }
-  };
+  }, [formatter, isMulti]);
 
   return (
     <Field name={name} validate={required ? requiredValidator : undefined} validateFields={[]}>

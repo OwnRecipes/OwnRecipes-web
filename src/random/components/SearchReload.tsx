@@ -11,9 +11,7 @@ export interface ISearchReloadProps {
 }
 
 const SearchReload: React.FC<ISearchReloadProps> = ({ onReloadClick }: ISearchReloadProps) => {
-  const intl = useIntl();
-
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     search_nothing_found_yet_heading: {
       id: 'random.reload.heading',

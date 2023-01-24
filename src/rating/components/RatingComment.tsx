@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
@@ -22,11 +22,11 @@ interface IRatingTimestampProps {
 }
 
 const RatingTimestamp: React.FC<IRatingTimestampProps> = ({ rating }: IRatingTimestampProps) => {
-  const intl = useIntl();
+  const { locale } = useIntl();
   if (rating.updateDate && new Date(rating.updateDate).getTime() > 0) {
-    return <Link className='rating-timestamp' to={`#rating-${rating.id}`}>{new Date(rating.updateDate).toLocaleString(intl.locale)}</Link>;
+    return <Link className='rating-timestamp' to={`#rating-${rating.id}`}>{new Date(rating.updateDate).toLocaleString(locale)}</Link>;
   } else if (rating.pubDate && new Date(rating.pubDate).getTime() > 0) {
-    return <Link className='rating-timestamp' to={`#rating-${rating.id}`}>{new Date(rating.pubDate).toLocaleString(intl.locale)}</Link>;
+    return <Link className='rating-timestamp' to={`#rating-${rating.id}`}>{new Date(rating.pubDate).toLocaleString(locale)}</Link>;
   } else {
     return null;
   }
@@ -59,7 +59,6 @@ const RatingCommentComment: React.FC<IRatingCommentCommentProps> = ({ rating }: 
 const RatingComment: React.FC<IRatingCommentProps> = ({
     rating, onDelete }: IRatingCommentProps) => {
   const intl = useIntl();
-
   const messages = defineMessages({
     confirm_delete_message: {
       id: 'rating_comments.confirm_delete',
@@ -72,9 +71,9 @@ const RatingComment: React.FC<IRatingCommentProps> = ({
   const hashId = (hash ?? '').replace('#', '');
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<number | undefined>();
-  const handleDeleteClick  = (ratingId: number) => { setShowDeleteConfirm(ratingId); };
-  const handleDeleteAccept = () => { onDelete?.(showDeleteConfirm ?? 0); };
-  const handleDeleteClose  = () => { setShowDeleteConfirm(undefined); };
+  const handleDeleteClick  = useCallback((ratingId: number) => { setShowDeleteConfirm(ratingId); }, []);
+  const handleDeleteAccept = useCallback(() => { onDelete?.(showDeleteConfirm ?? 0); }, [showDeleteConfirm]);
+  const handleDeleteClose  = useCallback(() => { setShowDeleteConfirm(undefined); }, []);
 
   const ratingContainerId = `rating-${rating.id}`;
 

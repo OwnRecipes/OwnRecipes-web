@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import * as RecipeFormActions from '../store/actions';
@@ -28,21 +28,21 @@ const CuisineSelectContainer: React.FC<ICuisineSelectContainerProps> = ({
       ?.map(c => ({ value: c.title, label: optionallyFormatMessage(intl, 'cuisine.', c.title) }))
       .sort(sortByLabel), [cuisines, intl.locale]);
 
-  const parser = (newValue: string | undefined): Cuisine | undefined => {
+  const parser = useCallback((newValue: string | undefined): Cuisine | undefined => {
     if (newValue == null) {
       return undefined;
     } else {
       return cuisines?.find(c => c.title === newValue) ?? { title: newValue ?? '' } as Cuisine;
     }
-  };
+  }, [cuisines]);
 
-  const formatter = (value: Array<Cuisine> | Cuisine): Array<string> | string => {
+  const formatter = useCallback((value: Array<Cuisine> | Cuisine): Array<string> | string => {
     if (Array.isArray(value)) {
       return value.map(v => v.title);
     } else {
       return value.title;
     }
-  };
+  }, []);
 
   return (
     <ReCreatableSelect

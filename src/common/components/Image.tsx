@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface IImageProps {
   src: string;
@@ -19,12 +19,10 @@ const Image: React.FC<IImageProps> = ({
     setError(false);
   }, [src]);
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     setError(true);
-    if (onError) {
-      onError();
-    }
-  };
+    onError?.();
+  }, [onError]);
 
   return (
     <img

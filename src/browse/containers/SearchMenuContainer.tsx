@@ -53,13 +53,9 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
     }
   };
 
-  const handleChangeOpenFilters = (newOpenFilters: Array<string>) => {
-    setOpenFilters(newOpenFilters);
-  };
-
   useEffect(() => {
     reloadData();
-  }, [qsString, openFilters]);
+  }, [reloadData, qsString, openFilters]);
 
   const resetFilterUrl = useMemo(() => {
     if (!qs.search) {
@@ -83,7 +79,7 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
         hasActiveFilter = {hasActiveFilter}
         resetFilterUrl  = {resetFilterUrl}
         openFilters    = {openFilters}
-        setOpenFilters = {handleChangeOpenFilters}
+        setOpenFilters = {setOpenFilters}
 
         buildUrl = {buildUrl} />
   );

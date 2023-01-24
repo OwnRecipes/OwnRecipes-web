@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ListGroup } from 'react-bootstrap';
 
@@ -23,19 +24,17 @@ export const ThemeDialog: React.FC<IThemeDialogProps> = ({
     },
   });
 
-  const handleCloseClick = () => { onClose(); };
-
   return (
     <Modal
         show = {show}
         title = {formatMessage(messages.theme_modal_title)}
-        onClose = {handleCloseClick}
+        onClose = {onClose}
         size = 'sm'
         noCloseButton>
       <ThemeDialogContent
           settings = {settings}
           onChangeTheme = {onChangeTheme}
-          onClose = {handleCloseClick} />
+          onClose = {onClose} />
     </Modal>
   );
 };
@@ -68,10 +67,10 @@ const ThemeDialogContent: React.FC<IThemeDialogContentProps> = ({
     },
   });
 
-  const handleChangeTheme = (theme: ThemeMode) => {
+  const handleChangeTheme = useCallback((theme: ThemeMode) => {
     onChangeTheme(theme);
     onClose();
-  };
+  }, [onChangeTheme, onClose]);
 
   const themeButtons = Object.values(ThemeMode).map(t => (
     <ListGroup.Item key={t} action disabled={settings.themeMode === t} onClick={() => handleChangeTheme(t)}>{formatMessage(messages[`theme_mode_${t}`])}</ListGroup.Item>

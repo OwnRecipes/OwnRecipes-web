@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import * as _ from 'lodash-es';
@@ -16,9 +16,7 @@ interface IFormData {
 }
 
 const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarProps) => {
-  const intl = useIntl();
-
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     input_placeholder: {
       id: 'searchbar.placeholder',
@@ -43,17 +41,17 @@ const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarPro
     }
   }, [formData]);
 
-  const handleChange = (attr: string, val: string) => {
+  const handleChange = useCallback((attr: string, val: string) => {
     setFormData(prev => {
       const newState = _.cloneDeep(prev);
       _.set(newState, attr, val);
       return newState;
     });
-  };
+  }, []);
 
-  const handleClearInput = () => {
+  const handleClearInput = useCallback(() => {
     setFormData({ value: '' });
-  };
+  }, []);
 
   const clearInput = (
     <Button variant='secondary' className='search-clear' onClick={handleClearInput}>

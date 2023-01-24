@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Dropdown } from 'react-bootstrap';
 
@@ -17,7 +18,6 @@ export interface IGroceryListSummaryProps {
 const GroceryListSummary: React.FC<IGroceryListSummaryProps> = ({
     list, items, filter, onChangeFilter }: IGroceryListSummaryProps) => {
   const intl = useIntl();
-
   const { formatMessage } = intl;
   const messages = defineMessages({
     groceryList_items_summary_empty: {
@@ -59,13 +59,13 @@ const GroceryListSummary: React.FC<IGroceryListSummaryProps> = ({
   const completedCount = items?.filter(i => i.completed).length ?? 0;
   const incompletedCount = items?.filter(i => !i.completed).length ?? 0;
 
-  const handleFilterByClick = (event: React.MouseEvent<HTMLAnchorElement>, newFilter: GROCERY_LIST_FILTER) => {
+  const handleFilterByClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>, newFilter: GROCERY_LIST_FILTER) => {
     if (filter === newFilter) {
       event.preventDefault();
     } else {
       onChangeFilter(newFilter);
     }
-  };
+  }, [filter, onChangeFilter]);
 
   const dropdownItems = Object.values(GROCERY_LIST_FILTER).map(f => (
     <Dropdown.Item key={f} active={filter === f} onClick={(event: React.MouseEvent<HTMLAnchorElement>) => handleFilterByClick(event, f)}>

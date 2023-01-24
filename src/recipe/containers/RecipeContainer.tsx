@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import '../css/recipe.css';
@@ -33,17 +33,17 @@ const RecipeContainer: React.FC = () => {
   // const [showItemModal, setShowItemModal] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  const handlePreloadRecipe = () => {
+  const handlePreloadRecipe = useCallback(() => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
     dispatch(RecipeFormActions.preload(recipe));
-  };
+  }, [recipe, dispatch]);
 
   // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, [dispatch]);
   const deleteRecipe = useCallback(() => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
     setIsDeleting(true);
     dispatch(RecipeActions.deleteRecipe(recipe.id, recipe.slug));
-  }, [dispatch]);
+  }, [recipe, dispatch]);
 
   // Handle deletion
   useEffect(() => {

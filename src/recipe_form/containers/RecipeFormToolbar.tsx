@@ -1,13 +1,13 @@
-import React from 'react';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
+import { FormSpy } from 'react-final-form';
 
 import { CombinedStore } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import { getRoutePath, isDemoMode } from '../../common/utility';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
-import { FormSpy } from 'react-final-form';
 
 const RecipeFormToolbar: React.FC = () => {
   const intl = useIntl();
@@ -34,15 +34,15 @@ const RecipeFormToolbar: React.FC = () => {
 
   const recipeState = useSelector((state: CombinedStore) => state.recipeForm);
 
-  const preload = () => { if (recipeState.item) dispatch(RecipeActions.preload(recipeState.item)); };
+  const preload = useCallback(() => { if (recipeState.item) dispatch(RecipeActions.preload(recipeState.item)); }, [dispatch, recipeState.item]);
 
   const id = recipeState.item?.id;
   const isNew = id == null || id === 0;
 
   // eslint-disable-next-line arrow-body-style
-  const showViewButton = (pristine: boolean) => {
+  const showViewButton = useCallback((pristine: boolean) => {
     return !isNew && pristine;
-  };
+  }, [isNew]);
 
   return (
     <FormSpy subscription={{ pristine: true, submitting: true }}>

@@ -1,7 +1,6 @@
 // Coded by Gilad Peleg (https://github.com/pgilad/react-page-visibility)
 
-import React from 'react';
-
+import { Children, Component } from 'react';
 import { getHandlerArgs, isSupported, visibility } from './utils';
 
 export interface IPageVisibilityProps {
@@ -13,7 +12,7 @@ interface IPageVisibilityState {
   isSupported: boolean;
 }
 
-class PageVisibility extends React.Component<IPageVisibilityProps, IPageVisibilityState> {
+class PageVisibility extends Component<IPageVisibilityProps, IPageVisibilityState> {
   constructor(props: IPageVisibilityProps) {
     super(props);
 
@@ -65,7 +64,7 @@ class PageVisibility extends React.Component<IPageVisibilityProps, IPageVisibili
       return childrenFunc(...getHandlerArgs());
     }
 
-    return React.Children.only(this.props.children);
+    return Children.only(this.props.children);
   }
 }
 

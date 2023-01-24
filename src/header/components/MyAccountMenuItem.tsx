@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { NavDropdown, Button } from 'react-bootstrap';
 
@@ -79,20 +79,20 @@ export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
   const [showLanguageDialog, setShowLanguageDialog] = useState<boolean>(false);
   const [showThemeDialog, setShowThemeDialog] = useState<boolean>(false);
 
-  const handleChangeLanguageClick = () => { setShowLanguageDialog(true); };
-  const handleLanguageDialogClose = () => { setShowLanguageDialog(false); };
-  const handleChangeThemeClick    = () => { setShowThemeDialog(true); };
-  const handleThemeDialogClose    = () => { setShowThemeDialog(false); };
+  const handleChangeLanguageClick = useCallback(() => { setShowLanguageDialog(true); }, []);
+  const handleLanguageDialogClose = useCallback(() => { setShowLanguageDialog(false); }, []);
+  const handleChangeThemeClick    = useCallback(() => { setShowThemeDialog(true); }, []);
+  const handleThemeDialogClose    = useCallback(() => { setShowThemeDialog(false); }, []);
 
-  const handleChangeLanguage = (lang: LanguageCode) => {
+  const handleChangeLanguage = useCallback((lang: LanguageCode) => {
     handleLanguageDialogClose();
     onChangeLanguage(lang);
-  };
+  }, [handleLanguageDialogClose, onChangeLanguage]);
 
-  const handleChangeTheme = (theme: ThemeMode) => {
+  const handleChangeTheme = useCallback((theme: ThemeMode) => {
     handleThemeDialogClose();
     onChangeTheme(theme);
-  };
+  }, [handleThemeDialogClose, onChangeTheme]);
 
   return (
     <>

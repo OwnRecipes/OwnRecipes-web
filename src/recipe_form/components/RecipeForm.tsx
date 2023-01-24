@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';
@@ -106,11 +106,11 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
 
   const measurementsContext = useContext(MeasurementContext);
 
-  const handleSubmit = (form: RecipeFormatted) => onSubmit({
+  const handleSubmit = useCallback((form: RecipeFormatted) => onSubmit({
     ...form,
     ingredientGroups: ingredientsParser(measurementsContext.parser, form.ingredientGroupsS),
     subrecipes:        subrecipesParser(measurementsContext.parser, form.subrecipesS),
-  });
+  }), [measurementsContext.parser]);
 
   const initialValues: Partial<RecipeFormatted> | undefined = useMemo(() => {
     if (isNew && !recipe) {

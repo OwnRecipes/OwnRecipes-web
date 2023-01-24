@@ -4,6 +4,7 @@ import '../css/ratings.css';
 
 import Icon from '../../common/components/Icon';
 import ConditionalWrapper from '../../common/components/ConditionalWrapper';
+import { useCallback } from 'react';
 
 export interface IRatingsProps {
   stars: number;
@@ -17,11 +18,9 @@ interface IStarProps {
 }
 
 const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
-  const handleClick = () => {
-    if (onChange) {
-      onChange(num);
-    }
-  };
+  const handleClick = useCallback(() => {
+    onChange?.(num);
+  }, [onChange, num]);
 
   const isHalfFilled = stars > (num - 1) && stars < num;
   const icon = isHalfFilled ? 'star-half' : 'star';

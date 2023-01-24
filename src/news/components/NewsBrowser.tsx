@@ -1,4 +1,3 @@
-import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/news.css';
@@ -10,8 +9,7 @@ import MiniBrowse from '../../browse/containers/MiniBrowse';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
 
 const NewsBrowser: React.FC = () => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     recommendedRecipes: {
       id: 'nav.home.recommended_recipes_title',

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/form_errors.css';
@@ -63,8 +63,7 @@ interface IFormErrorsProps {
 }
 
 const FormErrors: React.FC<IFormErrorsProps> = ({ errors }: IFormErrorsProps) => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     form_errors_title: {
       id: 'status.form_errors_title',
@@ -140,8 +139,7 @@ interface ISubmitSuccessProps {
 }
 
 const SubmitSuccess: React.FC<ISubmitSuccessProps> = ({ dirty, submitting, errors, onSubmitSuccess }: ISubmitSuccessProps) => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     save_success: {
       id: 'status.save_success',
@@ -168,9 +166,9 @@ const SubmitSuccess: React.FC<ISubmitSuccessProps> = ({ dirty, submitting, error
     }
   }, [dirty]);
 
-  const handleCloseSaveSuccessToast = () => {
+  const handleCloseSaveSuccessToast = useCallback(() => {
     setShowSaveSuccess(false);
-  };
+  }, []);
 
   return (
     <Toast

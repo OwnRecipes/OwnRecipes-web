@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 import classNames from 'classnames';
@@ -16,12 +16,14 @@ import { CombinedStore } from '../../app/Store';
 import PageSpinner from '../../app/components/PageSpinner';
 
 const LoginPage: React.FC = () => {
-  const dispatch = useDispatch();
   const intl = useIntl();
+  const dispatch = useDispatch();
 
   const accountMeta = useSelector((state: CombinedStore) => state.account.meta);
 
-  const handleLogin = useCallback(async (username: string, password: string, remember: boolean) => AuthActions.getToken(dispatch, username, password, remember), [dispatch]);
+  const handleLogin = useCallback(async (username: string, password: string, remember: boolean) => (
+    AuthActions.getToken(dispatch, username, password, remember)
+  ), [dispatch]);
 
   return (
     <PageWrapper title={intl.messages['nav.login.title'] as string}>

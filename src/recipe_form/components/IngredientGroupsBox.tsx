@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
 import { FormSpy } from 'react-final-form';
@@ -167,7 +167,7 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
 
   const measurementsContext = useContext(MeasurementContext);
 
-  const checkErrorneous = (errors: ValidationErrors, touched: Record<string, boolean> | undefined) => {
+  const checkErrorneous = useCallback((errors: ValidationErrors, touched: Record<string, boolean> | undefined) => {
     if (touched?.[nameIg] === true && errors?.[nameIg] != null) {
       return formatValidation(intl, errors?.[nameIg]);
     } else if (touched?.[nameSub] && errors?.[nameSub] != null) {
@@ -175,7 +175,7 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
     } else {
       return undefined;
     }
-  };
+  }, [intl]);
 
   return (
     <FormSpy subscription={{ errors: true, touched: true, initialValues: true }}>

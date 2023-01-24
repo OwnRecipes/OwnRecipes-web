@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Dropdown, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -16,7 +17,6 @@ export interface ISearchMenuProps {
 
 const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines, buildUrl }: ISearchMenuProps) => {
   const intl = useIntl();
-
   const { formatMessage } = intl;
   const messages = defineMessages({
     filter_by_course: {
@@ -39,11 +39,11 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines,
   const filterAllText = formatMessage(messages.filter_all);
 
   const currentCourse = qs.course__slug ?? '';
-  const handleFilterCourseClick = (event: React.MouseEvent<HTMLAnchorElement>, filterCourse: string) => {
+  const handleFilterCourseClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>, filterCourse: string) => {
     if (currentCourse === filterCourse) {
       event.preventDefault();
     }
-  };
+  }, [currentCourse]);
   const courseDropdownItems = courses?.map(course => ({ key: course.title, value: optionallyFormatMessage(intl, 'course.', course.title) })).sort((a, b) => a.value.localeCompare(b.value));
   courseDropdownItems?.unshift({ key: '', value: filterAllText });
   const courseDropdownItemsJsx = courseDropdownItems?.map(item => (
@@ -53,11 +53,11 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines,
   ));
 
   const currentCuisine = qs.cuisine__slug ?? '';
-  const handleFilterCuisineClick = (event: React.MouseEvent<HTMLAnchorElement>, filterCuisine: string) => {
+  const handleFilterCuisineClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>, filterCuisine: string) => {
     if (currentCuisine === filterCuisine) {
       event.preventDefault();
     }
-  };
+  }, [currentCuisine]);
   const cuisineDropdownItems = cuisines?.map(cuisine => ({ key: cuisine.title, value: optionallyFormatMessage(intl, 'cuisine.', cuisine.title) })).sort((a, b) => a.value.localeCompare(b.value));
   cuisineDropdownItems?.unshift({ key: '', value: filterAllText });
   const cuisineDropdownItemsJsx = cuisineDropdownItems?.map(item => (

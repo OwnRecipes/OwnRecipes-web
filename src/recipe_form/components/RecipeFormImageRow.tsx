@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
@@ -33,17 +33,17 @@ const RecipeFormImageRow: React.FC = () => {
     setImageUrl(undefined);
   }, [key]);
 
-  const handleImageChange = (_name: string, newValue: File | undefined) => {
+  const handleImageChange = useCallback((_name: string, newValue: File | undefined) => {
     setImageUrl(newValue ? URL.createObjectURL(newValue) : '');
-  };
+  }, []);
 
-  const getDisplayImage = (recipePhoto: string | undefined) => {
+  const getDisplayImage = useCallback((recipePhoto: string | undefined) => {
     if (imageUrl != null) {
       return imageUrl.length > 0 ? imageUrl : getRecipeImagePlaceholder();
     } else {
       return getRecipeImage(recipePhoto || IMAGE_PLACEHOLDER);
     }
-  };
+  }, [imageUrl, IMAGE_PLACEHOLDER]);
 
   return (
     <>

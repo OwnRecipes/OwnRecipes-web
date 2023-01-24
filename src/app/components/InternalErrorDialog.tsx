@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 
 import { useSelector } from '../../common/store/redux';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
@@ -15,9 +15,7 @@ const InternalErrorDialog = () => {
     setOpen(internalError != null);
   }, [internalError]);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = useCallback(() => { setOpen(false); }, []);
 
   if (!open || !internalError) return null;
 

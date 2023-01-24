@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback } from 'react';
 import classNames from 'classnames';
 import { Tabs, Tab } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
@@ -23,9 +23,7 @@ const TabbedView: React.FC<ITabbedViewProps> = ({
     id, labels, errors, tooltips,
     initialTab, activeTab, onSelect,
     children } : ITabbedViewProps) => {
-  const intl = useIntl();
-
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     preview: {
       id: 'recipe.create.preview',
@@ -68,11 +66,11 @@ const TabbedView: React.FC<ITabbedViewProps> = ({
     </Tab>
   ));
 
-  const handleSelect = (selectedKey: string | null) => {
-    if (onSelect && selectedKey) {
-      onSelect(selectedKey);
+  const handleSelect = useCallback((selectedKey: string | null) => {
+    if (selectedKey) {
+      onSelect?.(selectedKey);
     }
-  };
+  }, [onSelect]);
 
   return (
     <div className='live-editor'>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button } from 'react-bootstrap';
 
@@ -14,7 +14,6 @@ export interface IGroceryListNewItemProps {
 const GroceryListNewItem: React.FC<IGroceryListNewItemProps> = ({
     onAddItem }: IGroceryListNewItemProps) => {
   const intl = useIntl();
-
   const { formatMessage } = intl;
   const messages = defineMessages({
     new_item_placeholder: {
@@ -27,30 +26,30 @@ const GroceryListNewItem: React.FC<IGroceryListNewItemProps> = ({
   const [newTitle, setNewTitle] = useState<string>('');
   const [error, setError] = useState<ValidationResult | undefined>();
 
-  const handleAddItem = (newTitlee: string) => {
+  const handleAddItem = useCallback(async (newTitlee: string) => {
     onAddItem({ title: newTitlee })
         .then(() => {
           setNewTitle('');
         })
         .catch((e: ValidationResult) => { setError(e); });
-  };
+  }, [onAddItem]);
 
-  const handleAddItemClick = () => {
+  const handleAddItemClick = useCallback(() => {
     handleAddItem(newTitle);
-  };
+  }, [handleAddItem, newTitle]);
 
-  const handleLabelChange = (_name: string, newValue: string) => {
+  const handleLabelChange = useCallback((_name: string, newValue: string) => {
     if (newValue !== newTitle) {
       setNewTitle(newValue);
     }
-  };
+  }, [newTitle]);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLElement>) => {
     if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return;
     if (event.key === 'Enter') {
       handleAddItem((event.currentTarget as HTMLInputElement).value);
     }
-  };
+  }, [handleAddItem]);
 
   return (
     <>

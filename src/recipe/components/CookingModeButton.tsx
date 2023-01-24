@@ -1,6 +1,6 @@
+import { useCallback, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import React, { useContext } from 'react';
 
 import '../css/recipe_header.css';
 
@@ -10,9 +10,7 @@ import CookingModeContext from '../context/CookingModeContext';
 import { useWakeLock } from '../../common/hooks/useWakeLock';
 
 const CookingModeButton: React.FC = () => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
-
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     activate_cooking_mode_tooltip: {
       id: 'recipe.activate_cooking_mode_tooltip',
@@ -30,9 +28,9 @@ const CookingModeButton: React.FC = () => {
   const cookingModeContext = useContext(CookingModeContext);
   const isCookingMode = cookingModeContext?.cookingMode ?? false;
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     cookingModeContext?.setCookingMode(!isCookingMode);
-  };
+  }, [cookingModeContext?.setCookingMode, isCookingMode]);
 
   if (!isSupported) return null;
 

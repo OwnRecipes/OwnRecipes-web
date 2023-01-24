@@ -34,10 +34,6 @@ function capitalize(str: string): string {
 }
 
 const Toast: React.FC<IToastProps> = ({ show, autoHide, variant, anchorOrigin, onClose, className, children }: IToastProps) => {
-  const handleClose = () => {
-    onClose?.();
-  };
-
   const autoHideD = autoHide ?? 6000;
   const anchorString = anchorOrigin != null ? `Toast-anchorOrigin${capitalize(anchorOrigin.vertical)}${capitalize(anchorOrigin.horizontal)}` : undefined;
 
@@ -49,7 +45,7 @@ const Toast: React.FC<IToastProps> = ({ show, autoHide, variant, anchorOrigin, o
         className = {classNames('simple-toast', className, anchorString, {
           success: variant === 'success',
         })}
-        onClose   = {handleClose}>
+        onClose   = {onClose}>
       <ReactBootstrapToast.Header closeButton={onClose != null}>
         <>
           {variant === 'success' && <div className='toast-icon'><Icon icon='check' variant='light' size='2x' /></div>}

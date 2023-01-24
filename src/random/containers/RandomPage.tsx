@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 
@@ -21,27 +21,27 @@ import SearchResults from '../../browse/containers/SearchResults';
 import { objToSearchString } from '../../common/utility';
 
 const RandomPage: React.FC = () => {
-  const dispatch = useDispatch();
   const intl = useIntl();
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
   const search   = useSelector((state: CombinedStore) => state.browse.search.items);
 
-  const qs = Object.fromEntries(searchParams);
-  const qsMergedDefaults = mergeDefaultFilters(DefaultFilters, qs);
-  const qsMergedString = objToSearchString(qsMergedDefaults);
+  const qs = useMemo(() => Object.fromEntries(searchParams), [searchParams]);
+  const qsMergedDefaults = useMemo(() => mergeDefaultFilters(DefaultFilters, qs), [DefaultFilters, qs]);
+  const qsMergedString = useMemo(() => objToSearchString(qsMergedDefaults), [qsMergedDefaults]);
 
-  const fetchCourses = useCallback(() => dispatch(RecipeGroupActions.fetchCourses()) , [dispatch, RecipeGroupActions]);
+  const fetchCourses = useCallback(() => { dispatch(RecipeGroupActions.fetchCourses()); }, [dispatch, RecipeGroupActions]);
   const courses  = useSelector((state: CombinedStore) => state.recipeGroups.courses.items);
-  useSingle(fetchCourses , courses);
+  useSingle(fetchCourses, courses);
 
-  const fetchCuisines = useCallback(() => dispatch(RecipeGroupActions.fetchCuisines()) , [dispatch, RecipeGroupActions]);
+  const fetchCuisines = useCallback(() => { dispatch(RecipeGroupActions.fetchCuisines()); }, [dispatch, RecipeGroupActions]);
   const cuisines  = useSelector((state: CombinedStore) => state.recipeGroups.cuisines.items);
-  useSingle(fetchCuisines , cuisines);
+  useSingle(fetchCuisines, cuisines);
 
-  const reloadData = () => {
+  const reloadData = useCallback(() => {
     dispatch(SearchActions.loadRandomRecipes(qsMergedDefaults));
-  };
+  }, [dispatch, qsMergedDefaults]);
 
   useEffect(() => {
     reloadData();
@@ -49,7 +49,7 @@ const RandomPage: React.FC = () => {
 
   const handleBuildUrl = useCallback((name: string, value: string, multiSelect = false) => (
     buildSearchUrl('random', qs, name, value, multiSelect)
-  ), [qs]);
+  ), [buildSearchUrl, qs]);
 
   const handleOpenRecipe = useCallback((rec: RecipeList) => {
     dispatch(RecipeActions.preload(rec));

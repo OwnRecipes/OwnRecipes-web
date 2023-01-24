@@ -19,9 +19,7 @@ export interface IRandomHeaderProps {
 const RandomHeader: React.FC<IRandomHeaderProps> = ({
     search, courses, cuisines, qs, qsString,
     buildUrl }: IRandomHeaderProps) => {
-  const intl = useIntl();
-
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     random_heading: {
       id: 'random.heading',

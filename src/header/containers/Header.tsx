@@ -1,13 +1,11 @@
-// import { useEffect } from 'react';
+import { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
 import NavBar from '../components/NavBar';
 import * as AuthActions from '../../account/store/actions';
-// import * as ListActions from '../../list/store/actions';
 import * as SettingsActions from '../../account/store/settings/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import { CombinedStore } from '../../app/Store';
-// import { ListItemType } from '../components/GroceryListMenuItem';
 import { ThemeMode } from '../../account/store/settings/types';
 import { LanguageCode } from '../../common/language';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
@@ -25,17 +23,17 @@ const HeaderContent: React.FC = () => {
   const accountState = useSelector((state: CombinedStore) => state.account);
   const settings = useSelector((state: CombinedStore) => state.settings);
 
-  const handleChangeLanguage = (language: LanguageCode) => {
+  const handleChangeLanguage = useCallback((language: LanguageCode) => {
     dispatch(SettingsActions.changeLanguage(language));
-  };
+  }, [dispatch]);
 
-  const handleChangeTheme = (mode: ThemeMode) => {
+  const handleChangeTheme = useCallback((mode: ThemeMode) => {
     dispatch(SettingsActions.changeThemeMode(mode));
-  };
+  }, [dispatch]);
 
-  const handleLogoutClick = () => {
+  const handleLogoutClick = useCallback(() => {
     dispatch(AuthActions.logUserOut());
-  };
+  }, [dispatch]);
 
   return (
     <NavBar

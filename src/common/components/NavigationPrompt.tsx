@@ -12,7 +12,6 @@ interface INavigationPromptProps {
 
 const NavigationPrompt: React.FC<INavigationPromptProps> = ({ isDirty }: INavigationPromptProps) => {
   const { formatMessage } = useIntl();
-
   const messages = defineMessages({
     navigation_warning: {
       id: 'navigationprompt.warning',

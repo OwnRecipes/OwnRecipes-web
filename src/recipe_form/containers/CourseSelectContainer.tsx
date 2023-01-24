@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
@@ -27,21 +27,21 @@ const CourseSelectContainer: React.FC<ICourseSelectContainerProps> = ({
       ?.map(c => ({ value: c.title, label: optionallyFormatMessage(intl, 'course.', c.title) }))
       .sort(sortByLabel), [courses, intl.locale]);
 
-  const parser = (newValue: string | undefined): Course | undefined => {
+  const parser = useCallback((newValue: string | undefined): Course | undefined => {
     if (newValue == null) {
       return undefined;
     } else {
       return courses?.find(c => c.title === newValue) ?? { title: newValue } as Course;
     }
-  };
+  }, [courses]);
 
-  const formatter = (value: Array<Course> | Course): Array<string> | string => {
+  const formatter = useCallback((value: Array<Course> | Course): Array<string> | string => {
     if (Array.isArray(value)) {
       return value.map(v => v.title);
     } else {
       return value.title;
     }
-  };
+  }, []);
 
   return (
     <ReCreatableSelect

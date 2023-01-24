@@ -8,7 +8,6 @@ import { getResourcePath } from '../../common/utility';
 
 const NotFoundPage = () => {
   const { formatMessage } = useIntl();
-
   const messages = defineMessages({
     not_found: {
       id: '404.title',

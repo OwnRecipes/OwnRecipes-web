@@ -24,8 +24,7 @@ export interface IGroceryListItemFCProps {
 const GroceryListItemFC: React.FC<IGroceryListItemFCProps> = ({
     item, className,
     onToggle, onUpdate, onDelete }: IGroceryListItemFCProps) => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     edit_button: {
       id: 'grocery_list.item.edit_button',
@@ -40,27 +39,27 @@ const GroceryListItemFC: React.FC<IGroceryListItemFCProps> = ({
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const submitRef = useRef<HTMLButtonElement>(null);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     onToggle(item.id, !item.completed);
-  };
+  }, [onToggle, item]);
 
-  const handleEditClick = () => {
+  const handleEditClick = useCallback(() => {
     setShowEdit(true);
-  };
-  const handleEditClose = (autoClose?: boolean) => {
+  }, []);
+  const handleEditClose = useCallback((autoClose?: boolean) => {
     if (autoClose) return;
     setShowEdit(false);
-  };
-  const handleEditSubmit = () => {
+  }, []);
+  const handleEditSubmit = useCallback(() => {
     submitRef.current?.click();
-  };
+  }, [submitRef.current]);
   const handleEditItem = useCallback(async (upd: GroceryListItemUpdate) => (
     onUpdate(item.id, upd)
-  ), [item.id]);
+  ), [onUpdate, item.id]);
 
-  const handleDeleteItem = () => {
+  const handleDeleteItem = useCallback(() => {
     onDelete(item.id);
-  };
+  }, [onDelete, item.id]);
 
   return (
     <div className={classNames('grocery-list-item', className)}>
@@ -125,13 +124,13 @@ const EditItemForm = forwardRef<HTMLFormElement, IEditItemFormProps>(({
 
   const [initialValues] = useState<Partial<IEditItemFormDataProps>>({ oldTitle: item.title, newTitle: item.title });
 
-  const handleSubmit = async (form: IEditItemFormDataProps) => {
+  const handleSubmit = useCallback(async (form: IEditItemFormDataProps) => {
     if (item.title === form.newTitle) return null;
     const upd: GroceryListItemUpdate = {
       title: form.newTitle,
     };
     return onSubmit(upd);
-  };
+  }, [item.title, onSubmit]);
 
   // if (!show) return null;
 

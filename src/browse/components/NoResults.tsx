@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import P from '../../common/components/P';
 
 const NoResults: React.FC = () => {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     no_results: {
       id: 'browse.no_results',
@@ -13,7 +13,7 @@ const NoResults: React.FC = () => {
   });
 
   return (
-    <P className='no-results placeholder'>{intl.formatMessage(messages.no_results)}</P>
+    <P className='no-results placeholder'>{formatMessage(messages.no_results)}</P>
   );
 };
 

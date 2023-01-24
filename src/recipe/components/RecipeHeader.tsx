@@ -1,8 +1,7 @@
-/* eslint-disable camelcase */
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import React, { useState } from 'react';
 
 import '../css/recipe_header.css';
 
@@ -32,7 +31,6 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     recipe, userIsAuthor, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-
   const messages = defineMessages({
     edit_tooltip: {
       id: 'recipe.edit_tooltip',
@@ -101,11 +99,11 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     },
   });
 
-  const handleEditClick    = () => { onEditRecipe(); };
+  const handleEditClick    = useCallback(() => { onEditRecipe(); }, [onEditRecipe]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
-  const handleDeleteClick  = () => { setShowDeleteConfirm(true); };
-  const handleDeleteAccept = () => { deleteRecipe(); };
-  const handleDeleteClose  = () => { setShowDeleteConfirm(false); };
+  const handleDeleteClick  = useCallback(() => { setShowDeleteConfirm(true); }, []);
+  const handleDeleteAccept = useCallback(() => { deleteRecipe(); }, [deleteRecipe]);
+  const handleDeleteClose  = useCallback(() => { setShowDeleteConfirm(false); }, []);
 
   const editLink = userIsAuthor ? (
     <Tooltip id='edit tooltip' tooltip={formatMessage(messages.edit_tooltip)}>

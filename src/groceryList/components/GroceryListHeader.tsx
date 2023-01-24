@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { defineMessages, useIntl } from 'react-intl';
 import { Form as ReduxForm, FormSpy } from 'react-final-form';
@@ -74,9 +74,11 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
   const [editMode, setEditMode] = useState<boolean>(isNew);
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
-  const handleDeleteClick  = () => { setShowDeleteConfirm(true); };
-  const handleDeleteAccept = () => { onRemove(); };
-  const handleDeleteClose  = () => { setShowDeleteConfirm(false); };
+  const handleDeleteClick  = useCallback(() => { setShowDeleteConfirm(true); }, []);
+  const handleDeleteAccept = useCallback(() => { onRemove(); }, [onRemove]);
+  const handleDeleteClose  = useCallback(() => { setShowDeleteConfirm(false); }, []);
+
+  const listSlug = list?.slug;
 
   useEffect(() => {
     if (editMode !== isNew) {
@@ -87,7 +89,7 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
     }
   }, [isNew, list]);
 
-  const handleEditClick = () => {
+  const handleEditClick = useCallback(() => {
     setEditMode(true);
     if (inputRef != null && inputRef.current != null) {
       setTimeout(() => {
@@ -95,13 +97,13 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
         (inputRef.current as any).focus();
       }, 1);
     }
-  };
+  }, [inputRef?.current]);
 
-  const handleRevertClick = () => {
+  const handleRevertClick = useCallback(() => {
     setEditMode(false);
-  };
+  }, []);
 
-  const handleSubmit = async (form: FormDataProps) => {
+  const handleSubmit = useCallback(async (form: FormDataProps) => {
     if (isNew) {
       const createList: GroceryListCreate = {
         title: form.title,
@@ -113,10 +115,10 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
       };
       return onUpdate(updList);
     }
-  };
-  const handleSubmitSuccess = () => {
+  }, [isNew, onCreate, onUpdate]);
+  const handleSubmitSuccess = useCallback(() => {
     if (isNew) {
-      nav(`${parentPagePath}/${list?.slug}`);
+      nav(`${parentPagePath}/${listSlug}`);
     }
 
     setEditMode(false);
@@ -126,7 +128,7 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
         (titleRef.current as any).focus();
       }, 1);
     }
-  };
+  }, [isNew, parentPagePath, listSlug, titleRef?.current]);
 
   const initialValues: Partial<FormDataProps> = useMemo(() => (list ? { title: list.title } : {}), [list]);
 

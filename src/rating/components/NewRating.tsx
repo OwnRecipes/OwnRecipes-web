@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import { Field, Form as ReduxForm, FormSpy } from 'react-final-form';
@@ -61,14 +61,14 @@ const NewRating: React.FC<INewRatingProps> = ({ show, recipeSlug, userId, addRat
 
   const [initialValues] = useState<Partial<IFormDataProps>>({ rating: 0, comment: '' });
 
-  const handleSubmit = async (form: IFormDataProps) => {
+  const handleSubmit = useCallback(async (form: IFormDataProps) => {
     const newRating: RatingCreate = {
       rating:     form.rating,
       comment:    form.comment,
       userId:     userId,
     };
     return addRating(recipeSlug, newRating);
-  };
+  }, [recipeSlug, userId, addRating]);
 
   if (!show) return null;
 

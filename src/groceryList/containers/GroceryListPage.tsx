@@ -12,7 +12,7 @@ import GroceryListContainer from './GroceryListContainer';
 import { defineMessages, useIntl } from 'react-intl';
 
 const GroceryListPage: React.FC = () => {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     new_grocery_list: {
       id: 'grocery_list.new_grocery_list',
@@ -72,7 +72,7 @@ const GroceryListPage: React.FC = () => {
   }, []);
 
   return (
-    <PageWrapper title={isNew ? intl.formatMessage(messages.new_grocery_list) : groceryListState.item?.title}>
+    <PageWrapper title={isNew ? formatMessage(messages.new_grocery_list) : groceryListState.item?.title}>
       <GroceryListContainer isNew={isNew} />
     </PageWrapper>
   );

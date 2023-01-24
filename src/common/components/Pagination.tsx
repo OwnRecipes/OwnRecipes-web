@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
@@ -13,11 +14,11 @@ export interface IPaginationLinkProps {
 }
 
 export const PaginationLink: React.FC<IPaginationLinkProps> = ({ title, offset, active, buildUrl, disabled, className }: IPaginationLinkProps) => {
-  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
     if (active || disabled) {
       event.preventDefault();
     }
-  };
+  }, [active, disabled]);
 
   return (
     <li className={classNames('page-item', className, { active: active, disabled: disabled })}>

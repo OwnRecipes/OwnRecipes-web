@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button, Modal as BootstrapModal } from 'react-bootstrap';
 
@@ -56,20 +57,14 @@ const Modal: React.FC<IModalProps> = ({
     },
   });
 
-  const handleClose = () => {
-    if (onClose) {
-      onClose(false);
-    }
-  };
+  const handleClose = useCallback(() => {
+    onClose?.(false);
+  }, [onClose]);
 
-  const handleAccept = () => {
-    if (onClose) {
-      onClose(true);
-    }
-    if (onAccept) {
-      onAccept();
-    }
-  };
+  const handleAccept = useCallback(() => {
+    onClose?.(true);
+    onAccept?.();
+  }, [onClose, onAccept]);
 
   const hasButton = onAccept != null || (onClose != null && !noCloseButton);
 

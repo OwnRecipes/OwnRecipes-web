@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -13,9 +14,12 @@ export interface ISearchSummaryProps {
   buildUrl: (qsTitle: string, recipeSlug: string, multiSelect?: boolean) => string;
 }
 
+function toSortSlug(sort: string): string {
+  return sort.startsWith('-') ? sort.substring(1) : sort;
+}
+
 const SearchSummary: React.FC<ISearchSummaryProps> = ({ search, qs, buildUrl }: ISearchSummaryProps) => {
   const intl = useIntl();
-
   const { formatMessage } = intl;
   const messages = defineMessages({
     search_summary_results: {
@@ -48,21 +52,17 @@ const SearchSummary: React.FC<ISearchSummaryProps> = ({ search, qs, buildUrl }: 
     },
   });
 
-  const toSortSlug = (sort: string): string => (
-    sort.startsWith('-') ? sort.substring(1) : sort
-  );
-
   const resultsCountD: number | undefined = search?.totalRecipes ?? 0;
   const offset: number = toNumberDefault(qs.offset, 0);
   const limit: number  = toNumberDefault(qs.limit, DefaultFilters.limit ?? 12);
   const withPagination = search != null && search.totalRecipes > limit;
   const currentSort    = qs.ordering != null ? toSortSlug(qs.ordering) : toSortSlug('-pub_date');
 
-  const handleSortByClick = (event: React.MouseEvent<HTMLAnchorElement>, sortSlug: string) => {
+  const handleSortByClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>, sortSlug: string) => {
     if (currentSort === sortSlug) {
       event.preventDefault();
     }
-  };
+  }, [currentSort]);
 
   const dropdownItems = ['title', '-pub_date', '-rating'].map(sort => {
     const sortSlug = toSortSlug(sort);

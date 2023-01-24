@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button } from 'react-bootstrap';
@@ -44,21 +44,21 @@ const MiniBrowse: React.FC<IMiniBrowseProps> = ({ heading, count, filters }: IMi
 
   const miniBrowseItems = useSelector((state: CombinedStore) => state.browse.miniBrowse.items);
   const differentMiniBrowseItems = useMemo(() => miniBrowseItems?.filter(itm => itm.slug !== slug), [slug, miniBrowseItems]);
+  const recipeSlug = params.recipe ?? '';
 
   useEffect(() => {
     dispatch(MiniBrowseActions.loadMiniBrowse(buildUrlFilter(count, filters)));
   }, [location]);
 
-  const handleShuffleClick = () => {
+  const handleShuffleClick = useCallback(() => {
     dispatch(MiniBrowseActions.loadMiniBrowse(buildUrlFilter(count, filters)));
-  };
+  }, [dispatch, buildUrlFilter, count, filters]);
 
-  const handleOpenRecipe = (rec: RecipeList) => {
-    const recipeSlug = params.recipe ?? '';
+  const handleOpenRecipe = useCallback((rec: RecipeList) => {
     if (recipeSlug !== rec.slug) {
       dispatch(RecipeActions.preload(rec as Recipe));
     }
-  };
+  }, [recipeSlug, dispatch]);
 
   if (differentMiniBrowseItems != null && differentMiniBrowseItems.length === 0) return null;
 

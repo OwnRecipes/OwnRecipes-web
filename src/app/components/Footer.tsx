@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import { Button, Container, NavLink } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -45,8 +45,8 @@ const FooterContent: React.FC = () => {
 
   const [openAbout, setOpenAbout] = useState<boolean>(false);
 
-  const handleOpenAboutClick  = () => { setOpenAbout(true); };
-  const handleCloseAbout = () => { setOpenAbout(false); };
+  const handleOpenAboutClick  = useCallback(() => { setOpenAbout(true); }, []);
+  const handleCloseAbout = useCallback(() => { setOpenAbout(false); }, []);
 
   return (
     <>

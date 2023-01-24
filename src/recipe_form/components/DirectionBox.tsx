@@ -1,5 +1,5 @@
+import { useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FormSpy } from 'react-final-form';
 import { defineMessages, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';

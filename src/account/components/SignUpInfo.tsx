@@ -4,7 +4,6 @@ import P from '../../common/components/P';
 
 const SignUpInfo: React.FC = () => {
   const { formatMessage } = useIntl();
-
   const messages = defineMessages({
     sign_up_info: {
       id: 'login.sign_up_info',

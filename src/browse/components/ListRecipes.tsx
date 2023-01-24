@@ -15,17 +15,17 @@ export interface IListRecipes {
   onOpenRecipe: (rec: RecipeList) => void;
 }
 
+function getRecipeImage(recipe: RecipeList) {
+  if (recipe.photoThumbnail) {
+    return recipe.photoThumbnail;
+  } else {
+    const images = ['fish', 'fried-eggs', 'pizza', 'soup', 'steak'];
+    return getResourcePath(`/images/${images[Math.floor(Math.random() * images.length)]}.jpg`);
+  }
+}
+
 const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipes) => {
   const IMAGE_PLACEHOLDER = useMemo(() => getRecipeImagePlaceholder(), []);
-
-  const getRecipeImage = (recipe: RecipeList) => {
-    if (recipe.photoThumbnail) {
-      return recipe.photoThumbnail;
-    } else {
-      const images = ['fish', 'fried-eggs', 'pizza', 'soup', 'steak'];
-      return getResourcePath(`/images/${images[Math.floor(Math.random() * images.length)]}.jpg`);
-    }
-  };
 
   const recipes = data?.map(recipe => {
     const link = getRoutePath(`/recipe/${recipe.slug}`);

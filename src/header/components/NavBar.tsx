@@ -1,5 +1,5 @@
+import { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Image, Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
@@ -79,7 +79,7 @@ const NavBar: React.FC<INavBarProps> = ({
     setIsScreenMdUp(window.matchMedia('(min-width: 768px)').matches);
   }, []);
   const [isSearchExpanded, setIsSearchExpanded] = useState<boolean>(false);
-  const handleExpandSearch = (expanded: boolean) => { setIsSearchExpanded(expanded); };
+  const handleExpandSearch = useCallback((expanded: boolean) => { setIsSearchExpanded(expanded); }, []);
 
   const isAuthenticated = account != null && account.id !== 0;
   const isPrivilegedUser = account != null && ['user', 'staff', 'admin'].includes(account.role);

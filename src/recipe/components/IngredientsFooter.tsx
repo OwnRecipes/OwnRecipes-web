@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -35,18 +35,20 @@ const IngredientsFooter: React.FC<IIngredientsFooterProps> = ({
   });
 
   const [showGroceriesModal, setShowGroceriesModal] = useState<boolean>(false);
-  const handleAddGroceries = () => {
+  const handleAddGroceries = useCallback(() => {
     setShowGroceriesModal(true);
-  };
-  const handleGroceriesModalClose = () => {
+  }, []);
+  const handleGroceriesModalClose = useCallback(() => {
     setShowGroceriesModal(false);
-  };
+  }, []);
 
   const [showGroceriesSuccessToast, setShowGroceriesSuccessToast] = useState<boolean>(false);
-  const handleAddToGroceryListSuccess = () => {
+  const handleAddToGroceryListSuccess = useCallback(() => {
     setShowGroceriesSuccessToast(true);
-  };
-  const handleCloseAddGroceryListToast = () => { setShowGroceriesSuccessToast(false); };
+  }, []);
+  const handleCloseAddGroceryListToast = useCallback(() => {
+    setShowGroceriesSuccessToast(false);
+  }, []);
 
   return (
     <div className='ingredients-footer'>

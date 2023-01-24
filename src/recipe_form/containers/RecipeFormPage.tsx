@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -11,7 +11,7 @@ import PageWrapper from '../../common/components/PageWrapper';
 import EditGuard from '../components/EditGuard';
 
 const RecipeFormPage: React.FC = () => {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     new_recipe: {
       id: 'recipe_form.new_recipe',
@@ -49,7 +49,7 @@ const RecipeFormPage: React.FC = () => {
   }, []);
 
   return (
-    <PageWrapper title={isNew ? intl.formatMessage(messages.new_recipe) : recipe?.title}>
+    <PageWrapper title={isNew ? formatMessage(messages.new_recipe) : recipe?.title}>
       <EditGuard />
       <RecipeForm
           recipe = {recipe}

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 import classNames from 'classnames';
 

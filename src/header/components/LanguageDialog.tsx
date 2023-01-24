@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ListGroup } from 'react-bootstrap';
 
@@ -23,19 +24,17 @@ export const LanguageDialog: React.FC<ILanguageDialogProps> = ({
     },
   });
 
-  const handleCloseClick = () => { onClose(); };
-
   return (
     <Modal
         show = {show}
         title = {formatMessage(messages.language_modal_title)}
-        onClose = {handleCloseClick}
+        onClose = {onClose}
         size = 'sm'
         noCloseButton>
       <LanguageDialogContent
           settings = {settings}
           onChangeLanguage = {onChangeLanguage}
-          onClose = {handleCloseClick} />
+          onClose = {onClose} />
     </Modal>
   );
 };
@@ -48,10 +47,10 @@ interface ILanguageDialogContentProps {
 
 const LanguageDialogContent: React.FC<ILanguageDialogContentProps> = ({
     settings, onChangeLanguage, onClose }: ILanguageDialogContentProps) => {
-  const handleChangeLanguage = (lang: LanguageCode) => {
+  const handleChangeLanguage = useCallback((lang: LanguageCode) => {
     onChangeLanguage(lang);
     onClose();
-  };
+  }, [onChangeLanguage, onClose]);
 
   const languageButtons = Object.values(LanguageCode).map(l => (
     <ListGroup.Item key={l} action disabled={settings.language === l} onClick={() => handleChangeLanguage(l)}>{getMessagesFromLang(l)['1.display_name']}</ListGroup.Item>

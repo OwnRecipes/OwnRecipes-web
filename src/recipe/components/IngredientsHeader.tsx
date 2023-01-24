@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';
@@ -50,7 +50,7 @@ const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({
 
   const customServings = recipe?.customServings;
 
-  const handleSubmit = (form: IFormDataProps) => updateServings(form.servings);
+  const handleSubmit = useCallback(async (form: IFormDataProps) => updateServings(form.servings), [updateServings]);
 
   const initialValues: Partial<IFormDataProps> = useMemo(() => ({
     servings: customServings,

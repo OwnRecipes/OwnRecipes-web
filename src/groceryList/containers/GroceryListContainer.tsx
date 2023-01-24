@@ -53,36 +53,42 @@ const GroceryListContainer: React.FC<IGroceryListContainerProps> = ({
   const createList = useCallback(async (listCreate: GroceryListCreate) => GroceryListActions.create(dispatch, listCreate), [dispatch]);
   const updateList = useCallback(async (upd: GroceryListUpdate) => GroceryListActions.update(dispatch, listSlug ?? '', upd), [listSlug, dispatch]);
   const removeList = useCallback(() => {
-    if (list == null) { crash('Invalid state: list item may not be null'); return; }
+    if (list?.id == null) { crash('Invalid state: list item may not be null'); return; }
     setIsDeleting(true);
     dispatch(GroceryListActions.remove(list.id, listSlug ?? ''));
-  }, [list, listSlug, dispatch]);
+  }, [list?.id, listSlug, dispatch]);
 
   const clearCompleted = useCallback(() => {
-    if (list == null) { crash('Invalid state: list item may not be null'); return; }
+    if (list?.id == null) { crash('Invalid state: list item may not be null'); return; }
     setIsClearing(true);
     const completedItems = listItems?.filter(i => i.completed) ?? [];
     GroceryListItemsActions.clearCompleted(dispatch, list.id, completedItems)
       .then(() => {
         setIsClearing(false);
       });
-  }, [list, listItems, dispatch]);
+  }, [list?.id, listItems, dispatch]);
 
-  const addItem = useCallback(async (itemCreate: GroceryListItemCreate) => GroceryListItemActions.create(dispatch, list?.id ?? 0, itemCreate), [list, listSlug, dispatch]);
+  const addItem = useCallback(async (itemCreate: GroceryListItemCreate) => (
+    GroceryListItemActions.create(dispatch, list?.id ?? 0, itemCreate)
+  ), [list?.id, dispatch]);
+
   const toggleItem = useCallback((itemId: number, completed: boolean) => {
-    if (list == null) { crash('Invalid state: list item may not be null'); return; }
+    if (list?.id == null) { crash('Invalid state: list item may not be null'); return; }
     // setIsToggling(true);
     dispatch(GroceryListItemActions.toggleItem(list.id, itemId, completed));
-  }, [list, listSlug, dispatch]);
+  }, [list?.id, dispatch]);
+
   const toggleItems = useCallback((items: Array<GroceryListItem>, newCompleted: boolean) => {
-    if (list == null || listItems == null) { crash('Invalid state: list item may not be null'); return; }
+    if (list?.id == null || listItems == null) { crash('Invalid state: list item may not be null'); return; }
     // setIsToggling(true);
     dispatch(GroceryListItemsActions.toggleItems(list.id, items, newCompleted));
-  }, [list, listSlug, listItems, dispatch]);
+  }, [list?.id, listItems, dispatch]);
+
   const updateItem = useCallback(async (itemId: number, update: GroceryListItemUpdate) => {
-    if (list == null) { crash('Invalid state: list item may not be null'); return undefined; }
+    if (list?.id == null) { crash('Invalid state: list item may not be null'); return undefined; }
     return GroceryListItemActions.update(dispatch, list.id, itemId, update);
-  }, [listSlug, dispatch]);
+  }, [list?.id, dispatch]);
+
   const removeItem = useCallback((itemId: number) => {
     if (list == null) { crash('Invalid state: list item may not be null'); return; }
     // setIsDeletingItem(true);
