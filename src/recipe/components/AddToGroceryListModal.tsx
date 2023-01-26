@@ -1,28 +1,30 @@
 import { forwardRef, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Form as ReduxForm } from 'react-final-form';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Form as ReduxForm } from 'react-final-form';
+import { FormApi } from 'final-form';
 
 import '../css/add_to_grocery_list_modal.css';
 
-import * as GroceryListsActions from '../../groceryList/store/GroceryListsActions';
-import * as GroceryListActions from '../../groceryList/store/GroceryListActions';
+import { CombinedStore } from '../../app/Store';
 import Modal from '../../common/components/Modal';
 import { ValidationResult } from '../../common/store/Validation';
 import { Ingredient, IngredientGroup, SubRecipe } from '../store/RecipeTypes';
-import { GroceryList, GroceryListBulkAdd, GroceryListCreate } from '../../groceryList/store/GroceryListTypes';
 import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import { useDispatch, useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../../app/Store';
-import ReSelect from '../../common/components/ReduxForm/ReSelect';
-import IngredientGroups from './IngredientGroups';
-import SubRecipes from './SubRecipes';
-import { FormApi } from 'final-form';
 import Checkbox from '../../common/components/Input/Checkbox';
 import useCrash from '../../common/hooks/useCrash';
 import Icon from '../../common/components/Icon';
 import Tooltip from '../../common/components/Tooltip';
+import P from '../../common/components/P';
+import { PendingState } from '../../common/store/GenericReducerType';
+import { GroceryList, GroceryListBulkAdd, GroceryListCreate } from '../../groceryList/store/GroceryListTypes';
+import * as GroceryListsActions from '../../groceryList/store/GroceryListsActions';
+import * as GroceryListActions from '../../groceryList/store/GroceryListActions';
+import ReSelect from '../../common/components/ReduxForm/ReSelect';
+import IngredientGroups from './IngredientGroups';
+import SubRecipes from './SubRecipes';
 
 export interface IAddToGroceryListModalProps {
   show: boolean;
@@ -51,6 +53,8 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
   useEffect(() => {
     dispatch(GroceryListsActions.load());
   }, []);
+
+  const bulkAddPending = useSelector((state: CombinedStore) => state.groceryList.meta.pending);
 
   const submitRef = useRef<HTMLButtonElement>(null);
 
@@ -95,6 +99,7 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
         show = {show}
         title = {intl.messages['recipe.recipe_ingredient_button.add_groceries'] as string}
         onAccept = {handleEditSubmit}
+        acceptButtonProps = {{ disabled: lists.length === 0 || bulkAddPending === PendingState.SAVING }}
         onClose  = {handleModalClose}
         className = 'add-to-grocery-list-modal'>
       <AddToGroceryListForm
@@ -267,17 +272,21 @@ const ListRow: React.FC<IListRowProps> = ({
       id: 'grocery_list.form.list',
       defaultMessage: 'List',
     },
-    new_title: {
+    new_text: {
+      id: 'grocery_list.item.new_text',
+      defaultMessage: 'Create a new grocery list to get started.',
+    },
+    new_list_title: {
       id: 'grocery_list.item.new_title',
       defaultMessage: 'My grocery list',
     },
   });
 
   const [addedNewList, setAddedNewList] = useState<boolean>(false);
-  const prevListIds = useRef<Array<number>>([]);
+  const prevListIds = useRef<Array<number> | undefined>();
 
   const handleAddListClick = useCallback(() => {
-    const newListTitle = `${formatMessage(messages.new_title)}`;
+    const newListTitle = `${formatMessage(messages.new_list_title)}`;
     const suffixes = lists
         .filter(l => l.title.startsWith(newListTitle))
         .map(l => parseInt(l.title.substring(newListTitle.length)))
@@ -293,10 +302,10 @@ const ListRow: React.FC<IListRowProps> = ({
   }, [lists, onAddList, formatMessage]);
 
   useEffect(() => {
-    if (prevListIds.current.length === 0) return;
+    if (prevListIds.current == null) return;
     const newIds = lists.map(l => l.id);
 
-    const newList = newIds.find(i => !prevListIds.current.includes(i));
+    const newList = newIds.find(i => !prevListIds.current?.includes(i));
     if (!newList) return;
     form.change('list', String(newList));
 
@@ -306,17 +315,30 @@ const ListRow: React.FC<IListRowProps> = ({
   return (
     <Row>
       <Col className='input-with-button'>
-        <ReSelect
-            name   = 'list'
-            label  = {formatMessage(messages.list)}
-            data   = {lists.map(l => ({ value: String(l.id), label: l.title }))}
-            readOnly = {lists.length < 2} />
-        {!addedNewList && (
-          <Tooltip id='add-list-button-tooltip' tooltip={intl.messages['nav.grocery_list_create'] as string}>
-            <Button type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' aria-label='Add list'>
-              <Icon icon='plus-lg' variant='light' size='2x' />
+        {lists.length === 0 && (
+          <>
+            <P>{formatMessage(messages.new_text)}</P>
+            <Button type='button' onClick={handleAddListClick} variant='primary' className='add-list-button' aria-label='Add list'>
+              {intl.messages['nav.grocery_list_create'] as string}
             </Button>
-          </Tooltip>
+          </>
+        )}
+        {lists.length > 0 && (
+          <>
+            <ReSelect
+                name   = 'list'
+                label  = {formatMessage(messages.list)}
+                data   = {lists.map(l => ({ value: String(l.id), label: l.title }))}
+                readOnly = {lists.length === 0}
+                disabled = {lists.length === 0} />
+            {!addedNewList && (
+              <Tooltip id='add-list-button-tooltip' tooltip={intl.messages['nav.grocery_list_create'] as string}>
+                <Button type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' aria-label='Add list'>
+                  <Icon icon='plus-lg' variant='light' size='2x' />
+                </Button>
+              </Tooltip>
+            )}
+          </>
         )}
       </Col>
     </Row>

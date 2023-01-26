@@ -80,7 +80,7 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
         onSubmit = {handleSubmit}
         subscription = {{}}
         render = {({ handleSubmit: renderSubmit }) => (
-          <Form onBlur={handleBlur} onSubmit={renderSubmit} className='print-hidden'>
+          <Form onBlur={handleBlur} onSubmit={renderSubmit} className='nav-search-form print-hidden'>
             <ReInput
                 name = 'search'
                 placeholder = {formatMessage(messages.search_placeholder)}

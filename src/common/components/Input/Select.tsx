@@ -96,6 +96,9 @@ export class Select extends BaseInputComponent<ISelectProps> {
               name        = {this.props.name}
               value       = {selectedOption}
               options     = {this.props.data}
+
+              isDisabled  = {this.props.readOnly || this.props.disabled}
+
               onChange    = {this.handleChange}
               onBlur      = {this.props.onBlur}
               onFocus     = {this.props.onFocus}

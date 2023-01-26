@@ -111,14 +111,14 @@
     padding-bottom: 0;
   }
 
-  #header-navbar .dropdown-toggle {
+  #header-navbar .header-dropdown > .dropdown-toggle {
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100%;
     color: var(--primaryContrast);
   }
-  #header-navbar .dropdown-toggle:hover {
+  #header-navbar .header-dropdown > .dropdown-toggle:hover {
     color: var(--primaryContrast);
   }
 }
@@ -249,6 +249,14 @@
   margin-left: 10px;
 }
 
+#header-navbar .dropdown-menu.show .nav-link {
+  color: inherit;
+}
+#header-navbar .dropdown-menu.show .nav-link:not(.disabled):hover,
+#header-navbar .dropdown-menu.show a:not(.disabled):hover {
+  color: var(--hoverText) !important;
+  background-color: var(--hoverBg) !important;
+}
 #header-navbar .grocery-lists-dropdown > .dropdown-menu.show > .nav-link {
   white-space: nowrap;
   max-width: 25em;

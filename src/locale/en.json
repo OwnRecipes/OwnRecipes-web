@@ -95,6 +95,7 @@
   "grocery_list.header.title_placeholder": "(Enter a new title)",
   "grocery_list.item.delete_button": "Delete",
   "grocery_list.item.edit_button": "Edit",
+  "grocery_list.item.new_text": "Create a new grocery list to get started.",
   "grocery_list.item.new_title": "My grocery list",
   "grocery_list.item.new_title_label": "New Title",
   "grocery_list.item.old_title_label": "Item",

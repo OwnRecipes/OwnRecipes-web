@@ -12,10 +12,11 @@ export interface INavLinkProps {
 
   accessKey?: string;
 
+  className?: string;
   children: React.ReactNode;
 }
 
-const NavLink = forwardRef<unknown, INavLinkProps>(({ id, as, to, active, children, ...rest }: INavLinkProps, ref) => (
+const NavLink = forwardRef<unknown, INavLinkProps>(({ id, as, to, active, className, children, ...rest }: INavLinkProps, ref) => (
   <Nav.Link
       id = {id}
       as = {as ?? Link}
@@ -24,6 +25,7 @@ const NavLink = forwardRef<unknown, INavLinkProps>(({ id, as, to, active, childr
       // react bootstrap navbar collapseOnSelect to work.
       href = {to ?? undefined}
       active = {active}
+      className = {className}
       {...rest}
       ref = {ref}>
     {children}

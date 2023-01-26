@@ -107,7 +107,7 @@ const NewRating: React.FC<INewRatingProps> = ({ show, recipeSlug, userId, addRat
                 </Col>
               </Row>
               <Row>
-                <Col xs={12}>
+                <Col xs={12} className='toolbar'>
                   <FormSpy subscription={{ values: true, submitting: true }}>
                     {({ values, submitting }) => (
                       <Button type='submit' variant='primary' disabled={!values.rating || !values.comment || submitting}>

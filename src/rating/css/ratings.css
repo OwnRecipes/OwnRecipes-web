@@ -60,3 +60,14 @@
 .new-rating .rating-stars .btn {
   margin-top: 0;
 }
+
+.new-rating .toolbar {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+@media screen and (min-width: 1200px) {
+  .new-rating .toolbar {
+    flex-direction: row;
+  }
+}

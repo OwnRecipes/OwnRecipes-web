@@ -1,6 +1,12 @@
 .add-to-grocery-list-modal .col.input-with-button {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: flex-end;
+}
+.add-to-grocery-list-modal .col.input-with-button p {
+  min-width: 100%;
+  text-align: center;
 }
 .add-to-grocery-list-modal .col.input-with-button .form-group {
   flex: 1;

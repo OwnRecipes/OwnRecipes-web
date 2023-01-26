@@ -95,6 +95,7 @@
   "grocery_list.header.title_placeholder": "",
   "grocery_list.item.delete_button": "Borrar",
   "grocery_list.item.edit_button": "Editar",
+  "grocery_list.item.new_text": "",
   "grocery_list.item.new_title": "",
   "grocery_list.item.new_title_label": "",
   "grocery_list.item.old_title_label": "",

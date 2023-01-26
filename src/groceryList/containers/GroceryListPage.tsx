@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
+import { defineMessages, useIntl } from 'react-intl';
 import * as _ from 'lodash-es';
 
 import { CombinedStore } from '../../app/Store';
@@ -9,7 +10,6 @@ import * as GroceryListItemsActions from '../store/GroceryListItemsActions';
 import PageWrapper from '../../common/components/PageWrapper';
 import { getResourcePath } from '../../common/utility';
 import GroceryListContainer from './GroceryListContainer';
-import { defineMessages, useIntl } from 'react-intl';
 
 const GroceryListPage: React.FC = () => {
   const { formatMessage } = useIntl();
@@ -49,7 +49,7 @@ const GroceryListPage: React.FC = () => {
     if (groceryListState.item?.id && !isNew) {
       dispatch(GroceryListItemsActions.load(groceryListState.item.id));
     }
-  }, [groceryListState.item?.id]);
+  }, [groceryListState.item?.id, isNew]);
 
   // If list not found, redirect to lists
   useEffect(() => {
