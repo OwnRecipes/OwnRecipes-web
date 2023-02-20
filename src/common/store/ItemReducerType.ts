@@ -1,7 +1,7 @@
 import GenericReducerType from './GenericReducerType';
 
-type ItemReducerType<T> = {
+interface ItemReducerType<T> extends GenericReducerType {
   item: T | undefined;
-} & GenericReducerType;
+}
 
 export default ItemReducerType;

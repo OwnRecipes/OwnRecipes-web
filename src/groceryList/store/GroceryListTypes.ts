@@ -5,14 +5,14 @@ import { PayloadAction } from '../../common/store/redux';
 import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import { IngredientGroup, SubRecipe } from '../../recipe/store/RecipeTypes';
 
-export type GroceryListDto = {
+export interface GroceryListDto {
   id:    number;
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
   item_count: number;
 }
 
-export type GroceryList = {
+export interface GroceryList {
   id:    number;
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
@@ -26,15 +26,15 @@ export const toGroceryList = (dto: GroceryListDto): GroceryList => ({
   item_count: dto.item_count,
 });
 
-export type GroceryListCreate = {
+export interface GroceryListCreate {
   title: string;
-};
+}
 
-export type GroceryListUpdate = {
+export interface GroceryListUpdate {
   title: string;
-};
+}
 
-export type GroceryListBulkAdd = {
+export interface GroceryListBulkAdd {
   subrecipes: Array<SubRecipe>;
   ingredientGroups: Array<IngredientGroup>;
 }

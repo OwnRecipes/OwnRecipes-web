@@ -16,7 +16,7 @@ export interface ILoginFormProps {
   onSubmit: (username: string, password: string, remember: boolean) => Promise<ValidationResult>;
 }
 
-type LoginFormData = {
+interface LoginFormData {
   username: string;
   password: string;
   remember: boolean;

@@ -4,14 +4,14 @@ import ItemReducerType from '../../common/store/ItemReducerType';
 import { PayloadAction } from '../../common/store/redux';
 import { ACTION, GenericItemReducerAction } from '../../common/store/ReduxHelper';
 
-export type GroceryListItemDto = {
+export interface GroceryListItemDto {
   id:    number;
   title: string; // Tasty Chili 24
   completed: boolean;
   order: number;
 }
 
-export type GroceryListItem = {
+export interface GroceryListItem {
   listId: number;
 
   id:    number;
@@ -27,18 +27,18 @@ export const toGroceryListItem = (listId: number, dto: GroceryListItemDto): Groc
   completed: dto.completed ?? false,
 });
 
-export type GroceryListItemCreateDto = {
+export interface GroceryListItemCreateDto {
   list: number;
   title: string;
-};
+}
 
-export type GroceryListItemCreate = {
+export interface GroceryListItemCreate {
   title: string;
-};
+}
 
-export type GroceryListItemUpdate = {
+export interface GroceryListItemUpdate {
   title: string;
-};
+}
 
 export const GROCERY_LIST_ITEM_STORE = '@@groceryListItem';
 

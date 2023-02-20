@@ -34,7 +34,7 @@ export interface IGroceryListHeaderProps {
   onChangeFilter: (newFilter: GROCERY_LIST_FILTER) => void;
 }
 
-type FormDataProps = {
+interface FormDataProps {
   title: string;
 }
 

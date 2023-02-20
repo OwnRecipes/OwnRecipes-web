@@ -1,7 +1,7 @@
 import GenericReducerType from './GenericReducerType';
 
-type MapReducerType<T> = {
+interface MapReducerType<T> extends GenericReducerType {
   items: Record<string, T> | undefined;
-} & GenericReducerType;
+}
 
 export default MapReducerType;

@@ -6,12 +6,12 @@ import { RecipeList, RecipeListDto, toRecipeList } from '../../recipe/store/Reci
 
 export const BROWSER_SEARCH_STORE = '@@browserSearch';
 
-export type SearchResultDto = {
+export interface SearchResultDto {
   results: Array<RecipeListDto>;
   count:   number;
 }
 
-export type SearchResult = {
+export interface SearchResult {
   recipes:      Array<RecipeList>;
   totalRecipes: number;
 }

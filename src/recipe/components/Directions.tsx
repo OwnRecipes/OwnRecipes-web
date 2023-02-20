@@ -12,7 +12,7 @@ export interface IDirectionsProps {
   ingredients: Array<IngredientGroup>;
 }
 
-type DirectionWithIngredients = {
+interface DirectionWithIngredients {
   heading?:     string;
   directions:   Array<string>;
   ingredients?: Array<IngredientGroup>;

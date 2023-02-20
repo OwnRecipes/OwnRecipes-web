@@ -29,7 +29,7 @@ import { RatingsState } from '../rating/store/types';
 import settings from '../account/store/settings/reducer';
 import { SettingsState } from '../account/store/settings/types';
 
-export type CombinedStore = {
+export interface CombinedStore {
   account:          AccountState;
   browse:           BrowseState;
   connection:       ConnectionState;

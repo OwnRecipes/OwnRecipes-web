@@ -7,7 +7,7 @@ import { MiniBrowseAction, MiniBrowseState } from './MiniBrowseTypes';
 import search from './SearchReducer';
 import { SearchAction, SearchState } from './SearchTypes';
 
-export type BrowseState = {
+export interface BrowseState {
   filters:    FilterState;
   miniBrowse: MiniBrowseState;
   search:     SearchState;

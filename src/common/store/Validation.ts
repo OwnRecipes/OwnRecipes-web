@@ -5,7 +5,7 @@ import { FORM_ERROR } from 'final-form';
 import { ResponseError } from '../CustomSuperagent';
 import { optionallyFormatMessage } from '../utility';
 
-export type ValidationErrorType = {
+export interface ValidationErrorType {
   code:         string;
   message:      string;
   sourceError?: Error;
@@ -84,7 +84,7 @@ export const isValidationResult = (obj: unknown): obj is ValidationResult => (ob
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ValueValidatorFunction = (value: any, data?: any) => ValidationErrorType | undefined;
 
-export type FieldValidatorType = {
+export interface FieldValidatorType {
   name: string;
   validators: Array<ValueValidatorFunction>;
 }

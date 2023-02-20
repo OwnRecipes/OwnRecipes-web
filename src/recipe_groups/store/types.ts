@@ -14,8 +14,8 @@ export type TagsState     = ArrayReducerType<Tag>;
 
 export type RecipeGroupsAction   = GenericArrayReducerAction<Course | Cuisine | Tag>;
 export type RecipeGroupsDispatch = ReduxDispatch<RecipeGroupsAction>;
-export type RecipeGroupsState = {
+export interface RecipeGroupsState {
   courses:  CoursesState,
   cuisines: CuisinesState,
   tags:     TagsState,
-};
+}

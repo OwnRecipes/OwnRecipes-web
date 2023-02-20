@@ -1,7 +1,7 @@
 import GenericReducerType from './GenericReducerType';
 
-type ArrayReducerType<T> = {
+interface ArrayReducerType<T> extends GenericReducerType {
   items: Array<T> | undefined;
-} & GenericReducerType;
+}
 
 export default ArrayReducerType;

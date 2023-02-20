@@ -22,7 +22,7 @@ export enum SettingsActionTypes {
   LANGUAGE   = 'LANGUAGE',
 }
 
-export type Settings = {
+export interface Settings {
   // CAREFUL: Keys have to match the SETTING_XXX_STORAGE_KEY's value
   themeMode: ThemeMode;
   language:  LanguageCode;

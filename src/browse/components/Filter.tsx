@@ -9,7 +9,7 @@ import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
 import ConditionalWrapper from '../../common/components/ConditionalWrapper';
 
-export type RecipeFilter = {
+export interface RecipeFilter {
   id:      number;
   title:   string;
   slug:    string;
@@ -30,10 +30,10 @@ export interface IFilterProps {
   cssClass?: string;
 }
 
-type EnhancedFilterData = {
+interface EnhancedFilterData extends RecipeFilter {
   label: string;
   active: boolean;
-} & RecipeFilter;
+}
 
 const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect, cssClass, buildUrl, sort }: IFilterProps) => {
   const intl = useIntl();

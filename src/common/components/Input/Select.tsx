@@ -43,7 +43,10 @@ export class Async extends BaseInputComponent {
 }
 */
 
-export type SelectDataType = { value: string, label: string };
+export interface SelectDataType {
+  value: string;
+  label: string;
+}
 
 export interface ISelectProps extends IBaseInputComponentProps {
   value?: string;

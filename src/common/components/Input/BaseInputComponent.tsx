@@ -33,7 +33,7 @@ export interface IBaseInputComponentProps {
   onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
 }
 
-export type BaseLabelProps = {
+export interface BaseLabelProps {
   htmlFor?: string;
 }
 

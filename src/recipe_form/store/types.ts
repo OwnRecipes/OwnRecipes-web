@@ -4,7 +4,7 @@ import ItemReducerType from '../../common/store/ItemReducerType';
 import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 
-export type AutocompleteListItem = {
+export interface AutocompleteListItem {
   name: string;
   char: string;
 }

@@ -6,10 +6,10 @@ import { useIntl } from 'react-intl';
 import { formatValidation, requiredValidator } from '../../store/Validation';
 import { ISelectProps, Select } from '../Input/Select';
 
-export type IReSelectProps = {
+export interface IReSelectProps extends ISelectProps {
   format?: (value: any, name: string) => string;
   parse?:  (value: any, name: string) => any;
-} & ISelectProps;
+}
 
 const ReSelect = forwardRef<Select, IReSelectProps>(({
     name, required, data, format, parse,

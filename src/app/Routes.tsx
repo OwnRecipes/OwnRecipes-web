@@ -26,7 +26,7 @@ const RandomPage       = lazyJsx(() => import('../random/containers/RandomPage')
 const RecipePage       = lazyJsx(() => import('../recipe/containers/RecipePage'));
 const RecipeFormPage   = lazyJsx(() => import('../recipe_form/containers/RecipeFormPage'));
 
-export type IRouteType = {
+export interface IRouteType {
   /** URL path. Should start with a slash. */
   path:      string;
   /** Container for this route. */

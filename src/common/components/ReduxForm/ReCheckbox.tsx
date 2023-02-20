@@ -6,10 +6,10 @@ import { useIntl } from 'react-intl';
 import { formatValidation, requiredValidator } from '../../store/Validation';
 import Checkbox,  { ICheckboxProps } from '../Input/Checkbox';
 
-export type IReCheckboxProps = {
+export interface IReCheckboxProps extends Omit<ICheckboxProps, 'value'> {
   format?: (value: any, name: string) => boolean;
   parse?:  (value: any, name: string) => any;
-} & Omit<ICheckboxProps, 'value'>;
+}
 
 const ReCheckbox = forwardRef<Checkbox, IReCheckboxProps>(({
     name, required, format, parse,

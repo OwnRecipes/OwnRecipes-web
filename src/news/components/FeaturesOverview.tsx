@@ -9,10 +9,10 @@ import { CombinedStore } from '../../app/Store';
 import { optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 
-type FeatureContent = {
+interface FeatureContent {
   icon: string;
   title: string;
-};
+}
 
 const features: Array<FeatureContent> = [
   {

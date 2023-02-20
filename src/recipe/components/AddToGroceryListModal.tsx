@@ -34,11 +34,11 @@ export interface IAddToGroceryListModalProps {
   onClose: () => void;
 }
 
-type AddToGroceryListData = {
+interface AddToGroceryListData {
   list: number;
   ingredients: Array<{ slug: string, title: string, ingredients: Array<number> }>;
   subrecipes: Array<number>;
-};
+}
 
 const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
     show, subrecipes, ingredients, onSaveSuccess, onClose }: IAddToGroceryListModalProps) => {

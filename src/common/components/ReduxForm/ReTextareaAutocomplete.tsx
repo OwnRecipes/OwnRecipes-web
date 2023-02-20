@@ -6,10 +6,11 @@ import { useIntl } from 'react-intl';
 import { composeValidators, formatValidation, requiredValidator, ValueValidatorFunction } from '../../store/Validation';
 import TextareaAutocomplete, { AutocompleteListItem, ITextareaAutocompleteProps } from '../Input/TextareaAutocomplete';
 
-export type IReTextareaAutocompleteProps<TListItem extends string | object = AutocompleteListItem> = {
+export interface IReTextareaAutocompleteProps<TListItem extends string | object = AutocompleteListItem>
+    extends ITextareaAutocompleteProps<TListItem> {
   format?: (value: any, name: string) => string;
   parse?:  (value: any, name: string) => any;
-} & ITextareaAutocompleteProps<TListItem>;
+}
 
 const ReTextareaAutocomplete = forwardRef<any, IReTextareaAutocompleteProps>(({
     name, required, format, parse,

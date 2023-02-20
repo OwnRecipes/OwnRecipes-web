@@ -2,7 +2,7 @@ import { Dispatch as ReduxDispatch } from 'redux';
 import { ACTION, GenericResetAction } from '../../common/store/ReduxHelper';
 import { PayloadAction } from '../../common/store/redux';
 
-export type InternalError = {
+export interface InternalError {
   store: string;
 
   name:    string;

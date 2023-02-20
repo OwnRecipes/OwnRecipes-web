@@ -5,28 +5,28 @@ import ItemReducerType from '../../common/store/ItemReducerType';
 import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import { PayloadAction } from '../../common/store/redux';
 
-export type Quantity = {
+export interface Quantity {
   numerator?:   number;
   denominator:  number;
   measurement?: string;
 }
 
-export type IngredientInput = {
+export interface IngredientInput extends Partial<Quantity> {
   title:        string;
 
   quantity?:    string;
-} & Partial<Quantity>;
+}
 
-export type IngredientDto = {
+export interface IngredientDto extends Quantity {
   id:           number;
   title:        string;
-} & Quantity;
-export type Ingredient = {
+}
+export interface Ingredient extends Quantity {
   id:           number;
   title:        string;
 
   quantity?:    string;
-} & Quantity;
+}
 export const toIngredientDto = (obj: Ingredient): IngredientDto => ({
   id:    obj.id,
   title: obj.title,
@@ -44,11 +44,11 @@ export const toIngredient = (dto: IngredientDto): Ingredient => ({
   measurement: dto.measurement,
 });
 
-export type IngredientGroupDto = {
+export interface IngredientGroupDto {
   title:       string;
   ingredients: Array<IngredientDto>;
 }
-export type IngredientGroup = {
+export interface IngredientGroup {
   slug:        string;
   title:       string;
   ingredients: Array<Ingredient>;
@@ -66,16 +66,16 @@ export const toIngredientGroup = (dto: IngredientGroupDto): IngredientGroup => (
   ingredients: dto.ingredients.map(toIngredient),
 });
 
-export type SubRecipeDto = {
+export interface SubRecipeDto extends Quantity {
   title:       string;
   slug:        string;
   child_recipe_id: number;
   parent_recipe_id?: number;
 
   measurement?: string;
-} & Quantity;
+}
 
-export type SubRecipe = {
+export interface SubRecipe extends Quantity {
   title:       string;
   slug:        string;
   child_recipe_id:   number;
@@ -83,7 +83,7 @@ export type SubRecipe = {
   measurement?: string;
 
   quantity?:   string;
-} & Quantity;
+}
 export const toSubRecipeDto = (obj: SubRecipe): SubRecipeDto => ({
   title: obj.title,
   slug:  obj.slug,
@@ -105,12 +105,12 @@ export const toSubRecipe = (dto: SubRecipeDto): SubRecipe => ({
   denominator: dto.denominator,
 });
 
-export type CourseDto = {
+export interface CourseDto {
   id:    number;
   title: string;
 }
 
-export type Course = {
+export interface Course {
   id:    number;
   title: string;
 }
@@ -125,12 +125,12 @@ export const toCourseDto = (obj: Course): CourseDto => ({
   title: obj.title,
 });
 
-export type CuisineDto = {
+export interface CuisineDto {
   id:    number;
   title: string;
 }
 
-export type Cuisine = {
+export interface Cuisine {
   id:    number;
   title: string;
 }
@@ -145,12 +145,12 @@ export const toCuisineDto = (obj: Cuisine): CuisineDto => ({
   title: obj.title,
 });
 
-export type TagDto = {
+export interface TagDto {
   id:    number;
   title: string;
 }
 
-export type Tag = {
+export interface Tag {
   id:    number;
   title: string;
 }
@@ -160,7 +160,7 @@ export const toTag = (dto: TagDto): Tag => ({
   title: dto.title,
 });
 
-export type RecipeListDto = {
+export interface RecipeListDto {
   id:    number;
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
@@ -172,7 +172,7 @@ export type RecipeListDto = {
   pub_date: string; // 2011-05-20
 }
 
-export type RecipeList = {
+export interface RecipeList {
   id:    number;
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
@@ -196,7 +196,7 @@ export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
   pubDate: dto.pub_date,
 });
 
-export type RecipeDto = {
+export interface RecipeDto extends RecipeListDto {
   username:   string;
   author:     number;
   source:     string;
@@ -218,9 +218,9 @@ export type RecipeDto = {
 
   public: boolean;
   update_date: string;
-} & RecipeListDto;
+}
 
-export type Recipe = {
+export interface Recipe extends RecipeList {
   username:    string;
   author:      number;
   source:      string;
@@ -244,7 +244,7 @@ export type Recipe = {
   updateDate: string;
 
   customServings: number;
-} & RecipeList;
+}
 
 export const toRecipe = (dto: RecipeDto): Recipe => ({
   id:    dto.id,
@@ -280,7 +280,7 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   customServings: dto.servings,
 });
 
-export type RecipeRequest = {
+export interface RecipeRequest {
   title:      string;
 
   source:     string;
@@ -301,7 +301,7 @@ export type RecipeRequest = {
   photo?:     '';
 
   public:     boolean;
-};
+}
 
 function parseBackendNumber(val: number | undefined): number | undefined {
   if (val == null || val === NUMBER_UNDEFINED) return undefined;

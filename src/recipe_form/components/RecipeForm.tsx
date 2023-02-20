@@ -31,10 +31,10 @@ export interface IRecipeFormProps {
   onSubmit: (form: Recipe) => Promise<ValidationResult>;
 }
 
-type RecipeFormatted = {
+interface RecipeFormatted extends Recipe {
   ingredientGroupsS: string;
   subrecipesS: string;
-} & Recipe;
+}
 
 const RecipeForm: React.FC<IRecipeFormProps> = ({
     recipe, isNew, location,

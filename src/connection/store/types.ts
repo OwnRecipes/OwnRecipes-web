@@ -1,1 +1,3 @@
-export type ConnectionState  = { hasConnection: boolean };
+export interface ConnectionState {
+  hasConnection: boolean
+}

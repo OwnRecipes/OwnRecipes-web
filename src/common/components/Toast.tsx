@@ -5,7 +5,7 @@ import '../css/toast.css';
 
 import Icon from './Icon';
 
-export type AnchorOriginPosition = {
+export interface AnchorOriginPosition {
   horizontal: 'center' | 'left' | 'right';
   vertical: 'bottom' | 'top';
 }

@@ -21,12 +21,12 @@ export const isResponseError = (obj: unknown): obj is ResponseError => (
       && typeof (obj as ResponseError).status === 'number'
       && (obj as ResponseError).response != null); // eslint-disable-line no-underscore-dangle, @typescript-eslint/no-explicit-any
 
-export type NetworkError = {
+export interface NetworkError {
   message: string;
   method: 'DELETE' | 'GET' | 'PATCH' | 'PUT' | 'POST';
   status: undefined;
   url: string;
-};
+}
 export const isNetworkError = (obj: unknown): obj is NetworkError => (
   obj != null
       && (obj as NetworkError).status === undefined

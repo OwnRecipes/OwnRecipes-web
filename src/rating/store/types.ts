@@ -5,7 +5,7 @@ import { PayloadAction } from '../../common/store/redux';
 
 export const RATING_STORE  = '@@rating';
 
-export type RatingDto = {
+export interface RatingDto {
   id:       number;
   comment:  string;
   user_id:  number;
@@ -19,7 +19,7 @@ export type RatingDto = {
   update_date: string; // ISO8601
 }
 
-export type Rating = {
+export interface Rating {
   id:       number;
   comment:  string;
   userId:   number;
@@ -30,7 +30,7 @@ export type Rating = {
   updateDate: string;
 }
 
-export type RatingCreate = {
+export interface RatingCreate {
   comment:  string;
   userId:   number;
   rating:   number;

@@ -1,12 +1,12 @@
-export type PaginationProps = {
+export interface PaginationProps {
   limit:  number;
   offset: number;
   count:  number;
 }
 
-export type DefaultFilterProps = {
+export interface DefaultFilterProps extends PaginationProps {
   ordering: string;
-} & PaginationProps;
+}
 
 const defaultFilters: Partial<DefaultFilterProps> = {
   limit: 12,
