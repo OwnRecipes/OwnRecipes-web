@@ -2,10 +2,6 @@
 html {
   position: relative;
   min-height: 100%;
-  background-color: var(--background);
-}
-body {
-  color: var(--primaryText);
 }
 #content {
   display: flex;
@@ -21,6 +17,7 @@ body {
   padding-top: 15px;
   padding-bottom: 20px;
 }
+
 @media screen and (max-width: 81rem) {
   .container,
   .container-sm {
@@ -31,6 +28,23 @@ body {
 @media (min-width: 87rem) {
   .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
     max-width: 83rem;
+  }
+}
+
+/* Basic page color styling */
+/* Not required for printing */
+@media screen {
+  html {
+    background-color: var(--background);
+  }
+  body {
+    color: var(--primaryText);
+  }
+  #content {
+    background-color: var(--background);
+  }
+  #content > .container {
+    background-color: var(--midground);
   }
 }
 
@@ -260,11 +274,13 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
   };
 }
 
-html[data-theme="dark"] img {
-  opacity: 0.875;
-}
-html[data-theme="dark"] img:hover {
-  opacity: 1.0;
+@media screen {
+  html[data-theme="dark"] img {
+    opacity: 0.875;
+  }
+  html[data-theme="dark"] img:hover {
+    opacity: 1.0;
+  }
 }
 
 .visibility-hidden {

@@ -34,38 +34,40 @@ html {
   --hoverBg: rgba(110, 135, 150, 0.15);
 }
 
-html[data-theme="dark"] {
-  /* dark */
-  --primaryLight: #2faa49;
-  --primaryMain: #4f9615;
-  --primaryShadow: rgba(74, 151, 38, 0.25);
-  --primaryContrast: #fff;
+@media screen {
+  html[data-theme="dark"] {
+    /* dark */
+    --primaryLight: #2faa49;
+    --primaryMain: #4f9615;
+    --primaryShadow: rgba(74, 151, 38, 0.25);
+    --primaryContrast: #fff;
 
-  --secondaryMain: #da6575;
-  --secondaryLight: #f17f8e;
-  --secondaryContrast: #fff;
+    --secondaryMain: #da6575;
+    --secondaryLight: #f17f8e;
+    --secondaryContrast: #fff;
 
-  --actionDisabled: #303336;
+    --actionDisabled: #303336;
 
-  --background: #151518;
-  --midground: #181c22;
-  --elevation: #33373d;
+    --background: #151518;
+    --midground: #181c22;
+    --elevation: #33373d;
 
-  --elevationShadow: rgba(96, 96, 110, 0.4);
-  --elevationBorder: rgba(255, 255, 255, 0.2);
+    --elevationShadow: rgba(96, 96, 110, 0.4);
+    --elevationBorder: rgba(255, 255, 255, 0.2);
 
-  --primaryText: #ededed;
-  --secondaryText: #d0d0d0;
-  --disabledText: #bababa;
-  --hoverText: #fff;
-  --errorText: #f01616;
-  --infoText: #3676ff;
-  --successText: #349b25;
+    --primaryText: #ededed;
+    --secondaryText: #d0d0d0;
+    --disabledText: #bababa;
+    --hoverText: #fff;
+    --errorText: #f01616;
+    --infoText: #3676ff;
+    --successText: #349b25;
 
-  --inputBgActive: #1d2430;
-  --inputBgRequired: rgba(74, 151, 0, 0.15);
-  --inputBgDisabled: #303336;
-  --inputBorder: #bbb;
+    --inputBgActive: #1d2430;
+    --inputBgRequired: rgba(74, 151, 0, 0.15);
+    --inputBgDisabled: #303336;
+    --inputBorder: #bbb;
 
-  --hoverBg: rgba(105, 130, 150, 0.15);
+    --hoverBg: rgba(105, 130, 150, 0.15);
+  }
 }

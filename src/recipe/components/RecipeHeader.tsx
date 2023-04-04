@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
@@ -123,13 +123,32 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     </Tooltip>
   ) : null;
 
-  let hostname = '';
-  if (recipe?.source && recipe.source.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g)) {
-    // Get Host name of a URL
-    const a = document.createElement('a');
-    a.href = recipe.source;
-    hostname = a.hostname;
-  }
+  const source = useMemo(() => {
+    if (recipe?.source) {
+      let hostname = '';
+      if (recipe?.source && recipe.source.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g)) {
+        // Get Host name of a URL
+        const a = document.createElement('a');
+        a.href = recipe.source;
+        hostname = a.hostname;
+      }
+
+      return (
+        <div>
+          {`${formatMessage(messages.source)}: `}
+          {hostname.length > 0 && (
+            <>
+              <a href={recipe.source} target='_blank' rel='noreferrer' className='print-hidden'>{hostname}</a>
+              <a href={recipe.source} target='_blank' rel='noreferrer' className='print-only'>{recipe.source}</a>
+            </>
+          )}
+          {hostname.length === 0 && recipe.source}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }, [recipe?.source]);
 
   const printButton = (
     <Tooltip id='print tooltip' tooltip={formatMessage(messages.print_tooltip)}>
@@ -252,13 +271,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             <P>{recipe?.info}</P>
             <Ratings stars={recipe?.rating ?? 0} />
             {chips}
-            {recipe?.source && (
-              <div>
-                {`${formatMessage(messages.source)}: `}
-                {hostname.length > 0 && <a href={recipe.source} target='_blank' rel='noreferrer'>{hostname}</a>}
-                {hostname.length === 0 && recipe.source}
-              </div>
-            )}
+            {source}
           </Col>
         </Row>
       </article>

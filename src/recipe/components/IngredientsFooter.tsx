@@ -51,7 +51,7 @@ const IngredientsFooter: React.FC<IIngredientsFooterProps> = ({
   }, []);
 
   return (
-    <div className='ingredients-footer'>
+    <div className='ingredients-footer print-hidden'>
       <ConditionalWrapper
           condition = {!isAuthenticated}
           render = {childr => <Link to={getRoutePath('/login')}>{childr}</Link>}>
