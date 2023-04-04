@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 
 import '../css/browse.css';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { Recipe, RecipeList } from '../../recipe/store/RecipeTypes';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
 import ListRecipes from '../components/ListRecipes';
@@ -42,7 +42,7 @@ const MiniBrowse: React.FC<IMiniBrowseProps> = ({ heading, count, filters }: IMi
 
   const slug = params.recipe;
 
-  const miniBrowseItems = useSelector((state: CombinedStore) => state.browse.miniBrowse.items);
+  const miniBrowseItems = useSelector((state: RootState) => state.browse.miniBrowse.items);
   const differentMiniBrowseItems = useMemo(() => miniBrowseItems?.filter(itm => itm.slug !== slug), [slug, miniBrowseItems]);
   const recipeSlug = params.recipe ?? '';
 

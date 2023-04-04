@@ -12,7 +12,7 @@ import * as RecipeFormActions from '../../recipe_form/store/actions';
 // import * as MenuItemActions from '../../menu/actions/MenuItemActions';
 // import { fetchRecipeList } from '../../menu/actions/RecipeListActions';
 // import { menuItemValidation } from '../../menu/actions/validation';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { Recipe } from '../store/RecipeTypes';
 import { getRoutePath } from '../../common/utility';
 import useCrash from '../../common/hooks/useCrash';
@@ -24,8 +24,8 @@ const RecipeContainer: React.FC = () => {
   const nav = useNavigate();
   const crash = useCrash();
 
-  const userId = useSelector((state: CombinedStore) => state.account.item?.id);
-  const recipeState = useSelector((state: CombinedStore) => state.recipe);
+  const userId = useSelector((state: RootState) => state.account.item?.id);
+  const recipeState = useSelector((state: RootState) => state.recipe);
   const recipe      = recipeState.item;
   const recipeMeta  = recipeState.meta;
   const prevRecipe  = useRef<Recipe | undefined>();

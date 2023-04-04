@@ -11,7 +11,7 @@ import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { buildSearchUrl, mergeDefaultFilters } from '../../browse/containers/BrowsePage';
 import SearchReload from '../components/SearchReload';
@@ -25,18 +25,18 @@ const RandomPage: React.FC = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
-  const search   = useSelector((state: CombinedStore) => state.browse.search.items);
+  const search   = useSelector((state: RootState) => state.browse.search.items);
 
   const qs = useMemo(() => Object.fromEntries(searchParams), [searchParams]);
   const qsMergedDefaults = useMemo(() => mergeDefaultFilters(DefaultFilters, qs), [DefaultFilters, qs]);
   const qsMergedString = useMemo(() => objToSearchString(qsMergedDefaults), [qsMergedDefaults]);
 
   const fetchCourses = useCallback(() => { dispatch(RecipeGroupActions.fetchCourses()); }, [dispatch, RecipeGroupActions]);
-  const courses  = useSelector((state: CombinedStore) => state.recipeGroups.courses.items);
+  const courses  = useSelector((state: RootState) => state.recipeGroups.courses.items);
   useSingle(fetchCourses, courses);
 
   const fetchCuisines = useCallback(() => { dispatch(RecipeGroupActions.fetchCuisines()); }, [dispatch, RecipeGroupActions]);
-  const cuisines  = useSelector((state: CombinedStore) => state.recipeGroups.cuisines.items);
+  const cuisines  = useSelector((state: RootState) => state.recipeGroups.cuisines.items);
   useSingle(fetchCuisines, cuisines);
 
   const reloadData = useCallback(() => {

@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import { FormSpy } from 'react-final-form';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import { getRoutePath, isDemoMode } from '../../common/utility';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
@@ -32,7 +32,7 @@ const RecipeFormToolbar: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const recipeState = useSelector((state: CombinedStore) => state.recipeForm);
+  const recipeState = useSelector((state: RootState) => state.recipeForm);
 
   const preload = useCallback(() => { if (recipeState.item) dispatch(RecipeActions.preload(recipeState.item)); }, [dispatch, recipeState.item]);
 

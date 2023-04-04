@@ -2,7 +2,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/news.css';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 
 import MiniBrowse from '../../browse/containers/MiniBrowse';
@@ -18,7 +18,7 @@ const NewsBrowser: React.FC = () => {
     },
   });
 
-  const miniBrowseMeta = useSelector((state: CombinedStore) => state.browse.miniBrowse.meta);
+  const miniBrowseMeta = useSelector((state: RootState) => state.browse.miniBrowse.meta);
 
   if (!miniBrowseMeta.hasConnection || miniBrowseMeta.error != null) return null;
 

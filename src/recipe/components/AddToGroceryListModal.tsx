@@ -6,7 +6,7 @@ import { FormApi } from 'final-form';
 
 import '../css/add_to_grocery_list_modal.css';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import Modal from '../../common/components/Modal';
 import { ValidationResult } from '../../common/store/Validation';
 import { Ingredient, IngredientGroup, SubRecipe } from '../store/RecipeTypes';
@@ -48,13 +48,13 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
   const bulkAdd = useCallback(async (list: number, data: GroceryListBulkAdd) => GroceryListActions.bulkAdd(dispatch, list, data), [dispatch]);
   const createList = useCallback(async (item: GroceryListCreate) => GroceryListActions.create(dispatch, item), [dispatch]);
 
-  const groceryListsState = useSelector((state: CombinedStore) => state.groceryLists);
+  const groceryListsState = useSelector((state: RootState) => state.groceryLists);
   const { items: lists } = groceryListsState;
   useEffect(() => {
     dispatch(GroceryListsActions.load());
   }, []);
 
-  const bulkAddPending = useSelector((state: CombinedStore) => state.groceryList.meta.pending);
+  const bulkAddPending = useSelector((state: RootState) => state.groceryList.meta.pending);
 
   const submitRef = useRef<HTMLButtonElement>(null);
 

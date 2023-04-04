@@ -10,7 +10,7 @@ import { Beforeunload } from 'react-beforeunload';
 
 import './css/404.css';
 
-import { CombinedStore } from './Store';
+import { RootState } from './Store';
 import * as AccountActions from '../account/store/actions';
 import { AccountState } from '../account/store/types';
 import { getEnvAsBoolean, getRoutePath } from '../common/utility';
@@ -110,11 +110,11 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
   }
 }
 
-const mapStateToProps = (state: CombinedStore): IStateProps => ({
+const mapStateToProps = (state: RootState): IStateProps => ({
   account: state.account,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<CombinedStore, unknown, AnyAction>): IDispatchProps => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, AnyAction>): IDispatchProps => ({
   tryAutoLogin:  () => dispatch(AccountActions.tryAutoLogin()),
   forgetLogin:   () => dispatch(AccountActions.forgetLogin()),
 });

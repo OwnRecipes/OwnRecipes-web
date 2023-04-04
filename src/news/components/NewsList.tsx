@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import { Carousel } from 'react-bootstrap';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import * as NewsActions from '../store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 
@@ -23,7 +23,7 @@ const NewsCarousel: React.FC = () => {
   });
 
   const dispatch = useDispatch();
-  const news = useSelector((state: CombinedStore) => state.news);
+  const news = useSelector((state: RootState) => state.news);
   const newsList = news.items;
 
   useEffect(() => {

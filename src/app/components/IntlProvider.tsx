@@ -7,7 +7,7 @@ import { getMessagesFromLang, LanguageCode, toLanguageCode } from '../../common/
 import LocalStorageHelper from '../../common/LocalStorageHelper';
 import { getEnv } from '../../common/utility';
 
-import { CombinedStore } from '../Store';
+import { RootState } from '../Store';
 
 export interface IIntlProviderProps {
   children: React.ReactNode;
@@ -16,7 +16,7 @@ export interface IIntlProviderProps {
 const IntlProvider: React.FC<IIntlProviderProps> = ({ children }: IIntlProviderProps) => {
   const DEFAULT_LANGUAGE = toLanguageCode(getEnv('REACT_APP_LOCALE'), LanguageCode.EN);
 
-  const settings = useSelector((state: CombinedStore) => state.settings);
+  const settings = useSelector((state: RootState) => state.settings);
 
   const [language, setLanguage] = useState<LanguageCode>(DEFAULT_LANGUAGE);
 

@@ -5,7 +5,7 @@ import NavBar from '../components/NavBar';
 import * as AuthActions from '../../account/store/actions';
 import * as SettingsActions from '../../account/store/settings/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { ThemeMode } from '../../account/store/settings/types';
 import { LanguageCode } from '../../common/language';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
@@ -20,8 +20,8 @@ const HeaderContent: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const accountState = useSelector((state: CombinedStore) => state.account);
-  const settings = useSelector((state: CombinedStore) => state.settings);
+  const accountState = useSelector((state: RootState) => state.account);
+  const settings = useSelector((state: RootState) => state.settings);
 
   const handleChangeLanguage = useCallback((language: LanguageCode) => {
     dispatch(SettingsActions.changeLanguage(language));

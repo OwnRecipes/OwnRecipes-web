@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import { Recipe } from '../store/RecipeTypes';
 import MiniBrowse from '../../browse/containers/MiniBrowse';
@@ -24,7 +24,7 @@ function getFilters(recipe: Recipe): Record<string, string> | undefined {
 const RecipeFooter: React.FC<IRecipeFooterProps> = ({ recipe }: IRecipeFooterProps) => {
   const intl = useIntl();
 
-  const miniBrowseMeta = useSelector((state: CombinedStore) => state.browse.miniBrowse.meta);
+  const miniBrowseMeta = useSelector((state: RootState) => state.browse.miniBrowse.meta);
 
   if (!miniBrowseMeta.hasConnection || miniBrowseMeta.error
       || !recipe?.author) return null;

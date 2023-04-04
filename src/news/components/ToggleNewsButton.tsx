@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import { Button } from 'react-bootstrap';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
 
@@ -25,8 +25,8 @@ const ToggleNewsButton: React.FC<IToggleNewsButtonProps> = ({ showNews, onClick 
     },
   });
 
-  const connection = useSelector((state: CombinedStore) => state.connection);
-  const news = useSelector((state: CombinedStore) => state.news);
+  const connection = useSelector((state: RootState) => state.connection);
+  const news = useSelector((state: RootState) => state.news);
   const newsList = news.items;
 
   if (!connection.hasConnection) {

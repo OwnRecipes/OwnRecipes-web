@@ -1,7 +1,7 @@
 import { ComponentType, lazy, Suspense } from 'react';
 import { Route, Routes as RouterRoutes, Navigate } from 'react-router-dom';
 
-import { CombinedStore } from './Store';
+import { RootState } from './Store';
 import { useSelector } from '../common/store/redux';
 import { AnyComponent } from '../types/Types';
 import { getEnvAsBoolean, getRoutePath, isDemoMode } from '../common/utility';
@@ -130,7 +130,7 @@ function toPageComponent(cmp: AnyComponent): React.ReactNode {
 }
 
 const Routes: React.FC = () => {
-  const account = useSelector((state: CombinedStore) => state.account.item);
+  const account = useSelector((state: RootState) => state.account.item);
   const isAuthenticated = account != null && account.id !== 0;
   const role = account?.role;
 

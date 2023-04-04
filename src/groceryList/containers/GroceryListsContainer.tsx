@@ -7,7 +7,7 @@ import '../css/grocery_lists.css';
 
 import { useDispatch, useSelector } from '../../common/store/redux';
 import * as GroceryListsActions from '../store/GroceryListsActions';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { PendingState } from '../../common/store/GenericReducerType';
 import Loading from '../../common/components/Loading';
 import P from '../../common/components/P';
@@ -35,7 +35,7 @@ const GroceryListsContainer: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const groceryListsState = useSelector((state: CombinedStore) => state.groceryLists);
+  const groceryListsState = useSelector((state: RootState) => state.groceryLists);
   const { items } = groceryListsState;
   useEffect(() => {
     dispatch(GroceryListsActions.load());

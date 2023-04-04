@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import '../css/news.css';
 
 import LocalStorageHelper from '../../common/LocalStorageHelper';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import NewsCarousel from './NewsList';
 import FeaturesOverview from './FeaturesOverview';
@@ -13,7 +13,7 @@ import ErrorBoundary from '../../common/components/ErrorBoundary';
 const SHOW_NEWS_STORAGE_KEY = 'show_news';
 
 const NewsOverview: React.FC = () => {
-  const accountState = useSelector((state: CombinedStore) => state.account);
+  const accountState = useSelector((state: RootState) => state.account);
   const user = accountState.item;
   const userName = user?.username;
 

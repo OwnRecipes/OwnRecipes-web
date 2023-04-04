@@ -12,14 +12,14 @@ import { PendingState } from '../../common/store/GenericReducerType';
 import PageWrapper from '../../common/components/PageWrapper';
 import LoginForm from '../components/LoginForm';
 import SignUpInfo from '../components/SignUpInfo';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import PageSpinner from '../../app/components/PageSpinner';
 
 const LoginPage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useDispatch();
 
-  const accountMeta = useSelector((state: CombinedStore) => state.account.meta);
+  const accountMeta = useSelector((state: RootState) => state.account.meta);
 
   const handleLogin = useCallback(async (username: string, password: string, remember: boolean) => (
     AuthActions.getToken(dispatch, username, password, remember)

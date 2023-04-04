@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import * as RecipeFormActions from '../store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import RecipeForm from '../components/RecipeForm';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 import PageWrapper from '../../common/components/PageWrapper';
@@ -30,7 +30,7 @@ const RecipeFormPage: React.FC = () => {
   const recipeSlug = params.recipe ?? '';
   const isNew = recipeSlug === 'create';
 
-  const recipe = useSelector((state: CombinedStore) => state.recipeForm.item);
+  const recipe = useSelector((state: RootState) => state.recipeForm.item);
 
   // Load Recipe / or init.
   useEffect(() => {

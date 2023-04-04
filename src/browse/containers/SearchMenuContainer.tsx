@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Dispatch } from 'redux';
 
 import * as FilterActions from '../store/FilterActions';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import SearchMenu from '../components/SearchMenu';
 import { getRoutePath } from '../../common/utility';
 import { useDispatch, useSelector } from '../../common/store/redux';
@@ -18,10 +18,10 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
     qs, qsString, buildUrl }: ISearchMenuContainerProps) => {
   const dispatch = useDispatch();
 
-  const courses  = useSelector((state: CombinedStore) => state.browse.filters.courses.items);
-  const cuisines = useSelector((state: CombinedStore) => state.browse.filters.cuisines.items);
-  const ratings  = useSelector((state: CombinedStore) => state.browse.filters.ratings.items);
-  const tags     = useSelector((state: CombinedStore) => state.browse.filters.tags.items);
+  const courses  = useSelector((state: RootState) => state.browse.filters.courses.items);
+  const cuisines = useSelector((state: RootState) => state.browse.filters.cuisines.items);
+  const ratings  = useSelector((state: RootState) => state.browse.filters.ratings.items);
+  const tags     = useSelector((state: RootState) => state.browse.filters.tags.items);
 
   const [openFilters, setOpenFilters] = useState<Array<string>>(Object.keys(qs));
 

@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import * as RecipeFormActions from '../store/actions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import { Cuisine } from '../../recipe/store/RecipeTypes';
@@ -21,7 +21,7 @@ const CuisineSelectContainer: React.FC<ICuisineSelectContainerProps> = ({
   const dispatch = useDispatch();
 
   const fetchCuisines = useCallback(() => dispatch(RecipeGroupActions.fetchCuisines()), [dispatch, RecipeFormActions]);
-  const cuisines = useSelector((state: CombinedStore) => state.recipeGroups.cuisines.items);
+  const cuisines = useSelector((state: RootState) => state.recipeGroups.cuisines.items);
   useSingle(fetchCuisines, cuisines);
 
   const data = useMemo(() => cuisines

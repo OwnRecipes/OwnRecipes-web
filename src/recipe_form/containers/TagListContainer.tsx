@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 
 import * as RecipeFormActions from '../store/actions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
@@ -21,7 +21,7 @@ const TagListContainer: React.FC<ITagListContainerProps> = ({
   const dispatch = useDispatch();
 
   const fetchTags = useCallback(() => dispatch(RecipeGroupActions.fetchTags()), [dispatch, RecipeFormActions]);
-  const tags = useSelector((state: CombinedStore) => state.recipeGroups.tags.items);
+  const tags = useSelector((state: RootState) => state.recipeGroups.tags.items);
   useSingle(fetchTags, tags);
 
   const data = useMemo(() => tags

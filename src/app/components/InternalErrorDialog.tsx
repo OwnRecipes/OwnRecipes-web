@@ -2,12 +2,12 @@ import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 
 import { useSelector } from '../../common/store/redux';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
-import { CombinedStore } from '../Store';
+import { RootState } from '../Store';
 
 const InternalErrorDialogFC = lazy(() => import('./InternalErrorDialogFC'));
 
 const InternalErrorDialog = () => {
-  const internalError = useSelector((state: CombinedStore) => state.internalError.item);
+  const internalError = useSelector((state: RootState) => state.internalError.item);
 
   const [open, setOpen] = useState<boolean>(false);
 

@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import { Course } from '../../recipe/store/RecipeTypes';
@@ -20,7 +20,7 @@ const CourseSelectContainer: React.FC<ICourseSelectContainerProps> = ({
   const dispatch = useDispatch();
 
   const fetchCourses = useCallback(() => dispatch(RecipeGroupActions.fetchCourses()) , [dispatch, RecipeGroupActions]);
-  const courses  = useSelector((state: CombinedStore) => state.recipeGroups.courses.items);
+  const courses  = useSelector((state: RootState) => state.recipeGroups.courses.items);
   useSingle(fetchCourses , courses);
 
   const data = useMemo(() => courses

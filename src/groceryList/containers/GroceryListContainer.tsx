@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from '../../common/store/redux';
 import * as GroceryListActions from '../store/GroceryListActions';
 import * as GroceryListItemActions from '../store/GroceryListItemActions';
 import * as GroceryListItemsActions from '../store/GroceryListItemsActions';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { GroceryList, GroceryListCreate, GroceryListUpdate } from '../store/GroceryListTypes';
 import GroceryListFC from '../components/GroceryList';
 import useCrash from '../../common/hooks/useCrash';
@@ -37,12 +37,12 @@ const GroceryListContainer: React.FC<IGroceryListContainerProps> = ({
   const crash = useCrash();
   const nav = useNavigate();
 
-  const groceryListState = useSelector((state: CombinedStore) => state.groceryList);
+  const groceryListState = useSelector((state: RootState) => state.groceryList);
   const { item: list } = groceryListState;
   const listSlug = list?.slug;
   const prevList = useRef<GroceryList | undefined>();
 
-  const groceryListItemsState = useSelector((state: CombinedStore) => state.groceryListItems);
+  const groceryListItemsState = useSelector((state: RootState) => state.groceryListItems);
   const { items: listItems } = groceryListItemsState;
   const prevListItems = useRef<Array<GroceryListItem> | undefined>();
 

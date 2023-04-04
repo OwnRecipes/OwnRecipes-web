@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import * as _ from 'lodash-es';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import Ratings from '../../rating/containers/Ratings';
 import PageWrapper from '../../common/components/PageWrapper';
@@ -17,7 +17,7 @@ const RecipePage: React.FC = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
 
-  const recipeState  = useSelector((state: CombinedStore) => state.recipe);
+  const recipeState  = useSelector((state: RootState) => state.recipe);
   const recipeMeta  = recipeState.meta;
 
   const paramsRecipe = params.recipe;

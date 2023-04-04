@@ -7,7 +7,7 @@ import '../css/connection.css';
 import { useSelector } from '../../common/store/redux';
 import Alert from '../../common/components/Alert';
 import DynamicHeightContext from '../../common/context/DynamicHeightContext';
-import { CombinedStore } from '../Store';
+import { RootState } from '../Store';
 
 const ConnectionObserver: React.FC = () => {
   const { formatMessage } = useIntl();
@@ -26,7 +26,7 @@ const ConnectionObserver: React.FC = () => {
 
   const dynamicHeightContext = useContext(DynamicHeightContext);
 
-  const connectionState = useSelector((state: CombinedStore) => state.connection);
+  const connectionState = useSelector((state: RootState) => state.connection);
 
   if (connectionState.hasConnection) return null;
 

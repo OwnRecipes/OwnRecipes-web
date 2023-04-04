@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
 import * as _ from 'lodash-es';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import * as GroceryListActions from '../store/GroceryListActions';
 import * as GroceryListItemsActions from '../store/GroceryListItemsActions';
@@ -25,9 +25,9 @@ const GroceryListPage: React.FC = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
 
-  const groceryListState  = useSelector((state: CombinedStore) => state.groceryList);
+  const groceryListState  = useSelector((state: RootState) => state.groceryList);
   const groceryListMeta   = groceryListState.meta;
-  const groceryListItemsState  = useSelector((state: CombinedStore) => state.groceryListItems);
+  const groceryListItemsState  = useSelector((state: RootState) => state.groceryListItems);
   const groceryListItemsMeta   = groceryListItemsState.meta;
 
   const listSlug = params.list;

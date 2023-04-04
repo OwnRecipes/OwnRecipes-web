@@ -5,7 +5,7 @@ import { NavDropdown } from 'react-bootstrap';
 import { getRoutePath } from '../../common/utility';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import * as GroceryListsActions from '../../groceryList/store/GroceryListsActions';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { NEW_ITEM_URL_ID } from '../../common/constants';
 import NavLink from './NavLink';
 import Chip from '../../common/components/Chip';
@@ -23,7 +23,7 @@ const GroceryListMenuItem: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const groceryListsState = useSelector((state: CombinedStore) => state.groceryLists);
+  const groceryListsState = useSelector((state: RootState) => state.groceryLists);
   const { items } = groceryListsState;
   useEffect(() => {
     dispatch(GroceryListsActions.load());

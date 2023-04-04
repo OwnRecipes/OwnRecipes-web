@@ -7,7 +7,7 @@ import NoResults from '../components/NoResults';
 import Loading from '../components/Loading';
 import { PendingState } from '../../common/store/GenericReducerType';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { SearchResult } from '../store/SearchTypes';
 
 export interface ISearchResultsProps {
@@ -19,7 +19,7 @@ export interface ISearchResultsProps {
 }
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ qs, qsString, buildUrl, onOpenRecipe }: ISearchResultsProps) => {
-  const searchState = useSelector((state: CombinedStore) => state.browse.search);
+  const searchState = useSelector((state: RootState) => state.browse.search);
   const pending = searchState.meta.pending === PendingState.LOADING;
 
   const [searchResults, setSearchResults] = useState<SearchResult | undefined>(undefined);

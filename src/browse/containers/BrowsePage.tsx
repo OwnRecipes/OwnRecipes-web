@@ -12,7 +12,7 @@ import * as RecipeActions from '../../recipe/store/RecipeActions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { getRoutePath, objToSearchString } from '../../common/utility';
 
@@ -81,7 +81,7 @@ const BrowsePage: React.FC = () => {
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const search   = useSelector((state: CombinedStore) => state.browse.search.items);
+  const search   = useSelector((state: RootState) => state.browse.search.items);
 
   const qs = useMemo(() => Object.fromEntries(searchParams), [searchParams]);
   const qsMergedDefaults = useMemo(() => mergeDefaultFilters(DefaultFilters, qs), [DefaultFilters, qs]);

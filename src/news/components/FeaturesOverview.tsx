@@ -5,7 +5,7 @@ import { Card, Col, Container, Row } from 'react-bootstrap';
 import '../css/features_overview.css';
 
 import { useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 
@@ -125,7 +125,7 @@ const FeaturesOverview: React.FC = () => {
     },
   });
 
-  const news = useSelector((state: CombinedStore) => state.news);
+  const news = useSelector((state: RootState) => state.news);
   const newsList = news.items;
 
   const featureOverview = useMemo(() => {
