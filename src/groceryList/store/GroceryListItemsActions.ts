@@ -8,7 +8,7 @@ import { GroceryListItem, GroceryListItemDto, toGroceryListItem } from './Grocer
 export const load = (listId: number) => (dispatch: GroceryListItemsDispatch) => {
   dispatch({ ...toBasicAction(GROCERY_LIST_ITEMS_STORE, ACTION.GET_START) });
   request()
-    .get(`${serverURLs.list_item}?list=${String(listId)}`)
+    .get(`${serverURLs.list_item}?list=${listId}`)
     .then(res => {
       dispatch({
         ...toBasicAction(

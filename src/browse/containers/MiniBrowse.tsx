@@ -22,7 +22,7 @@ interface IMiniBrowseProps {
 
 function buildUrlFilter(count: number, filters: Record<string, string> | undefined): string {
   const searchParams = new URLSearchParams(filters);
-  searchParams.append('limit', String(count));
+  searchParams.append('limit', count.toString());
   return searchParams.toString();
 }
 

@@ -1,15 +1,22 @@
+import { forwardRef } from 'react';
 import classNames from 'classnames';
 
 import '../css/p.css';
 
-export interface IPProps {
+import { CommonProps } from '../types/OverridableComponent';
+
+export interface IPProps extends CommonProps {
+  /**
+   * @defaultValue `body1`
+   */
   variant?: 'body1' | 'body2';
-  className?: string;
   children: React.ReactNode;
 }
 
-const P: React.FC<IPProps> = ({ variant, className, children }: IPProps) => (
-  <p className={classNames(variant ?? 'body1', className)}>{children}</p>
-);
+const P = forwardRef<HTMLParagraphElement, IPProps>(({
+  variant = 'body1', children,
+  className, ...rest }: IPProps, ref) => (
+    <p className={classNames(variant ?? 'body1', className)} {...rest} ref={ref}>{children}</p>
+));
 
 export default P;

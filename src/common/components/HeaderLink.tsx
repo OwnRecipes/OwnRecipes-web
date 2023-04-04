@@ -1,17 +1,28 @@
+import { forwardRef } from 'react';
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import '../css/header_link.css';
+
+import { CommonProps } from '../types/OverridableComponent';
 import PageScroller from './PageScroller';
 
-export interface IHeaderLinkProps {
+export interface IHeaderLinkProps extends CommonProps {
   linkFor: string;
 }
 
-const HeaderLink: React.FC<IHeaderLinkProps> = ({ linkFor }: IHeaderLinkProps) => (
+const HeaderLink = forwardRef<HTMLAnchorElement, IHeaderLinkProps>(({ linkFor, className, ...rest }: IHeaderLinkProps, ref) => (
   <>
-    <Link className='headerlink' to={`#${linkFor}`} title='Permalink to this headline'>¶</Link>
+    <Link
+        className = {classNames('headerlink', className)}
+        to = {`#${linkFor}`}
+        title = 'Permalink to this headline'
+        {...rest}
+        ref = {ref}>
+      ¶
+    </Link>
     <PageScroller uriFragmentId={linkFor} />
   </>
-);
+));
 
 export default HeaderLink;

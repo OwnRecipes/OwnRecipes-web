@@ -1,19 +1,24 @@
+import { forwardRef } from 'react';
 import classNames from 'classnames';
 
 import '../css/chip.css';
 
-export interface IChipProps {
+import { CommonProps } from '../types/OverridableComponent';
+
+export interface IChipProps extends CommonProps {
   variant: 'primary' | 'secondary';
 
-  className?: string;
   children: React.ReactNode;
 }
 
-const Chip: React.FC<IChipProps> = ({ variant, className, children }: IChipProps) => (
-  <span
-      className={classNames('chip', variant, className)}>
-    {children}
-  </span>
-);
+const Chip = forwardRef<HTMLSpanElement, IChipProps>(({
+  variant, className, children, ...rest }: IChipProps, ref) => (
+    <span
+        className={classNames('chip', variant, className)}
+        {...rest}
+        ref = {ref}>
+      {children}
+    </span>
+));
 
 export default Chip;

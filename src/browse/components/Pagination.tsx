@@ -149,7 +149,7 @@ const PaginationNumbersList: React.FC<IPaginationNumbersListProps> = ({ offset, 
   const pageList = useMemo(() => generatePageList(currentPage, numOfPages), [currentPage, numOfPages]);
 
   const pageListJsx: Array<React.ReactNode> = pageList.map(p => (
-    <PaginationLink title={String(p.index)} offset={limit * (p.index - 1)} key={String(p.index)} active={currentPage === p.index} buildUrl={buildUrl} className={p.role} />
+    <PaginationLink title={p.index.toString()} offset={limit * (p.index - 1)} key={p.index.toString()} active={currentPage === p.index} buildUrl={buildUrl} className={p.role} />
   ));
 
   return <>{pageListJsx}</>;

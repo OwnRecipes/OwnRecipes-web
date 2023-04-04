@@ -43,7 +43,7 @@ const TabbedView: React.FC<ITabbedViewProps> = ({
   const tabs = children.slice(0, children.length - 1).map((childr, index) => (
     <Tab
         // eslint-disable-next-line react/no-array-index-key
-        key = {String(index)}
+        key = {index.toString()}
         title = {(
           <>
             {labels[index]}
@@ -60,7 +60,7 @@ const TabbedView: React.FC<ITabbedViewProps> = ({
             )}
           </>
         )}
-        eventKey  = {String(index)}
+        eventKey  = {index.toString()}
         className = 'editor'>
       <div className={contentClassName}>{childr}</div>
     </Tab>

@@ -46,6 +46,6 @@ class LocalStorageHelperPrivate {
       hash &= hash;
     }
 
-    return String(hash);
+    return hash.toString();
   }
 }

@@ -1,20 +1,21 @@
+import { forwardRef } from 'react';
 import { Alert as BootstrapAlert } from 'react-bootstrap';
 
 import '../css/alert.css';
 
+import { CommonProps } from '../types/OverridableComponent';
 import Icon from './Icon';
 import P from './P';
 
-export interface IAlertProps {
+export interface IAlertProps extends CommonProps {
   severity: 'danger' | 'info';
   title: string;
-  className?: string;
 
   children: React.ReactNode;
 }
 
-const Alert: React.FC<IAlertProps> = ({ severity, title, className, children }: IAlertProps) => (
-  <BootstrapAlert variant={severity} className={className}>
+const Alert = forwardRef<HTMLDivElement, IAlertProps>(({ severity, title, children, ...rest }: IAlertProps, ref) => (
+  <BootstrapAlert variant={severity} {...rest} ref={ref}>
     <BootstrapAlert.Heading>
       {severity === 'info'   && <Icon icon='info-circle' size='2x' className='alert-icon' />}
       {severity === 'danger' && <Icon icon='exclamation-diamond' size='2x' className='alert-icon' />}
@@ -27,6 +28,6 @@ const Alert: React.FC<IAlertProps> = ({ severity, title, className, children }: 
       <div className='alert-message'>{children}</div>
     )}
   </BootstrapAlert>
-);
+));
 
 export default Alert;

@@ -6,9 +6,10 @@ import classNames from 'classnames';
 import '../../css/button.css';
 import '../../css/form_group.css';
 
+import { CommonProps } from '../../types/OverridableComponent';
 import Icon from '../Icon';
 
-export interface IBaseInputComponentProps {
+export interface IBaseInputComponentProps extends CommonProps {
   name:       string;
   label?:     string;
 
@@ -25,7 +26,6 @@ export interface IBaseInputComponentProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?:      FieldMetaState<any>;
 
-  className?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (name: string, newValue: any) => void;
   onBlur?:   (event: React.FocusEvent<HTMLElement, Element>) => void;

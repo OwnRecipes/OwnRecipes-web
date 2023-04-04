@@ -46,7 +46,7 @@ export const update = async (dispatch: AnyDispatch, listId: number, id: number, 
   dispatch({ ...toBasicAction(GROCERY_LIST_ITEM_STORE, ACTION.UPDATE_START) });
 
   return request()
-    .patch(`${serverURLs.list_item}${String(id)}/`)
+    .patch(`${serverURLs.list_item}${id}/`)
     .send(item)
     .then(res => {
       const groceryListItem = toGroceryListItem(listId, res.body);

@@ -1,25 +1,27 @@
+import { forwardRef } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-export interface INavButtonProps {
+import { CommonProps } from '../types/OverridableComponent';
+
+export interface INavButtonProps extends CommonProps {
   to: string;
   variant?: 'primary' | 'secondary' | 'outline-primary' | 'outline-secondary' | 'transparent';
-  className?: string;
   children: React.ReactNode;
 }
 
-const NavButton: React.FC<INavButtonProps> = ({
-  to, variant, className, children, ...rest }: INavButtonProps) => (
+const NavButton = forwardRef<HTMLButtonElement, INavButtonProps>(({
+  to, variant, children, ...rest }: INavButtonProps, ref) => (
     <Button
         type = 'button'
         variant = {variant}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         as = {Link as any}
         to = {to}
-        className = {className}
-        {...rest}>
+        {...rest}
+        ref = {ref}>
       {children}
     </Button>
-);
+));
 
 export default NavButton;

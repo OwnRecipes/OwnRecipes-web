@@ -51,7 +51,8 @@ class FileSelect extends BaseInputComponent<IFileSelectProps> {
       <Form.Group
           {...this.getGroupProps()}
           controlId = {this.props.name}
-          className = {this.getFormGroupClassNames()}>
+          className = {this.getFormGroupClassNames()}
+          style     = {this.props.style}>
         <ConditionalWrapper
             condition = {this.props.tooltip != null}
             render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>

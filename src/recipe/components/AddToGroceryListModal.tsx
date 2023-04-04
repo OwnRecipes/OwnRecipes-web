@@ -155,7 +155,7 @@ const AddToGroceryListForm = forwardRef<HTMLFormElement, IAddToGroceryListProps>
   const crash = useCrash();
 
   const [initialValues] = useState<Partial<IAddToGroceryListFormDataProps>>({
-    list: lists.length > 0 ? String(lists[lists.length - 1].id) : undefined,
+    list: lists.length > 0 ? lists[lists.length - 1].id.toString() : undefined,
     ingredients: initializeInredientGroupsCheckboxes(ingredients),
     subrecipes: {
       ...initializeCheckboxes(subrecipes.flatMap(sr => `cb-${sr.child_recipe_id}`)),
@@ -307,7 +307,7 @@ const ListRow: React.FC<IListRowProps> = ({
 
     const newList = newIds.find(i => !prevListIds.current?.includes(i));
     if (!newList) return;
-    form.change('list', String(newList));
+    form.change('list', newList.toString());
 
     prevListIds.current = [];
   }, [lists]);
@@ -328,7 +328,7 @@ const ListRow: React.FC<IListRowProps> = ({
             <ReSelect
                 name   = 'list'
                 label  = {formatMessage(messages.list)}
-                data   = {lists.map(l => ({ value: String(l.id), label: l.title }))}
+                data   = {lists.map(l => ({ value: l.id.toString(), label: l.title }))}
                 readOnly = {lists.length === 0}
                 disabled = {lists.length === 0} />
             {!addedNewList && (

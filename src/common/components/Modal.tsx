@@ -1,26 +1,26 @@
-import { useCallback } from 'react';
+import { forwardRef, useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button, Modal as BootstrapModal } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import '../css/modal.css';
 
 import Icon from './Icon';
-import classNames from 'classnames';
+import { CommonProps } from '../types/OverridableComponent';
 import ErrorBoundary from './ErrorBoundary';
 
-export interface IModalHeaderCloseButtonProps {
+export interface IModalHeaderCloseButtonProps extends CommonProps {
   onClose: (event: React.MouseEvent) => void;
-  className?: string;
 }
 
-export const ModalHeaderCloseButton: React.FC<IModalHeaderCloseButtonProps> = ({
-  onClose, className, ...rest }: IModalHeaderCloseButtonProps) => (
-    <Button type='button' onClick={onClose} variant='transparent' className={classNames('close-button', className)} aria-label='Close' {...rest}>
+export const ModalHeaderCloseButton = forwardRef<HTMLButtonElement, IModalHeaderCloseButtonProps>(({
+  onClose, className, ...rest }: IModalHeaderCloseButtonProps, ref) => (
+    <Button type='button' onClick={onClose} variant='transparent' className={classNames('close-button', className)} aria-label='Close' {...rest} ref={ref}>
       <Icon icon='x' variant='light' size='2x' />
     </Button>
-);
+));
 
-export interface IModalProps {
+export interface IModalProps extends CommonProps {
   show: boolean;
   title: string;
 
@@ -31,18 +31,21 @@ export interface IModalProps {
   onClose?: (autoClose: boolean) => void;
   noCloseButton?: boolean;
 
+  /**
+   * @defaultValue `lg`
+   */
   size?: 'sm' | 'lg' | 'xl';
 
-  className?: string;
   acceptButtonProps?: Partial<unknown>;
   children: React.ReactNode;
 }
 
-const Modal: React.FC<IModalProps> = ({
+const Modal = forwardRef<HTMLDivElement, IModalProps>(({
     show, title,
     acceptTitle, closeTitle,
     onAccept, onClose, noCloseButton,
-    size, className, acceptButtonProps, children }: IModalProps) => {
+    size = 'lg', acceptButtonProps, children,
+    ...rest }: IModalProps, ref) => {
   const { formatMessage } = useIntl();
   const messages = defineMessages({
     accept: {
@@ -72,11 +75,12 @@ const Modal: React.FC<IModalProps> = ({
     <BootstrapModal
         show = {show}
         backdrop = 'static'
-        size = {size ?? 'lg'}
+        size = {size}
         centered
         onHide = {handleClose}
         keyboard = {false}
-        className = {className}>
+        {...rest}
+        ref = {ref}>
       <BootstrapModal.Header>
         <BootstrapModal.Title>{title}</BootstrapModal.Title>
         {onClose != null && (
@@ -106,6 +110,6 @@ const Modal: React.FC<IModalProps> = ({
       )}
     </BootstrapModal>
   );
-};
+});
 
 export default Modal;

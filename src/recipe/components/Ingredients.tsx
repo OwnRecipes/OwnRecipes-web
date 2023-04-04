@@ -59,7 +59,7 @@ const Ingredients: React.FC<IIngredientsProps> = ({
     const renderQuantity: boolean = Boolean(quantityS) || Boolean(measurementString);
 
     return (
-      <tr className='ingredient' key={String(ingredient.id ?? index)}>
+      <tr className='ingredient' key={(ingredient.id ?? index).toString()}>
         {selectable && (
           <td className='selection'>
             <ReCheckbox

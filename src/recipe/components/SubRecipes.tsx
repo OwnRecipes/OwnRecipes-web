@@ -46,7 +46,7 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({
     const titleString       = subRecipe.title;
 
     return (
-      <tr className='ingredient' key={String(subRecipe.child_recipe_id ?? index)}>
+      <tr className='ingredient' key={(subRecipe.child_recipe_id ?? index).toString()}>
         {selectable && (
           <td className='selection'>
             <ReCheckbox

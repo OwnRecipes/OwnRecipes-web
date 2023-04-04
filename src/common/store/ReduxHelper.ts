@@ -113,7 +113,7 @@ export default class ReduxHelper {
     return arr.map(toEntity);
   }
 
-  static getItemReducerDefaultState = <T>(ident: string): ItemReducerType<T> => {
+  static getItemReducerDefaultState<T>(ident: string): ItemReducerType<T> {
     const newState: ItemReducerType<T> = {
       ident: ident,
 
@@ -129,9 +129,9 @@ export default class ReduxHelper {
     };
 
     return newState;
-  };
+  }
 
-  static getArrayReducerDefaultState = <T>(ident: string): ArrayReducerType<T> => {
+  static getArrayReducerDefaultState<T>(ident: string): ArrayReducerType<T> {
     const newState: ArrayReducerType<T> = {
       ident: ident,
 
@@ -148,9 +148,9 @@ export default class ReduxHelper {
     };
 
     return newState;
-  };
+  }
 
-  static getMapReducerDefaultState = <T>(ident: string): MapReducerType<T> => {
+  static getMapReducerDefaultState<T>(ident: string): MapReducerType<T> {
     const newState: MapReducerType<T> = {
       ident: ident,
 
@@ -166,9 +166,9 @@ export default class ReduxHelper {
     };
 
     return newState;
-  };
+  }
 
-  static setItem = <TItem, TState extends ItemReducerType<TItem>>(state: TState, item: TItem | undefined): TState => {
+  static setItem<TItem, TState extends ItemReducerType<TItem>>(state: TState, item: TItem | undefined): TState {
     const updState = ReduxHelper.cloneState(state);
 
     updState.item  = item;
@@ -179,9 +179,9 @@ export default class ReduxHelper {
     updState.meta.dirty = false;
 
     return updState;
-  };
+  }
 
-  static preloadItem = <TItem, TState extends ItemReducerType<TItem>>(state: TState, item: TItem | undefined): TState => {
+  static preloadItem<TItem, TState extends ItemReducerType<TItem>>(state: TState, item: TItem | undefined): TState {
     const updState = ReduxHelper.cloneState(state);
 
     updState.item  = item;
@@ -190,7 +190,7 @@ export default class ReduxHelper {
     updState.meta.pending = PendingState.INITIAL;
 
     return updState;
-  };
+  }
 
   static setArray<T>(state: ArrayReducerType<T>, items: Array<T>): ArrayReducerType<T> {
     const updState = ReduxHelper.cloneState(state);
@@ -230,7 +230,7 @@ export default class ReduxHelper {
     return updState;
   }
 
-  static setError = <T extends GenericReducerType>(state: T, error: Error | undefined): T => {
+  static setError<T extends GenericReducerType>(state: T, error: Error | undefined): T {
     const updState = ReduxHelper.cloneState(state);
 
     updState.meta.error   = error;
@@ -238,9 +238,9 @@ export default class ReduxHelper {
     updState.meta.hasConnection = true;
 
     return updState;
-  };
+  }
 
-  static setNoConnection = <T extends GenericReducerType>(state: T): T => {
+  static setNoConnection<T extends GenericReducerType>(state: T): T {
     const updState = ReduxHelper.cloneState(state);
 
     updState.meta.error = undefined;
@@ -248,18 +248,18 @@ export default class ReduxHelper {
     updState.meta.hasConnection = false;
 
     return updState;
-  };
+  }
 
-  static setPending = <T extends GenericReducerType>(state: T, pending: PendingState): T => {
+  static setPending<T extends GenericReducerType>(state: T, pending: PendingState): T {
     const updState = ReduxHelper.cloneState(state);
 
     updState.meta.error   = undefined;
     updState.meta.pending = pending;
 
     return updState;
-  };
+  }
 
-  static setSoftReset = <T extends GenericReducerType>(state: T): T => {
+  static setSoftReset<T extends GenericReducerType>(state: T): T {
     const updState = ReduxHelper.cloneState(state);
 
     updState.meta.error = undefined;
@@ -267,9 +267,9 @@ export default class ReduxHelper {
     updState.meta.hasConnection = true;
 
     return updState;
-  };
+  }
 
-  static doSetValidation = <T extends GenericReducerType>(updState: T, validation: ValidationResult | undefined, mode: 'overwrite' | 'merge') => {
+  static doSetValidation<T extends GenericReducerType>(updState: T, validation: ValidationResult | undefined, mode: 'overwrite' | 'merge') {
     if (mode === 'overwrite' || validation == null) {
       updState.meta.validation = validation;
     } else {
@@ -280,9 +280,9 @@ export default class ReduxHelper {
       });
       updState.meta.validation = newErrors;
     }
-  };
+  }
 
-  static setValidation = <T extends GenericReducerType>(state: T, validation: ValidationResult | undefined, mode: 'overwrite' | 'merge' = 'overwrite'): T => {
+  static setValidation<T extends GenericReducerType>(state: T, validation: ValidationResult | undefined, mode: 'overwrite' | 'merge' = 'overwrite'): T {
     const updState = ReduxHelper.cloneState(state);
 
     ReduxHelper.doSetValidation(updState, validation, mode);
@@ -293,7 +293,7 @@ export default class ReduxHelper {
     }
 
     return updState;
-  };
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static validate = <TEntity>(store: string, data: TEntity, validations: ValidatorsType): any => (dispatch: Dispatch) => {
@@ -311,7 +311,7 @@ export default class ReduxHelper {
     }
   };
 
-  static caseItemDefaultReducer = <T>(state: ItemReducerType<T>, action: GenericItemReducerAction<T>, defaultState: ItemReducerType<T>): ItemReducerType<T> => {
+  static caseItemDefaultReducer<T>(state: ItemReducerType<T>, action: GenericItemReducerAction<T>, defaultState: ItemReducerType<T>): ItemReducerType<T> {
     if (state.ident === action.store) {
       switch (action.typs) {
         case ACTION.CREATE_START:
@@ -340,9 +340,9 @@ export default class ReduxHelper {
     }
 
     return ReduxHelper.caseDefaultReducer(state, action, defaultState);
-  };
+  }
 
-  static caseArrayDefaultReducer = <T>(state: ArrayReducerType<T>, action: GenericArrayReducerAction<T>, defaultState: ArrayReducerType<T>, itemStoreIdent?: string): ArrayReducerType<T> => {
+  static caseArrayDefaultReducer<T>(state: ArrayReducerType<T>, action: GenericArrayReducerAction<T>, defaultState: ArrayReducerType<T>, itemStoreIdent?: string): ArrayReducerType<T> {
     if (itemStoreIdent === action.store) {
       const itemAction: GenericItemReducerAction<T> = action as GenericItemReducerAction<T>;
       switch (itemAction.typs) {
@@ -420,9 +420,9 @@ export default class ReduxHelper {
     }
 
     return ReduxHelper.caseDefaultReducer(state, action, defaultState);
-  };
+  }
 
-  static caseMapDefaultReducer = <T>(state: MapReducerType<T>, action: GenericMapReducerAction<T>, defaultState: MapReducerType<T>, itemStoreIdent?: string): MapReducerType<T> => {
+  static caseMapDefaultReducer<T>(state: MapReducerType<T>, action: GenericMapReducerAction<T>, defaultState: MapReducerType<T>, itemStoreIdent?: string): MapReducerType<T> {
     if (itemStoreIdent === action.store) {
       const itemAction: GenericItemReducerAction<T> = action as GenericItemReducerAction<T>;
       switch (itemAction.typs) {
@@ -467,9 +467,9 @@ export default class ReduxHelper {
     }
 
     return ReduxHelper.caseDefaultReducer(state, action, defaultState);
-  };
+  }
 
-  static caseDefaultReducer = <T extends GenericReducerType>(state: T, action: AnyAction, defaultState: T): T => {
+  static caseDefaultReducer<T extends GenericReducerType>(state: T, action: AnyAction, defaultState: T): T {
     if (state.ident === action.store) {
       switch (action.typs) {
         case ACTION.LOADING:       return ReduxHelper.setPending(state, PendingState.LOADING);
@@ -488,11 +488,11 @@ export default class ReduxHelper {
     }
 
     return state;
-  };
+  }
 
-  static cloneState = <T extends GenericReducerType>(state: T): T => {
+  static cloneState<T extends GenericReducerType>(state: T): T {
     const cpy = { ...state };
     cpy.meta = { ...state.meta };
     return cpy;
-  };
+  }
 }

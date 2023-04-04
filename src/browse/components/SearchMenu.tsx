@@ -169,7 +169,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
                   id:     r.rating,
                   rating: r.rating,
                   total:  r.total,
-                  slug:   String(r.rating),
+                  slug:   r.rating.toString(),
                   title:  formatMessage(messages.x_stars, { rating: r.rating }),
               }))}
               qs       = {qs}

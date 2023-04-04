@@ -221,7 +221,8 @@ export class CreatableSelect extends BaseInputComponent<ICreatableSelectProps, I
             error:    this.isErrorneous(),
             readonly: this.props.readOnly,
             required: this.props.required && !this.props.readOnly,
-          })}>
+          })}
+          style     = {this.props.style}>
         <ConditionalWrapper
             condition = {this.props.tooltip != null}
             render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
