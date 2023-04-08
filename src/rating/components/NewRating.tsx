@@ -103,6 +103,7 @@ const NewRating: React.FC<INewRatingProps> = ({ show, recipeSlug, userId, addRat
                       rows   = {4}
                       label  = {formatMessage(messages.rating_comment_label)}
                       placeholder = {formatMessage(messages.rating_comment_placeholder)}
+                      maxLength = {1000}
                       required />
                 </Col>
               </Row>

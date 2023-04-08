@@ -104,6 +104,8 @@
   "grocery_list.new_grocery_list": "",
   "ingredients.table.ingredient": "Ingrédient",
   "ingredients.table.quantity": "Indication de la quantité",
+  "input.length_exceeded": "Vous avez dépassé la limite de caractères de {amount}.",
+  "input.length_warning": "{amount, plural, one {# caractère} other {# caracteres}} restants.",
   "internal_error.dialog_title": "Erreur",
   "internal_error.heading.general": "Généralités",
   "internal_error.heading.information": "Informations avancées",

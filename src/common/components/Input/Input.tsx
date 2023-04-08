@@ -1,6 +1,7 @@
-import { createRef } from 'react';
+import { createRef, forwardRef } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import classNames from 'classnames';
+import { defineMessages, useIntl } from 'react-intl';
 
 import '../../css/input.css';
 
@@ -9,6 +10,7 @@ import DebounceInput from './DebounceInput';
 import Tooltip from '../Tooltip';
 import ConditionalWrapper from '../ConditionalWrapper';
 import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
+import { CommonProps } from '../../types/OverridableComponent';
 
 export interface IInputProps extends IBaseInputComponentProps {
   label?: string;
@@ -27,6 +29,7 @@ export interface IInputProps extends IBaseInputComponentProps {
 export type ITextInputProps = {
   type?:  'text' | 'password';
   rows?:  number;
+  maxLength?: number;
 
   value?: string;
   saveValue?: string;
@@ -170,6 +173,8 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
     const type = this.props.type ?? 'text';
     const isDebounce = this.props.debounceTimeout != null && this.props.debounceTimeout > 0;
 
+    const currentLength = (this.props.value?.toString() ?? '').length;
+
     return (
       <Form.Group
           {...this.getGroupProps()}
@@ -245,8 +250,55 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
               )}
             {this.props.inputAdornmentEnd && <InputGroup.Text className='input-adornment-end'>{this.props.inputAdornmentEnd}</InputGroup.Text>}
           </InputGroup>
+          {isTextInput(this.props) && this.props.maxLength && (
+            <InputLengthWarning length={currentLength} maxLength={this.props.maxLength} />
+          )}
         </ConditionalWrapper>
       </Form.Group>
     );
   }
 }
+
+interface IInputLengthWarning extends CommonProps {
+  length: number;
+  maxLength: number;
+}
+
+const InputLengthWarning = forwardRef<HTMLDivElement, IInputLengthWarning>(({
+    length, maxLength, ...rest }: IInputLengthWarning, ref) => {
+  const { formatMessage } = useIntl();
+  const messages = defineMessages({
+    lengthWarning: {
+      id: 'input.length_warning',
+      description: 'Warning when text input with maxLength has only few remaining characters.',
+      defaultMessage: '{amount, plural, one {# character} other {# characters}} remaining.',
+    },
+    lengthExceeded: {
+      id: 'input.length_exceeded',
+      description: 'Error when text input with maxLength has too many characters.',
+      defaultMessage: 'Exceeded the character limit by {amount}.',
+    },
+  });
+
+  const showLengthWarning = maxLength && maxLength > 19 && length >= (maxLength - Math.max(Math.floor(maxLength * 0.1), 9));
+  const remainingChars = maxLength && maxLength > 0 ? (maxLength - length) : Number.POSITIVE_INFINITY;
+
+  if (!showLengthWarning) return null;
+
+  /* TODO position right. properly translate */
+
+  return (
+    <Form.Text
+        className = {classNames('post-text', {
+          'help-text': remainingChars >= 0,
+          'error-text': remainingChars < 0,
+        })}
+        {...rest}
+        ref = {ref}>
+      <>
+        {remainingChars >= 0 && formatMessage(messages.lengthWarning, { amount: remainingChars })}
+        {remainingChars < 0  && formatMessage(messages.lengthExceeded, { amount: remainingChars * -1 })}
+      </>
+    </Form.Text>
+  );
+});

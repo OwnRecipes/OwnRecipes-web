@@ -55,7 +55,7 @@ export default class BaseInputComponent<P extends IBaseInputComponentProps, S = 
   }
 
   getErrorMessage() { // eslint-disable-line react/no-unused-class-component-methods
-    return this.isErrorneous() ? <Form.Text className='error-text'>{this.props.errors}</Form.Text> : null;
+    return this.isErrorneous() ? <Form.Text className='pre-text error-text'>{this.props.errors}</Form.Text> : null;
   }
 
   getGroupProps() { // eslint-disable-line react/no-unused-class-component-methods
@@ -65,7 +65,7 @@ export default class BaseInputComponent<P extends IBaseInputComponentProps, S = 
   }
 
   getHelpText() { // eslint-disable-line react/no-unused-class-component-methods
-    return this.props.helpText ? <Form.Text className='help-text'>{this.props.helpText}</Form.Text> : null;
+    return this.props.helpText ? <Form.Text className='pre-text help-text'>{this.props.helpText}</Form.Text> : null;
   }
 
   getLabel(labelProps?: BaseLabelProps): React.ReactNode | undefined { // eslint-disable-line react/no-unused-class-component-methods

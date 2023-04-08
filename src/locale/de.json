@@ -104,6 +104,8 @@
   "grocery_list.new_grocery_list": "Neue Einkaufsliste",
   "ingredients.table.ingredient": "Zutat",
   "ingredients.table.quantity": "Mengenangabe",
+  "input.length_exceeded": "Zeichenlimit überschritten um {amount}.",
+  "input.length_warning": "{amount} Zeichen übrig.",
   "internal_error.dialog_title": "Fehler",
   "internal_error.heading.general": "Allgemeines",
   "internal_error.heading.information": "Erweiterte Informationen",

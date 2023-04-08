@@ -148,6 +148,7 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                       <ReInput
                           name      = 'title'
                           label     = {formatMessage(messages.name_label)}
+                          maxLength = {250}
                           required
                           />
                     </Col>

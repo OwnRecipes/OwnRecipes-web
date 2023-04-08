@@ -167,6 +167,7 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
                       <ReInput
                           name = 'title'
                           placeholder = {formatMessage(messages.new_title_placeholder)}
+                          maxLength = {250}
                           ref = {inputRef}
                           />
                       <FormSpy subscription={{ values: true, submitting: true }}>
