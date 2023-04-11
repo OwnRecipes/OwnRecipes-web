@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line camelcase
 import { applyMiddleware, compose, legacy_createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -11,8 +12,22 @@ if (isDemoMode()) {
   data = require('../../demo/store/data.json');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = (
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    && ((
+      process.env.NODE_ENV === 'production'
+        && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+          features: {
+            export: true,
+          },
+        })
+    ) || (
+      (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        trace: true,
+        traceLimit: 25,
+      })
+    ))
+  ) || compose;
 
 const store = legacy_createStore(
   reducer,
