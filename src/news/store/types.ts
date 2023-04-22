@@ -27,7 +27,7 @@ export const toNewsItem = (dto: NewsItemDto): NewsItem => ({
   frontpage: dto.frontpage,
 });
 
-export const NEWS_STORE = '@@news';
+export const NEWS_STORE = 'news';
 
 export type NewsState    = ArrayReducerType<NewsItem>;
 export type NewsAction   = GenericArrayReducerAction<NewsItem>;

@@ -28,7 +28,7 @@ export interface Settings {
   language:  LanguageCode;
 }
 
-export const SETTINGS_STORE = '@@settings';
+export const SETTINGS_STORE = 'settings';
 export const SETTING_THEME_STORAGE_KEY = 'themeMode';
 export const SETTING_LANGUAGE_STORAGE_KEY = 'language';
 

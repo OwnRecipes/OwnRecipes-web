@@ -42,7 +42,7 @@ const MiniBrowse: React.FC<IMiniBrowseProps> = ({ heading, count, filters }: IMi
 
   const slug = params.recipe;
 
-  const miniBrowseItems = useSelector((state: RootState) => state.browse.miniBrowse.items);
+  const miniBrowseItems = useSelector((state: RootState) => state.browse.browserMini.items);
   const differentMiniBrowseItems = useMemo(() => miniBrowseItems?.filter(itm => itm.slug !== slug), [slug, miniBrowseItems]);
   const recipeSlug = params.recipe ?? '';
 

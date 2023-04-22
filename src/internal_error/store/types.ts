@@ -17,7 +17,7 @@ export interface InternalError {
   error: Error;
 }
 
-export const INTERNAL_ERROR_STORE = '@@INTERNAL_ERROR_STORE';
+export const INTERNAL_ERROR_STORE = 'internalError';
 
 type IInternalErrorSetAction = {
   store: typeof INTERNAL_ERROR_STORE;

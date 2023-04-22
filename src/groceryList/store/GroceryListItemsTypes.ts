@@ -10,7 +10,7 @@ export enum GroceryListItemsActionTypes {
   DELETE_COMPLETED_ITEMS = 'DELETE_COMPLETED_ITEMS',
 }
 
-export const GROCERY_LIST_ITEMS_STORE = '@@groceryListItems';
+export const GROCERY_LIST_ITEMS_STORE = 'groceryListItems';
 
 export type IGroceryListItemsToggleAllAction = {
   store: typeof GROCERY_LIST_ITEMS_STORE;

@@ -4,7 +4,7 @@ import MapReducerType from '../../common/store/MapReducerType';
 import { GenericMapReducerAction } from '../../common/store/ReduxHelper';
 import { RecipeList, RecipeListDto, toRecipeList } from '../../recipe/store/RecipeTypes';
 
-export const BROWSER_SEARCH_STORE = '@@browserSearch';
+export const BROWSER_SEARCH_STORE = 'browserSearch';
 
 export interface SearchResultDto {
   results: Array<RecipeListDto>;

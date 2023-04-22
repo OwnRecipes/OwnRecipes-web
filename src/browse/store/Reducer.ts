@@ -1,24 +1,18 @@
-import { combineReducers, Reducer } from 'redux';
+import { combineReducers } from 'redux';
 
 import filters from './FilterReducer';
-import { FilterAction, FilterState } from './FilterTypes';
+import { BROWSE_FILTER_STORE } from './FilterTypes';
 import miniBrowse from './MiniBrowseReducer';
-import { MiniBrowseAction, MiniBrowseState } from './MiniBrowseTypes';
+import { MINI_BROWSE_STORE } from './MiniBrowseTypes';
 import search from './SearchReducer';
-import { SearchAction, SearchState } from './SearchTypes';
+import { BROWSER_SEARCH_STORE } from './SearchTypes';
 
-export interface BrowseState {
-  filters:    FilterState;
-  miniBrowse: MiniBrowseState;
-  search:     SearchState;
-}
+export const BROWSE_STORE = 'browse';
 
-type BrowseAction = FilterAction | MiniBrowseAction | SearchAction;
-
-const reducer: Reducer<BrowseState, BrowseAction> = combineReducers({
-  filters,
-  miniBrowse,
-  search,
+const reducer = combineReducers({
+  [BROWSE_FILTER_STORE]:  filters,
+  [MINI_BROWSE_STORE]:    miniBrowse,
+  [BROWSER_SEARCH_STORE]: search,
 });
 
 export default reducer;

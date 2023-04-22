@@ -3,7 +3,7 @@ import { BasicAction, PayloadAction } from '../../common/store/redux';
 import { QuantityFormatter } from './IngredientReducer';
 import { RecipeActionTypes, SubRecipe } from './RecipeTypes';
 
-export const RECIPE_SUBRECIPES_STORE = '@@recipeSubrecipes';
+export const RECIPE_SUBRECIPES_STORE = 'recipeSubrecipes';
 
 export enum RecipeSubrecipesReducerActionTypes {
   RECIPE_SUBRECIPES_LOAD = 'RECIPE_SUBRECIPES_LOAD',

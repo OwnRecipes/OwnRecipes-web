@@ -19,7 +19,7 @@ export interface ISearchResultsProps {
 }
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ qs, qsString, buildUrl, onOpenRecipe }: ISearchResultsProps) => {
-  const searchState = useSelector((state: RootState) => state.browse.search);
+  const searchState = useSelector((state: RootState) => state.browse.browserSearch);
   const pending = searchState.meta.pending === PendingState.LOADING;
 
   const [searchResults, setSearchResults] = useState<SearchResult | undefined>(undefined);

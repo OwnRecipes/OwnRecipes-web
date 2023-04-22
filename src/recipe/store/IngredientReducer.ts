@@ -3,7 +3,7 @@ import { Dispatch as ReduxDispatch } from 'redux';
 import { BasicAction, PayloadAction } from '../../common/store/redux';
 import { Ingredient, IngredientGroup, RecipeActionTypes } from './RecipeTypes';
 
-export const RECIPE_INGREDIENTS_STORE = '@@recipeIngredients';
+export const RECIPE_INGREDIENTS_STORE = 'recipeIngredients';
 
 export type QuantityFormatter = (numerator: number | undefined, denominator: number) => string;
 

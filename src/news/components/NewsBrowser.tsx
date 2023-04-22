@@ -18,7 +18,7 @@ const NewsBrowser: React.FC = () => {
     },
   });
 
-  const miniBrowseMeta = useSelector((state: RootState) => state.browse.miniBrowse.meta);
+  const miniBrowseMeta = useSelector((state: RootState) => state.browse.browserMini.meta);
 
   if (!miniBrowseMeta.hasConnection || miniBrowseMeta.error != null) return null;
 

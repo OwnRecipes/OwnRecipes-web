@@ -25,7 +25,7 @@ const RandomPage: React.FC = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
-  const search   = useSelector((state: RootState) => state.browse.search.items);
+  const search   = useSelector((state: RootState) => state.browse.browserSearch.items);
 
   const qs = useMemo(() => Object.fromEntries(searchParams), [searchParams]);
   const qsMergedDefaults = useMemo(() => mergeDefaultFilters(DefaultFilters, qs), [DefaultFilters, qs]);

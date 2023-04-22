@@ -39,7 +39,7 @@ export interface GroceryListBulkAdd {
   ingredientGroups: Array<IngredientGroup>;
 }
 
-export const GROCERY_LIST_STORE = '@@groceryList';
+export const GROCERY_LIST_STORE = 'groceryList';
 
 export enum GroceryListActionTypes {
   BULK_ADD = 'BULK_ADD',

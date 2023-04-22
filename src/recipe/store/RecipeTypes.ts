@@ -361,7 +361,7 @@ export enum RecipeActionTypes {
   RECIPE_LIST_ERROR = 'RECIPE_LIST_ERROR',
 }
 
-export const RECIPE_STORE = '@@recipe';
+export const RECIPE_STORE = 'recipe';
 
 export type IRecipeSlugAction = {
   store: typeof RECIPE_STORE;

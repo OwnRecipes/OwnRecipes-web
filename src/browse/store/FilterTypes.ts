@@ -15,10 +15,12 @@ export interface RatingCount {
   total:  number;
 }
 
-export const BROWSE_FILTER_COURSE_STORE  = '@@BROWSE_FILTER_COURSE';
-export const BROWSE_FILTER_CUISINE_STORE = '@@BROWSE_FILTER_CUISINE';
-export const BROWSE_FILTER_RATING_STORE  = '@@BROWSE_FILTER_RATING';
-export const BROWSE_FILTER_TAGS_STORE    = '@@BROWSE_FILTER_TAGS';
+export const BROWSE_FILTER_STORE = 'browserFilter';
+
+export const BROWSE_FILTER_COURSE_STORE  = 'courses';
+export const BROWSE_FILTER_CUISINE_STORE = 'cuisines';
+export const BROWSE_FILTER_RATING_STORE  = 'ratings';
+export const BROWSE_FILTER_TAGS_STORE    = 'tags';
 
 export type CategoryCountState = MapReducerType<Array<CategoryCount>>;
 export type RatingCountState   = MapReducerType<Array<RatingCount>>;

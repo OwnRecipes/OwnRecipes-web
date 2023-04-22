@@ -18,10 +18,10 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
     qs, qsString, buildUrl }: ISearchMenuContainerProps) => {
   const dispatch = useDispatch();
 
-  const courses  = useSelector((state: RootState) => state.browse.filters.courses.items);
-  const cuisines = useSelector((state: RootState) => state.browse.filters.cuisines.items);
-  const ratings  = useSelector((state: RootState) => state.browse.filters.ratings.items);
-  const tags     = useSelector((state: RootState) => state.browse.filters.tags.items);
+  const courses  = useSelector((state: RootState) => state.browse.browserFilter.courses.items);
+  const cuisines = useSelector((state: RootState) => state.browse.browserFilter.cuisines.items);
+  const ratings  = useSelector((state: RootState) => state.browse.browserFilter.ratings.items);
+  const tags     = useSelector((state: RootState) => state.browse.browserFilter.tags.items);
 
   const [openFilters, setOpenFilters] = useState<Array<string>>(Object.keys(qs));
 

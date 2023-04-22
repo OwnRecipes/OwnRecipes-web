@@ -3,7 +3,7 @@ import MapReducerType from '../../common/store/MapReducerType';
 import { ACTION, GenericItemReducerAction, GenericMapReducerAction } from '../../common/store/ReduxHelper';
 import { PayloadAction } from '../../common/store/redux';
 
-export const RATING_STORE  = '@@rating';
+export const RATING_STORE  = 'rating';
 
 export interface RatingDto {
   id:       number;
@@ -66,7 +66,7 @@ export type IRatingDeleteAction = {
 export type RatingAction   = IRatingAddAction | IRatingDeleteAction | GenericItemReducerAction<Rating>;
 export type RatingDispatch = ReduxDispatch<RatingAction>;
 
-export const RATINGS_STORE = '@@ratings';
+export const RATINGS_STORE = 'ratings';
 
 export type RatingsState    = MapReducerType<Rating[]>;
 export type RatingsAction   = GenericMapReducerAction<Rating[]>;

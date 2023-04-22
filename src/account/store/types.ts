@@ -59,7 +59,7 @@ export enum AccountActionTypes {
   LOGOUT = 'LOGOUT',
 }
 
-export const ACCOUNT_STORE = '@@account';
+export const ACCOUNT_STORE = 'account';
 export const ACCOUNT_TOKEN_STORAGE_KEY = 'token';
 
 export type IAccountLoginAction = {

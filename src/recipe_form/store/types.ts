@@ -9,7 +9,7 @@ export interface AutocompleteListItem {
   char: string;
 }
 
-export const RECIPE_FORM_STORE  = '@@recipeForm';
+export const RECIPE_FORM_STORE  = 'recipeForm';
 
 export type RecipeFormAction   = GenericItemReducerAction<Recipe>;
 export type RecipeFormDispatch = ReduxDispatch<RecipeFormAction>;

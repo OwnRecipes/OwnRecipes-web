@@ -40,7 +40,7 @@ export interface GroceryListItemUpdate {
   title: string;
 }
 
-export const GROCERY_LIST_ITEM_STORE = '@@groceryListItem';
+export const GROCERY_LIST_ITEM_STORE = 'groceryListItem';
 
 export enum GroceryListItemActionTypes {
   TOGGLE_ITEM = 'TOGGLE_ITEM',

@@ -24,7 +24,7 @@ function getFilters(recipe: Recipe): Record<string, string> | undefined {
 const RecipeFooter: React.FC<IRecipeFooterProps> = ({ recipe }: IRecipeFooterProps) => {
   const intl = useIntl();
 
-  const miniBrowseMeta = useSelector((state: RootState) => state.browse.miniBrowse.meta);
+  const miniBrowseMeta = useSelector((state: RootState) => state.browse.browserMini.meta);
 
   if (!miniBrowseMeta.hasConnection || miniBrowseMeta.error
       || !recipe?.author) return null;
