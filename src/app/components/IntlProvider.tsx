@@ -46,6 +46,10 @@ const IntlProvider: React.FC<IIntlProviderProps> = ({ children }: IIntlProviderP
     }
   }, [settings.language]);
 
+  useEffect(() => {
+    window.document.documentElement.lang = language;
+  }, [language]);
+
   return (
     <ReactIntlProvider locale={language} defaultLocale={DEFAULT_LANGUAGE} messages={getMessagesFromLang(language)}>
       {children}
