@@ -66,7 +66,7 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
     }
   }, [qs]);
 
-  const hasActiveFilter = Object.keys(qs).filter(key => !['limit', 'offset', 'search'].includes(key)).length !== 0;
+  const hasActiveFilter = Object.keys(qs).filter(key => !['limit', 'ordering', 'offset', 'search'].includes(key)).length !== 0;
 
   return (
     <SearchMenu
