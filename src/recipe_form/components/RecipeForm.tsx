@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';
@@ -10,7 +10,7 @@ import { Recipe } from '../../recipe/store/RecipeTypes';
 import TagListContainer from '../containers/TagListContainer';
 import CourseSelectContainer from '../containers/CourseSelectContainer';
 import CuisineSelectContainer from '../containers/CuisineSelectContainer';
-import RecipeFormToolbar from '../containers/RecipeFormToolbar';
+import RecipeFormToolbar, { SubmittingObserver, SubmittingObserverClass } from '../containers/RecipeFormToolbar';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
@@ -106,11 +106,17 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
 
   const measurementsContext = useContext(MeasurementContext);
 
-  const handleSubmit = useCallback((form: RecipeFormatted) => onSubmit({
-    ...form,
-    ingredientGroups: ingredientsParser(measurementsContext.parser, form.ingredientGroupsS),
-    subrecipes:        subrecipesParser(measurementsContext.parser, form.subrecipesS),
-  }), [measurementsContext.parser]);
+  const submittingObserverRef = useRef<SubmittingObserverClass>(null);
+  const handleSubmit = useCallback((form: RecipeFormatted) => {
+    // Do not disable the submit-button on submitting, to prevent losing focus.
+    if (submittingObserverRef.current?.getSubmitting()) return Promise<null>;
+
+    return onSubmit({
+      ...form,
+      ingredientGroups: ingredientsParser(measurementsContext.parser, form.ingredientGroupsS),
+      subrecipes:        subrecipesParser(measurementsContext.parser, form.subrecipesS),
+    });
+  }, [measurementsContext.parser, submittingObserverRef.current]);
 
   const initialValues: Partial<RecipeFormatted> | undefined = useMemo(() => {
     if (isNew && !recipe) {
@@ -135,10 +141,11 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
     <ReduxForm
         initialValues = {initialValues}
         onSubmit = {handleSubmit}
-        subscription = {{}}
+        subscription = {{ submitting: true }}
         render = {({ form, handleSubmit: renderSubmit }) => (
           <Form className='recipe-form' onSubmit={renderSubmit}>
             <InitialValuesResetter form={form} initialValues={initialValues} />
+            <SubmittingObserver ref={submittingObserverRef} />
             <Container>
               <ReFormStatus />
               <Row>
