@@ -5,6 +5,7 @@ import * as _ from 'lodash-es';
 
 import Icon from '../../common/components/Icon';
 import Input from '../../common/components/Input/Input';
+import InputAdornment from '../../common/components/Input/InputAdornment';
 
 export interface ISearchBarProps {
   value:  string;
@@ -54,9 +55,11 @@ const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarPro
   }, []);
 
   const clearInput = (
-    <Button variant='secondary' className='search-clear' onClick={handleClearInput}>
-      <Icon icon='x' variant='light' size='2x' />
-    </Button>
+    <InputAdornment position='end'>
+      <Button variant='secondary' className='search-clear' onClick={handleClearInput}>
+        <Icon icon='x' variant='light' size='2x' />
+      </Button>
+    </InputAdornment>
   );
 
   return (

@@ -1,5 +1,5 @@
 import { createRef, forwardRef } from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import classNames from 'classnames';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -11,6 +11,10 @@ import Tooltip from '../Tooltip';
 import ConditionalWrapper from '../ConditionalWrapper';
 import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
 import { CommonProps } from '../../types/OverridableComponent';
+import Icon from '../Icon';
+import InputAdornment from './InputAdornment';
+
+export const IS_SAVED_PASSWORD = '~$$~PASSWORD~$$~';
 
 export interface IInputProps extends IBaseInputComponentProps {
   label?: string;
@@ -57,9 +61,24 @@ export type IAnyInputProps = ITextInputProps | INumberInputProps;
 export const isTextInput   = (inp: IAnyInputProps): inp is ITextInputProps => (inp as ITextInputProps).type == null || (inp as ITextInputProps).type === 'text' || (inp as ITextInputProps).type === 'password';
 export const isNumberInput = (inp: IAnyInputProps): inp is INumberInputProps => (inp as INumberInputProps).type === 'number';
 
-export default class Input extends BaseInputComponent<IAnyInputProps> {
+interface IInputState {
+  hasFocus: boolean;
+  showCapsWarning: boolean;
+  showPassword: boolean;
+}
+
+export default class Input extends BaseInputComponent<IAnyInputProps, IInputState> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
+
+  constructor(props: IAnyInputProps) {
+    super(props);
+    this.state = {
+      hasFocus: false,
+      showCapsWarning: false,
+      showPassword: false,
+    };
+  }
 
   focus(): boolean { // eslint-disable-line react/no-unused-class-component-methods
     if (this.ref != null && this.ref.current) {
@@ -157,23 +176,113 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
     }
   };
 
+  doHandleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
+    this.setState({
+      hasFocus: false,
+      showPassword: false,
+    });
+    this.props.onBlur?.(event);
+  };
+
   handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    if (this.props.onBlur) {
-      this.props.onBlur(event);
-    }
     if (!this.props.onChange || this.props.readOnly || this.props.disabled) return;
     const value = this.formatValue(event.target.value, true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.props.onChange(this.props.name, value as any);
+
+    const { relatedTarget } = event;
+    const endAdornmentId = `${this.props.name}-endadornment`;
+    if (relatedTarget instanceof Element && relatedTarget?.id === endAdornmentId) {
+      return;
+    }
+
+    this.doHandleBlurInput(event);
+  };
+
+  handleBlurAdornment = (event: React.FocusEvent<HTMLButtonElement>) => {
+    const { relatedTarget } = event;
+    if (relatedTarget instanceof Element && relatedTarget?.id === this.props.name) {
+      return;
+    }
+
+    this.doHandleBlurInput(event as React.FocusEvent<HTMLInputElement>);
+  };
+
+  updateShowCapsWarning = (isCaps: boolean) => {
+    if (isCaps && !this.state.showCapsWarning) {
+      this.setState({
+        showCapsWarning: true,
+      });
+    } else if (!isCaps && this.state.showCapsWarning) {
+      this.setState({
+        showCapsWarning: false,
+      });
+    }
+  };
+
+  handleClick = (event: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>) => {
+    this.updateShowCapsWarning(event.getModifierState('CapsLock'));
+    if (this.props.type === 'password' && this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD) {
+      setTimeout(() => {
+        // TODO
+        // combinedRef.current?.select();
+      }, 0);
+    }
+  };
+
+  handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    this.updateShowCapsWarning(event.getModifierState('CapsLock'));
+  };
+
+  handleFocus = () => {
+    this.setState({
+      hasFocus: true,
+    });
+    if (this.props.type === 'password' && this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD) {
+      // TODO
+      // combinedRef.current?.select();
+    }
+  };
+
+  handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return;
+
+    if (this.props.type === 'password') {
+      if (this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD
+        && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowDown')) {
+          event.preventDefault();
+        }
+    }
+  };
+
+  handleToggleShowPassword = () => {
+    this.setState({
+      showPassword: !this.state.showPassword,
+    });
   };
 
   render() {
     // console.log(`[Input] name=${this.props.name}`);
 
     const type = this.props.type ?? 'text';
-    const isDebounce = this.props.debounceTimeout != null && this.props.debounceTimeout > 0;
+    const isDebounce = type === 'text' && this.props.debounceTimeout != null && this.props.debounceTimeout > 0;
 
     const currentLength = (this.props.value?.toString() ?? '').length;
+
+    const showPasswordReveal = this.props.type === 'password' && this.props.value != null && String(this.props.value).length > 0 && String(this.props.value) !== IS_SAVED_PASSWORD;
+    let endAdornmentJsx: React.ReactElement | undefined;
+    if (showPasswordReveal) {
+      endAdornmentJsx = <InputPasswordRevealAdornment showPassword={this.state.showPassword} onClick={this.handleToggleShowPassword} onBlur={this.handleBlurAdornment} />;
+    }
+
+    if (this.props.inputAdornmentEnd) {
+      endAdornmentJsx = (
+        <>
+          {endAdornmentJsx}
+          {this.props.inputAdornmentEnd}
+        </>
+      );
+    }
 
     return (
       <Form.Group
@@ -207,9 +316,11 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
                   placeholder  = {this.props.placeholder}
                   autoFocus = {this.props.autoFocus}
 
-                  onChange  = {this.handleChange}
-                  onKeyDown = {this.handleKeyDown}
                   onBlur    = {this.handleBlur}
+                  onChange  = {this.handleChange}
+                  onClick   = {this.handleClick}
+                  onKeyDown = {this.handleKeyDown}
+                  onKeyUp   = {this.handleKeyUp}
                   onFocus   = {this.props.onFocus}
 
                   className = {classNames('form-control', {
@@ -221,7 +332,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
             {!isDebounce && (
               <Form.Control
                   name  = {this.props.name}
-                  type  = {type === 'number' ? 'text' : type}
+                  type  = {type === 'number' || this.state.showPassword ? 'text' : type}
                   as    = {isTextInput(this.props) && type === 'text' && this.props.rows != null ? 'textarea' : undefined}
                   value = {this.props.value ?? ''}
                   rows  = {isTextInput(this.props) && type === 'text' ? this.props.rows : undefined}
@@ -238,18 +349,24 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
 
                   className = {classNames({
                     'adorned-start': this.props.inputAdornmentStart,
-                    'adorned-end': this.props.inputAdornmentEnd,
+                    'adorned-end': endAdornmentJsx,
+                    'with-password-reveal': showPasswordReveal,
                   })}
 
-                  onChange  = {this.handleChange}
-                  onKeyDown = {this.handleKeyDown}
                   onBlur    = {this.handleBlur}
+                  onChange  = {this.handleChange}
+                  onClick   = {this.handleClick}
+                  onKeyDown = {this.handleKeyDown}
+                  onKeyUp   = {this.handleKeyUp}
                   onFocus   = {this.props.onFocus}
 
                   ref = {this.ref} />
               )}
-            {this.props.inputAdornmentEnd && <InputGroup.Text className='input-adornment-end'>{this.props.inputAdornmentEnd}</InputGroup.Text>}
+            {endAdornmentJsx}
           </InputGroup>
+          {this.props.type === 'password' && this.state.showCapsWarning && (
+            <InputCapslockWarning />
+          )}
           {isTextInput(this.props) && this.props.maxLength && (
             <InputLengthWarning length={currentLength} maxLength={this.props.maxLength} />
           )}
@@ -258,6 +375,62 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
     );
   }
 }
+
+interface IInputPasswordRevealAdornment extends CommonProps {
+  showPassword: boolean;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onBlur:  (event: React.FocusEvent<HTMLButtonElement>) => void;
+}
+
+const InputPasswordRevealAdornment = forwardRef<HTMLDivElement, IInputPasswordRevealAdornment>(({
+    showPassword, onClick, onBlur,
+    className, ...rest }: IInputPasswordRevealAdornment, ref) => {
+  const { formatMessage } = useIntl();
+  const messages = defineMessages({
+    hidePassword: {
+      id: 'input.hide_password',
+      description: 'Button label to mask the password.',
+      defaultMessage: 'Hide the password',
+    },
+    revealPassword: {
+      id: 'input.reveal_password',
+      description: 'Button label to reveal the password.',
+      defaultMessage: 'Reveal the password',
+    },
+  });
+
+  return (
+    <InputAdornment position='end' inline {...rest} className={classNames('inline-adornment', className)} ref={ref}>
+      <Button
+          variant = 'text'
+          onClick = {onClick}
+          onBlur  = {onBlur}
+          aria-label = {showPassword ? formatMessage(messages.hidePassword) : formatMessage(messages.revealPassword)}>
+        <Icon icon={showPassword ? 'eye-slash' : 'eye'} variant='light' />
+      </Button>
+    </InputAdornment>
+  );
+});
+
+const InputCapslockWarning = forwardRef<HTMLDivElement, CommonProps>(({ ...rest }: CommonProps, ref) => {
+  const { formatMessage } = useIntl();
+  const messages = defineMessages({
+    capslockWarning: {
+      id: 'input.capslock_warning',
+      description: 'Warning when password input has focus and capslock is active.',
+      defaultMessage: 'Capslock is active.',
+    },
+  });
+
+  return (
+    <Form.Text
+        className = {classNames('post-text', 'help-text')}
+        {...rest}
+        ref = {ref}>
+      {formatMessage(messages.capslockWarning)}
+    </Form.Text>
+  );
+});
 
 interface IInputLengthWarning extends CommonProps {
   length: number;
@@ -284,8 +457,6 @@ const InputLengthWarning = forwardRef<HTMLDivElement, IInputLengthWarning>(({
   const remainingChars = maxLength && maxLength > 0 ? (maxLength - length) : Number.POSITIVE_INFINITY;
 
   if (!showLengthWarning) return null;
-
-  /* TODO position right. properly translate */
 
   return (
     <Form.Text

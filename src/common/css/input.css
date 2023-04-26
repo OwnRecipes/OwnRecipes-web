@@ -27,6 +27,10 @@
 .form-group:not(.readonly) .form-control:hover {
   border-color: var(--primaryMain);
 }
+.form-control.with-password-reveal::-ms-reveal {
+  /* Edge Chromium: Remove their built-in password-reveal button. */
+  display: 'none',
+}
 
 .input-group-text {
   background-color: var(--hoverBg);

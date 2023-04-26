@@ -101,7 +101,8 @@
 #header-navbar .my-account-dropdown > .dropdown-menu.show {
   overflow-y: initial;
 }
-#header-navbar .header-dropdown > .dropdown-toggle {
+#header-navbar .header-dropdown > .dropdown-toggle,
+#header-navbar #settings-dropdown {
   padding-top: 0;
   padding-bottom: 0;
 }

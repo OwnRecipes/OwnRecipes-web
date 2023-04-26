@@ -8,6 +8,7 @@ import Icon from '../../common/components/Icon';
 import { getRoutePath } from '../../common/utility';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import InputAdornment from '../../common/components/Input/InputAdornment';
 import NavLink from './NavLink';
 
 export interface INavSearchProps {
@@ -89,7 +90,9 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
                 inputAdornmentEnd = {(
                   <FieldSpyValues fieldNames={['search']}>
                     {values => (
-                      <SearchButton isExpanded={isExpanded} searchValue={values.search} onSearchClick={handleSearchClick} onExpandClick={handleExpandClick} ref={urlRef} />
+                      <InputAdornment position='end'>
+                        <SearchButton isExpanded={isExpanded} searchValue={values.search} onSearchClick={handleSearchClick} onExpandClick={handleExpandClick} ref={urlRef} />
+                      </InputAdornment>
                     )}
                   </FieldSpyValues>
                 )}

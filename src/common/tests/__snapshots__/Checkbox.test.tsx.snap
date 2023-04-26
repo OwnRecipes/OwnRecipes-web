@@ -41,12 +41,12 @@ exports[`Checkbox complex 1`] = `
     onMouseOver={[Function]}
   >
     <small
-      className="help-text form-text"
+      className="pre-text help-text form-text"
     >
       some advice
     </small>
     <small
-      className="error-text form-text"
+      className="pre-text error-text form-text"
     >
       Oh no!
     </small>
@@ -114,7 +114,7 @@ exports[`Checkbox error 1`] = `
   data-api-field="cb"
 >
   <small
-    className="error-text form-text"
+    className="pre-text error-text form-text"
   >
     Oh no!
   </small>
