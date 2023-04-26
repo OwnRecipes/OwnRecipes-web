@@ -1,4 +1,4 @@
-import { forwardRef, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { forwardRef, RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';
@@ -23,8 +23,10 @@ import { GroceryList, GroceryListBulkAdd, GroceryListCreate } from '../../grocer
 import * as GroceryListsActions from '../../groceryList/store/GroceryListsActions';
 import * as GroceryListActions from '../../groceryList/store/GroceryListActions';
 import ReSelect from '../../common/components/ReduxForm/ReSelect';
+import MeasurementContext from '../../common/context/MeasurementContext';
 import IngredientGroups from './IngredientGroups';
 import SubRecipes from './SubRecipes';
+import { formatMeasurement } from './Ingredients';
 
 export interface IAddToGroceryListModalProps {
   show: boolean;
@@ -45,7 +47,10 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
   const intl = useIntl();
   const dispatch = useDispatch();
 
-  const bulkAdd = useCallback(async (list: number, data: GroceryListBulkAdd) => GroceryListActions.bulkAdd(dispatch, list, data), [dispatch]);
+  const measurementContext = useContext(MeasurementContext);
+  const formatMeasurementCb = useCallback((measurement: string | undefined, quantity: string | undefined) => formatMeasurement(intl, measurementContext, measurement, quantity), [measurementContext, intl]);
+
+  const bulkAdd = useCallback(async (list: number, data: GroceryListBulkAdd) => GroceryListActions.bulkAdd(dispatch, list, data, formatMeasurementCb), [dispatch]);
   const createList = useCallback(async (item: GroceryListCreate) => GroceryListActions.create(dispatch, item), [dispatch]);
 
   const groceryListsState = useSelector((state: RootState) => state.groceryLists);

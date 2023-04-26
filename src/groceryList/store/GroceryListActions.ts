@@ -75,15 +75,17 @@ export const remove = (id: number, slug: string) => (dispatch: GroceryListDispat
     .catch(err => dispatch(handleError(err, GROCERY_LIST_STORE)));
 };
 
-function format(i: Ingredient | SubRecipe) {
+function format(i: Ingredient | SubRecipe, formatter: FormatterFunc) {
   const quantityS = i.quantity && i.quantity !== '0' ? i.quantity : undefined;
-  const measurementS = i.measurement ? i.measurement : undefined;
-  return [quantityS, measurementS, i.title].filter(Boolean).join(' ');
+  const formatted = formatter(i.measurement, i.quantity);
+  return [quantityS, formatted, i.title].filter(Boolean).join(' ');
 }
 
-export const bulkAdd = async (dispatch: AnyDispatch, list: number, data: GroceryListBulkAdd) => {
-  const checkedIngredients = data.ingredientGroups.flatMap(ig => ig.ingredients.map(i => ({ list: list, title: format(i) })));
-  const checkedSubRecipe = data.subrecipes.map(sr => ({ list: list, title: format(sr) }));
+type FormatterFunc = (measurement: string | undefined, quantity: string | undefined) => string;
+
+export const bulkAdd = async (dispatch: AnyDispatch, list: number, data: GroceryListBulkAdd, formatter: FormatterFunc) => {
+  const checkedIngredients = data.ingredientGroups.flatMap(ig => ig.ingredients.map(i => ({ list: list, title: format(i, formatter) })));
+  const checkedSubRecipe = data.subrecipes.map(sr => ({ list: list, title: format(sr, formatter) }));
   const allItems = checkedIngredients.concat(checkedSubRecipe);
 
   if (allItems.length > 0) {

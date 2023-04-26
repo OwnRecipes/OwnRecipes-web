@@ -16,7 +16,7 @@ export interface IIngredientsProps {
   selectable?: boolean;
 }
 
-export function formatMeasurement(measurementsContext: IMeasurementContext, measurement: string | undefined, intl: IntlShape, quantity: string | undefined): string {
+export function formatMeasurement(intl: IntlShape, measurementsContext: IMeasurementContext, measurement: string | undefined, quantity: string | undefined): string {
   let measurementString: string;
   if (measurement != null) {
     const measurementParserId = measurementsContext.formatter[measurementsContext.parser[measurement]];
@@ -54,7 +54,7 @@ const Ingredients: React.FC<IIngredientsProps> = ({
 
   const ingredients = data.map((ingredient, index) => {
     const quantityS    = ingredient.quantity;
-    const measurementString = formatMeasurement(measurementsContext, ingredient.measurement, intl, ingredient.quantity);
+    const measurementString = formatMeasurement(intl, measurementsContext, ingredient.measurement, ingredient.quantity);
     const titleString = ingredient.title;
     const renderQuantity: boolean = Boolean(quantityS) || Boolean(measurementString);
 
