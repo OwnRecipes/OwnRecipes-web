@@ -17,15 +17,13 @@ import InputAdornment from './InputAdornment';
 export const IS_SAVED_PASSWORD = '~$$~PASSWORD~$$~';
 
 export interface IInputProps extends IBaseInputComponentProps {
-  label?: string;
-
   placeholder?:  string;
-  autoComplete?: string;
 
   inputAdornmentStart?: React.ReactNode;
   inputAdornmentEnd?:   React.ReactNode;
 
   debounceTimeout?: number;
+  saveValue?: string;
 
   onChange?: (name: string, newValue: string) => void;
 }
@@ -36,7 +34,6 @@ export type ITextInputProps = {
   maxLength?: number;
 
   value?: string;
-  saveValue?: string;
 
   onChange?: (name: string, newValue: string) => void;
 } & IBaseInputComponentProps & IInputProps;
@@ -44,13 +41,7 @@ export type ITextInputProps = {
 export type INumberInputProps = {
   type?:  'number';
 
-  placeholder?:  string;
-  autoComplete?: string;
-
-  inputAdornmentStart?: React.ReactNode;
-
   value?: string | number;
-  saveValue?: string;
   min?:   number;
   max?:   number;
 
@@ -264,22 +255,32 @@ export default class Input extends BaseInputComponent<IAnyInputProps, IInputStat
   render() {
     // console.log(`[Input] name=${this.props.name}`);
 
-    const type = this.props.type ?? 'text';
-    const isDebounce = type === 'text' && this.props.debounceTimeout != null && this.props.debounceTimeout > 0;
+    const { inputAdornmentStart, inputAdornmentEnd, debounceTimeout, value, saveValue, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        type = 'text',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        rows, maxLength,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        min, max,
+        name, style, tooltip,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
 
-    const currentLength = (this.props.value?.toString() ?? '').length;
+    const isDebounce = type === 'text' && debounceTimeout != null && debounceTimeout > 0;
 
-    const showPasswordReveal = this.props.type === 'password' && this.props.value != null && String(this.props.value).length > 0 && String(this.props.value) !== IS_SAVED_PASSWORD;
+    const currentLength = (value?.toString() ?? '').length;
+
+    const showPasswordReveal = type === 'password' && value != null && String(value).length > 0 && String(value) !== IS_SAVED_PASSWORD;
     let endAdornmentJsx: React.ReactElement | undefined;
     if (showPasswordReveal) {
       endAdornmentJsx = <InputPasswordRevealAdornment showPassword={this.state.showPassword} onClick={this.handleToggleShowPassword} onBlur={this.handleBlurAdornment} />;
     }
 
-    if (this.props.inputAdornmentEnd) {
+    if (inputAdornmentEnd) {
       endAdornmentJsx = (
         <>
           {endAdornmentJsx}
-          {this.props.inputAdornmentEnd}
+          {inputAdornmentEnd}
         </>
       );
     }
@@ -287,69 +288,56 @@ export default class Input extends BaseInputComponent<IAnyInputProps, IInputStat
     return (
       <Form.Group
           {...this.getGroupProps()}
-          controlId = {this.props.name}
+          controlId = {name}
           className = {this.getFormGroupClassNames()}
-          style     = {this.props.style}>
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
           {this.getLabel()}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <InputGroup>
-            {this.props.inputAdornmentStart && <InputGroup.Text className='input-adornment-start'>{this.props.inputAdornmentStart}</InputGroup.Text>}
+            {inputAdornmentStart && <InputGroup.Text className='input-adornment-start'>{inputAdornmentStart}</InputGroup.Text>}
             {isDebounce && (
               <DebounceInput
                   minLength = {2}
-                  debounceTimeout = {this.props.debounceTimeout}
+                  debounceTimeout = {debounceTimeout}
 
-                  name  = {this.props.name}
-                  element = {isTextInput(this.props) && type === 'text' && this.props.rows != null ? 'textarea' : undefined}
-                  value = {this.props.value ?? ''}
-                  rows  = {isTextInput(this.props) && type === 'text' ? this.props.rows : undefined}
-                  min   = {isNumberInput(this.props) ? this.props.min : undefined}
-                  max   = {isNumberInput(this.props) ? this.props.max : undefined}
+                  name  = {name}
+                  element = {isTextInput(this.props) && type === 'text' && rows != null ? 'textarea' : undefined}
+                  value = {value ?? ''}
+                  rows  = {isTextInput(this.props) && type === 'text' ? rows : undefined}
+                  min   = {isNumberInput(this.props) ? min : undefined}
+                  max   = {isNumberInput(this.props) ? max : undefined}
 
-                  required  = {this.props.required}
-                  readOnly  = {this.props.readOnly}
-                  autoComplete = {this.props.autoComplete}
-                  placeholder  = {this.props.placeholder}
-                  autoFocus = {this.props.autoFocus}
+                  {...rest}
 
                   onBlur    = {this.handleBlur}
                   onChange  = {this.handleChange}
                   onClick   = {this.handleClick}
                   onKeyDown = {this.handleKeyDown}
                   onKeyUp   = {this.handleKeyUp}
-                  onFocus   = {this.props.onFocus}
 
                   className = {classNames('form-control', {
-                    'adorned-start': this.props.inputAdornmentStart,
-                    'adorned-end': this.props.inputAdornmentEnd,
+                    'adorned-start': inputAdornmentStart != null,
+                    'adorned-end':   inputAdornmentEnd != null,
                   })}
                   ref = {this.ref} />
             )}
             {!isDebounce && (
               <Form.Control
-                  name  = {this.props.name}
+                  name  = {name}
                   type  = {type === 'number' || this.state.showPassword ? 'text' : type}
-                  as    = {isTextInput(this.props) && type === 'text' && this.props.rows != null ? 'textarea' : undefined}
-                  value = {this.props.value ?? ''}
-                  rows  = {isTextInput(this.props) && type === 'text' ? this.props.rows : undefined}
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  min   = {isNumberInput(this.props) ? this.props.min : undefined}
-                  max   = {isNumberInput(this.props) ? this.props.max : undefined}
+                  as    = {isTextInput(this.props) && type === 'text' && rows != null ? 'textarea' : undefined}
+                  value = {value ?? ''}
+                  rows  = {isTextInput(this.props) && type === 'text' ? rows : undefined}
 
-                  required  = {this.props.required}
-                  readOnly  = {this.props.readOnly}
-                  autoComplete = {this.props.autoComplete}
-                  placeholder  = {this.props.placeholder}
-                  autoFocus = {this.props.autoFocus}
+                  {...rest}
 
                   className = {classNames({
-                    'adorned-start': this.props.inputAdornmentStart,
-                    'adorned-end': endAdornmentJsx,
+                    'adorned-start': inputAdornmentStart != null,
+                    'adorned-end':   endAdornmentJsx != null,
                     'with-password-reveal': showPasswordReveal,
                   })}
 
@@ -358,17 +346,16 @@ export default class Input extends BaseInputComponent<IAnyInputProps, IInputStat
                   onClick   = {this.handleClick}
                   onKeyDown = {this.handleKeyDown}
                   onKeyUp   = {this.handleKeyUp}
-                  onFocus   = {this.props.onFocus}
 
                   ref = {this.ref} />
               )}
             {endAdornmentJsx}
           </InputGroup>
-          {this.props.type === 'password' && this.state.showCapsWarning && (
+          {type === 'password' && this.state.showCapsWarning && (
             <InputCapslockWarning />
           )}
-          {isTextInput(this.props) && this.props.maxLength && (
-            <InputLengthWarning length={currentLength} maxLength={this.props.maxLength} />
+          {isTextInput(this.props) && maxLength && (
+            <InputLengthWarning length={currentLength} maxLength={maxLength} />
           )}
         </ConditionalWrapper>
       </Form.Group>

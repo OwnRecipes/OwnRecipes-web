@@ -151,6 +151,10 @@ export function scrollToElement(element: Element, offset: number) {
   });
 }
 
+export function slugify(title: string): string {
+  return (title.replace(/ /g, '-').replace(/\./g, '') || 'default').toLocaleLowerCase();
+}
+
 export function sortByLabel(a: { label: string }, b: { label: string}): number {
   return a.label.localeCompare(b.label);
 }

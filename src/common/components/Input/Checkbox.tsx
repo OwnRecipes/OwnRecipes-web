@@ -54,32 +54,29 @@ export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
   render() {
     // console.log(`[Checkbox] name=${this.props.name}`);
 
+    const { value, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
     return (
       <Form.Group
           {...this.getGroupProps()}
-          controlId = {this.props.name}
+          controlId = {name}
           className = {this.getFormGroupClassNames()}
-          style     = {this.props.style}>
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
           {this.getHelpText()}
           {this.getErrorMessage()}
           <Form.Check
-              name  = {this.props.name}
-              checked = {this.props.value}
+              name  = {name}
+              checked = {value}
               label = {this.getLabel()}
               className = 'form-check' // BUG: always set form-check
-
-              required  = {this.props.required}
-              readOnly  = {this.props.readOnly}
-              autoComplete = {this.props.autoComplete}
-              autoFocus = {this.props.autoFocus}
-
               onChange  = {this.handleChange}
-              onBlur    = {this.props.onBlur}
-              onFocus   = {this.props.onFocus}
-              onKeyDown = {this.props.onKeyDown}
+
+              {...rest}
               ref = {this.ref} />
         </ConditionalWrapper>
       </Form.Group>

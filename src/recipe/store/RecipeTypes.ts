@@ -4,6 +4,7 @@ import { NUMBER_UNDEFINED, STRING_UNDEFINED } from '../../common/constants';
 import ItemReducerType from '../../common/store/ItemReducerType';
 import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import { PayloadAction } from '../../common/store/redux';
+import { slugify } from '../../common/utility';
 
 export interface Quantity {
   numerator?:   number;
@@ -57,9 +58,6 @@ export const toIngredientGroupDto = (obj: IngredientGroup): IngredientGroupDto =
   title:       obj.title,
   ingredients: obj.ingredients.map(toIngredientDto),
 });
-export function slugify(title: string): string {
-  return (title.replace(/ /g, '-').replace(/\./g, '') || 'default').toLocaleLowerCase();
-}
 export const toIngredientGroup = (dto: IngredientGroupDto): IngredientGroup => ({
   slug:        slugify(dto.title),
   title:       dto.title,

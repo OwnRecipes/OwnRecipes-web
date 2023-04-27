@@ -58,39 +58,36 @@ export default class TextareaAutocomplete<TListItem extends string | object = Au
   render() {
     // console.log(`[TextareaAutocomplete] name=${this.props.name}, value=${this.props.value}`);
 
+    const { value = '', rows = 4, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
     return (
       <Form.Group
           {...this.getGroupProps()}
-          controlId = {this.props.name}
+          controlId = {name}
           className = {this.getFormGroupClassNames()}
-          style     = {this.props.style}>
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
           {this.getLabel()}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <InputGroup>
             <ReactTextareaAutocomplete<TListItem>
-                {...this.props}
-                name     = {this.props.name}
-                value    = {this.props.value ?? ''}
-                rows     = {this.props.rows ?? 4}
-
-                required  = {this.props.required}
-                readOnly  = {this.props.readOnly}
-                autoComplete = {this.props.autoComplete}
-                autoFocus = {this.props.autoFocus}
+                name     = {name}
+                value    = {value}
+                rows     = {rows}
 
                 loadingComponent = {Loading}
                 className = 'form-control'
                 movePopupAsYouType
-                trigger   = {this.props.trigger}
 
                 onChange  = {this.handleChange}
-                onBlur    = {this.props.onBlur}
-                onFocus   = {this.props.onFocus}
-                onKeyDown = {this.props.onKeyDown}
+
+                {...rest}
+                ref = {this.ref}
               />
           </InputGroup>
         </ConditionalWrapper>

@@ -46,6 +46,11 @@ const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({
       description: 'Accessible tooltip for the (change) servings input',
       defaultMessage: 'Amount of servings',
     },
+    servings_update_button: {
+      id: 'recipe.servings_update_button',
+      description: 'Label for the button to change the servings',
+      defaultMessage: 'Update servings',
+    },
   });
 
   const customServings = recipe?.customServings;
@@ -92,7 +97,7 @@ const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({
                         min   = {0}
                         max   = {1000}
                         autoComplete = 'off' />
-                    <Button type='submit' variant='primary'>
+                    <Button type='submit' variant='primary' aria-label={formatMessage(messages.servings_update_button)}>
                       <Icon icon='arrow-repeat' variant='light' />
                       {formatMessage(messages.servings)}
                     </Button>

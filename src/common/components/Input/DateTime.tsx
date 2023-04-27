@@ -9,8 +9,6 @@ import ConditionalWrapper from '../ConditionalWrapper';
 require('react-datetime/css/react-datetime.css');
 
 interface IDateTimeProps extends IBaseInputComponentProps {
-  name:  string;
-  label: string;
   timeFormat?: string;
   dateFormat?: string;
 
@@ -33,29 +31,31 @@ export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTi
   };
 
   render() {
+    const { timeFormat, dateFormat, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
     return (
       <Form.Group
           {...this.getGroupProps()}
-          controlId = {this.props.name}
+          controlId = {name}
           className = {this.getFormGroupClassNames()}
-          style     = {this.props.style}>
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
           {this.getLabel()}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <Datetime
-              value = {!this.props.timeFormat ? moment(this.state.value).format('ddd, ll') : moment(this.state.value).format('llll')}
+              value = {!timeFormat ? moment(this.state.value).format('ddd, ll') : moment(this.state.value).format('llll')}
               inputProps = {{
-                name:    this.props.name,
+                name:       name,
                 className: 'form-control',
-                onBlur:  this.props.onBlur,
-                onFocus: this.props.onFocus,
-                onKeyDown: this.props.onKeyDown,
+                ...rest,
               }}
-              dateFormat ={this.props.dateFormat || 'ddd, ll'}
-              timeFormat ={this.props.timeFormat}
+              dateFormat = {dateFormat || 'ddd, ll'}
+              timeFormat = {timeFormat}
               onChange   = {this.handleChange} />
         </ConditionalWrapper>
       </Form.Group>

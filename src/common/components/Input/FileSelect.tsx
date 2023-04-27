@@ -47,32 +47,34 @@ class FileSelect extends BaseInputComponent<IFileSelectProps> {
   render() {
     // console.log(`[FileSelect] name=${this.props.name}`);
 
+    const { accept, value, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip, readOnly, disabled,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
     return (
       <Form.Group
           {...this.getGroupProps()}
-          controlId = {this.props.name}
+          controlId = {name}
           className = {this.getFormGroupClassNames()}
-          style     = {this.props.style}>
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
           {this.getLabel()}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <InputGroup>
             <Form.Control
                 type   = 'file'
-                name   = {this.props.name}
-                accept = {this.props.accept}
-                readOnly = {this.props.readOnly}
-                disabled = {this.props.disabled}
+                name   = {name}
+                accept = {accept}
+                readOnly = {readOnly}
+                disabled = {disabled}
                 onChange = {this.handleChange}
-                onBlur   = {this.props.onBlur}
-                onFocus  = {this.props.onFocus}
-                onKeyDown = {this.props.onKeyDown}
+                {...rest}
                 ref = {this.ref} />
-            {!this.props.readOnly && !this.props.disabled && this.props.onChange
-                && (this.props.value || (this.ref.current != null && this.ref.current.value)) && (
+            {!readOnly && !disabled && onChange
+                && (value || (this.ref.current != null && this.ref.current.value)) && (
                   <InputGroup.Text className='input-adornment-end button'>
                     <Button onClick={this.handleClear}><Icon icon='x' variant='light' size='2x' /></Button>
                   </InputGroup.Text>

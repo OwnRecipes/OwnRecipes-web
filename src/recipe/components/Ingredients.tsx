@@ -4,7 +4,7 @@ import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
 import MeasurementContext, { IMeasurementContext } from '../../common/context/MeasurementContext';
 import HeaderLink from '../../common/components/HeaderLink';
-import { optionallyFormatMessage } from '../../common/utility';
+import { optionallyFormatMessage, slugify } from '../../common/utility';
 import { Ingredient, IngredientGroup } from '../store/RecipeTypes';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 
@@ -51,6 +51,7 @@ const Ingredients: React.FC<IIngredientsProps> = ({
 
   const measurementsContext = useContext(MeasurementContext);
   const caption = showCaptions && group.title ? group.title : undefined;
+  const captionSlug = slugify(caption ?? '');
 
   const ingredients = data.map((ingredient, index) => {
     const quantityS    = ingredient.quantity;
@@ -87,9 +88,9 @@ const Ingredients: React.FC<IIngredientsProps> = ({
   return (
     <Table striped size='sm' className='table ingredients-table'>
       {caption && (
-        <caption id={withHeaderLink ? `ingredients-${caption}` : undefined} className='subheading h3'>
+        <caption id={withHeaderLink ? `ingredients-${captionSlug}` : undefined} className='subheading h3'>
           {`${caption}:`}
-          {withHeaderLink && <HeaderLink linkFor={`ingredients-${caption}`} />}
+          {withHeaderLink && <HeaderLink linkFor={`ingredients-${captionSlug}`} />}
         </caption>
       )}
       <thead className='hideme'>

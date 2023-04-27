@@ -9,7 +9,7 @@ import '../css/smart_text_box.css';
 import IngredientGroups from '../../recipe/components/IngredientGroups';
 import formatQuantity from '../../recipe/utilts/formatQuantity';
 import parseIngredient from '../utilts/parseIngredient';
-import { Ingredient, IngredientGroup, IngredientInput, slugify, SubRecipe } from '../../recipe/store/RecipeTypes';
+import { Ingredient, IngredientGroup, IngredientInput, SubRecipe } from '../../recipe/store/RecipeTypes';
 import SubRecipes from '../../recipe/components/SubRecipes';
 import MeasurementContext from '../../common/context/MeasurementContext';
 import { formatValidation } from '../../common/store/Validation';
@@ -19,6 +19,7 @@ import { AutocompleteListItem } from '../../common/components/Input/TextareaAuto
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 import { NEW_ITEM_URL_ID } from '../../common/constants';
 import TabbedView from './TabbedView';
+import { slugify } from '../../common/utility';
 
 export interface IIngredientGroupsBoxProps {
   nameIg:   string;
