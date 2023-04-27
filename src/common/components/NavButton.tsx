@@ -3,25 +3,33 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { CommonProps } from '../types/OverridableComponent';
+import ConditionalWrapper from './ConditionalWrapper';
+import Tooltip from './Tooltip';
+import { IButtonProps } from './Button';
 
-export interface INavButtonProps extends CommonProps {
+export interface INavButtonProps extends
+    Omit<IButtonProps, 'type'>,
+    CommonProps {
   to: string;
-  variant?: 'primary' | 'secondary' | 'outline-primary' | 'outline-secondary' | 'transparent';
-  children: React.ReactNode;
 }
 
 const NavButton = forwardRef<HTMLButtonElement, INavButtonProps>(({
-  to, variant, children, ...rest }: INavButtonProps, ref) => (
-    <Button
-        type = 'button'
-        variant = {variant}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        as = {Link as any}
-        to = {to}
-        {...rest}
-        ref = {ref}>
-      {children}
-    </Button>
+  id, to,
+  tooltip,
+  children, ...rest }: INavButtonProps, ref) => (
+    <ConditionalWrapper
+        condition = {Boolean(tooltip)}
+        render = {childr => <Tooltip id={`${id}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
+      <Button
+          type = 'button'
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          as = {Link as any}
+          to = {to}
+          {...rest}
+          ref = {ref}>
+        {children}
+      </Button>
+    </ConditionalWrapper>
 ));
 
 export default NavButton;

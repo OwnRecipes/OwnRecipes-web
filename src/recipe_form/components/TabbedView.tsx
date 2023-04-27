@@ -52,9 +52,8 @@ const TabbedView: React.FC<ITabbedViewProps> = ({
                 &nbsp;
                 <Tooltip
                     id = {`${labels[index]}-tooltip`}
-                    placement = 'bottom'
                     tooltip   = {tooltips[index]}>
-                  <Icon icon='info-circle' className='tooltip-icon' />
+                  <Icon icon='info-circle' className='tooltip-icon' aria-label={tooltips[index]} aria-describedby={undefined} />
                 </Tooltip>
               </>
             )}

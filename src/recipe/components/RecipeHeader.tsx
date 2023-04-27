@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/recipe_header.css';
@@ -14,9 +13,10 @@ import { Recipe } from '../store/RecipeTypes';
 import Modal from '../../common/components/Modal';
 import WidthHeightRatio from '../../common/components/WidthHeightRatio';
 import Image from '../../common/components/Image';
-import Tooltip from '../../common/components/Tooltip';
 import ImageViewer from '../../common/components/ImageViewer';
 import CookingModeButton from './CookingModeButton';
+import Button from '../../common/components/Button';
+import NavButton from '../../common/components/NavButton';
 
 export interface IRecipeHeaderProps {
   recipe:       Recipe | undefined;
@@ -106,21 +106,21 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   const handleDeleteClose  = useCallback(() => { setShowDeleteConfirm(false); }, []);
 
   const editLink = userIsAuthor ? (
-    <Tooltip id='edit tooltip' tooltip={formatMessage(messages.edit_tooltip)}>
-      <Link to={getRoutePath(`/recipe/edit/${recipe?.slug}`)} onClick={handleEditClick}>
-        <Button variant='outline-primary' size='sm'>
-          <i className='bi bi-pencil-fill' />
-        </Button>
-      </Link>
-    </Tooltip>
+    <NavButton
+        id='edit-recipe-button'
+        variant = 'outline-primary'
+        tooltip={formatMessage(messages.edit_tooltip)}
+        to={getRoutePath(`/recipe/edit/${recipe?.slug}`)}
+        onClick={handleEditClick}
+        size='sm'>
+      <Icon icon='pencil' />
+    </NavButton>
   ) : null;
 
   const deleteLink = userIsAuthor ? (
-    <Tooltip id='trash tooltip' tooltip={formatMessage(messages.delete_tooltip)}>
-      <Button variant='outline-danger' size='sm' onClick={handleDeleteClick}>
-        <Icon icon='trash' />
-      </Button>
-    </Tooltip>
+    <Button id='trash-recipe-button' variant='outline-danger' size='sm' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
+      <Icon icon='trash' />
+    </Button>
   ) : null;
 
   const source = useMemo(() => {
@@ -151,11 +151,9 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   }, [recipe?.source]);
 
   const printButton = (
-    <Tooltip id='print tooltip' tooltip={formatMessage(messages.print_tooltip)}>
-      <Button variant='outline-primary' aria-label='Print receipt' onClick={window.print}>
-        <Icon icon='printer' />
-      </Button>
-    </Tooltip>
+    <Button id='print-recipe-button' variant='outline-primary' aria-label='Print receipt' onClick={window.print} tooltip={formatMessage(messages.print_tooltip)}>
+      <Icon icon='printer' />
+    </Button>
   );
 
   const optionButtons = (

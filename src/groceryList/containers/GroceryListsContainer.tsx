@@ -70,7 +70,7 @@ const GroceryListsContainer: React.FC = () => {
             {listsJsx}
           </ul>
           <hr />
-          <NavButton variant='outline-primary' to={getRoutePath(`/grocery-lists/${NEW_ITEM_URL_ID}`)}>
+          <NavButton id='create-new-grocery-list' variant='outline-primary' to={getRoutePath(`/grocery-lists/${NEW_ITEM_URL_ID}`)}>
             {intl.messages['nav.grocery_list_create'] as string}
           </NavButton>
         </div>

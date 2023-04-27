@@ -16,7 +16,6 @@ import ReInput from '../../common/components/ReduxForm/ReInput';
 import NavLink from '../../header/components/NavLink';
 import NavButton from '../../common/components/NavButton';
 import { getRoutePath } from '../../common/utility';
-import Tooltip from '../../common/components/Tooltip';
 import GroceryListSummary from './GroceryListSummary';
 import { GroceryListItem } from '../store/GroceryListItemTypes';
 import { GROCERY_LIST_FILTER } from '../containers/GroceryListContainer';
@@ -145,9 +144,7 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
         <div className='grocery-list-title-bar' tabIndex={-1} ref={titleRef}>
           {list && !isNew && !editMode && (
             <>
-              <Tooltip id='to-grocery-lists' tooltip={formatMessage(messages.back_to_lists)} placement='bottom'>
-                <NavButton variant='transparent' to={getRoutePath('/grocery-lists')} className='print-hidden'><Icon icon='caret-left' /></NavButton>
-              </Tooltip>
+              <NavButton id='to-grocery-lists' variant='transparent' to={getRoutePath('/grocery-lists')} className='print-hidden' tooltip={formatMessage(messages.back_to_lists)}><Icon icon='caret-left' /></NavButton>
               <h2>{list.title}</h2>
             </>
           )}

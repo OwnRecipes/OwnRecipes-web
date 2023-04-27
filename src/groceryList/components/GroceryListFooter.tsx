@@ -1,14 +1,13 @@
 import { useCallback, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Button } from 'react-bootstrap';
 
 import '../css/grocery_list_footer.css';
 
 import { GroceryList } from '../store/GroceryListTypes';
-import { isDemoMode } from '../../common/utility';
 import { GroceryListItem } from '../store/GroceryListItemTypes';
+import { isDemoMode } from '../../common/utility';
+import Button from '../../common/components/Button';
 import Icon from '../../common/components/Icon';
-import Tooltip from '../../common/components/Tooltip';
 import Toast from '../../common/components/Toast';
 
 export interface IGroceryListFooterProps {
@@ -56,24 +55,26 @@ const GroceryListFooter: React.FC<IGroceryListFooterProps> = ({
     <div className='grocery-list-footer print-hidden'>
       {items != null && items.length > 0 && (
         <>
-          <Tooltip id='clear_completed_tooltip' tooltip={formatMessage(messages.clear_completed_tooltip)}>
-            <Button
-                variant  = 'primary'
-                type     = 'button'
-                disabled = {isDemoMode() || !hasCheckedItem || isClearPending}
-                className = 'check'
-                onClick = {onClearCompleted}>
-              <Icon icon='check' variant='light' size='2x' />
-            </Button>
-          </Tooltip>
-          <Tooltip id='copy_to_clipboard_tooltip' tooltip={formatMessage(messages.copy_to_clipboard_tooltip)}>
-            <Button
-                variant  = 'outline-primary'
-                type     = 'button'
-                onClick = {handleCopyToClipboard}>
-              <Icon icon='clipboard' />
-            </Button>
-          </Tooltip>
+          <Button
+              id = 'clear-completed'
+              variant  = 'primary'
+              type     = 'button'
+              disabled = {isDemoMode() || !hasCheckedItem || isClearPending}
+              className = 'check'
+              onClick = {onClearCompleted}
+
+              tooltip = {formatMessage(messages.clear_completed_tooltip)}>
+            <Icon icon='check' variant='light' size='2x' />
+          </Button>
+          <Button
+              id = 'copy-to-clipboard'
+              variant  = 'outline-primary'
+              type     = 'button'
+              onClick = {handleCopyToClipboard}
+
+              tooltip={formatMessage(messages.copy_to_clipboard_tooltip)}>
+            <Icon icon='clipboard' />
+          </Button>
         </>
       )}
       <Toast

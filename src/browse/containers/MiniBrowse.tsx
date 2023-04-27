@@ -1,18 +1,17 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
-import { Button } from 'react-bootstrap';
 
 import '../css/browse.css';
 
 import { RootState } from '../../app/Store';
+import Icon from '../../common/components/Icon';
+import Button from '../../common/components/Button';
+import { useDispatch, useSelector } from '../../common/store/redux';
 import { Recipe, RecipeList } from '../../recipe/store/RecipeTypes';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
 import ListRecipes from '../components/ListRecipes';
 import * as MiniBrowseActions from '../store/MiniBrowseActions';
-import { useDispatch, useSelector } from '../../common/store/redux';
-import Icon from '../../common/components/Icon';
-import Tooltip from '../../common/components/Tooltip';
 
 interface IMiniBrowseProps {
   heading: string;
@@ -65,11 +64,9 @@ const MiniBrowse: React.FC<IMiniBrowseProps> = ({ heading, count, filters }: IMi
   return (
     <>
       <h2 id='suggestions-heading'>{heading}</h2>
-      <Tooltip id='shuffle tooltip' tooltip={formatMessage(messages.shuffleSuggestionsButton)}>
-        <Button id='shuffle-suggestions-button' variant='outline-primary' aria-label={formatMessage(messages.shuffleSuggestionsButton)} onClick={handleShuffleClick} className='print-hidden'>
-          <Icon icon='arrow-repeat' variant='light' />
-        </Button>
-      </Tooltip>
+      <Button id='shuffle-suggestions-button' variant='outline-primary' aria-label={formatMessage(messages.shuffleSuggestionsButton)} onClick={handleShuffleClick} className='print-hidden' tooltip={formatMessage(messages.shuffleSuggestionsButton)}>
+        <Icon icon='arrow-repeat' variant='light' />
+      </Button>
       <ListRecipes data={differentMiniBrowseItems} onOpenRecipe={handleOpenRecipe} />
     </>
   );

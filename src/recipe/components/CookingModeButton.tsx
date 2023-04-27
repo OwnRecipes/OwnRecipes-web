@@ -1,13 +1,12 @@
 import { useCallback, useContext } from 'react';
-import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/recipe_header.css';
 
 import Icon from '../../common/components/Icon';
-import Tooltip from '../../common/components/Tooltip';
 import CookingModeContext from '../context/CookingModeContext';
 import { useWakeLock } from '../../common/hooks/useWakeLock';
+import Button from '../../common/components/Button';
 
 const CookingModeButton: React.FC = () => {
   const { formatMessage } = useIntl();
@@ -35,11 +34,9 @@ const CookingModeButton: React.FC = () => {
   if (!isSupported) return null;
 
   return (
-    <Tooltip id='cooking mode tooltip' tooltip={formatMessage(isCookingMode ? messages.deactivate_cooking_mode_tooltip : messages.activate_cooking_mode_tooltip)}>
-      <Button variant={isCookingMode ? 'primary' : 'outline-primary'} aria-label='Toggle cooking mode' onClick={handleClick}>
-        <Icon icon='stopwatch' variant={isCookingMode ? 'filled' : 'light'} />
-      </Button>
-    </Tooltip>
+    <Button id='cooking-mode-toggle' variant={isCookingMode ? 'primary' : 'outline-primary'} aria-label='Toggle cooking mode' onClick={handleClick} tooltip={formatMessage(isCookingMode ? messages.deactivate_cooking_mode_tooltip : messages.activate_cooking_mode_tooltip)}>
+      <Icon icon='stopwatch' variant={isCookingMode ? 'filled' : 'light'} />
+    </Button>
   );
 };
 

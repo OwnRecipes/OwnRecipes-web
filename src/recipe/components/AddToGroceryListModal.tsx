@@ -1,6 +1,6 @@
 import { forwardRef, RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';
 import { FormApi } from 'final-form';
 
@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from '../../common/store/redux';
 import Checkbox from '../../common/components/Input/Checkbox';
 import useCrash from '../../common/hooks/useCrash';
 import Icon from '../../common/components/Icon';
-import Tooltip from '../../common/components/Tooltip';
+import Button from '../../common/components/Button';
 import P from '../../common/components/P';
 import { PendingState } from '../../common/store/GenericReducerType';
 import { GroceryList, GroceryListBulkAdd, GroceryListCreate } from '../../groceryList/store/GroceryListTypes';
@@ -323,7 +323,7 @@ const ListRow: React.FC<IListRowProps> = ({
         {lists.length === 0 && (
           <>
             <P>{formatMessage(messages.new_text)}</P>
-            <Button type='button' onClick={handleAddListClick} variant='primary' className='add-list-button' aria-label='Add list'>
+            <Button id='add-list-button' type='button' onClick={handleAddListClick} variant='primary' className='add-list-button' aria-label='Add list'>
               {intl.messages['nav.grocery_list_create'] as string}
             </Button>
           </>
@@ -337,11 +337,9 @@ const ListRow: React.FC<IListRowProps> = ({
                 readOnly = {lists.length === 0}
                 disabled = {lists.length === 0} />
             {!addedNewList && (
-              <Tooltip id='add-list-button-tooltip' tooltip={intl.messages['nav.grocery_list_create'] as string}>
-                <Button type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' aria-label='Add list'>
-                  <Icon icon='plus-lg' variant='light' size='2x' />
-                </Button>
-              </Tooltip>
+              <Button id='add-list-button' type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' aria-label='Add list' tooltip={intl.messages['nav.grocery_list_create'] as string}>
+                <Icon icon='plus-lg' variant='light' size='2x' />
+              </Button>
             )}
           </>
         )}
