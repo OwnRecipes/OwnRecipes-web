@@ -48,16 +48,18 @@ interface ILanguageDialogContentProps {
 const LanguageDialogContent: React.FC<ILanguageDialogContentProps> = ({
     settings, onChangeLanguage, onClose }: ILanguageDialogContentProps) => {
   const handleChangeLanguage = useCallback((lang: LanguageCode) => {
-    onChangeLanguage(lang);
+    if (settings.language !== lang) {
+      onChangeLanguage(lang);
+    }
     onClose();
-  }, [onChangeLanguage, onClose]);
+  }, [onChangeLanguage, onClose, settings.language]);
 
   const languageButtons = Object.values(LanguageCode).map(l => (
-    <ListGroup.Item key={l} action disabled={settings.language === l} onClick={() => handleChangeLanguage(l)}>{getMessagesFromLang(l)['1.display_name']}</ListGroup.Item>
+    <ListGroup.Item key={l} role='listitem' action active={settings.language === l} aria-current={settings.language === l} onClick={() => handleChangeLanguage(l)}>{getMessagesFromLang(l)['1.display_name']}</ListGroup.Item>
   ));
 
   return (
-    <ListGroup>
+    <ListGroup as='ol' role='list'>
       {languageButtons}
     </ListGroup>
   );

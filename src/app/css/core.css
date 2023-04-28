@@ -158,6 +158,11 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
     line-height: 2.5em;
   }
 }
+.list-group-item:not(.disabled).active {
+  color: var(--primaryText);
+  background-color: var(--inputBgDisabled);
+  border-color: rgba(0, 0, 0, .125);
+}
 .list-group-item:not(.disabled):hover {
   color: var(--hoverText);
   background-color: var(--hoverBg);

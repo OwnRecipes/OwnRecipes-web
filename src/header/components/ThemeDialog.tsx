@@ -68,16 +68,18 @@ const ThemeDialogContent: React.FC<IThemeDialogContentProps> = ({
   });
 
   const handleChangeTheme = useCallback((theme: ThemeMode) => {
-    onChangeTheme(theme);
+    if (settings.themeMode !== theme) {
+      onChangeTheme(theme);
+    }
     onClose();
-  }, [onChangeTheme, onClose]);
+  }, [onChangeTheme, onClose, settings.themeMode]);
 
   const themeButtons = Object.values(ThemeMode).map(t => (
-    <ListGroup.Item key={t} action disabled={settings.themeMode === t} onClick={() => handleChangeTheme(t)}>{formatMessage(messages[`theme_mode_${t}`])}</ListGroup.Item>
+    <ListGroup.Item key={t} role='listitem' action active={settings.themeMode === t} aria-current={settings.themeMode === t} onClick={() => handleChangeTheme(t)}>{formatMessage(messages[`theme_mode_${t}`])}</ListGroup.Item>
   ));
 
   return (
-    <ListGroup>
+    <ListGroup as='ol' role='list'>
       {themeButtons}
     </ListGroup>
   );
