@@ -18,7 +18,7 @@ const CreateRecipeMenuItem: React.FC = () => {
   const location = useLocation();
 
   return (
-    <NavLink to={getRoutePath(`/recipe/edit/${NEW_ITEM_URL_ID}`)} active={location.pathname.endsWith(`/recipe/edit/${NEW_ITEM_URL_ID}`)} accessKey='n'>{formatMessage(messages.create_recipe)}</NavLink>
+    <NavLink to={getRoutePath(`/recipe/edit/${NEW_ITEM_URL_ID}`)} active={location.pathname.endsWith(`/recipe/edit/${NEW_ITEM_URL_ID}`)} aria-current={location.pathname.endsWith(`/recipe/edit/${NEW_ITEM_URL_ID}`) ? 'page' : undefined} accessKey='n'>{formatMessage(messages.create_recipe)}</NavLink>
   );
 };
 

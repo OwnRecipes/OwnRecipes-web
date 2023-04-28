@@ -176,6 +176,7 @@
   "nav.accountmenu.theme": "Theme",
   "nav.accountmenu.theme_modal_title": "Choose theme",
   "nav.accountmenu.title": "Account",
+  "nav.aria_label": "Page navigation",
   "nav.create_recipe": "Create",
   "nav.groceryLists": "Groceries",
   "nav.grocery_list_create": "New list",

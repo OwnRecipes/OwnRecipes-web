@@ -36,6 +36,11 @@ const NavBar: React.FC<INavBarProps> = ({
     onChangeLanguage,  onChangeTheme, onLogoutClick }: INavBarProps) => {
   const { formatMessage } = useIntl();
   const messages = defineMessages({
+    page_navigation: {
+      id: 'nav.aria_label',
+      description: 'aria-label for the page navigation.',
+      defaultMessage: 'Page navigation',
+    },
     home: {
       id: 'nav.home',
       description: 'Home',
@@ -109,11 +114,11 @@ const NavBar: React.FC<INavBarProps> = ({
   );
 
   return (
-    <Navbar id='header-navbar' collapseOnSelect className='header' expand='md' fixed='top' ref={navbarRef}>
+    <Navbar id='header-navbar' collapseOnSelect className='header' expand='md' fixed='top' ref={navbarRef} aria-label={formatMessage(messages.page_navigation)}>
       <Container className={classNames({ 'search-expanded': isSearchExpanded })}>
         <Navbar.Toggle className='print-hidden'><Icon icon='list' variant='light' size='2x' /></Navbar.Toggle>
         <Navbar.Brand>
-          <Link to={getRoutePath('/home')} title={formatMessage(messages.home)}>
+          <Link to={getRoutePath('/home')} title={formatMessage(messages.home)} aria-current={locationPath.endsWith('/home') ? 'page' : undefined}>
             <Image alt='Brand' src={getResourcePath('/images/chef.png')} width='30' height='30' className='d-inline-block align-top' />
           </Link>
         </Navbar.Brand>
@@ -134,12 +139,12 @@ const NavBar: React.FC<INavBarProps> = ({
         <Navbar.Collapse>
           <Nav className={classNames('header-nav', { 'collapse-d-lg': isSearchExpanded })}>
             {(!isLoginRequired || isAuthenticated) && (!isScreenMdUp || locationPath.endsWith('/browser')) && (
-              <NavLink to={getRoutePath('/browser')} active={locationPath.endsWith('/browser')}>
+              <NavLink to={getRoutePath('/browser')} active={locationPath.endsWith('/browser')} aria-current={locationPath.endsWith('/browser') ? 'page' : undefined}>
                 <Icon icon='search' variant='light' className='d-md-inline-block d-none' />
                 <span className='d-inline-block d-md-none'>{formatMessage(messages.recipes)}</span>
               </NavLink>
             )}
-            {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getRoutePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
+            {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getRoutePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} aria-current={locationPath.endsWith('/random') ? 'page' : undefined} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
             {/* isAuthenticated && <MenuMenuItem /> */}
             {isAuthenticated && isPrivilegedUser && <CreateRecipeMenuItem />}
           </Nav>

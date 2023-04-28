@@ -162,13 +162,13 @@ const Pagination: React.FC<IPaginationProps> = ({ offset, limit, count, buildUrl
   if (count <= limit) return null;
 
   return (
-    <div>
+    <nav>
       <BootstraPagination>
         <PaginationLink title='←' offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} />
         <PaginationNumbersList    offset={offset}   limit={limit}  buildUrl={buildUrl} count={count} />
         <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} />
       </BootstraPagination>
-    </div>
+    </nav>
   );
 };
 
