@@ -163,6 +163,17 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
   background-color: var(--inputBgDisabled);
   border-color: rgba(0, 0, 0, .125);
 }
+.list-group-item:not(.disabled).active::after {
+  content: "*";
+  position: relative;
+  display: inline-block;
+  width: 0.42em;
+  height: 0.42em;
+  margin-left: 5px;
+
+  color: transparent;
+  font-weight: bold;
+}
 .list-group-item:not(.disabled):hover {
   color: var(--hoverText);
   background-color: var(--hoverBg);

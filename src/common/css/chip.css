@@ -6,24 +6,27 @@
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 0.25rem
+  border-radius: 0.25rem;
+  border: 1px solid;
 }
 .chip:empty {
-  display:none
+  display: none
 }
 .chip .bi {
   margin-right: 0.5em;
 }
 .btn .chip {
-  position:relative;
-  top:-1px
+  position:  relative;
+  top: -1px
 }
 
 .chip.primary {
-  background-color: var(--primaryTheme);
   color: var(--primaryContrast);
+  background-color: var(--primaryTheme);
+  border-color: var(--primaryTheme);
 }
 .chip.secondary {
-  background-color: rgba(128, 128, 128, 0.12);
   color: var(--secondaryText);
+  background-color: rgba(128, 128, 128, 0.12);
+  border-color: rgba(128, 128, 128, 0.12);
 }
