@@ -51,7 +51,7 @@ const Ingredients: React.FC<IIngredientsProps> = ({
 
   const measurementsContext = useContext(MeasurementContext);
   const caption = showCaptions && group.title ? group.title : undefined;
-  const captionSlug = slugify(caption ?? '');
+  const captionSlug = slugify(caption ?? '') || 'default-group';
 
   const ingredients = data.map((ingredient, index) => {
     const quantityS    = ingredient.quantity;

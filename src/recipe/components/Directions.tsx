@@ -113,10 +113,10 @@ function formatDirections(directions: DirectionsWithIngredients) {
       }
 
       const isDefaultGroup = !di.heading;
-      const headingSlug = slugify(di.heading ?? '');
+      const headingSlug = slugify(di.heading ?? '') || 'default-group';
 
       return (
-        <div key={headingSlug} className={classNames('subgroup', headingSlug || 'default-group')}>
+        <div key={headingSlug} className={classNames('subgroup', headingSlug)}>
           {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
           {di.heading && (
             <h3 id={`direction-${headingSlug}`}>

@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
+import { PendingState } from '../../common/store/GenericReducerType';
+import { RecipeList } from '../../recipe/store/RecipeTypes';
 import DefaultFilters from '../constants/DefaultFilters';
 import Results from '../components/Results';
 import NoResults from '../components/NoResults';
 import Loading from '../components/Loading';
-import { PendingState } from '../../common/store/GenericReducerType';
-import { RecipeList } from '../../recipe/store/RecipeTypes';
-import { RootState } from '../../app/Store';
 import { SearchResult } from '../store/SearchTypes';
 
 export interface ISearchResultsProps {
@@ -19,6 +20,15 @@ export interface ISearchResultsProps {
 }
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ qs, qsString, buildUrl, onOpenRecipe }: ISearchResultsProps) => {
+  const { formatMessage }  = useIntl();
+  const messages = defineMessages({
+    search_results_heading: {
+      id: 'browse.results_heading',
+      description: 'Browser search results heading',
+      defaultMessage: 'Results',
+    },
+  });
+
   const searchState = useSelector((state: RootState) => state.browse.browserSearch);
   const pending = searchState.meta.pending === PendingState.LOADING;
 
@@ -39,6 +49,7 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ qs, qsString, buildUrl, 
 
   return (
     <>
+      <h2 className='sr-only'>{formatMessage(messages.search_results_heading)}</h2>
       {pending && !searchResults && <Loading />}
       {!pending && (searchResults == null || searchResults.recipes.length === 0) && <NoResults />}
       {searchResults != null && searchResults.recipes.length > 0 && (

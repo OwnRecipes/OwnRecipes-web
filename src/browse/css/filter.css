@@ -71,6 +71,11 @@ html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-ti
   color: var(--errorText);
 }
 
+.container.browser .filter-panel .card-header h2 {
+  font-size: inherit;
+  margin-bottom: 0;
+}
+
 @media screen and (min-width: 768px) {
   .container.browser .filter-panel {
     flex: 0 0 12rem;

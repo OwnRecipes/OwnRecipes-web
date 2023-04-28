@@ -19,6 +19,11 @@ interface IFormData {
 const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarProps) => {
   const { formatMessage } = useIntl();
   const messages = defineMessages({
+    search_title: {
+      id: 'searchbar.title',
+      description: 'Heading for the search page',
+      defaultMessage: 'Search',
+    },
     input_placeholder: {
       id: 'searchbar.placeholder',
       description: 'SearchBar input placeholder',
@@ -63,16 +68,19 @@ const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarPro
   );
 
   return (
-    <Input
-        name  = 'value'
-        value = {formData.value}
-        placeholder = {formatMessage(messages.input_placeholder)}
-        required
-        inputAdornmentStart = {<Icon icon='search' variant='light' />}
-        inputAdornmentEnd = {formData.value.length > 0 ? clearInput : undefined}
-        onChange = {handleChange}
-        debounceTimeout = {400}
-        className = 'search-bar' />
+    <>
+      <h1 className='sr-only'>{formatMessage(messages.search_title)}</h1>
+      <Input
+          name  = 'value'
+          value = {formData.value}
+          placeholder = {formatMessage(messages.input_placeholder)}
+          required
+          inputAdornmentStart = {<Icon icon='search' variant='light' />}
+          inputAdornmentEnd = {formData.value.length > 0 ? clearInput : undefined}
+          onChange = {handleChange}
+          debounceTimeout = {400}
+          className = 'search-bar' />
+    </>
   );
 };
 

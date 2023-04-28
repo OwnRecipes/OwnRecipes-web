@@ -112,10 +112,12 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
 
   const mobileHeader = (
     <div className='sidebar-header'>
-      <Button type='button' variant='transparent' className='filter-header' onClick={toggleMenu}>
-        {showMenu ? formatMessage(messages.hide_filters) : formatMessage(messages.show_filters)}
-        <Icon icon={showMenu ? 'chevron-up' : 'chevron-down'} variant='light' className={classNames({ 'reset-margin': hasActiveFilter })} />
-      </Button>
+      <h2>
+        <Button type='button' variant='transparent' className='filter-header' onClick={toggleMenu}>
+          {showMenu ? formatMessage(messages.hide_filters) : formatMessage(messages.show_filters)}
+          <Icon icon={showMenu ? 'chevron-up' : 'chevron-down'} variant='light' className={classNames({ 'reset-margin': hasActiveFilter })} />
+        </Button>
+      </h2>
       {hasActiveFilter && (
         <div className='filter-header-clear'>
           <Link className='clear-filter-mobile btn btn-transparent' to={resetFilterUrl}>
@@ -137,7 +139,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
         {mobileHeader}
       </Card.Header>
       <Card.Header className='hidden-xs filter-title'>
-        {formatMessage(messages.filters)}
+        <h2>{formatMessage(messages.filters)}</h2>
         {hasActiveFilter && (
           <Tooltip id='clear-tooltip' tooltip={formatMessage(messages.reset_filters)} placement='bottom'>
             <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl}>
