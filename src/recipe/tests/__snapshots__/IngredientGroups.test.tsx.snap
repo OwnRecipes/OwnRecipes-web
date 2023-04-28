@@ -10,12 +10,12 @@ Array [
     >
       <caption
         className="subheading h3"
-        id="ingredients-Chili"
+        id="ingredients-chili"
       >
         Chili:
         <a
           className="headerlink"
-          href="/#ingredients-Chili"
+          href="/#ingredients-chili"
           onClick={[Function]}
           title="Permalink to this headline"
         >
@@ -70,12 +70,12 @@ Array [
     >
       <caption
         className="subheading h3"
-        id="ingredients-Spices"
+        id="ingredients-spices"
       >
         Spices:
         <a
           className="headerlink"
-          href="/#ingredients-Spices"
+          href="/#ingredients-spices"
           onClick={[Function]}
           title="Permalink to this headline"
         >

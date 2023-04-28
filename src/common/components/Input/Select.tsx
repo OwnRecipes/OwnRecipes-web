@@ -72,9 +72,7 @@ export class Select extends BaseInputComponent<ISelectProps> {
       value: data,
     });
 
-    if (this.props.onChange) {
-      this.props.onChange(this.props.name, data?.value);
-    }
+    this.props.onChange?.(this.props.name, data?.value);
   };
 
   render() {

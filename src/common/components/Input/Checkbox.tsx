@@ -46,9 +46,7 @@ export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
     // event: React.ChangeEvent<HTMLInputElement>
     // NOTE: bootstrap will pass as event.target.value always "on".
     if (this.props.readOnly || this.props.disabled) return;
-    if (this.props.onChange) {
-      this.props.onChange(this.props.name, !this.props.value);
-    }
+    this.props.onChange?.(this.props.name, !this.props.value);
   };
 
   render() {

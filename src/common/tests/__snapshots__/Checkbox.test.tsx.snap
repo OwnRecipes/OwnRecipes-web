@@ -90,7 +90,7 @@ exports[`Checkbox disabled 1`] = `
     <input
       checked={true}
       className="form-check-input"
-      disabled={false}
+      disabled={true}
       id="cb"
       name="cb"
       onChange={[Function]}

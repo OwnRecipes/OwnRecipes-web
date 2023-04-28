@@ -22,9 +22,8 @@ main[class*="grocery-lists/"] .toggle-all {
 main[class*="grocery-lists/"] .grocery-list-flex-container {
   display: flex;
 }
-main[class*="grocery-lists/"] .visibility-hidden {
-  visibility: hidden;
-  height: 1px;
+main[class*="grocery-lists/"] .dummy-checkbox.visibility-hidden {
+  position: initial;
 }
 main[class*="grocery-lists/"] .grocery-list-flex-container .new-item-input {
   height: 2.5em;

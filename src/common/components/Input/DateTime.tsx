@@ -25,9 +25,7 @@ export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTi
       value: date,
     });
 
-    if (this.props.onChange) {
-      this.props.onChange(this.props.name, moment(date).toISOString());
-    }
+    this.props.onChange?.(this.props.name, moment(date).toISOString());
   };
 
   render() {

@@ -32,9 +32,7 @@ class FileSelect extends BaseInputComponent<IFileSelectProps> {
   }
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (this.props.onChange) {
-      this.props.onChange(event.target.name, event?.target.files?.[0]);
-    }
+    this.props.onChange?.(event.target.name, event?.target.files?.[0]);
   };
 
   handleClear = () => {

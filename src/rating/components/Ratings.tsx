@@ -28,7 +28,7 @@ const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
 
   return (
     <ConditionalWrapper
-        condition={onChange != null}
+        condition = {onChange != null}
         render    = {childr => <Button variant='transparent' className='rating' onClick={handleClick}>{childr}</Button>}
         key={num}>
       <Icon key={num} icon={icon} variant={variant} size={onChange != null ? '2x' : '1x'} />

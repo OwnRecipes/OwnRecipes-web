@@ -25,6 +25,10 @@
   margin-bottom: 0;
 }
 
+.add-to-grocery-list-modal .ingredients-table {
+  border-color: transparent;
+}
+
 .add-to-grocery-list-modal .ingredients-table caption {
   caption-side: top;
   margin-left: 33%;
@@ -33,6 +37,10 @@
   margin-bottom: 0;
   padding-top: 0;
   padding-bottom: 0.7rem;
+}
+
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td {
+  vertical-align: middle;
 }
 
 .add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection {

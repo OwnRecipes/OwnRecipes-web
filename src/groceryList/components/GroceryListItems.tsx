@@ -92,7 +92,7 @@ const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
               name = 'hidden-placeholder-toggle'
               value = {false}
               disabled
-              className = 'visibility-hidden'
+              className = 'dummy-checkbox visibility-hidden'
               />
           <P className='placeholder grocery-list-item-margin'>{formatMessage(messages.filtered_items_info, { sum: numberOfHiddenItems })}</P>
         </div>
@@ -105,7 +105,7 @@ const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
                 name = 'new-item-toggle'
                 value = {false}
                 disabled
-                className = 'visibility-hidden'
+                className = 'dummy-checkbox visibility-hidden'
                 />
             <GroceryListNewItem
                 onAddItem = {onAddItem}

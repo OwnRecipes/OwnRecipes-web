@@ -41,9 +41,7 @@ export default class BaseInputComponent<P extends IBaseInputComponentProps, S = 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleChange = (event: any) => { // eslint-disable-line react/no-unused-class-component-methods
     if (this.props.readOnly || this.props.disabled) return;
-    if (this.props.onChange) {
-      this.props.onChange(this.props.name, event.target.value);
-    }
+    this.props.onChange?.(this.props.name, event.target.value);
   };
 
   hasError(): boolean {
