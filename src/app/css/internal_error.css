@@ -1,7 +1,16 @@
-.modal.internalError .modal-header {
+.modal.internalError .modal-header,
+.modal.internalError .modal-header .modal-title {
   background-color: var(--errorText);
   color: white;
   border-bottom-color: var(--primaryText);
+}
+.modal.internalError .modal-header .btn.close-button {
+  color: white;
+}
+
+html[data-theme="dark"] .modal.internalError .modal-header .modal-title,
+html[data-theme="dark"] .modal.internalError .modal-header .btn.close-button {
+  color: black;
 }
 
 .modal.internalError .modal-body {

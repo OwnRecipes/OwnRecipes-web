@@ -24,8 +24,12 @@
   font-weight: bold;
   padding: 0;
 }
-.container.browser .sidebar .filter-group .list-group-title .accordion-button::after {
-  filter: hue-rotate(255deg);
+.container.browser .sidebar .filter-group .list-group-title .accordion-button:focus::after {
+  /* core.css inverts the color for dark-theme */
+  box-shadow: 0 0 0 2px #000;
+}
+html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-title .accordion-button:not(.collapsed):focus::after {
+  box-shadow: 0 0 0 2px var(--primaryText);
 }
 
 .container.browser .sidebar .filter-group .filter-list.accordion-body {
