@@ -113,7 +113,7 @@ function formatDirections(directions: DirectionsWithIngredients) {
       }
 
       const isDefaultGroup = !di.heading;
-      const headingSlug = slugify(di.heading ?? '') || 'default-group';
+      const headingSlug = slugify(di.heading ?? '');
 
       return (
         <div key={headingSlug} className={classNames('subgroup', headingSlug)}>
