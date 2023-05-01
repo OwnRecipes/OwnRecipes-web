@@ -64,7 +64,7 @@ const SearchSummary: React.FC<ISearchSummaryProps> = ({ search, qs, buildUrl }: 
     }
   }, [currentSort]);
 
-  const dropdownItems = ['title', '-pub_date', '-rating'].map(sort => {
+  const dropdownItems = ['title', '-pub_date'].map(sort => {
     const sortSlug = toSortSlug(sort);
     return (
       <Dropdown.Item key={sort} as={Link} to={buildUrl('ordering', sort)} active={currentSort === sortSlug} onClick={(event: React.MouseEvent<HTMLAnchorElement>) => handleSortByClick(event, sortSlug)}>
