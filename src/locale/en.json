@@ -224,6 +224,8 @@
   "random.search.menu.filter_by_cuisine_dropdown": "Cuisine: {cuisine}",
   "rating_comments.confirm_delete": "Are you sure you want to delete this comment?",
   "rating_comments.no_comments": "(No comments yet. Be the first!)",
+  "rating_comments.star_alt": "Select to rate item {stars, plural, one {# star} other {# stars}}",
+  "rating_comments.stars_alt": "{stars} out of 5 stars",
   "recipe.activate_cooking_mode_tooltip": "Keep display awake.",
   "recipe.activated_cooking_mode_toast": "Your display will stay awake now.\nHappy cooking!",
   "recipe.comments": "Comments",
