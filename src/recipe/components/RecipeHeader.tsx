@@ -27,77 +27,76 @@ export interface IRecipeHeaderProps {
   // onAddToMenuClick: () => void;
 }
 
-const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, userIsAuthor, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+const messages = defineMessages({
+  edit_tooltip: {
+    id: 'recipe.edit_tooltip',
+    description: 'Tooltip displayed when hovering the edit recipe icon button',
+    defaultMessage: 'Edit this recipe',
+  },
+  delete_tooltip: {
+    id: 'recipe.delete_tooltip',
+    description: 'Tooltip displayed when hovering the delete recipe icon button',
+    defaultMessage: 'Delete this recipe',
+  },
+  print_tooltip: {
+    id: 'recipe.print_tooltip',
+    description: 'Tooltip displayed when hovering the print icon button',
+    defaultMessage: 'Print this recipe',
+  },
+  recipe_comments: {
+    id: 'recipe.comments',
+    description: 'Button to comments',
+    defaultMessage: 'Comments',
+  },
+  prep_time: {
+    id: 'recipe.prep_time',
+    description: 'Preparation time',
+    defaultMessage: 'Prep time',
+  },
+  cooking_time: {
+    id: 'recipe.cooking_time',
+    description: 'Cooking time',
+    defaultMessage: 'Cooking time',
+  },
+  minutes: {
+    id: 'recipe.minutes',
+    description: 'minutes',
+    defaultMessage: 'minutes',
+  },
+  source: {
+    id: 'recipe.source',
+    description: 'Source of the recipe',
+    defaultMessage: 'Source',
+  },
+  created_by: {
+    id: 'recipe.created_by',
+    description: 'Created by',
+    defaultMessage: 'Created by',
+  },
+  last_updated: {
+    id: 'recipe.last_updated',
+    description: 'Last Updated',
+    defaultMessage: 'Last Updated',
+  },
+  confirm_delete_title: {
+    id: 'recipe.confirm_delete_title',
+    description: 'Confirm deletion - dialog title',
+    defaultMessage: 'Confirm deletion',
+  },
+  confirm_delete_message: {
+    id: 'recipe.confirm_delete',
+    description: 'Are you sure you want to delete this recipe?',
+    defaultMessage: 'Are you sure you want to delete this recipe?',
+  },
+  confirm_delete_accept: {
+    id: 'recipe.confirm_delete_accept',
+    description: 'Confirm deletion - Accept button title',
+    defaultMessage: 'Delete',
+  },
+});
+
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    edit_tooltip: {
-      id: 'recipe.edit_tooltip',
-      description: 'Tooltip displayed when hovering the edit recipe icon button',
-      defaultMessage: 'Edit this recipe',
-    },
-    delete_tooltip: {
-      id: 'recipe.delete_tooltip',
-      description: 'Tooltip displayed when hovering the delete recipe icon button',
-      defaultMessage: 'Delete this recipe',
-    },
-    print_tooltip: {
-      id: 'recipe.print_tooltip',
-      description: 'Tooltip displayed when hovering the print icon button',
-      defaultMessage: 'Print this recipe',
-    },
-    recipe_comments: {
-      id: 'recipe.comments',
-      description: 'Button to comments',
-      defaultMessage: 'Comments',
-    },
-    prep_time: {
-      id: 'recipe.prep_time',
-      description: 'Preparation time',
-      defaultMessage: 'Prep time',
-    },
-    cooking_time: {
-      id: 'recipe.cooking_time',
-      description: 'Cooking time',
-      defaultMessage: 'Cooking time',
-    },
-    minutes: {
-      id: 'recipe.minutes',
-      description: 'minutes',
-      defaultMessage: 'minutes',
-    },
-    source: {
-      id: 'recipe.source',
-      description: 'Source of the recipe',
-      defaultMessage: 'Source',
-    },
-    created_by: {
-      id: 'recipe.created_by',
-      description: 'Created by',
-      defaultMessage: 'Created by',
-    },
-    last_updated: {
-      id: 'recipe.last_updated',
-      description: 'Last Updated',
-      defaultMessage: 'Last Updated',
-    },
-    confirm_delete_title: {
-      id: 'recipe.confirm_delete_title',
-      description: 'Confirm deletion - dialog title',
-      defaultMessage: 'Confirm deletion',
-    },
-    confirm_delete_message: {
-      id: 'recipe.confirm_delete',
-      description: 'Are you sure you want to delete this recipe?',
-      defaultMessage: 'Are you sure you want to delete this recipe?',
-    },
-    confirm_delete_accept: {
-      id: 'recipe.confirm_delete_accept',
-      description: 'Confirm deletion - Accept button title',
-      defaultMessage: 'Delete',
-    },
-  });
 
   const handleEditClick    = useCallback(() => { onEditRecipe(); }, [onEditRecipe]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
@@ -151,7 +150,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   }, [recipe?.source]);
 
   const printButton = (
-    <Button id='print-recipe-button' variant='outline-primary' aria-label='Print receipt' onClick={window.print} tooltip={formatMessage(messages.print_tooltip)}>
+    <Button id='print-recipe-button' variant='outline-primary' onClick={window.print} tooltip={formatMessage(messages.print_tooltip)}>
       <Icon icon='printer' />
     </Button>
   );
@@ -166,7 +165,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
           </>
         )}
         {/*
-          <Button variant='outline-primary' aria-label='Add receipt to menu' onClick={onAddToMenuClick}>
+          <Button variant='outline-primary' tooltip='Add receipt to menu' onClick={onAddToMenuClick}>
             <Icon icon='calendar' />
           </Button>
         */}

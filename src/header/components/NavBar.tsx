@@ -31,37 +31,38 @@ export interface INavBarProps {
   onLogoutClick: () => void;
 }
 
+const messages = defineMessages({
+  page_navigation: {
+    id: 'nav.aria_label',
+    description: 'aria-label for the page navigation.',
+    defaultMessage: 'Page navigation',
+  },
+  home: {
+    id: 'nav.home',
+    description: 'Home',
+    defaultMessage: 'Home',
+  },
+  recipes: {
+    id: 'nav.recipes',
+    description: 'Navbar Recipes',
+    defaultMessage: 'Browse',
+  },
+  randomRecipe: {
+    id: 'nav.randomRecipe',
+    description: 'Random Recipe',
+    defaultMessage: 'Random',
+  },
+  groceryLists: {
+    id: 'nav.groceryLists',
+    description: 'Grocery Lists',
+    defaultMessage: 'Groceries',
+  },
+});
+
 const NavBar: React.FC<INavBarProps> = ({
     account, settings, locationPath,
     onChangeLanguage,  onChangeTheme, onLogoutClick }: INavBarProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    page_navigation: {
-      id: 'nav.aria_label',
-      description: 'aria-label for the page navigation.',
-      defaultMessage: 'Page navigation',
-    },
-    home: {
-      id: 'nav.home',
-      description: 'Home',
-      defaultMessage: 'Home',
-    },
-    recipes: {
-      id: 'nav.recipes',
-      description: 'Navbar Recipes',
-      defaultMessage: 'Browse',
-    },
-    randomRecipe: {
-      id: 'nav.randomRecipe',
-      description: 'Random Recipe',
-      defaultMessage: 'Random',
-    },
-    groceryLists: {
-      id: 'nav.groceryLists',
-      description: 'Grocery Lists',
-      defaultMessage: 'Groceries',
-    },
-  });
 
   const navbarRef = useRef<HTMLDivElement>(null);
   const dynamicHeightContext = useContext(DynamicHeightContext);

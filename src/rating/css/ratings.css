@@ -53,10 +53,6 @@
   text-decoration: underline;
 }
 
-.rating-panel .card-body .rating-delete-button {
-  float: right;
-}
-
 .new-rating .rating-stars .btn {
   margin-top: 0;
 }

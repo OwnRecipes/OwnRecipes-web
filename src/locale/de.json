@@ -230,6 +230,7 @@
   "random.search.menu.filter_by_course_dropdown": "Gang: {course}",
   "random.search.menu.filter_by_cuisine_dropdown": "Küche: {cuisine}",
   "rating_comments.confirm_delete": "Möchten Sie diesen Kommentar wirklich unwiderruflich löschen?",
+  "rating_comments.delete_button": "Kommentar löschen",
   "rating_comments.no_comments": "(Noch keine Bewertung erhalten. Sei der erste!)",
   "rating_comments.star_alt": "Auswählen, um das Rezept mit {stars, plural, one {# Stern} other {# Sternen}} zu bewerten",
   "rating_comments.stars_alt": "{stars} von 5 Sternen",

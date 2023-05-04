@@ -2,6 +2,8 @@ import { useContext } from 'react';
 import { Table } from 'react-bootstrap';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
+import '../css/ingredients.css';
+
 import MeasurementContext, { IMeasurementContext } from '../../common/context/MeasurementContext';
 import HeaderLink from '../../common/components/HeaderLink';
 import { optionallyFormatMessage, slugify } from '../../common/utility';
@@ -54,25 +56,28 @@ const Ingredients: React.FC<IIngredientsProps> = ({
   const captionSlug = slugify(caption ?? '');
 
   const ingredients = data.map((ingredient, index) => {
-    const quantityS    = ingredient.quantity;
-    const measurementString = formatMeasurement(intl, measurementsContext, ingredient.measurement, ingredient.quantity);
+    const quantityS   = ingredient.quantity;
+    const msrmtString = formatMeasurement(intl, measurementsContext, ingredient.measurement, ingredient.quantity);
     const titleString = ingredient.title;
-    const renderQuantity: boolean = Boolean(quantityS) || Boolean(measurementString);
+    const fullString  = [quantityS, msrmtString, titleString].join(' ');
+    const renderQuantity: boolean = Boolean(quantityS) || Boolean(msrmtString);
 
     return (
       <tr className='ingredient' key={(ingredient.id ?? index).toString()}>
         {selectable && (
           <td className='selection'>
             <ReCheckbox
-                name    = {`ingredients.${group.slug}.cb-${ingredient.id}`} />
+                label = {fullString}
+                className = 'label-sr-only'
+                name  = {`ingredients.${group.slug}.cb-${ingredient.id}`} />
           </td>
         )}
         <td className='quantity'>
           {renderQuantity && (
             <span>
               {quantityS}
-              {quantityS != null && quantityS.length > 0 && measurementString.length > 0 && ' '}
-              {measurementString}
+              {quantityS != null && quantityS.length > 0 && msrmtString.length > 0 && ' '}
+              {msrmtString}
             </span>
           )}
         </td>

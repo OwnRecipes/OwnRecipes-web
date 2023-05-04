@@ -19,6 +19,14 @@ interface IMiniBrowseProps {
   filters?: Record<string, string>;
 }
 
+const messages = defineMessages({
+  shuffleSuggestionsButton: {
+    id: 'browse.shuffle_suggestions_button_title',
+    description: 'Title/tooltip of the icon button to shuffle the suggestions.',
+    defaultMessage: 'Shuffle suggestions',
+  },
+});
+
 function buildUrlFilter(count: number, filters: Record<string, string> | undefined): string {
   const searchParams = new URLSearchParams(filters);
   searchParams.append('limit', count.toString());
@@ -27,13 +35,6 @@ function buildUrlFilter(count: number, filters: Record<string, string> | undefin
 
 const MiniBrowse: React.FC<IMiniBrowseProps> = ({ heading, count, filters }: IMiniBrowseProps) => {
   const { formatMessage }  = useIntl();
-  const messages = defineMessages({
-    shuffleSuggestionsButton: {
-      id: 'browse.shuffle_suggestions_button_title',
-      description: 'Title/tooltip of the icon button to shuffle the suggestions.',
-      defaultMessage: 'Shuffle suggestions',
-    },
-  });
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -64,7 +65,7 @@ const MiniBrowse: React.FC<IMiniBrowseProps> = ({ heading, count, filters }: IMi
   return (
     <>
       <h2 id='suggestions-heading'>{heading}</h2>
-      <Button id='shuffle-suggestions-button' variant='outline-primary' aria-label={formatMessage(messages.shuffleSuggestionsButton)} onClick={handleShuffleClick} className='print-hidden' tooltip={formatMessage(messages.shuffleSuggestionsButton)}>
+      <Button id='shuffle-suggestions-button' variant='outline-primary' onClick={handleShuffleClick} className='print-hidden' tooltip={formatMessage(messages.shuffleSuggestionsButton)}>
         <Icon icon='arrow-repeat' variant='light' />
       </Button>
       <ListRecipes data={differentMiniBrowseItems} onOpenRecipe={handleOpenRecipe} />

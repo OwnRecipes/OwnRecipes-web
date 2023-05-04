@@ -84,16 +84,16 @@ export class Select extends BaseInputComponent<ISelectProps> {
     return (
       <Form.Group
           {...this.getGroupProps()}
-          controlId = {name}
           className = {this.getFormGroupClassNames()}
-          style = {style}>
+          style     = {style}>
         <ConditionalWrapper
             condition = {tooltip != null}
             render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
-          {this.getLabel()}
+          {this.getLabel({ htmlFor: `${name}-input` })}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <SelectReact
+              inputId     = {`${name}-input`}
               name        = {name}
               value       = {selectedOption}
               options     = {data}
@@ -218,6 +218,7 @@ export class CreatableSelect extends BaseInputComponent<ICreatableSelectProps, I
 
     return (
       <Form.Group
+          {...this.getGroupProps()}
           className = {this.getFormGroupClassNames()}
           style     = {style}>
         <ConditionalWrapper
@@ -234,10 +235,12 @@ export class CreatableSelect extends BaseInputComponent<ICreatableSelectProps, I
               isClearable
               value = {selectedOptions}
               isDisabled  = {readOnly || disabled}
+
               className = 'react-select-container'
               classNamePrefix = 'creatable-select'
               options = {options}
               placeholder = ''
+
               {...rest}
               ref = {this.ref} />
         </ConditionalWrapper>

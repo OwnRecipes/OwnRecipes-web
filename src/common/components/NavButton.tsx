@@ -25,6 +25,7 @@ const NavButton = forwardRef<HTMLButtonElement, INavButtonProps>(({
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           as = {Link as any}
           to = {to}
+          aria-label = {tooltip}
           {...rest}
           ref = {ref}>
         {children}

@@ -230,6 +230,7 @@
   "random.search.menu.filter_by_course_dropdown": "Plato: {course}",
   "random.search.menu.filter_by_cuisine_dropdown": "Cocina: {cuisine}",
   "rating_comments.confirm_delete": "¿Desea borrar este comentario de manera definitiva?",
+  "rating_comments.delete_button": "Borrar comentario",
   "rating_comments.no_comments": "(No hay ningún comentario. ¡Sé el primero en dar uno!)",
   "rating_comments.star_alt": "Seleccione para calificar la receta con {stars, plural, one {# estrella} other {# estrellas}}",
   "rating_comments.stars_alt": "{stars} de 5 estrellas",

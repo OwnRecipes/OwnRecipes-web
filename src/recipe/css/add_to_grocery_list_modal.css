@@ -49,12 +49,12 @@
   width: 3em;
 }
 
-.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.no-label {
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.label-sr-only {
   margin: 0;
 }
-.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.no-label > .form-check {
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.label-sr-only > .form-check {
   padding-left: 0;
 }
-.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.no-label > .form-check > input {
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.label-sr-only > .form-check > input {
   margin-left: 0;
 }

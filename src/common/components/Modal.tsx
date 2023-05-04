@@ -13,12 +13,29 @@ export interface IModalHeaderCloseButtonProps extends CommonProps {
   onClose: (event: React.MouseEvent) => void;
 }
 
+const messages = defineMessages({
+  accept: {
+    id: 'modal.accept',
+    description: 'Default modal accept button',
+    defaultMessage: 'Accept',
+  },
+  close: {
+    id: 'modal.close',
+    description: 'Default modal close button',
+    defaultMessage: 'Close',
+  },
+});
+
 export const ModalHeaderCloseButton = forwardRef<HTMLButtonElement, IModalHeaderCloseButtonProps>(({
-  onClose, className, ...rest }: IModalHeaderCloseButtonProps, ref) => (
-    <Button type='button' onClick={onClose} variant='transparent' className={classNames('close-button', className)} aria-label='Close' {...rest} ref={ref}>
-      <Icon icon='x' variant='light' size='2x' />
-    </Button>
-));
+  onClose, className, ...rest }: IModalHeaderCloseButtonProps, ref) => {
+    const { formatMessage } = useIntl();
+
+    return (
+      <Button type='button' onClick={onClose} variant='transparent' className={classNames('close-button', className)} aria-label={formatMessage(messages.close)} {...rest} ref={ref}>
+        <Icon icon='x' variant='light' size='2x' />
+      </Button>
+    );
+  });
 
 export interface IModalProps extends CommonProps {
   show: boolean;
@@ -47,18 +64,6 @@ const Modal = forwardRef<HTMLDivElement, IModalProps>(({
     size = 'lg', acceptButtonProps, children,
     ...rest }: IModalProps, ref) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    accept: {
-      id: 'modal.accept',
-      description: 'Default modal accept button',
-      defaultMessage: 'Accept',
-    },
-    close: {
-      id: 'modal.close',
-      description: 'Default modal close button',
-      defaultMessage: 'Close',
-    },
-  });
 
   const handleClose = useCallback(() => {
     onClose?.(false);

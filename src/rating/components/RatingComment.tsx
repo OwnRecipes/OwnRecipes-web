@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { defineMessages, useIntl } from 'react-intl';
 import classNames from 'classnames';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 import { Rating } from '../store/types';
 import Icon from '../../common/components/Icon';
@@ -11,6 +11,7 @@ import P from '../../common/components/P';
 import Modal from '../../common/components/Modal';
 import PageScroller from '../../common/components/PageScroller';
 import Ratings from './Ratings';
+import Button from '../../common/components/Button';
 
 export interface IRatingCommentProps {
   rating:     Rating;
@@ -56,16 +57,23 @@ const RatingCommentComment: React.FC<IRatingCommentCommentProps> = ({ rating }: 
   );
 };
 
+const messages = defineMessages({
+  delete_button: {
+    id: 'rating_comments.delete_button',
+    description: 'Label of the delete comment icon button',
+    defaultMessage: 'Delete comment',
+  },
+  confirm_delete_message: {
+    id: 'rating_comments.confirm_delete',
+    description: 'Are you sure you want to delete this comment?',
+    defaultMessage: 'Are you sure you want to delete this comment?',
+  },
+});
+
 const RatingComment: React.FC<IRatingCommentProps> = ({
     rating, onDelete }: IRatingCommentProps) => {
   const intl = useIntl();
-  const messages = defineMessages({
-    confirm_delete_message: {
-      id: 'rating_comments.confirm_delete',
-      description: 'Are you sure you want to delete this comment?',
-      defaultMessage: 'Are you sure you want to delete this comment?',
-    },
-  });
+  const { formatMessage } = intl;
 
   const { hash } = useLocation();
   const hashId = (hash ?? '').replace('#', '');
@@ -85,10 +93,10 @@ const RatingComment: React.FC<IRatingCommentProps> = ({
           <Ratings stars={rating.rating || 0} />
           <div className='rating-username'>{rating.userName}</div>
         </Col>
-        <Col xs='auto'>
+        <Col xs='auto' className='d-flex' style={{ alignItems: 'start' }}>
           <RatingTimestamp rating={rating} />
           {onDelete && (
-            <Button variant='outline-danger' className='rating-delete-button' size='sm' onClick={() => handleDeleteClick(rating.id)}>
+            <Button id={`delete-${rating.id}`} variant='outline-danger' className='rating-delete-button' size='sm' tooltip={formatMessage(messages.delete_button)} onClick={() => handleDeleteClick(rating.id)}>
               <Icon icon='trash' />
             </Button>
           )}
@@ -107,7 +115,7 @@ const RatingComment: React.FC<IRatingCommentProps> = ({
           onAccept = {handleDeleteAccept}
           onClose  = {handleDeleteClose}
           acceptButtonProps = {{ variant: 'danger' }}>
-        {intl.formatMessage(messages.confirm_delete_message)}
+        {formatMessage(messages.confirm_delete_message)}
       </Modal>
     </div>
   );

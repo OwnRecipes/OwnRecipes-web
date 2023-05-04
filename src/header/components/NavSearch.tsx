@@ -15,15 +15,16 @@ export interface INavSearchProps {
   onExpandSearch?: (expanded: boolean) => void;
 }
 
+const messages = defineMessages({
+  search_placeholder: {
+    id: 'nav.search.placeholder',
+    description: 'Placeholder for the search input',
+    defaultMessage: 'Search',
+  },
+});
+
 const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    search_placeholder: {
-      id: 'nav.search.placeholder',
-      description: 'Placeholder for the search input',
-      defaultMessage: 'Search',
-    },
-  });
 
   const urlRef = useRef(null);
   const searchRef = useRef(null);

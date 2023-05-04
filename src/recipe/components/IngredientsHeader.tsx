@@ -18,6 +18,34 @@ export interface IIngredientsHeaderProps {
   updateServings: (servings: number) => Promise<ValidationResult>;
 }
 
+const messages = defineMessages({
+  ingredients: {
+    id: 'recipe.ingredients',
+    description: 'Ingredients',
+    defaultMessage: 'Ingredients',
+  },
+  ingredients_for_servings: {
+    id: 'recipe.ingredients_for_servings',
+    description: 'Ingredients for[ n servings]',
+    defaultMessage: 'Ingredients for',
+  },
+  servings: {
+    id: 'recipe.servings',
+    description: 'Servings',
+    defaultMessage: 'Servings',
+  },
+  servings_input_tooltip: {
+    id: 'recipe.servings_input_tooltip',
+    description: 'Accessible tooltip for the (change) servings input',
+    defaultMessage: 'Amount of servings',
+  },
+  servings_update_button: {
+    id: 'recipe.servings_update_button',
+    description: 'Label for the button to change the servings',
+    defaultMessage: 'Update servings',
+  },
+});
+
 export interface IFormDataProps {
   servings: number;
 }
@@ -25,33 +53,6 @@ export interface IFormDataProps {
 const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({
     recipe, recipeMeta, updateServings }: IIngredientsHeaderProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    ingredients: {
-      id: 'recipe.ingredients',
-      description: 'Ingredients',
-      defaultMessage: 'Ingredients',
-    },
-    ingredients_for_servings: {
-      id: 'recipe.ingredients_for_servings',
-      description: 'Ingredients for[ n servings]',
-      defaultMessage: 'Ingredients for',
-    },
-    servings: {
-      id: 'recipe.servings',
-      description: 'Servings',
-      defaultMessage: 'Servings',
-    },
-    servings_input_tooltip: {
-      id: 'recipe.servings_input_tooltip',
-      description: 'Accessible tooltip for the (change) servings input',
-      defaultMessage: 'Amount of servings',
-    },
-    servings_update_button: {
-      id: 'recipe.servings_update_button',
-      description: 'Label for the button to change the servings',
-      defaultMessage: 'Update servings',
-    },
-  });
 
   const customServings = recipe?.customServings;
 

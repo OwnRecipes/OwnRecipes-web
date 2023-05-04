@@ -262,6 +262,21 @@ const AddToGroceryListForm = forwardRef<HTMLFormElement, IAddToGroceryListProps>
   );
 });
 
+const messages = defineMessages({
+  list: {
+    id: 'grocery_list.form.list',
+    defaultMessage: 'List',
+  },
+  new_text: {
+    id: 'grocery_list.item.new_text',
+    defaultMessage: 'Create a new grocery list to get started.',
+  },
+  new_list_title: {
+    id: 'grocery_list.item.new_title',
+    defaultMessage: 'My grocery list',
+  },
+});
+
 interface IListRowProps {
   lists: Array<GroceryList>;
   form: FormApi<IAddToGroceryListFormDataProps, Partial<IAddToGroceryListFormDataProps>>;
@@ -272,20 +287,6 @@ const ListRow: React.FC<IListRowProps> = ({
     lists, form, onAddList }: IListRowProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    list: {
-      id: 'grocery_list.form.list',
-      defaultMessage: 'List',
-    },
-    new_text: {
-      id: 'grocery_list.item.new_text',
-      defaultMessage: 'Create a new grocery list to get started.',
-    },
-    new_list_title: {
-      id: 'grocery_list.item.new_title',
-      defaultMessage: 'My grocery list',
-    },
-  });
 
   const [addedNewList, setAddedNewList] = useState<boolean>(false);
   const prevListIds = useRef<Array<number> | undefined>();
@@ -323,7 +324,7 @@ const ListRow: React.FC<IListRowProps> = ({
         {lists.length === 0 && (
           <>
             <P>{formatMessage(messages.new_text)}</P>
-            <Button id='add-list-button' type='button' onClick={handleAddListClick} variant='primary' className='add-list-button' aria-label='Add list'>
+            <Button id='add-list-button' type='button' onClick={handleAddListClick} variant='primary' className='add-list-button'>
               {intl.messages['nav.grocery_list_create'] as string}
             </Button>
           </>
@@ -337,7 +338,7 @@ const ListRow: React.FC<IListRowProps> = ({
                 readOnly = {lists.length === 0}
                 disabled = {lists.length === 0} />
             {!addedNewList && (
-              <Button id='add-list-button' type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' aria-label='Add list' tooltip={intl.messages['nav.grocery_list_create'] as string}>
+              <Button id='add-list-button' type='button' onClick={handleAddListClick} variant='transparent' className='add-list-button' tooltip={intl.messages['nav.grocery_list_create'] as string}>
                 <Icon icon='plus-lg' variant='light' size='2x' />
               </Button>
             )}

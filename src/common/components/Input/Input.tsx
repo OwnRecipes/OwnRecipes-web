@@ -369,22 +369,38 @@ interface IInputPasswordRevealAdornment extends CommonProps {
   onBlur:  (event: React.FocusEvent<HTMLButtonElement>) => void;
 }
 
+const messages = defineMessages({
+  hidePassword: {
+    id: 'input.hide_password',
+    description: 'Button label to mask the password.',
+    defaultMessage: 'Hide the password',
+  },
+  revealPassword: {
+    id: 'input.reveal_password',
+    description: 'Button label to reveal the password.',
+    defaultMessage: 'Reveal the password',
+  },
+  capslockWarning: {
+    id: 'input.capslock_warning',
+    description: 'Warning when password input has focus and capslock is active.',
+    defaultMessage: 'Capslock is active.',
+  },
+  lengthWarning: {
+    id: 'input.length_warning',
+    description: 'Warning when text input with maxLength has only few remaining characters.',
+    defaultMessage: '{amount, plural, one {# character} other {# characters}} remaining.',
+  },
+  lengthExceeded: {
+    id: 'input.length_exceeded',
+    description: 'Error when text input with maxLength has too many characters.',
+    defaultMessage: 'Exceeded the character limit by {amount}.',
+  },
+});
+
 const InputPasswordRevealAdornment = forwardRef<HTMLDivElement, IInputPasswordRevealAdornment>(({
     showPassword, onClick, onBlur,
     className, ...rest }: IInputPasswordRevealAdornment, ref) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    hidePassword: {
-      id: 'input.hide_password',
-      description: 'Button label to mask the password.',
-      defaultMessage: 'Hide the password',
-    },
-    revealPassword: {
-      id: 'input.reveal_password',
-      description: 'Button label to reveal the password.',
-      defaultMessage: 'Reveal the password',
-    },
-  });
 
   return (
     <InputAdornment position='end' inline {...rest} className={classNames('inline-adornment', className)} ref={ref}>
@@ -401,13 +417,6 @@ const InputPasswordRevealAdornment = forwardRef<HTMLDivElement, IInputPasswordRe
 
 const InputCapslockWarning = forwardRef<HTMLDivElement, CommonProps>(({ ...rest }: CommonProps, ref) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    capslockWarning: {
-      id: 'input.capslock_warning',
-      description: 'Warning when password input has focus and capslock is active.',
-      defaultMessage: 'Capslock is active.',
-    },
-  });
 
   return (
     <Form.Text
@@ -427,18 +436,6 @@ interface IInputLengthWarning extends CommonProps {
 const InputLengthWarning = forwardRef<HTMLDivElement, IInputLengthWarning>(({
     length, maxLength, ...rest }: IInputLengthWarning, ref) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    lengthWarning: {
-      id: 'input.length_warning',
-      description: 'Warning when text input with maxLength has only few remaining characters.',
-      defaultMessage: '{amount, plural, one {# character} other {# characters}} remaining.',
-    },
-    lengthExceeded: {
-      id: 'input.length_exceeded',
-      description: 'Error when text input with maxLength has too many characters.',
-      defaultMessage: 'Exceeded the character limit by {amount}.',
-    },
-  });
 
   const showLengthWarning = maxLength && maxLength > 19 && length >= (maxLength - Math.max(Math.floor(maxLength * 0.1), 9));
   const remainingChars = maxLength && maxLength > 0 ? (maxLength - length) : Number.POSITIVE_INFINITY;

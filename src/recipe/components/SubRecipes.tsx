@@ -41,24 +41,27 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({
   )).length > 0;
 
   const subRecipesList = subRecipes?.map((subRecipe, index) => {
-    const quantityString    = subRecipe.quantity != null && subRecipe.quantity.length > 0 && subRecipe.quantity !== '0' ? subRecipe.quantity : '';
-    const measurementString = subRecipe.measurement != null ? optionallyFormatMessage(intl, 'measurement.', subRecipe.measurement, { itemCount: subRecipe.quantity }) : '';
-    const titleString       = subRecipe.title;
+    const quantityS   = subRecipe.quantity != null && subRecipe.quantity.length > 0 && subRecipe.quantity !== '0' ? subRecipe.quantity : '';
+    const msrmtString = subRecipe.measurement != null ? optionallyFormatMessage(intl, 'measurement.', subRecipe.measurement, { itemCount: subRecipe.quantity }) : '';
+    const titleString = subRecipe.title;
+    const fullString  = [quantityS, msrmtString, titleString].join(' ');
 
     return (
       <tr className='ingredient' key={(subRecipe.child_recipe_id ?? index).toString()}>
         {selectable && (
           <td className='selection'>
             <ReCheckbox
-                name    = {`subrecipes.cb-${subRecipe.child_recipe_id}`} />
+                label = {fullString}
+                className = 'label-sr-only'
+                name  = {`subrecipes.cb-${subRecipe.child_recipe_id}`} />
           </td>
         )}
         {showQuantityCol && (
           <td className='quantity first-col'>
             <span>
-              {quantityString}
-              {quantityString != null && quantityString.length > 0 && measurementString.length > 0 && ' '}
-              {measurementString}
+              {quantityS}
+              {quantityS != null && quantityS.length > 0 && msrmtString.length > 0 && ' '}
+              {msrmtString}
             </span>
           </td>
         )}

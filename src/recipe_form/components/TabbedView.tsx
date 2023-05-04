@@ -19,18 +19,19 @@ export interface ITabbedViewProps {
   children:    Array<React.ReactNode>;
 }
 
+const messages = defineMessages({
+  preview: {
+    id: 'recipe.create.preview',
+    description: 'Preview',
+    defaultMessage: 'Preview',
+  },
+});
+
 const TabbedView: React.FC<ITabbedViewProps> = ({
     id, labels, errors, tooltips,
     initialTab, activeTab, onSelect,
     children } : ITabbedViewProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    preview: {
-      id: 'recipe.create.preview',
-      description: 'Preview',
-      defaultMessage: 'Preview',
-    },
-  });
 
   const contentClassName = classNames('content', {
     'has-error': !!errors,
