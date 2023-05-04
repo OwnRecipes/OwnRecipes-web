@@ -7,6 +7,24 @@ import { SearchResult } from '../../browse/store/SearchTypes';
 import { optionallyFormatMessage } from '../../common/utility';
 import { Course, Cuisine } from '../../recipe/store/RecipeTypes';
 
+const messages = defineMessages({
+  filter_by_course: {
+    id: 'random.search.menu.filter_by_course_dropdown',
+    description: 'Filter by main/...',
+    defaultMessage: 'Course: {course}',
+  },
+  filter_by_cuisine: {
+    id: 'random.search.menu.filter_by_cuisine_dropdown',
+    description: 'Filter by indian/...',
+    defaultMessage: 'Cuisine: {cuisine}',
+  },
+  filter_all: {
+    id: 'random.search.menu.filter_all',
+    description: 'Item to not filter at all',
+    defaultMessage: '(All)',
+  },
+});
+
 export interface ISearchMenuProps {
   search:   SearchResult | undefined;
   qs:       Record<string, string>;
@@ -18,23 +36,6 @@ export interface ISearchMenuProps {
 const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines, buildUrl }: ISearchMenuProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    filter_by_course: {
-      id: 'random.search.menu.filter_by_course_dropdown',
-      description: 'Filter by main/...',
-      defaultMessage: 'Course: {course}',
-    },
-    filter_by_cuisine: {
-      id: 'random.search.menu.filter_by_cuisine_dropdown',
-      description: 'Filter by indian/...',
-      defaultMessage: 'Cuisine: {cuisine}',
-    },
-    filter_all: {
-      id: 'random.search.menu.filter_all',
-      description: 'Item to not filter at all',
-      defaultMessage: '(All)',
-    },
-  });
 
   const filterAllText = formatMessage(messages.filter_all);
 

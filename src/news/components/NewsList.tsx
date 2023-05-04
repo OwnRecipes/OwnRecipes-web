@@ -13,14 +13,15 @@ import { PendingState } from '../../common/store/GenericReducerType';
 import Loading from '../../common/components/Loading';
 import { optionallyFormatMessage } from '../../common/utility';
 
+defineMessages({
+  news_placeholder_introduction: {
+    id: 'news.placeholder.introduction',
+    defaultMessage: 'OwnRecipes is an open source recipe management site. You can share recipes with friends, rate recipes, store your favorite recipes to find easily, and more.',
+  },
+});
+
 const NewsCarousel: React.FC = () => {
   const intl = useIntl();
-  defineMessages({
-    news_placeholder_introduction: {
-      id: 'news.placeholder.introduction',
-      defaultMessage: 'OwnRecipes is an open source recipe management site. You can share recipes with friends, rate recipes, store your favorite recipes to find easily, and more.',
-    },
-  });
 
   const dispatch = useDispatch();
   const news = useSelector((state: RootState) => state.news);

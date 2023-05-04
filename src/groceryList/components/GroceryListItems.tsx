@@ -12,6 +12,17 @@ import { ValidationResult } from '../../common/store/Validation';
 import { GROCERY_LIST_FILTER } from '../containers/GroceryListContainer';
 import P from '../../common/components/P';
 
+const messages = defineMessages({
+  toggle_all: {
+    id: 'grocery_list.items.toggle_all',
+    defaultMessage: 'Toggle all',
+  },
+  filtered_items_info: {
+    id: 'grocery_list.items.filtered_items_info',
+    defaultMessage: '({sum, plural, one {# filtered item} other {# filtered items}})',
+  },
+});
+
 export interface IGroceryListItemsProps {
   list: GroceryList | undefined;
   isNew: boolean;
@@ -40,16 +51,6 @@ export function filterListItems(items: Array<GroceryListItem>, filter: GROCERY_L
 const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
     list, isNew, items, filter, onAddItem, onToggleItem, onToggleItems, onUpdateItem, onDeleteItem }: IGroceryListItemsProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    toggle_all: {
-      id: 'grocery_list.items.toggle_all',
-      defaultMessage: 'Toggle all',
-    },
-    filtered_items_info: {
-      id: 'grocery_list.items.filtered_items_info',
-      defaultMessage: '({sum, plural, one {# filtered item} other {# filtered items}})',
-    },
-  });
 
   const filteredItems = useMemo(() => filterListItems(items ?? [], filter), [filterListItems, items, filter]);
 

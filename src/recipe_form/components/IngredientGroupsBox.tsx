@@ -21,12 +21,39 @@ import { NEW_ITEM_URL_ID } from '../../common/constants';
 import TabbedView from './TabbedView';
 import { slugify } from '../../common/utility';
 
-export interface IIngredientGroupsBoxProps {
-  nameIg:   string;
-  nameSub:  string;
+const messages = defineMessages({
+  ingredients_label: {
+    id: 'recipe.create.ingredients_label',
+    description: 'Recipe ingredients label',
+    defaultMessage: 'Ingredients',
+  },
+  ingredients_tooltip: {
+    id: 'recipe.create.ing.info_desc',
+    description: 'info_desc',
+    defaultMessage: 'Each Ingredient should be on its own line. You can form groups by ending the groups first line with a colon (":").',
+  },
+  ingredients_placeholder: {
+    id: 'recipe.create.ing.ingredients_placeholder',
+    description: 'Example for writing ingredients',
+    defaultMessage: 'Dough:\n300 g flour\n100 ml milk\n\nDip:\n100 ml olive oil\n...',
+  },
 
-  fetchRecipeList: (searchTerm: string) => Promise<Array<AutocompleteListItem>>;
-}
+  subrecipes_label: {
+    id: 'recipe.create.subrecipes_label',
+    description: 'Recipe links label',
+    defaultMessage: 'Recipe links',
+  },
+  subrecipes_tooltip: {
+    id: 'recipe.create.subrecipes.tooltip',
+    description: 'Subrecipes tooltip',
+    defaultMessage: 'If the recipe is made of several subrecipes, then link them here. Each Recipe Link should be on its own line.',
+  },
+  subrecipes_placeholder: {
+    id: 'recipe.create.subrecipes.placeholder',
+    description: 'Subreceipes placeholder',
+    defaultMessage: ':dough-1\n:olive-oil-dip-1',
+  },
+});
 
 function normalizeLine(line: string): string {
   let res = line.replace(/\t/g, ' ');
@@ -118,43 +145,17 @@ interface IItemProps {
 }
 const Item = ({ entity: { char } }: IItemProps) => <div>{char}</div>;
 
+export interface IIngredientGroupsBoxProps {
+  nameIg:   string;
+  nameSub:  string;
+
+  fetchRecipeList: (searchTerm: string) => Promise<Array<AutocompleteListItem>>;
+}
+
 const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
     nameIg, nameSub, fetchRecipeList }: IIngredientGroupsBoxProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    ingredients_label: {
-      id: 'recipe.create.ingredients_label',
-      description: 'Recipe ingredients label',
-      defaultMessage: 'Ingredients',
-    },
-    ingredients_tooltip: {
-      id: 'recipe.create.ing.info_desc',
-      description: 'info_desc',
-      defaultMessage: 'Each Ingredient should be on its own line. You can form groups by ending the groups first line with a colon (":").',
-    },
-    ingredients_placeholder: {
-      id: 'recipe.create.ing.ingredients_placeholder',
-      description: 'Example for writing ingredients',
-      defaultMessage: 'Dough:\n300 g flour\n100 ml milk\n\nDip:\n100 ml olive oil\n...',
-    },
-
-    subrecipes_label: {
-      id: 'recipe.create.subrecipes_label',
-      description: 'Recipe links label',
-      defaultMessage: 'Recipe links',
-    },
-    subrecipes_tooltip: {
-      id: 'recipe.create.subrecipes.tooltip',
-      description: 'Subrecipes tooltip',
-      defaultMessage: 'If the recipe is made of several subrecipes, then link them here. Each Recipe Link should be on its own line.',
-    },
-    subrecipes_placeholder: {
-      id: 'recipe.create.subrecipes.placeholder',
-      description: 'Subreceipes placeholder',
-      defaultMessage: ':dough-1\n:olive-oil-dip-1',
-    },
-  });
 
   const location = useLocation();
 

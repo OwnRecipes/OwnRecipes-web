@@ -11,6 +11,79 @@ import Icon from '../../common/components/Icon';
 import { CategoryCount, RatingCount } from '../store/FilterTypes';
 import Tooltip from '../../common/components/Tooltip';
 
+const messages = defineMessages({
+  reset: {
+    id: 'filter.reset',
+    description: 'Filter reset',
+    defaultMessage: 'Reset',
+  },
+  filter_course: {
+    id: 'filter.filter_course',
+    description: 'Filter field course',
+    defaultMessage: 'Courses',
+  },
+  filter_cuisine: {
+    id: 'filter.filter_cuisine',
+    description: 'Filter field cuisine',
+    defaultMessage: 'Cuisines',
+  },
+  filter_rating: {
+    id: 'filter.filter_rating',
+    description: 'Filter field rating',
+    defaultMessage: 'Ratings',
+  },
+  filter_tag: {
+    id: 'filter.filter_tag',
+    description: 'Filter field tag',
+    defaultMessage: 'Tags',
+  },
+  title: {
+    id: 'filter.title',
+    description: 'Title',
+    defaultMessage: 'Title',
+  },
+  rating: {
+    id: 'filter.rating',
+    description: 'rating',
+    defaultMessage: 'Rating',
+  },
+  pub_date: {
+    id: 'filter.pub_date',
+    description: 'pub_date',
+    defaultMessage: 'Created Date',
+  },
+  filters: {
+    id: 'filter.filters',
+    description: 'Filters',
+    defaultMessage: 'Filters',
+  },
+  show_filters: {
+    id: 'filter.show_filters',
+    description: 'Show Filters',
+    defaultMessage: 'Show Filters',
+  },
+  hide_filters: {
+    id: 'filter.hide_filters',
+    description: 'Hide Filters',
+    defaultMessage: 'Hide Filters',
+  },
+  reset_filters: {
+    id: 'filter.reset_filters',
+    description: 'Reset Filters',
+    defaultMessage: 'Reset Filters',
+  },
+  filter_ordering: {
+    id: 'filter.filter_ordering',
+    description: 'Filter field ordering',
+    defaultMessage: 'Ordering',
+  },
+  x_stars: {
+    id: 'filter.x_stars',
+    description: 'X Stars',
+    defaultMessage: '{rating, number} stars',
+  },
+});
+
 export interface ISearchMenuProps {
   qs: Record<string, string>;
   courses:  Array<CategoryCount> | undefined;
@@ -31,78 +104,6 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
     hasActiveFilter, resetFilterUrl, openFilters, setOpenFilters,
     buildUrl }: ISearchMenuProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    reset: {
-      id: 'filter.reset',
-      description: 'Filter reset',
-      defaultMessage: 'Reset',
-    },
-    filter_course: {
-      id: 'filter.filter_course',
-      description: 'Filter field course',
-      defaultMessage: 'Courses',
-    },
-    filter_cuisine: {
-      id: 'filter.filter_cuisine',
-      description: 'Filter field cuisine',
-      defaultMessage: 'Cuisines',
-    },
-    filter_rating: {
-      id: 'filter.filter_rating',
-      description: 'Filter field rating',
-      defaultMessage: 'Ratings',
-    },
-    filter_tag: {
-      id: 'filter.filter_tag',
-      description: 'Filter field tag',
-      defaultMessage: 'Tags',
-    },
-    title: {
-      id: 'filter.title',
-      description: 'Title',
-      defaultMessage: 'Title',
-    },
-    rating: {
-      id: 'filter.rating',
-      description: 'rating',
-      defaultMessage: 'Rating',
-    },
-    pub_date: {
-      id: 'filter.pub_date',
-      description: 'pub_date',
-      defaultMessage: 'Created Date',
-    },
-    filters: {
-      id: 'filter.filters',
-      description: 'Filters',
-      defaultMessage: 'Filters',
-    },
-    show_filters: {
-      id: 'filter.show_filters',
-      description: 'Show Filters',
-      defaultMessage: 'Show Filters',
-    },
-    hide_filters: {
-      id: 'filter.hide_filters',
-      description: 'Hide Filters',
-      defaultMessage: 'Hide Filters',
-    },
-    reset_filters: {
-      id: 'filter.reset_filters',
-      description: 'Reset Filters',
-      defaultMessage: 'Reset Filters',
-    },
-    filter_ordering: {
-      id: 'filter.filter_ordering',
-      description: 'Filter field ordering',
-      defaultMessage: 'Ordering',
-    },
-    x_stars: {
-      id: 'filter.x_stars',
-      description: 'X Stars',
-      defaultMessage: '{rating, number} stars',
-    },
-  });
 
   const [showMenu, setShowMenu] = useState<boolean>(false);
 

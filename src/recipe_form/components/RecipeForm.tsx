@@ -22,6 +22,69 @@ import IngredientGroupsBox, { ingredientsFormatter, ingredientsParser, subrecipe
 import DirectionBox from './DirectionBox';
 import { ValidationResult } from '../../common/store/Validation';
 
+const messages = defineMessages({
+  name_label: {
+    id: 'recipe.create.name_label',
+    description: 'Recipe name label',
+    defaultMessage: 'Recipe name',
+  },
+  course_label: {
+    id: 'recipe.create.course_label',
+    description: 'Course label',
+    defaultMessage: 'Course',
+  },
+  cuisine_label: {
+    id: 'recipe.create.cuisine_label',
+    description: 'Cuisine label',
+    defaultMessage: 'Cuisine',
+  },
+  tags_label: {
+    id: 'recipe.create.tags_label',
+    description: 'Tags label',
+    defaultMessage: 'Tags',
+  },
+  prep_time_label: {
+    id: 'recipe.create.prep_time_label',
+    description: 'Prep time label',
+    defaultMessage: 'Prep time (min)',
+  },
+  cooking_time_label: {
+    id: 'recipe.create.cooking_time_label',
+    description: 'Cooking time label',
+    defaultMessage: 'Cooking time (min)',
+  },
+  servings_label: {
+    id: 'recipe.create.servings_label',
+    description: 'Servings label',
+    defaultMessage: 'Servings',
+  },
+  information_label: {
+    id: 'recipe.create.information_label',
+    description: 'Recipe information label',
+    defaultMessage: 'Recipe information',
+  },
+  information_placeholder: {
+    id: 'recipe.create.information_placeholder',
+    description: 'Recipe information placeholder',
+    defaultMessage: 'A quick description of the recipe',
+  },
+  source_label: {
+    id: 'recipe.create.source_label',
+    description: 'Rating source label',
+    defaultMessage: 'Source',
+  },
+  source_tooltip: {
+    id: 'recipe.create.source_tooltip',
+    description: 'Rating source tooltip',
+    defaultMessage: 'Where the original recipe is from.',
+  },
+  public_label: {
+    id: 'recipe.create.public_label',
+    description: 'Recipe set public label',
+    defaultMessage: 'Public Recipe',
+  },
+});
+
 export interface IRecipeFormProps {
   recipe: Recipe | undefined;
   isNew: boolean;
@@ -41,68 +104,6 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
     fetchRecipeList, onSubmit } : IRecipeFormProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    name_label: {
-      id: 'recipe.create.name_label',
-      description: 'Recipe name label',
-      defaultMessage: 'Recipe name',
-    },
-    course_label: {
-      id: 'recipe.create.course_label',
-      description: 'Course label',
-      defaultMessage: 'Course',
-    },
-    cuisine_label: {
-      id: 'recipe.create.cuisine_label',
-      description: 'Cuisine label',
-      defaultMessage: 'Cuisine',
-    },
-    tags_label: {
-      id: 'recipe.create.tags_label',
-      description: 'Tags label',
-      defaultMessage: 'Tags',
-    },
-    prep_time_label: {
-      id: 'recipe.create.prep_time_label',
-      description: 'Prep time label',
-      defaultMessage: 'Prep time (min)',
-    },
-    cooking_time_label: {
-      id: 'recipe.create.cooking_time_label',
-      description: 'Cooking time label',
-      defaultMessage: 'Cooking time (min)',
-    },
-    servings_label: {
-      id: 'recipe.create.servings_label',
-      description: 'Servings label',
-      defaultMessage: 'Servings',
-    },
-    information_label: {
-      id: 'recipe.create.information_label',
-      description: 'Recipe information label',
-      defaultMessage: 'Recipe information',
-    },
-    information_placeholder: {
-      id: 'recipe.create.information_placeholder',
-      description: 'Recipe information placeholder',
-      defaultMessage: 'A quick description of the recipe',
-    },
-    source_label: {
-      id: 'recipe.create.source_label',
-      description: 'Rating source label',
-      defaultMessage: 'Source',
-    },
-    source_tooltip: {
-      id: 'recipe.create.source_tooltip',
-      description: 'Rating source tooltip',
-      defaultMessage: 'Where the original recipe is from.',
-    },
-    public_label: {
-      id: 'recipe.create.public_label',
-      description: 'Recipe set public label',
-      defaultMessage: 'Public Recipe',
-    },
-  });
 
   const measurementsContext = useContext(MeasurementContext);
 

@@ -10,6 +10,24 @@ import LoadingSpinner from '../../common/components/LoadingSpinner';
 
 const AboutModal = lazy(() => import('./AboutModal'));
 
+const messages = defineMessages({
+  about_link: {
+    id: 'footer.about_link',
+    description: 'Button title to open the about dialog.',
+    defaultMessage: 'About OwnRecipes',
+  },
+  legal_link: {
+    id: 'footer.legal_link',
+    description: 'Link to the custom legal page.',
+    defaultMessage: 'Legal',
+  },
+  privacy_link: {
+    id: 'footer.privacy_link',
+    description: 'Link to the custom privacy page.',
+    defaultMessage: 'Privacy',
+  },
+});
+
 const Footer: React.FC = () => (
   <footer className='footer print-hidden'>
     <Container>
@@ -22,23 +40,6 @@ const Footer: React.FC = () => (
 
 const FooterContent: React.FC = () => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    about_link: {
-      id: 'footer.about_link',
-      description: 'Button title to open the about dialog.',
-      defaultMessage: 'About OwnRecipes',
-    },
-    legal_link: {
-      id: 'footer.legal_link',
-      description: 'Link to the custom legal page.',
-      defaultMessage: 'Legal',
-    },
-    privacy_link: {
-      id: 'footer.privacy_link',
-      description: 'Link to the custom privacy page.',
-      defaultMessage: 'Privacy',
-    },
-  });
 
   const legalUrl = getEnv('REACT_APP_LEGAL_URL');
   const privacyUrl = getEnv('REACT_APP_PRIVACY_URL');

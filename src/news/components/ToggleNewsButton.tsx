@@ -7,6 +7,17 @@ import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
 
+const messages = defineMessages({
+  news_hide: {
+    id: 'news.hide news button',
+    defaultMessage: 'Got it!',
+  },
+  news_show: {
+    id: 'news.show news button',
+    defaultMessage: 'Show news',
+  },
+});
+
 export interface IToggleNewsButtonProps {
   showNews: boolean;
   onClick: () => void;
@@ -14,16 +25,6 @@ export interface IToggleNewsButtonProps {
 
 const ToggleNewsButton: React.FC<IToggleNewsButtonProps> = ({ showNews, onClick }: IToggleNewsButtonProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    news_hide: {
-      id: 'news.hide news button',
-      defaultMessage: 'Got it!',
-    },
-    news_show: {
-      id: 'news.show news button',
-      defaultMessage: 'Show news',
-    },
-  });
 
   const connection = useSelector((state: RootState) => state.connection);
   const news = useSelector((state: RootState) => state.news);

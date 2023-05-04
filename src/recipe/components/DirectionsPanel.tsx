@@ -10,6 +10,19 @@ import Loading from '../../common/components/Loading';
 import HeaderLink from '../../common/components/HeaderLink';
 import Directions from './Directions';
 
+const messages = defineMessages({
+  directions: {
+    id: 'recipe.directions',
+    description: 'Directions',
+    defaultMessage: 'Directions',
+  },
+  no_directions: {
+    id: 'recipe.directions.no_directions',
+    description: 'No directions provided message',
+    defaultMessage: '(This recipe has no directions.)',
+  },
+});
+
 export interface IDirectionsPanelProps {
   directions: string;
   recipeMeta: ReducerMeta;
@@ -19,18 +32,6 @@ export interface IDirectionsPanelProps {
 const DirectionsPanel: React.FC<IDirectionsPanelProps> = ({
     directions: directionsString, recipeMeta, ingredients }: IDirectionsPanelProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    directions: {
-      id: 'recipe.directions',
-      description: 'Directions',
-      defaultMessage: 'Directions',
-    },
-    no_directions: {
-      id: 'recipe.directions.no_directions',
-      description: 'No directions provided message',
-      defaultMessage: '(This recipe has no directions.)',
-    },
-  });
 
   const pending = recipeMeta.pending;
   const hasNoData = pending === PendingState.COMPLETED

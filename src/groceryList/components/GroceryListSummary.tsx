@@ -8,6 +8,42 @@ import { GroceryList } from '../store/GroceryListTypes';
 import { GroceryListItem } from '../store/GroceryListItemTypes';
 import { GROCERY_LIST_FILTER } from '../containers/GroceryListContainer';
 
+const messages = defineMessages({
+  groceryList_items_summary_empty: {
+    id: 'groceryList.items_summary_empty',
+    description: 'Summary for grocery list with no items.',
+    defaultMessage: 'Empty list',
+  },
+  groceryList_items_summary_completed: {
+    id: 'groceryList.items_summary_completed',
+    description: 'Number of items, all done.',
+    defaultMessage: '{sum, plural, one {# item} other {# items}}, all done 😀',
+  },
+  groceryList_items_summary_incompleted: {
+    id: 'groceryList.items_summary_incompleted',
+    description: 'Number of items, with not completed sum.',
+    defaultMessage: '{sum, plural, one {# item} other {# items}}, {sum_not_completed} not completed',
+  },
+  groceryList_filter_by: {
+    id: 'groceryList.filter_by',
+    description: 'Filter items',
+    defaultMessage: 'Show items: {filter}',
+  },
+
+  filter_off: {
+    id: 'groceryList.filter_items.ALL',
+    defaultMessage: 'All',
+  },
+  filter_active: {
+    id: 'groceryList.filter_items.ACTIVE',
+    defaultMessage: 'Not completed',
+  },
+  filter_completed: {
+    id: 'groceryList.filter_items.COMPLETED',
+    defaultMessage: 'Completed',
+  },
+});
+
 export interface IGroceryListSummaryProps {
   list: GroceryList | undefined;
   items: Array<GroceryListItem> | undefined;
@@ -19,41 +55,6 @@ const GroceryListSummary: React.FC<IGroceryListSummaryProps> = ({
     list, items, filter, onChangeFilter }: IGroceryListSummaryProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    groceryList_items_summary_empty: {
-      id: 'groceryList.items_summary_empty',
-      description: 'Summary for grocery list with no items.',
-      defaultMessage: 'Empty list',
-    },
-    groceryList_items_summary_completed: {
-      id: 'groceryList.items_summary_completed',
-      description: 'Number of items, all done.',
-      defaultMessage: '{sum, plural, one {# item} other {# items}}, all done 😀',
-    },
-    groceryList_items_summary_incompleted: {
-      id: 'groceryList.items_summary_incompleted',
-      description: 'Number of items, with not completed sum.',
-      defaultMessage: '{sum, plural, one {# item} other {# items}}, {sum_not_completed} not completed',
-    },
-    groceryList_filter_by: {
-      id: 'groceryList.filter_by',
-      description: 'Filter items',
-      defaultMessage: 'Show items: {filter}',
-    },
-
-    filter_off: {
-      id: 'groceryList.filter_items.ALL',
-      defaultMessage: 'All',
-    },
-    filter_active: {
-      id: 'groceryList.filter_items.ACTIVE',
-      defaultMessage: 'Not completed',
-    },
-    filter_completed: {
-      id: 'groceryList.filter_items.COMPLETED',
-      defaultMessage: 'Completed',
-    },
-  });
 
   const itemsCount = items?.length ?? 0;
   const completedCount = items?.filter(i => i.completed).length ?? 0;

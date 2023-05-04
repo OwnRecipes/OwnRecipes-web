@@ -12,6 +12,14 @@ import IngredientGroups from './IngredientGroups';
 import IngredientsHeader from './IngredientsHeader';
 import IngredientFooter from './IngredientsFooter';
 
+const messages = defineMessages({
+  no_ingredients: {
+    id: 'recipe.recipe_ingredient_button.no_ingredients',
+    description: 'No ingredients provided message',
+    defaultMessage: '(This recipe has no ingredients.)',
+  },
+});
+
 export interface IIngredientsPanelProps {
   recipe:      Recipe | undefined;
   recipeMeta:  ReducerMeta;
@@ -22,13 +30,6 @@ export interface IIngredientsPanelProps {
 
 const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta, userId, updateServings }: IIngredientsPanelProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    no_ingredients: {
-      id: 'recipe.recipe_ingredient_button.no_ingredients',
-      description: 'No ingredients provided message',
-      defaultMessage: '(This recipe has no ingredients.)',
-    },
-  });
 
   const pending = recipeMeta.pending;
   const hasNoIngredients = pending === PendingState.COMPLETED

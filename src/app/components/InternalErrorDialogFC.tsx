@@ -9,6 +9,29 @@ import P from '../../common/components/P';
 import Input from '../../common/components/Input/Input';
 import { InternalError } from '../../internal_error/store/types';
 
+const messages = defineMessages({
+  errorTitle: {
+    id: 'internal_error.dialog_title',
+    defaultMessage: 'Error',
+  },
+  heading_general: {
+    id: 'internal_error.heading.general',
+    defaultMessage: 'General',
+  },
+  heading_information: {
+    id: 'internal_error.heading.information',
+    defaultMessage: 'Extended information',
+  },
+  request: {
+    id: 'internal_error.request',
+    defaultMessage: 'Request',
+  },
+  response: {
+    id: 'internal_error.response',
+    defaultMessage: 'Response',
+  },
+});
+
 function getResponseText(internalError: InternalError | undefined): string | undefined {
   if (internalError == null || internalError.response == null) return undefined;
   const resp: string | undefined = _.get(internalError.response, 'text');
@@ -30,12 +53,6 @@ interface IInternalErrorDialogFCProps {
 const InternalErrorDialogFC: React.FC<IInternalErrorDialogFCProps> = ({
     internalError, onClose }: IInternalErrorDialogFCProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    errorTitle: {
-      id: 'internal_error.dialog_title',
-      defaultMessage: 'Error',
-    },
-  });
 
   return (
     <Modal
@@ -57,24 +74,6 @@ interface IInternalErrorDialogContentProps {
 const InternalErrorDialogContent: React.FC<IInternalErrorDialogContentProps> = ({
     internalError }: IInternalErrorDialogContentProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    heading_general: {
-      id: 'internal_error.heading.general',
-      defaultMessage: 'General',
-    },
-    heading_information: {
-      id: 'internal_error.heading.information',
-      defaultMessage: 'Extended information',
-    },
-    request: {
-      id: 'internal_error.request',
-      defaultMessage: 'Request',
-    },
-    response: {
-      id: 'internal_error.response',
-      defaultMessage: 'Response',
-    },
-  });
 
   const responseText = getResponseText(internalError);
   if (internalError) {

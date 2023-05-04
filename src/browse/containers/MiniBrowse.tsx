@@ -13,12 +13,6 @@ import * as RecipeActions from '../../recipe/store/RecipeActions';
 import ListRecipes from '../components/ListRecipes';
 import * as MiniBrowseActions from '../store/MiniBrowseActions';
 
-interface IMiniBrowseProps {
-  heading: string;
-  count: number;
-  filters?: Record<string, string>;
-}
-
 const messages = defineMessages({
   shuffleSuggestionsButton: {
     id: 'browse.shuffle_suggestions_button_title',
@@ -26,6 +20,12 @@ const messages = defineMessages({
     defaultMessage: 'Shuffle suggestions',
   },
 });
+
+interface IMiniBrowseProps {
+  heading: string;
+  count: number;
+  filters?: Record<string, string>;
+}
 
 function buildUrlFilter(count: number, filters: Record<string, string> | undefined): string {
   const searchParams = new URLSearchParams(filters);

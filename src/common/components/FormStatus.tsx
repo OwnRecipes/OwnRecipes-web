@@ -9,6 +9,35 @@ import NavigationPrompt from './NavigationPrompt';
 import P from './P';
 import Toast from './Toast';
 
+const messages = defineMessages({
+  form_errors_title: {
+    id: 'status.form_errors_title',
+    description: 'Title for the form error box.',
+    defaultMessage: 'The form contains an error.',
+  },
+  form_errors_alert: {
+    id: 'status.form_errors_alert',
+    description: 'Alert text for the form error box.',
+    defaultMessage: 'Please fix the described error(s) and continue.',
+  },
+  form_errors_table_heading_error: {
+    id: 'status.form_errors_table_heading_error',
+    description: 'The form-errors will be displayed as table, with an error column. This is the column\'s title.',
+    defaultMessage: 'Error',
+  },
+  form_errors_table_heading_message: {
+    id: 'status.form_errors_table_heading_message',
+    description: 'The form-errors will be displayed as table, with a message column. This is the column\'s title.',
+    defaultMessage: 'Message',
+  },
+
+  save_success: {
+    id: 'status.save_success',
+    description: 'Toast for successfully saved form.',
+    defaultMessage: 'Changes saved.',
+  },
+});
+
 interface IFormStatusProps {
   dirty: boolean;
   submitting: boolean;
@@ -38,17 +67,17 @@ interface IFormErrorRowErrorProps {
 const FormErrorRowError: React.FC<IFormErrorRowErrorProps> = ({ name, err }: IFormErrorRowErrorProps) => {
   const label = document.querySelector(`[data-api-field="${name}"] > label`)?.textContent ?? name;
 
-  const messages: Array<string> = [];
+  const errMsgs: Array<string> = [];
   if (Array.isArray(err)) {
-    messages.push(...(err.map(errr => errr.message)));
+    errMsgs.push(...(err.map(errr => errr.message)));
   } else {
-    messages.push(err.message);
+    errMsgs.push(err.message);
   }
 
   return (
     <tr>
       <td>{label}</td>
-      <td>{messages.join('. ')}</td>
+      <td>{errMsgs.join('. ')}</td>
     </tr>
   );
 };
@@ -64,28 +93,6 @@ interface IFormErrorsProps {
 
 const FormErrors: React.FC<IFormErrorsProps> = ({ errors }: IFormErrorsProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    form_errors_title: {
-      id: 'status.form_errors_title',
-      description: 'Title for the form error box.',
-      defaultMessage: 'The form contains an error.',
-    },
-    form_errors_alert: {
-      id: 'status.form_errors_alert',
-      description: 'Alert text for the form error box.',
-      defaultMessage: 'Please fix the described error(s) and continue.',
-    },
-    form_errors_table_heading_error: {
-      id: 'status.form_errors_table_heading_error',
-      description: 'The form-errors will be displayed as table, with an error column. This is the column\'s title.',
-      defaultMessage: 'Error',
-    },
-    form_errors_table_heading_message: {
-      id: 'status.form_errors_table_heading_message',
-      description: 'The form-errors will be displayed as table, with a message column. This is the column\'s title.',
-      defaultMessage: 'Message',
-    },
-  });
 
   const visibleErrors = useMemo(() => (
     errors != null ? getVisibleErrors(errors) : undefined
@@ -140,13 +147,6 @@ interface ISubmitSuccessProps {
 
 const SubmitSuccess: React.FC<ISubmitSuccessProps> = ({ dirty, submitting, errors, onSubmitSuccess }: ISubmitSuccessProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    save_success: {
-      id: 'status.save_success',
-      description: 'Toast for successfully saved form.',
-      defaultMessage: 'Changes saved.',
-    },
-  });
 
   const prevSubmitting = useRef<boolean>(false);
   const [showSaveSuccess, setShowSaveSuccess] = useState<boolean>(false);

@@ -7,19 +7,62 @@ import P from '../../common/components/P';
 import Modal from '../../common/components/Modal';
 import { getEnv, isDemoMode, optionallyFormatMessage, requireEnv } from '../../common/utility';
 
+const messages = defineMessages({
+  about_title: {
+    id: 'footer.about.title',
+    description: 'Title of the about dialog.',
+    defaultMessage: 'About OwnRecipes',
+  },
+
+  about_developers: {
+    id: 'footer.about.developers',
+    description: 'Developers heading.',
+    defaultMessage: 'Developers',
+  },
+  about_technical_info: {
+    id: 'footer.about.technical info',
+    description: 'Technical information heading.',
+    defaultMessage: 'Version info',
+  },
+  about_technical_info_demo: {
+    id: 'footer.about.technical info.demo alert',
+    description: 'Info that this instance is a demo only.',
+    defaultMessage: 'Demo mode.',
+  },
+  about_credits: {
+    id: 'footer.about.credits',
+    description: 'Credits heading.',
+    defaultMessage: 'Credits',
+  },
+
+  founder_openeats: {
+    id: 'footer.role.founder_openeats',
+    description: 'Role description for the founder of OpenEats.',
+    defaultMessage: 'Founder of OpenEats',
+  },
+  founder_ownrecipes: {
+    id: 'footer.role.founder_ownrecipes',
+    description: 'Role description for the founder of OwnRecipes.',
+    defaultMessage: 'Founder of OwnRecipes',
+  },
+  backend: {
+    id: 'footer.role.backend',
+    description: 'Backend staff.',
+    defaultMessage: 'Backend/api',
+  },
+  frontend: {
+    id: 'footer.role.frontend',
+    description: 'Frontend staff.',
+    defaultMessage: 'Frontend',
+  },
+});
+
 interface IAboutModalProps {
   show: boolean;
   onClose: () => void;
 }
 const AboutModal = ({ show, onClose }: IAboutModalProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    about_title: {
-      id: 'footer.about.title',
-      description: 'Title of the about dialog.',
-      defaultMessage: 'About OwnRecipes',
-    },
-  });
 
   return (
     <Modal
@@ -35,28 +78,6 @@ const AboutModal = ({ show, onClose }: IAboutModalProps) => {
 
 const ModalAboutContent: React.FC = () => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    about_developers: {
-      id: 'footer.about.developers',
-      description: 'Developers heading.',
-      defaultMessage: 'Developers',
-    },
-    about_technical_info: {
-      id: 'footer.about.technical info',
-      description: 'Technical information heading.',
-      defaultMessage: 'Version info',
-    },
-    about_technical_info_demo: {
-      id: 'footer.about.technical info.demo alert',
-      description: 'Info that this instance is a demo only.',
-      defaultMessage: 'Demo mode.',
-    },
-    about_credits: {
-      id: 'footer.about.credits',
-      description: 'Credits heading.',
-      defaultMessage: 'Credits',
-    },
-  });
 
   return (
     <>
@@ -149,28 +170,6 @@ interface IUserCardProps {
 }
 const UserCard = ({ userName, userUrl, imageSrc, roles }: IUserCardProps) => {
   const intl = useIntl();
-  defineMessages({
-    founder_openeats: {
-      id: 'footer.role.founder_openeats',
-      description: 'Role description for the founder of OpenEats.',
-      defaultMessage: 'Founder of OpenEats',
-    },
-    founder_ownrecipes: {
-      id: 'footer.role.founder_ownrecipes',
-      description: 'Role description for the founder of OwnRecipes.',
-      defaultMessage: 'Founder of OwnRecipes',
-    },
-    backend: {
-      id: 'footer.role.backend',
-      description: 'Backend staff.',
-      defaultMessage: 'Backend/api',
-    },
-    frontend: {
-      id: 'footer.role.frontend',
-      description: 'Frontend staff.',
-      defaultMessage: 'Frontend',
-    },
-  });
 
   return (
     <Col>

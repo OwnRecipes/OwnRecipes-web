@@ -9,16 +9,16 @@ import Image from '../../common/components/Image';
 import ReFileSelect from '../../common/components/ReduxForm/ReFileSelect';
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 
+const messages = defineMessages({
+  photo_label: {
+    id: 'recipe.create.photo_label',
+    description: 'Photo label',
+    defaultMessage: 'Photo',
+  },
+});
+
 const RecipeFormImageRow: React.FC = () => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    photo_label: {
-      id: 'recipe.create.photo_label',
-      description: 'Photo label',
-      defaultMessage: 'Photo',
-    },
-  });
-
   const { key } = useLocation();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

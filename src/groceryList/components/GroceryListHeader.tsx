@@ -21,6 +21,30 @@ import { GroceryListItem } from '../store/GroceryListItemTypes';
 import { GROCERY_LIST_FILTER } from '../containers/GroceryListContainer';
 import { ValidationResult } from '../../common/store/Validation';
 
+const messages = defineMessages({
+  new_title_placeholder: {
+    id: 'grocery_list.header.title_placeholder',
+    defaultMessage: '(Enter a new title)',
+  },
+  confirm_delete_message: {
+    id: 'grocery_list.header.confirm_delete',
+    description: 'Are you sure you want to delete this list?',
+    defaultMessage: 'Are you sure you want to delete this list?',
+  },
+  edit_list: {
+    id: 'grocery_list.header.edit_list_button',
+    defaultMessage: 'Edit',
+  },
+  delete_list: {
+    id: 'grocery_list.header.delete_list_button',
+    defaultMessage: 'Delete',
+  },
+  back_to_lists: {
+    id: 'grocery_list.header.back_to_lists',
+    defaultMessage: 'To my grocery lists',
+  },
+});
+
 export interface IGroceryListHeaderProps {
   list: GroceryList | undefined;
   isNew: boolean;
@@ -42,29 +66,6 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
     items, filter, onChangeFilter }: IGroceryListHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    new_title_placeholder: {
-      id: 'grocery_list.header.title_placeholder',
-      defaultMessage: '(Enter a new title)',
-    },
-    confirm_delete_message: {
-      id: 'grocery_list.header.confirm_delete',
-      description: 'Are you sure you want to delete this list?',
-      defaultMessage: 'Are you sure you want to delete this list?',
-    },
-    edit_list: {
-      id: 'grocery_list.header.edit_list_button',
-      defaultMessage: 'Edit',
-    },
-    delete_list: {
-      id: 'grocery_list.header.delete_list_button',
-      defaultMessage: 'Delete',
-    },
-    back_to_lists: {
-      id: 'grocery_list.header.back_to_lists',
-      defaultMessage: 'To my grocery lists',
-    },
-  });
 
   const location = useLocation();
   const nav = useNavigate();

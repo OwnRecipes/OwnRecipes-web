@@ -7,6 +7,19 @@ import Icon from '../../common/components/Icon';
 import Input from '../../common/components/Input/Input';
 import InputAdornment from '../../common/components/Input/InputAdornment';
 
+const messages = defineMessages({
+  search_title: {
+    id: 'searchbar.title',
+    description: 'Heading for the search page',
+    defaultMessage: 'Search',
+  },
+  input_placeholder: {
+    id: 'searchbar.placeholder',
+    description: 'SearchBar input placeholder',
+    defaultMessage: 'Enter a title, tag, or ingredient',
+  },
+});
+
 export interface ISearchBarProps {
   value:  string;
   doSearch: (value: string) => void;
@@ -18,18 +31,6 @@ interface IFormData {
 
 const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    search_title: {
-      id: 'searchbar.title',
-      description: 'Heading for the search page',
-      defaultMessage: 'Search',
-    },
-    input_placeholder: {
-      id: 'searchbar.placeholder',
-      description: 'SearchBar input placeholder',
-      defaultMessage: 'Enter a title, tag, or ingredient',
-    },
-  });
 
   const [formData, setFormData] = useState<IFormData>({ value: value ?? '' });
   const previousSearch = useRef<string>(value ?? '');

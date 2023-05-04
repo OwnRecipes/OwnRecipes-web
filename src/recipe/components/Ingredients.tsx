@@ -10,6 +10,19 @@ import { optionallyFormatMessage, slugify } from '../../common/utility';
 import { Ingredient, IngredientGroup } from '../store/RecipeTypes';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 
+const messages = defineMessages({
+  quantity: {
+    id: 'ingredients.table.quantity',
+    description: 'Ingredients table quantity header',
+    defaultMessage: 'Quantity',
+  },
+  ingredient: {
+    id: 'ingredients.table.ingredient',
+    description: 'Ingredients table ingredient header',
+    defaultMessage: 'Ingredient',
+  },
+});
+
 export interface IIngredientsProps {
   showCaptions: boolean;
   group: IngredientGroup;
@@ -38,18 +51,6 @@ const Ingredients: React.FC<IIngredientsProps> = ({
     showCaptions, group, data, withHeaderLink, selectable }: IIngredientsProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    quantity: {
-      id: 'ingredients.table.quantity',
-      description: 'Ingredients table quantity header',
-      defaultMessage: 'Quantity',
-    },
-    ingredient: {
-      id: 'ingredients.table.ingredient',
-      description: 'Ingredients table ingredient header',
-      defaultMessage: 'Ingredient',
-    },
-  });
 
   const measurementsContext = useContext(MeasurementContext);
   const caption = showCaptions && group.title ? group.title : undefined;

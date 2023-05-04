@@ -13,16 +13,17 @@ export interface ILanguageDialogProps {
   onClose:  () => void;
 }
 
+const messages = defineMessages({
+  language_modal_title: {
+    id: 'nav.accountmenu.language_modal_title',
+    description: 'Change language dialog title',
+    defaultMessage: 'Choose language',
+  },
+});
+
 export const LanguageDialog: React.FC<ILanguageDialogProps> = ({
     show, settings, onChangeLanguage, onClose }: ILanguageDialogProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    language_modal_title: {
-      id: 'nav.accountmenu.language_modal_title',
-      description: 'Change language dialog title',
-      defaultMessage: 'Choose language',
-    },
-  });
 
   return (
     <Modal

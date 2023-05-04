@@ -10,6 +10,21 @@ import Button from '../../common/components/Button';
 import Icon from '../../common/components/Icon';
 import Toast from '../../common/components/Toast';
 
+const messages = defineMessages({
+  clear_completed_tooltip: {
+    id: 'grocery_list.footer.clear_completed_tooltip',
+    defaultMessage: 'Clear completed',
+  },
+  copy_to_clipboard_tooltip: {
+    id: 'grocery_list.footer.copy_to_clipboard_tooltip',
+    defaultMessage: 'Copy to clipboard',
+  },
+  copy_to_clipboard_toast: {
+    id: 'grocery_list.footer.copy_to_clipboard_toast',
+    defaultMessage: 'Copied to clipboard.',
+  },
+});
+
 export interface IGroceryListFooterProps {
   list: GroceryList | undefined;
   isNew: boolean;
@@ -22,20 +37,6 @@ export interface IGroceryListFooterProps {
 const GroceryListFooter: React.FC<IGroceryListFooterProps> = ({
     list, isNew, items, onClearCompleted, isClearPending, onCopyToClipboard }: IGroceryListFooterProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    clear_completed_tooltip: {
-      id: 'grocery_list.footer.clear_completed_tooltip',
-      defaultMessage: 'Clear completed',
-    },
-    copy_to_clipboard_tooltip: {
-      id: 'grocery_list.footer.copy_to_clipboard_tooltip',
-      defaultMessage: 'Copy to clipboard',
-    },
-    copy_to_clipboard_toast: {
-      id: 'grocery_list.footer.copy_to_clipboard_toast',
-      defaultMessage: 'Copied to clipboard.',
-    },
-  });
 
   const [showCopyToast, setShowCopyToast] = useState<boolean>(false);
 

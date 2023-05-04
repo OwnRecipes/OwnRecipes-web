@@ -7,6 +7,14 @@ import Input from '../../common/components/Input/Input';
 import Icon from '../../common/components/Icon';
 import { formatValidation, ValidationResult } from '../../common/store/Validation';
 
+const messages = defineMessages({
+  new_item_placeholder: {
+    id: 'groceryList.items.new_item_placeholder',
+    description: 'New item input, placeholder.',
+    defaultMessage: '(New item)',
+  },
+});
+
 export interface IGroceryListNewItemProps {
   onAddItem: (item: GroceryListItemCreate) => Promise<ValidationResult>;
 }
@@ -15,13 +23,6 @@ const GroceryListNewItem: React.FC<IGroceryListNewItemProps> = ({
     onAddItem }: IGroceryListNewItemProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    new_item_placeholder: {
-      id: 'groceryList.items.new_item_placeholder',
-      description: 'New item input, placeholder.',
-      defaultMessage: '(New item)',
-    },
-  });
 
   const [newTitle, setNewTitle] = useState<string>('');
   const [error, setError] = useState<ValidationResult | undefined>();

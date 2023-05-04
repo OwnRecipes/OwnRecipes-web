@@ -6,15 +6,16 @@ import '../css/demo.css';
 import Alert from '../../common/components/Alert';
 import DynamicHeightContext from '../../common/context/DynamicHeightContext';
 
-const Demo = () => {
+const messages = defineMessages({
+  demoAlertTitle: {
+    id: 'demo.alert.title',
+    description: 'DEMO NOTICE',
+    defaultMessage: 'DEMO NOTICE: Everything is Read-Only!',
+  },
+});
+
+const Demo: React.FC = () => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    demoAlertTitle: {
-      id: 'demo.alert.title',
-      description: 'DEMO NOTICE',
-      defaultMessage: 'DEMO NOTICE: Everything is Read-Only!',
-    },
-  });
 
   const dynamicHeightContext = useContext(DynamicHeightContext);
 

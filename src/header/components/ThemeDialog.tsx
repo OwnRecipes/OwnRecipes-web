@@ -5,6 +5,24 @@ import { ListGroup } from 'react-bootstrap';
 import Modal from '../../common/components/Modal';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 
+const messages = defineMessages({
+  theme_modal_title: {
+    id: 'nav.accountmenu.theme_modal_title',
+    description: 'Change theme mode dialog title',
+    defaultMessage: 'Choose theme',
+  },
+  theme_mode_dark: {
+    id: 'theme.mode.dark',
+    description: 'Dark mode',
+    defaultMessage: 'Dark',
+  },
+  theme_mode_light: {
+    id: 'theme.mode.light',
+    description: 'Light mode',
+    defaultMessage: 'Light',
+  },
+});
+
 export interface IThemeDialogProps {
   show:  boolean;
   settings: Settings;
@@ -16,13 +34,6 @@ export interface IThemeDialogProps {
 export const ThemeDialog: React.FC<IThemeDialogProps> = ({
     show, settings, onChangeTheme, onClose }: IThemeDialogProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    theme_modal_title: {
-      id: 'nav.accountmenu.theme_modal_title',
-      description: 'Change theme mode dialog title',
-      defaultMessage: 'Choose theme',
-    },
-  });
 
   return (
     <Modal
@@ -49,23 +60,6 @@ interface IThemeDialogContentProps {
 const ThemeDialogContent: React.FC<IThemeDialogContentProps> = ({
     settings, onChangeTheme, onClose }: IThemeDialogContentProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    theme_modal_title: {
-      id: 'nav.accountmenu.theme_modal_title',
-      description: 'Change theme mode dialog title',
-      defaultMessage: 'Choose theme',
-    },
-    theme_mode_dark: {
-      id: 'theme.mode.dark',
-      description: 'Dark mode',
-      defaultMessage: 'Dark',
-    },
-    theme_mode_light: {
-      id: 'theme.mode.light',
-      description: 'Light mode',
-      defaultMessage: 'Light',
-    },
-  });
 
   const handleChangeTheme = useCallback((theme: ThemeMode) => {
     if (settings.themeMode !== theme) {

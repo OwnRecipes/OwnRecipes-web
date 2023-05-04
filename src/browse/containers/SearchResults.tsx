@@ -11,6 +11,14 @@ import NoResults from '../components/NoResults';
 import Loading from '../components/Loading';
 import { SearchResult } from '../store/SearchTypes';
 
+const messages = defineMessages({
+  search_results_heading: {
+    id: 'browse.results_heading',
+    description: 'Browser search results heading',
+    defaultMessage: 'Results',
+  },
+});
+
 export interface ISearchResultsProps {
   qs:       Record<string, string>;
   qsString: string;
@@ -21,13 +29,6 @@ export interface ISearchResultsProps {
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ qs, qsString, buildUrl, onOpenRecipe }: ISearchResultsProps) => {
   const { formatMessage }  = useIntl();
-  const messages = defineMessages({
-    search_results_heading: {
-      id: 'browse.results_heading',
-      description: 'Browser search results heading',
-      defaultMessage: 'Results',
-    },
-  });
 
   const searchState = useSelector((state: RootState) => state.browse.browserSearch);
   const pending = searchState.meta.pending === PendingState.LOADING;

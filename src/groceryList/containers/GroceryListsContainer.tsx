@@ -17,21 +17,22 @@ import Chip from '../../common/components/Chip';
 import NavLink from '../../header/components/NavLink';
 import NavButton from '../../common/components/NavButton';
 
+const messages = defineMessages({
+  my_grocery_lists: {
+    id: 'groceryLists.my_grocery_lists',
+    description: 'My grocery lists heading',
+    defaultMessage: 'My grocery lists',
+  },
+  no_grocery_lists: {
+    id: 'groceryLists.no_grocery_lists',
+    description: 'Info that the user has no grocery list.',
+    defaultMessage: '(You don\'t have any grocery list, yet.)',
+  },
+});
+
 const GroceryListsContainer: React.FC = () => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    my_grocery_lists: {
-      id: 'groceryLists.my_grocery_lists',
-      description: 'My grocery lists heading',
-      defaultMessage: 'My grocery lists',
-    },
-    no_grocery_lists: {
-      id: 'groceryLists.no_grocery_lists',
-      description: 'Info that the user has no grocery list.',
-      defaultMessage: '(You don\'t have any grocery list, yet.)',
-    },
-  });
 
   const dispatch = useDispatch();
 

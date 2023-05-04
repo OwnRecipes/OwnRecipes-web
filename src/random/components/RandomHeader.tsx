@@ -6,6 +6,19 @@ import { SearchResult } from '../../browse/store/SearchTypes';
 import SearchMenu from './SearchMenu';
 import { Course, Cuisine } from '../../recipe/store/RecipeTypes';
 
+const messages = defineMessages({
+  random_heading: {
+    id: 'random.heading',
+    description: 'Heading of the random page.',
+    defaultMessage: 'Random recipe',
+  },
+  random_text: {
+    id: 'random.heading.text',
+    description: 'Some nice text above the random search results.',
+    defaultMessage: 'Looking for an awesome meal? There are plenty waiting for you!',
+  },
+});
+
 export interface IRandomHeaderProps {
   search:   Record<string, SearchResult> | undefined;
   courses:  Array<Course>| undefined;
@@ -20,18 +33,6 @@ const RandomHeader: React.FC<IRandomHeaderProps> = ({
     search, courses, cuisines, qs, qsString,
     buildUrl }: IRandomHeaderProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    random_heading: {
-      id: 'random.heading',
-      description: 'Heading of the random page.',
-      defaultMessage: 'Random recipe',
-    },
-    random_text: {
-      id: 'random.heading.text',
-      description: 'Some nice text above the random search results.',
-      defaultMessage: 'Looking for an awesome meal? There are plenty waiting for you!',
-    },
-  });
 
   const qsSearchResult = search?.[qsString];
 

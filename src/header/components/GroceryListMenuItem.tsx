@@ -10,16 +10,17 @@ import { NEW_ITEM_URL_ID } from '../../common/constants';
 import NavLink from './NavLink';
 import Chip from '../../common/components/Chip';
 
+const messages = defineMessages({
+  grocery_list_create: {
+    id: 'nav.grocery_list_create',
+    description: 'Button to create a new grocery List',
+    defaultMessage: 'New list',
+  },
+});
+
 const GroceryListMenuItem: React.FC = () => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    grocery_list_create: {
-      id: 'nav.grocery_list_create',
-      description: 'Button to create a new grocery List',
-      defaultMessage: 'New list',
-    },
-  });
 
   const dispatch = useDispatch();
 

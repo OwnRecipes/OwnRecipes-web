@@ -10,6 +10,19 @@ import { getRoutePath, isDemoMode } from '../../common/utility';
 import * as RecipeActions from '../../recipe/store/RecipeActions';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
 
+const messages = defineMessages({
+  submit: {
+    id: 'recipe.create.submit',
+    description: 'Submit recipe button',
+    defaultMessage: 'Submit recipe',
+  },
+  view: {
+    id: 'recipe.create.view',
+    description: 'View recipe button',
+    defaultMessage: 'View',
+  },
+});
+
 const RecipeFormToolbar: React.FC = () => {
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -42,20 +55,7 @@ interface ISubmitViewButtonProps {
 
 const SubmitViewButton = forwardRef<HTMLButtonElement, ISubmitViewButtonProps>(({
     isNew, submitting, pristine, onSubmit, onLink, ...rest }: ISubmitViewButtonProps, ref) => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
-  const messages = defineMessages({
-    submit: {
-      id: 'recipe.create.submit',
-      description: 'Submit recipe button',
-      defaultMessage: 'Submit recipe',
-    },
-    view: {
-      id: 'recipe.create.view',
-      description: 'View recipe button',
-      defaultMessage: 'View',
-    },
-  });
+  const { formatMessage } = useIntl();
 
   const asView = !isNew && pristine;
 

@@ -13,6 +13,25 @@ import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 
+const messages = defineMessages({
+  edit_button: {
+    id: 'grocery_list.item.edit_button',
+    defaultMessage: 'Edit',
+  },
+  delete_button: {
+    id: 'grocery_list.item.delete_button',
+    defaultMessage: 'Delete',
+  },
+  old_title: {
+    id: 'grocery_list.item.old_title_label',
+    defaultMessage: 'Item',
+  },
+  new_title: {
+    id: 'grocery_list.item.new_title_label',
+    defaultMessage: 'New Title',
+  },
+});
+
 export interface IGroceryListItemFCProps {
   item: GroceryListItem;
   className?: string;
@@ -25,16 +44,6 @@ const GroceryListItemFC: React.FC<IGroceryListItemFCProps> = ({
     item, className,
     onToggle, onUpdate, onDelete }: IGroceryListItemFCProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    edit_button: {
-      id: 'grocery_list.item.edit_button',
-      defaultMessage: 'Edit',
-    },
-    delete_button: {
-      id: 'grocery_list.item.delete_button',
-      defaultMessage: 'Delete',
-    },
-  });
 
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const submitRef = useRef<HTMLButtonElement>(null);
@@ -109,18 +118,7 @@ interface IEditItemFormDataProps {
 
 const EditItemForm = forwardRef<HTMLFormElement, IEditItemFormProps>(({
     item, onSubmit, onSubmitSuccess, submitRef }: IEditItemFormProps, ref) => {
-  const intl = useIntl();
-  const { formatMessage } = intl;
-  const messages = defineMessages({
-    old_title: {
-      id: 'grocery_list.item.old_title_label',
-      defaultMessage: 'Item',
-    },
-    new_title: {
-      id: 'grocery_list.item.new_title_label',
-      defaultMessage: 'New Title',
-    },
-  });
+  const { formatMessage } = useIntl();
 
   const [initialValues] = useState<Partial<IEditItemFormDataProps>>({ oldTitle: item.title, newTitle: item.title });
 

@@ -15,6 +15,24 @@ import formatQuantity from '../../recipe/utilts/formatQuantity';
 import { ingredientsParser } from './IngredientGroupsBox';
 import TabbedView from './TabbedView';
 
+const messages = defineMessages({
+  directions_label: {
+    id: 'recipe.create.directions_label',
+    description: 'Directions label',
+    defaultMessage: 'Directions',
+  },
+  directions_tooltip: {
+    id: 'recipe.create.dir.tooltip',
+    description: 'Directions Tooltip',
+    defaultMessage: 'Each Direction should be on its own line. You can form chapters by ending the chapters heading with a colon (":").',
+  },
+  directions_placeholder: {
+    id: 'recipe.create.dir.placeholder',
+    description: 'Directions Placeholder',
+    defaultMessage: 'Dough:\nPrepare the dough.\n\nDip:\nPrepare the dip.\n...',
+  },
+});
+
 export interface IDirectionBox {
   name:       string;
 }
@@ -23,23 +41,6 @@ const DirectionBox: React.FC<IDirectionBox> = ({
     name }: IDirectionBox) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    directions_label: {
-      id: 'recipe.create.directions_label',
-      description: 'Directions label',
-      defaultMessage: 'Directions',
-    },
-    directions_tooltip: {
-      id: 'recipe.create.dir.tooltip',
-      description: 'Directions Tooltip',
-      defaultMessage: 'Each Direction should be on its own line. You can form chapters by ending the chapters heading with a colon (":").',
-    },
-    directions_placeholder: {
-      id: 'recipe.create.dir.placeholder',
-      description: 'Directions Placeholder',
-      defaultMessage: 'Dough:\nPrepare the dough.\n\nDip:\nPrepare the dip.\n...',
-    },
-  });
 
   const measurementsContext = useContext(MeasurementContext);
 

@@ -8,6 +8,24 @@ import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import { SubRecipe } from '../store/RecipeTypes';
 
+const messages = defineMessages({
+  subrecipes: {
+    id: 'subrecipes.subrecipes heading',
+    description: 'Subrecipes header',
+    defaultMessage: 'Subrecipes',
+  },
+  quantity: {
+    id: 'subrecipes.table.quantity',
+    description: 'Subrecipes table quantity header',
+    defaultMessage: 'Quantity',
+  },
+  subrecipe: {
+    id: 'subrecipes.table.subrecipe',
+    description: 'Subrecipes table ingredient header',
+    defaultMessage: 'Subrecipe',
+  },
+});
+
 export interface ISubRecipesProps {
   subRecipes: Array<SubRecipe> | undefined;
   withHeaderLink?: boolean;
@@ -17,23 +35,6 @@ export interface ISubRecipesProps {
 const SubRecipes: React.FC<ISubRecipesProps> = ({
     subRecipes, withHeaderLink, selectable }: ISubRecipesProps) => {
   const intl = useIntl();
-  const messages = defineMessages({
-    subrecipes: {
-      id: 'subrecipes.subrecipes heading',
-      description: 'Subrecipes header',
-      defaultMessage: 'Subrecipes',
-    },
-    quantity: {
-      id: 'subrecipes.table.quantity',
-      description: 'Subrecipes table quantity header',
-      defaultMessage: 'Quantity',
-    },
-    subrecipe: {
-      id: 'subrecipes.table.subrecipe',
-      description: 'Subrecipes table ingredient header',
-      defaultMessage: 'Subrecipe',
-    },
-  });
 
   const showQuantityCol = subRecipes == null || subRecipes.filter(sr => (
     (sr.quantity != null && sr.quantity.length > 0 && sr.quantity !== '0')

@@ -12,6 +12,19 @@ import { IngredientGroup, SubRecipe } from '../store/RecipeTypes';
 import AddToGroceryListModal from './AddToGroceryListModal';
 import Toast from '../../common/components/Toast';
 
+const messages = defineMessages({
+  add_groceries: {
+    id: 'recipe.recipe_ingredient_button.add_groceries',
+    description: 'Add groceries to list',
+    defaultMessage: 'Add to grocery list',
+  },
+  add_groceries_success_toast: {
+    id: 'recipe.recipe_ingredient_button.success_toast',
+    description: 'Add groceries to list success toast',
+    defaultMessage: 'Groceries added to the list.',
+  },
+});
+
 export interface IIngredientsFooterProps {
   subrecipes: Array<SubRecipe> | undefined;
   ingredients: Array<IngredientGroup> | undefined;
@@ -21,18 +34,6 @@ export interface IIngredientsFooterProps {
 const IngredientsFooter: React.FC<IIngredientsFooterProps> = ({
     isAuthenticated, subrecipes, ingredients }: IIngredientsFooterProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    add_groceries: {
-      id: 'recipe.recipe_ingredient_button.add_groceries',
-      description: 'Add groceries to list',
-      defaultMessage: 'Add to grocery list',
-    },
-    add_groceries_success_toast: {
-      id: 'recipe.recipe_ingredient_button.success_toast',
-      description: 'Add groceries to list success toast',
-      defaultMessage: 'Groceries added to the list.',
-    },
-  });
 
   const [showGroceriesModal, setShowGroceriesModal] = useState<boolean>(false);
   const handleAddGroceries = useCallback(() => {
