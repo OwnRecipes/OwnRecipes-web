@@ -3,15 +3,17 @@ import classNames from 'classnames';
 
 import '../css/directions.css';
 
+import HeaderLink from '../../common/components/HeaderLink';
 import { IngredientGroup } from '../store/RecipeTypes';
 import IngredientGroups from './IngredientGroups';
+import { slugify } from '../../common/utility';
 
 export interface IDirectionsProps {
   directions: string;
   ingredients: Array<IngredientGroup>;
 }
 
-type DirectionWithIngredients = {
+interface DirectionWithIngredients {
   heading?:     string;
   directions:   Array<string>;
   ingredients?: Array<IngredientGroup>;
@@ -111,11 +113,17 @@ function formatDirections(directions: DirectionsWithIngredients) {
       }
 
       const isDefaultGroup = !di.heading;
+      const headingSlug = slugify(di.heading ?? '');
 
       return (
-        <div key={di.heading ?? ''} className={classNames('subgroup', di.heading || 'default-group')}>
+        <div key={headingSlug} className={classNames('subgroup', headingSlug)}>
           {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-          {di.heading && <h3>{di.heading}:</h3>}
+          {di.heading && (
+            <h3 id={`direction-${headingSlug}`}>
+              {`${di.heading}:`}
+              <HeaderLink linkFor={`direction-${headingSlug}`} />
+            </h3>
+          )}
           {di.ingredients && di.ingredients.length > 0 && (
             <div className='ingredients'>
               <IngredientGroups groups={di.ingredients} hasSubrecipes={isDefaultGroup && directions.length > 1} />

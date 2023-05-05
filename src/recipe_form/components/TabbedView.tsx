@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback } from 'react';
 import classNames from 'classnames';
 import { Tabs, Tab } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
@@ -19,20 +19,19 @@ export interface ITabbedViewProps {
   children:    Array<React.ReactNode>;
 }
 
+const messages = defineMessages({
+  preview: {
+    id: 'recipe.create.preview',
+    description: 'Preview',
+    defaultMessage: 'Preview',
+  },
+});
+
 const TabbedView: React.FC<ITabbedViewProps> = ({
     id, labels, errors, tooltips,
     initialTab, activeTab, onSelect,
     children } : ITabbedViewProps) => {
-  const intl = useIntl();
-
-  const { formatMessage } = intl;
-  const messages = defineMessages({
-    preview: {
-      id: 'recipe.create.preview',
-      description: 'Preview',
-      defaultMessage: 'Preview',
-    },
-  });
+  const { formatMessage } = useIntl();
 
   const contentClassName = classNames('content', {
     'has-error': !!errors,
@@ -45,7 +44,7 @@ const TabbedView: React.FC<ITabbedViewProps> = ({
   const tabs = children.slice(0, children.length - 1).map((childr, index) => (
     <Tab
         // eslint-disable-next-line react/no-array-index-key
-        key = {String(index)}
+        key = {index.toString()}
         title = {(
           <>
             {labels[index]}
@@ -54,25 +53,24 @@ const TabbedView: React.FC<ITabbedViewProps> = ({
                 &nbsp;
                 <Tooltip
                     id = {`${labels[index]}-tooltip`}
-                    placement = 'bottom'
                     tooltip   = {tooltips[index]}>
-                  <Icon icon='info-circle' className='tooltip-icon' />
+                  <Icon icon='info-circle' className='tooltip-icon' aria-label={tooltips[index]} aria-describedby={undefined} />
                 </Tooltip>
               </>
             )}
           </>
         )}
-        eventKey  = {String(index)}
+        eventKey  = {index.toString()}
         className = 'editor'>
       <div className={contentClassName}>{childr}</div>
     </Tab>
   ));
 
-  const handleSelect = (selectedKey: string | null) => {
-    if (onSelect && selectedKey) {
-      onSelect(selectedKey);
+  const handleSelect = useCallback((selectedKey: string | null) => {
+    if (selectedKey) {
+      onSelect?.(selectedKey);
     }
-  };
+  }, [onSelect]);
 
   return (
     <div className='live-editor'>

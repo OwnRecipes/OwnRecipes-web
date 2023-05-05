@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
 import { FormSpy } from 'react-final-form';
@@ -15,16 +15,45 @@ import MeasurementContext from '../../common/context/MeasurementContext';
 import { formatValidation } from '../../common/store/Validation';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReTextareaAutocomplete from '../../common/components/ReduxForm/ReTextareaAutocomplete';
-import TabbedView from './TabbedView';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import { NEW_ITEM_URL_ID } from '../../common/constants';
+import TabbedView from './TabbedView';
+import { slugify } from '../../common/utility';
 
-export interface IIngredientGroupsBoxProps {
-  nameIg:   string;
-  nameSub:  string;
+const messages = defineMessages({
+  ingredients_label: {
+    id: 'recipe.create.ingredients_label',
+    description: 'Recipe ingredients label',
+    defaultMessage: 'Ingredients',
+  },
+  ingredients_tooltip: {
+    id: 'recipe.create.ing.info_desc',
+    description: 'info_desc',
+    defaultMessage: 'Each Ingredient should be on its own line. You can form groups by ending the groups first line with a colon (":").',
+  },
+  ingredients_placeholder: {
+    id: 'recipe.create.ing.ingredients_placeholder',
+    description: 'Example for writing ingredients',
+    defaultMessage: 'Dough:\n300 g flour\n100 ml milk\n\nDip:\n100 ml olive oil\n...',
+  },
 
-  fetchRecipeList: (searchTerm: string) => Promise<Array<AutocompleteListItem>>;
-}
+  subrecipes_label: {
+    id: 'recipe.create.subrecipes_label',
+    description: 'Recipe links label',
+    defaultMessage: 'Recipe links',
+  },
+  subrecipes_tooltip: {
+    id: 'recipe.create.subrecipes.tooltip',
+    description: 'Subrecipes tooltip',
+    defaultMessage: 'If the recipe is made of several subrecipes, then link them here. Each Recipe Link should be on its own line.',
+  },
+  subrecipes_placeholder: {
+    id: 'recipe.create.subrecipes.placeholder',
+    description: 'Subreceipes placeholder',
+    defaultMessage: ':dough-1\n:olive-oil-dip-1',
+  },
+});
 
 function normalizeLine(line: string): string {
   let res = line.replace(/\t/g, ' ');
@@ -58,12 +87,12 @@ export function ingredientsFormatter(intl: IntlShape, formatter: Record<string, 
 
 export function ingredientsParser(parser: Record<string, string>, value: string | undefined): Array<IngredientGroup> {
   if (!value) return [];
-  const dict = [{ title: '', ingredients: [] }];
+  const dict = [{ slug: 'default', title: '', ingredients: [] }];
   let igTitle = '';
   let ings: Array<IngredientInput> | undefined = dict.find(t => t.title === '')?.ingredients; // Should always exist, as it is the init group.
   if (ings == null) throw new Error('Invalid state: ings may not be null.');
   if (value) {
-    const tags = value.split('\n').map(line => normalizeLine(line)).filter(t => t.length > 0);
+    const tags = value.split('\n').map(normalizeLine).filter(t => t.length > 0);
     tags.forEach(line => {
       if (line.length > 0) {
         // Check if the line is an IG title
@@ -71,7 +100,7 @@ export function ingredientsParser(parser: Record<string, string>, value: string 
         // Else add ing to the current ig group
         if (line.endsWith(':') && line.length > 1) {
           igTitle = line.substring(0, line.length - 1);
-          dict.push({ title: igTitle, ingredients: [] });
+          dict.push({ slug: slugify(igTitle), title: igTitle, ingredients: [] });
           ings = dict.find(t => t.title === igTitle)?.ingredients; // Should always exist, as we just pushed it.
           if (ings == null) throw new Error('Invalid state: The create ings may not be null.');
         } else {
@@ -102,7 +131,7 @@ export function subrecipesFormatter(intl: IntlShape, formatter: Record<string, s
 export function subrecipesParser(parser: Record<string, string>, value: string | undefined): Array<SubRecipe> {
   if (!value) return [];
   const ings: Array<SubRecipe> = [];
-  const subRecipes = value.split('\n').map(line => normalizeLine(line)).filter(t => t.length > 1 && !t.startsWith(':'));
+  const subRecipes = value.split('\n').map(normalizeLine).filter(t => t.length > 1 && !t.startsWith(':'));
   subRecipes.forEach(sr => {
     if (sr.length > 0) {
       ings.push(parseIngredient(parser, sr) as SubRecipe);
@@ -116,57 +145,31 @@ interface IItemProps {
 }
 const Item = ({ entity: { char } }: IItemProps) => <div>{char}</div>;
 
+export interface IIngredientGroupsBoxProps {
+  nameIg:   string;
+  nameSub:  string;
+
+  fetchRecipeList: (searchTerm: string) => Promise<Array<AutocompleteListItem>>;
+}
+
 const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
     nameIg, nameSub, fetchRecipeList }: IIngredientGroupsBoxProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    ingredients_label: {
-      id: 'recipe.create.ingredients_label',
-      description: 'Recipe ingredients label',
-      defaultMessage: 'Ingredients',
-    },
-    ingredients_tooltip: {
-      id: 'recipe.create.ing.info_desc',
-      description: 'info_desc',
-      defaultMessage: 'Each Ingredient should be on its own line. You can form groups by ending the groups first line with a colon (":").',
-    },
-    ingredients_placeholder: {
-      id: 'recipe.create.ing.ingredients_placeholder',
-      description: 'Example for writing ingredients',
-      defaultMessage: 'Dough:\n300 g flour\n100 ml milk\n\nDip:\n100 ml olive oil\n...',
-    },
-
-    subrecipes_label: {
-      id: 'recipe.create.subrecipes_label',
-      description: 'Recipe links label',
-      defaultMessage: 'Recipe links',
-    },
-    subrecipes_tooltip: {
-      id: 'recipe.create.subrecipes.tooltip',
-      description: 'Subrecipes tooltip',
-      defaultMessage: 'If the recipe is made of several subrecipes, then link them here. Each Recipe Link should be on its own line.',
-    },
-    subrecipes_placeholder: {
-      id: 'recipe.create.subrecipes.placeholder',
-      description: 'Subreceipes placeholder',
-      defaultMessage: ':dough-1\n:olive-oil-dip-1',
-    },
-  });
 
   const location = useLocation();
 
   const [activeTab, setActiveTab] = useState<string>('0');
 
   useEffect(() => {
-    if (location.pathname.endsWith('/create')) {
+    if (location.pathname.endsWith(`/${NEW_ITEM_URL_ID}`)) {
       setActiveTab('0');
     }
   }, [location.pathname]);
 
   const measurementsContext = useContext(MeasurementContext);
 
-  const checkErrorneous = (errors: ValidationErrors, touched: Record<string, boolean> | undefined) => {
+  const checkErrorneous = useCallback((errors: ValidationErrors, touched: Record<string, boolean> | undefined) => {
     if (touched?.[nameIg] === true && errors?.[nameIg] != null) {
       return formatValidation(intl, errors?.[nameIg]);
     } else if (touched?.[nameSub] && errors?.[nameSub] != null) {
@@ -174,7 +177,7 @@ const IngredientGroupsBox: React.FC<IIngredientGroupsBoxProps> = ({
     } else {
       return undefined;
     }
-  };
+  }, [intl]);
 
   return (
     <FormSpy subscription={{ errors: true, touched: true, initialValues: true }}>
@@ -234,7 +237,7 @@ interface IIngredientsPreviewProps {
 
 const recurseIngredients = (igs: Array<IngredientGroup>, cb: (ingr: Ingredient) => Ingredient): Array<IngredientGroup> => igs.map(ig => ({
   ...ig,
-  ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
+  ingredients: ig.ingredients.map(cb),
 }));
 
 const IngredientsPreview: React.FC<IIngredientsPreviewProps> = ({ igData, srData }: IIngredientsPreviewProps) => {

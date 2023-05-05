@@ -3,6 +3,7 @@
 exports[`Input inputAdornmentStart 1`] = `
 <div
   className="form-group"
+  data-api-field="myInput"
 >
   <label
     className="form-label"
@@ -28,7 +29,9 @@ exports[`Input inputAdornmentStart 1`] = `
       name="myInput"
       onBlur={[Function]}
       onChange={[Function]}
+      onClick={[Function]}
       onKeyDown={[Function]}
+      onKeyUp={[Function]}
       type="text"
       value="Some value"
     />
@@ -39,6 +42,7 @@ exports[`Input inputAdornmentStart 1`] = `
 exports[`Input readOnly 1`] = `
 <div
   className="form-group readonly"
+  data-api-field="myInput"
 >
   <label
     className="form-label"
@@ -55,7 +59,9 @@ exports[`Input readOnly 1`] = `
       name="myInput"
       onBlur={[Function]}
       onChange={[Function]}
+      onClick={[Function]}
       onKeyDown={[Function]}
+      onKeyUp={[Function]}
       readOnly={true}
       type="text"
       value="Some value"
@@ -67,6 +73,7 @@ exports[`Input readOnly 1`] = `
 exports[`Input required 1`] = `
 <div
   className="form-group required"
+  data-api-field="myInput"
 >
   <label
     className="form-label"
@@ -83,7 +90,9 @@ exports[`Input required 1`] = `
       name="myInput"
       onBlur={[Function]}
       onChange={[Function]}
+      onClick={[Function]}
       onKeyDown={[Function]}
+      onKeyUp={[Function]}
       required={true}
       type="text"
       value="Some value"
@@ -95,6 +104,7 @@ exports[`Input required 1`] = `
 exports[`Input type number 1`] = `
 <div
   className="form-group"
+  data-api-field="myInput"
 >
   <label
     className="form-label"
@@ -112,7 +122,9 @@ exports[`Input type number 1`] = `
       name="myInput"
       onBlur={[Function]}
       onChange={[Function]}
+      onClick={[Function]}
       onKeyDown={[Function]}
+      onKeyUp={[Function]}
       placeholder="Some placeholder"
       type="text"
       value="17"
@@ -124,6 +136,7 @@ exports[`Input type number 1`] = `
 exports[`Input type text 1`] = `
 <div
   className="form-group"
+  data-api-field="myInput"
 >
   <label
     className="form-label"
@@ -141,7 +154,9 @@ exports[`Input type text 1`] = `
       name="myInput"
       onBlur={[Function]}
       onChange={[Function]}
+      onClick={[Function]}
       onKeyDown={[Function]}
+      onKeyUp={[Function]}
       placeholder="Some placeholder"
       type="text"
       value="Some value"
@@ -153,6 +168,7 @@ exports[`Input type text 1`] = `
 exports[`Input type text multirow 1`] = `
 <div
   className="form-group"
+  data-api-field="myInput"
 >
   <label
     className="form-label"
@@ -170,7 +186,9 @@ exports[`Input type text multirow 1`] = `
       name="myInput"
       onBlur={[Function]}
       onChange={[Function]}
+      onClick={[Function]}
       onKeyDown={[Function]}
+      onKeyUp={[Function]}
       placeholder="Some placeholder"
       rows={4}
       type="text"

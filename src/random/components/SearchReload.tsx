@@ -10,30 +10,29 @@ export interface ISearchReloadProps {
   onReloadClick: () => void;
 }
 
-const SearchReload: React.FC<ISearchReloadProps> = ({ onReloadClick }: ISearchReloadProps) => {
-  const intl = useIntl();
+const messages = defineMessages({
+  search_nothing_found_yet_heading: {
+    id: 'random.reload.heading',
+    description: 'Nothing found?',
+    defaultMessage: 'Not the right one?',
+  },
+  search_nothing_found_yet: {
+    id: 'random.reload.text',
+    description: 'Nothing found? Text',
+    defaultMessage: 'Just give it another try.',
+  },
+  search_reload_button: {
+    id: 'random.reload.button',
+    description: 'Title/tooltip of the icon button to reload to recipes.',
+    defaultMessage: 'Reload recipes',
+  },
+});
 
-  const { formatMessage } = intl;
-  const messages = defineMessages({
-    search_nothing_found_yet_heading: {
-      id: 'random.reload.heading',
-      description: 'Nothing found?',
-      defaultMessage: 'Not the right one?',
-    },
-    search_nothing_found_yet: {
-      id: 'random.reload.text',
-      description: 'Nothing found? Text',
-      defaultMessage: 'Just give it another try.',
-    },
-    search_reload_button: {
-      id: 'random.reload.button',
-      description: 'Title/tooltip of the icon button to reload to recipes.',
-      defaultMessage: 'Reload recipes',
-    },
-  });
+const SearchReload: React.FC<ISearchReloadProps> = ({ onReloadClick }: ISearchReloadProps) => {
+  const { formatMessage } = useIntl();
 
   return (
-    <div className='search-reload reload-container'>
+    <div className='search-reload reload-container print-hidden'>
       <div className='search-reload modal-content'>
         <div className='search-reload-box'>
           <h2>{formatMessage(messages.search_nothing_found_yet_heading)}</h2>

@@ -1,0 +1,25 @@
+.input-adornment {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.input-adornment-start {
+  margin-right: 0;
+}
+
+.input-adornment-end {
+  margin-left: 0;
+}
+
+.input-adornment-end.input-adornment-inline {
+  position: absolute;
+  right: 0;
+  padding: 0;
+  margin-right: 0;
+
+  border: 0;
+  z-index: 5;
+  background: transparent;
+}

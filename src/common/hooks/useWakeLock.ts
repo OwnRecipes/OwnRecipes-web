@@ -8,6 +8,8 @@ export interface IWakeLockOptions {
   onRelease?: EventListener;
 }
 
+type WakeLockType = 'screen';
+
 export const useWakeLock = ({
   onError,
   onRequest,

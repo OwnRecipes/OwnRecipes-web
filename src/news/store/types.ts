@@ -3,7 +3,7 @@ import { Dispatch as ReduxDispatch } from 'redux';
 import ArrayReducerType from '../../common/store/ArrayReducerType';
 import { GenericArrayReducerAction } from '../../common/store/ReduxHelper';
 
-export type NewsItemDto = {
+export interface NewsItemDto {
   id:        number;
   image:     string;
   title:     string;
@@ -11,7 +11,7 @@ export type NewsItemDto = {
   frontpage: boolean;
 }
 
-export type NewsItem = {
+export interface NewsItem {
   id:        number;
   image:     string;
   title:     string;
@@ -27,7 +27,7 @@ export const toNewsItem = (dto: NewsItemDto): NewsItem => ({
   frontpage: dto.frontpage,
 });
 
-export const NEWS_STORE = '@@news';
+export const NEWS_STORE = 'news';
 
 export type NewsState    = ArrayReducerType<NewsItem>;
 export type NewsAction   = GenericArrayReducerAction<NewsItem>;

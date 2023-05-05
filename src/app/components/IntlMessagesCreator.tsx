@@ -8,7 +8,7 @@ import initTags from './messages/Tags';
 import initValidations from './messages/Validations';
 
 const IntlMessagesCreator = () => {
-  const intl = useIntl();
+  const { locale } = useIntl();
 
   useEffect(() => {
     initCourses();
@@ -16,7 +16,7 @@ const IntlMessagesCreator = () => {
     initMeasurements();
     initTags();
     initValidations();
-  }, [intl.locale]);
+  }, [locale]);
 
   return null;
 };

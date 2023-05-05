@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { forwardRef } from 'react';
+import { forwardRef, useCallback } from 'react';
 import { Field } from 'react-final-form';
 import { useIntl } from 'react-intl';
 
 import { formatValidation, requiredValidator } from '../../store/Validation';
 import { CreatableSelect, ICreatableSelectValues } from '../Input/Select';
 
-export type IReCreatableSelectProps = {
+export interface IReCreatableSelectProps extends Omit<ICreatableSelectValues, 'value' | 'onChange'> {
   parser: (newValue: any | null) => any | undefined;
   formatter: (newValue: Array<any> | any) => any;
-} & Omit<ICreatableSelectValues, 'value' | 'onChange'>;
+}
 
 const ReCreatableSelect = forwardRef<CreatableSelect, IReCreatableSelectProps>(({
     parser, formatter,
@@ -17,13 +17,13 @@ const ReCreatableSelect = forwardRef<CreatableSelect, IReCreatableSelectProps>((
     onFocus, onBlur, ...rest }: IReCreatableSelectProps, ref) => {
   const intl = useIntl();
 
-  const formatValue = (value: Array<any> | any | undefined) => {
+  const formatValue = useCallback((value: Array<any> | any | undefined) => {
     if (value == null) {
       return isMulti ? [] : undefined;
     } else {
       return formatter(value);
     }
-  };
+  }, [formatter, isMulti]);
 
   return (
     <Field name={name} validate={required ? requiredValidator : undefined} validateFields={[]}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
@@ -9,16 +9,16 @@ import Image from '../../common/components/Image';
 import ReFileSelect from '../../common/components/ReduxForm/ReFileSelect';
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 
+const messages = defineMessages({
+  photo_label: {
+    id: 'recipe.create.photo_label',
+    description: 'Photo label',
+    defaultMessage: 'Photo',
+  },
+});
+
 const RecipeFormImageRow: React.FC = () => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    photo_label: {
-      id: 'recipe.create.photo_label',
-      description: 'Photo label',
-      defaultMessage: 'Photo',
-    },
-  });
-
   const { key } = useLocation();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,17 +33,17 @@ const RecipeFormImageRow: React.FC = () => {
     setImageUrl(undefined);
   }, [key]);
 
-  const handleImageChange = (_name: string, newValue: File | undefined) => {
+  const handleImageChange = useCallback((_name: string, newValue: File | undefined) => {
     setImageUrl(newValue ? URL.createObjectURL(newValue) : '');
-  };
+  }, []);
 
-  const getDisplayImage = (recipePhoto: string | undefined) => {
+  const getDisplayImage = useCallback((recipePhoto: string | undefined) => {
     if (imageUrl != null) {
       return imageUrl.length > 0 ? imageUrl : getRecipeImagePlaceholder();
     } else {
       return getRecipeImage(recipePhoto || IMAGE_PLACEHOLDER);
     }
-  };
+  }, [imageUrl, IMAGE_PLACEHOLDER]);
 
   return (
     <>

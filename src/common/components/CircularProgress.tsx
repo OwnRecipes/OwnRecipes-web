@@ -1,10 +1,13 @@
 /** Code adapted from https://github.com/KyleAMathews/react-spinkit */
 
+import { forwardRef } from 'react';
 import classNames from 'classnames';
 
 import '../css/circular_progress.css';
 
-export interface ICircularSpinnerProps {
+import { CommonProps } from '../types/OverridableComponent';
+
+export interface ICircularSpinnerProps extends CommonProps {
   /**
    * Variant of the spinner.
    *
@@ -15,8 +18,6 @@ export interface ICircularSpinnerProps {
    * Color of the spinner. When `undefined` the color will be neutral.
    */
   color?: 'primary' | 'secondary';
-  /** Custom className for styling. */
-  className?: string;
 }
 
 function getDivCount(variant: 'circle' | 'three-bounce'): number {
@@ -27,19 +28,17 @@ function getDivCount(variant: 'circle' | 'three-bounce'): number {
   }
 }
 
-const CircularProgress: React.FC<ICircularSpinnerProps> = ({
-    variant, color, className }: ICircularSpinnerProps) => {
-  const variantD = variant ?? 'circle';
-
-  const classes = classNames('circular-progress', variantD, color, className);
-  const divCount = getDivCount(variantD);
+const CircularProgress = forwardRef<HTMLDivElement, ICircularSpinnerProps>(({
+    variant = 'circle', color, className, ...rest }: ICircularSpinnerProps, ref) => {
+  const classes = classNames('circular-progress', variant, color, className);
+  const divCount = getDivCount(variant);
 
   return (
-    <div className={classes}>
+    <div className={classes} {...rest} ref={ref}>
       {/* eslint-disable-next-line react/no-array-index-key */}
       {[...Array(divCount)].map((_, idx) => <div key={idx} />)}
     </div>
   );
-};
+});
 
 export default CircularProgress;

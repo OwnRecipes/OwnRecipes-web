@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import * as _ from 'lodash-es';
 
 import '../css/browse.css';
@@ -11,10 +12,9 @@ import * as RecipeActions from '../../recipe/store/RecipeActions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { getRoutePath, objToSearchString } from '../../common/utility';
-import { useSearchParams } from 'react-router-dom';
 
 export function mergeDefaultFilters(
     defaultFilters: Record<string, unknown>,
@@ -76,30 +76,29 @@ export function buildSearchUrl(route: string, qs: Record<string, string>, name: 
 }
 
 const BrowsePage: React.FC = () => {
-  const dispatch = useDispatch();
   const intl = useIntl();
+  const dispatch = useDispatch();
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const search   = useSelector((state: CombinedStore) => state.browse.search.items);
+  const search   = useSelector((state: RootState) => state.browse.browserSearch.items);
 
-  const qs = Object.fromEntries(searchParams);
-  const qsMergedDefaults = mergeDefaultFilters(DefaultFilters, qs);
-  const qsMergedString = objToSearchString(qsMergedDefaults);
+  const qs = useMemo(() => Object.fromEntries(searchParams), [searchParams]);
+  const qsMergedDefaults = useMemo(() => mergeDefaultFilters(DefaultFilters, qs), [DefaultFilters, qs]);
+  const qsMergedString = useMemo(() => objToSearchString(qsMergedDefaults), [qsMergedDefaults]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     dispatch(SearchActions.loadRecipes(qsMergedDefaults));
   }, [searchParams]);
 
   const handleBuildUrl = useCallback((name: string, value: string, multiSelect = false) => (
     buildSearchUrl('browser', qs, name, value, multiSelect)
-  ), [qs]);
+  ), [buildSearchUrl, qs]);
 
   const doSearch = useCallback((value: string) => {
     const str = buildSearchString('browser', qs, value);
     nav(str);
-  }, [qs, nav]);
+  }, [buildSearchString, qs, nav]);
 
   const handleOpenRecipe = useCallback((rec: RecipeList) => {
     dispatch(RecipeActions.preload(rec));

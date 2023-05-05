@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';
@@ -10,7 +10,7 @@ import { Recipe } from '../../recipe/store/RecipeTypes';
 import TagListContainer from '../containers/TagListContainer';
 import CourseSelectContainer from '../containers/CourseSelectContainer';
 import CuisineSelectContainer from '../containers/CuisineSelectContainer';
-import RecipeFormToolbar from '../containers/RecipeFormToolbar';
+import RecipeFormToolbar, { SubmittingObserver, SubmittingObserverClass } from '../containers/RecipeFormToolbar';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
@@ -20,6 +20,70 @@ import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
 import RecipeFormImageRow from './RecipeFormImageRow';
 import IngredientGroupsBox, { ingredientsFormatter, ingredientsParser, subrecipesFormatter, subrecipesParser } from './IngredientGroupsBox';
 import DirectionBox from './DirectionBox';
+import { ValidationResult } from '../../common/store/Validation';
+
+const messages = defineMessages({
+  name_label: {
+    id: 'recipe.create.name_label',
+    description: 'Recipe name label',
+    defaultMessage: 'Recipe name',
+  },
+  course_label: {
+    id: 'recipe.create.course_label',
+    description: 'Course label',
+    defaultMessage: 'Course',
+  },
+  cuisine_label: {
+    id: 'recipe.create.cuisine_label',
+    description: 'Cuisine label',
+    defaultMessage: 'Cuisine',
+  },
+  tags_label: {
+    id: 'recipe.create.tags_label',
+    description: 'Tags label',
+    defaultMessage: 'Tags',
+  },
+  prep_time_label: {
+    id: 'recipe.create.prep_time_label',
+    description: 'Prep time label',
+    defaultMessage: 'Prep time (min)',
+  },
+  cooking_time_label: {
+    id: 'recipe.create.cooking_time_label',
+    description: 'Cooking time label',
+    defaultMessage: 'Cooking time (min)',
+  },
+  servings_label: {
+    id: 'recipe.create.servings_label',
+    description: 'Servings label',
+    defaultMessage: 'Servings',
+  },
+  information_label: {
+    id: 'recipe.create.information_label',
+    description: 'Recipe information label',
+    defaultMessage: 'Recipe information',
+  },
+  information_placeholder: {
+    id: 'recipe.create.information_placeholder',
+    description: 'Recipe information placeholder',
+    defaultMessage: 'A quick description of the recipe',
+  },
+  source_label: {
+    id: 'recipe.create.source_label',
+    description: 'Rating source label',
+    defaultMessage: 'Source',
+  },
+  source_tooltip: {
+    id: 'recipe.create.source_tooltip',
+    description: 'Rating source tooltip',
+    defaultMessage: 'Where the original recipe is from.',
+  },
+  public_label: {
+    id: 'recipe.create.public_label',
+    description: 'Recipe set public label',
+    defaultMessage: 'Public Recipe',
+  },
+});
 
 export interface IRecipeFormProps {
   recipe: Recipe | undefined;
@@ -27,89 +91,33 @@ export interface IRecipeFormProps {
   location: string;
 
   fetchRecipeList: (searchTerm: string) => Promise<AutocompleteListItem[]>;
-  onSubmit: (form: Recipe) => void;
+  onSubmit: (form: Recipe) => Promise<ValidationResult>;
 }
 
-type RecipeFormatted = {
+interface RecipeFormatted extends Recipe {
   ingredientGroupsS: string;
   subrecipesS: string;
-} & Recipe;
+}
 
 const RecipeForm: React.FC<IRecipeFormProps> = ({
     recipe, isNew, location,
     fetchRecipeList, onSubmit } : IRecipeFormProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    name_label: {
-      id: 'recipe.create.name_label',
-      description: 'Recipe name label',
-      defaultMessage: 'Recipe name',
-    },
-    course_label: {
-      id: 'recipe.create.course_label',
-      description: 'Course label',
-      defaultMessage: 'Course',
-    },
-    cuisine_label: {
-      id: 'recipe.create.cuisine_label',
-      description: 'Cuisine label',
-      defaultMessage: 'Cuisine',
-    },
-    tags_label: {
-      id: 'recipe.create.tags_label',
-      description: 'Tags label',
-      defaultMessage: 'Tags',
-    },
-    prep_time_label: {
-      id: 'recipe.create.prep_time_label',
-      description: 'Prep time label',
-      defaultMessage: 'Prep time (min)',
-    },
-    cooking_time_label: {
-      id: 'recipe.create.cooking_time_label',
-      description: 'Cooking time label',
-      defaultMessage: 'Cooking time (min)',
-    },
-    servings_label: {
-      id: 'recipe.create.servings_label',
-      description: 'Servings label',
-      defaultMessage: 'Servings',
-    },
-    information_label: {
-      id: 'recipe.create.information_label',
-      description: 'Recipe information label',
-      defaultMessage: 'Recipe information',
-    },
-    information_placeholder: {
-      id: 'recipe.create.information_placeholder',
-      description: 'Recipe information placeholder',
-      defaultMessage: 'A quick description of the recipe',
-    },
-    source_label: {
-      id: 'recipe.create.source_label',
-      description: 'Rating source label',
-      defaultMessage: 'Source',
-    },
-    source_tooltip: {
-      id: 'recipe.create.source_tooltip',
-      description: 'Rating source tooltip',
-      defaultMessage: 'Where the original recipe is from.',
-    },
-    public_label: {
-      id: 'recipe.create.public_label',
-      description: 'Recipe set public label',
-      defaultMessage: 'Public Recipe',
-    },
-  });
 
   const measurementsContext = useContext(MeasurementContext);
 
-  const handleSubmit = (form: RecipeFormatted) => onSubmit({
-    ...form,
-    ingredientGroups: ingredientsParser(measurementsContext.parser, form.ingredientGroupsS),
-    subrecipes:        subrecipesParser(measurementsContext.parser, form.subrecipesS),
-  });
+  const submittingObserverRef = useRef<SubmittingObserverClass>(null);
+  const handleSubmit = useCallback((form: RecipeFormatted) => {
+    // Do not disable the submit-button on submitting, to prevent losing focus.
+    if (submittingObserverRef.current?.getSubmitting()) return Promise<null>;
+
+    return onSubmit({
+      ...form,
+      ingredientGroups: ingredientsParser(measurementsContext.parser, form.ingredientGroupsS),
+      subrecipes:        subrecipesParser(measurementsContext.parser, form.subrecipesS),
+    });
+  }, [measurementsContext.parser, submittingObserverRef.current]);
 
   const initialValues: Partial<RecipeFormatted> | undefined = useMemo(() => {
     if (isNew && !recipe) {
@@ -134,12 +142,13 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
     <ReduxForm
         initialValues = {initialValues}
         onSubmit = {handleSubmit}
-        subscription = {{}}
+        subscription = {{ submitting: true }}
         render = {({ form, handleSubmit: renderSubmit }) => (
           <Form className='recipe-form' onSubmit={renderSubmit}>
-            <ReFormStatus />
             <InitialValuesResetter form={form} initialValues={initialValues} />
+            <SubmittingObserver ref={submittingObserverRef} />
             <Container>
+              <ReFormStatus />
               <Row>
                 <Col id='recipe-meta' md={5} lg={4}>
                   <Row>
@@ -147,6 +156,7 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                       <ReInput
                           name      = 'title'
                           label     = {formatMessage(messages.name_label)}
+                          maxLength = {250}
                           required
                           />
                     </Col>

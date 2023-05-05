@@ -1,7 +1,21 @@
-import React from 'react';
+import { useMemo } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Pagination as BootstraPagination } from 'react-bootstrap';
 
 import { PaginationLink } from '../../common/components/Pagination';
+
+const messages = defineMessages({
+  pagination_previous: {
+    id: 'pagination.previous',
+    description: 'Button to previous pagination page',
+    defaultMessage: 'Previous',
+  },
+  pagination_next: {
+    id: 'pagination.next',
+    description: 'Button to next pagination page',
+    defaultMessage: 'Next',
+  },
+});
 
 export interface IPaginationProps {
   offset:   number;
@@ -146,29 +160,31 @@ const PaginationNumbersList: React.FC<IPaginationNumbersListProps> = ({ offset, 
   const numOfPages = Math.ceil(count / limit);
   const currentPage = Math.ceil(offset / limit) + 1;
 
-  const pageList = generatePageList(currentPage, numOfPages);
+  const pageList = useMemo(() => generatePageList(currentPage, numOfPages), [currentPage, numOfPages]);
 
   const pageListJsx: Array<React.ReactNode> = pageList.map(p => (
-    <PaginationLink title={String(p.index)} offset={limit * (p.index - 1)} key={String(p.index)} active={currentPage === p.index} buildUrl={buildUrl} className={p.role} />
+    <PaginationLink title={p.index.toString()} offset={limit * (p.index - 1)} key={p.index.toString()} active={currentPage === p.index} buildUrl={buildUrl} className={p.role} />
   ));
 
   return <>{pageListJsx}</>;
 };
 
 const Pagination: React.FC<IPaginationProps> = ({ offset, limit, count, buildUrl }: IPaginationProps) => {
+  const { formatMessage } = useIntl();
+
   const next = offset + limit;
   const previous = offset - limit;
 
   if (count <= limit) return null;
 
   return (
-    <div>
+    <nav>
       <BootstraPagination>
-        <PaginationLink title='←' offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} />
+        <PaginationLink title='←' offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} aria-label={formatMessage(messages.pagination_previous)} />
         <PaginationNumbersList    offset={offset}   limit={limit}  buildUrl={buildUrl} count={count} />
-        <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} />
+        <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} aria-label={formatMessage(messages.pagination_previous)} />
       </BootstraPagination>
-    </div>
+    </nav>
   );
 };
 

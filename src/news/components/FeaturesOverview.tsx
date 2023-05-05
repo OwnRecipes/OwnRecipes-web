@@ -1,18 +1,18 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
 import '../css/features_overview.css';
 
 import { useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 
-type FeatureContent = {
+interface FeatureContent {
   icon: string;
   title: string;
-};
+}
 
 const features: Array<FeatureContent> = [
   {
@@ -49,83 +49,84 @@ const features: Array<FeatureContent> = [
   },
 ];
 
+defineMessages({
+  news_features_create_recipes: {
+    id: 'news.features.create recipes',
+    defaultMessage: 'Create Recipes',
+  },
+  news_features_create_recipes_description: {
+    id: 'news.features.create recipes description',
+    defaultMessage: 'Easily create and manage your own recipes, and combine them to menus.',
+  },
+
+  news_features_search_recipes: {
+    id: 'news.features.search recipes',
+    defaultMessage: 'Search Recipes',
+  },
+  news_features_search_recipes_description: {
+    id: 'news.features.search recipes description',
+    defaultMessage: 'Use powerful browsing tools to find your new favorite meals.',
+  },
+
+  news_features_comment_and_rating_recipes: {
+    id: 'news.features.comment and rating',
+    defaultMessage: 'Rating and Comments',
+  },
+  news_features_comment_and_rating_description: {
+    id: 'news.features.comment and rating description',
+    defaultMessage: 'Provide useful feedback on recipes and add your rating. Help your friends to avoid repeating your mistakes.',
+  },
+
+  news_features_responsive_design: {
+    id: 'news.features.responsive design',
+    defaultMessage: 'Responsive Design',
+  },
+  news_features_responsive_design_description: {
+    id: 'news.features.responsive design description',
+    defaultMessage: 'Manage your recipes on your large screen at home, and conveniently use your phone for cooking.',
+  },
+
+  news_features_easy_setup: {
+    id: 'news.features.easy setup',
+    defaultMessage: 'Easy Setup',
+  },
+  news_features_easy_setup_description: {
+    id: 'news.features.easy setup description',
+    defaultMessage: 'Getting Your instance up and running is extremely easy, thanks to docker. To focus on the important things in life.',
+  },
+
+  news_features_administration: {
+    id: 'news.features.administration',
+    defaultMessage: 'Administration',
+  },
+  news_features_administration_description: {
+    id: 'news.features.administration description',
+    defaultMessage: 'The app ships with a powerful administration platform, to make the house-keeping a breeze.',
+  },
+
+  news_features_open_source: {
+    id: 'news.features.open source',
+    defaultMessage: 'Open Source',
+  },
+  news_features_open_source_description: {
+    id: 'news.features.open source description',
+    defaultMessage: 'Built by passionate people who care. <3',
+  },
+
+  news_features_open_api: {
+    id: 'news.features.open api',
+    defaultMessage: 'OpenApi',
+  },
+  news_features_open_api_description: {
+    id: 'news.features.open api description',
+    defaultMessage: 'The api is documented with OpenAPI (ex. Swagger). That makes it fairly easy to integrate custom tools and queries.',
+  },
+});
+
 const FeaturesOverview: React.FC = () => {
   const intl = useIntl();
-  defineMessages({
-    news_features_create_recipes: {
-      id: 'news.features.create recipes',
-      defaultMessage: 'Create Recipes',
-    },
-    news_features_create_recipes_description: {
-      id: 'news.features.create recipes description',
-      defaultMessage: 'Easily create and manage your own recipes, and combine them to menus.',
-    },
 
-    news_features_search_recipes: {
-      id: 'news.features.search recipes',
-      defaultMessage: 'Search Recipes',
-    },
-    news_features_search_recipes_description: {
-      id: 'news.features.search recipes description',
-      defaultMessage: 'Use powerful browsing tools to find your new favorite meals.',
-    },
-
-    news_features_comment_and_rating_recipes: {
-      id: 'news.features.comment and rating',
-      defaultMessage: 'Rating and Comments',
-    },
-    news_features_comment_and_rating_description: {
-      id: 'news.features.comment and rating description',
-      defaultMessage: 'Provide useful feedback on recipes and add your rating. Help your friends to avoid repeating your mistakes.',
-    },
-
-    news_features_responsive_design: {
-      id: 'news.features.responsive design',
-      defaultMessage: 'Responsive Design',
-    },
-    news_features_responsive_design_description: {
-      id: 'news.features.responsive design description',
-      defaultMessage: 'Manage your recipes on your large screen at home, and conveniently use your phone for cooking.',
-    },
-
-    news_features_easy_setup: {
-      id: 'news.features.easy setup',
-      defaultMessage: 'Easy Setup',
-    },
-    news_features_easy_setup_description: {
-      id: 'news.features.easy setup description',
-      defaultMessage: 'Getting Your instance up and running is extremely easy, thanks to docker. To focus on the important things in life.',
-    },
-
-    news_features_administration: {
-      id: 'news.features.administration',
-      defaultMessage: 'Administration',
-    },
-    news_features_administration_description: {
-      id: 'news.features.administration description',
-      defaultMessage: 'The app ships with a powerful administration platform, to make the house-keeping a breeze.',
-    },
-
-    news_features_open_source: {
-      id: 'news.features.open source',
-      defaultMessage: 'Open Source',
-    },
-    news_features_open_source_description: {
-      id: 'news.features.open source description',
-      defaultMessage: 'Built by passionate people who care. <3',
-    },
-
-    news_features_open_api: {
-      id: 'news.features.open api',
-      defaultMessage: 'OpenApi',
-    },
-    news_features_open_api_description: {
-      id: 'news.features.open api description',
-      defaultMessage: 'The api is documented with OpenAPI (ex. Swagger). That makes it fairly easy to integrate custom tools and queries.',
-    },
-  });
-
-  const news = useSelector((state: CombinedStore) => state.news);
+  const news = useSelector((state: RootState) => state.news);
   const newsList = news.items;
 
   const featureOverview = useMemo(() => {

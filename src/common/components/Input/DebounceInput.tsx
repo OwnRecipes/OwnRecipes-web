@@ -1,6 +1,6 @@
 /** Coded by Nik Butenko et al, see https://github.com/nkbt/react-debounce-input. */
 
-import React, { RefObject } from 'react';
+import { createElement, PureComponent, RefObject } from 'react';
 import { debounce } from 'lodash-es';
 
 export interface IDebounceInputProps {
@@ -59,7 +59,7 @@ interface IDebounceInputState {
 
 const DEBOUNCE_TIMEOUT_D = 100;
 
-export default class DebounceInput extends React.PureComponent<IDebounceInputProps, IDebounceInputState> {
+export default class DebounceInput extends PureComponent<IDebounceInputProps, IDebounceInputState> {
   private isDebouncing: boolean;
   private flush!: () => void;
   private notify!: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -236,7 +236,7 @@ export default class DebounceInput extends React.PureComponent<IDebounceInputPro
 
     const maybeRef = inputRef ? { ref: inputRef } : {};
 
-    return React.createElement(element as any, {
+    return createElement(element as any, {
       ...props,
       onChange: this.onChange,
       value: value,

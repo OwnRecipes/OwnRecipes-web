@@ -9,19 +9,19 @@ export enum PendingState {
   ABORTED   = 'ABORTED',
 }
 
-export type ReducerMeta = {
+export interface ReducerMeta {
   error:      Error | undefined;
   validation: ValidationResult | undefined;
   pending:    PendingState;
 
   hasConnection: boolean;
   dirty: boolean;
-};
+}
 
-type GenericReducerType = {
+interface GenericReducerType {
   readonly ident: string;
 
   meta: ReducerMeta;
-};
+}
 
 export default GenericReducerType;

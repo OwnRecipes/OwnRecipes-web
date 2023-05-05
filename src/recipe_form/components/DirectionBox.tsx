@@ -1,11 +1,12 @@
+import { useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FormSpy } from 'react-final-form';
 import { defineMessages, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
 
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
 import ReInput from '../../common/components/ReduxForm/ReInput';
+import { NEW_ITEM_URL_ID } from '../../common/constants';
 import MeasurementContext from '../../common/context/MeasurementContext';
 import { formatValidation } from '../../common/store/Validation';
 import Directions from '../../recipe/components/Directions';
@@ -13,6 +14,24 @@ import { Ingredient, IngredientGroup } from '../../recipe/store/RecipeTypes';
 import formatQuantity from '../../recipe/utilts/formatQuantity';
 import { ingredientsParser } from './IngredientGroupsBox';
 import TabbedView from './TabbedView';
+
+const messages = defineMessages({
+  directions_label: {
+    id: 'recipe.create.directions_label',
+    description: 'Directions label',
+    defaultMessage: 'Directions',
+  },
+  directions_tooltip: {
+    id: 'recipe.create.dir.tooltip',
+    description: 'Directions Tooltip',
+    defaultMessage: 'Each Direction should be on its own line. You can form chapters by ending the chapters heading with a colon (":").',
+  },
+  directions_placeholder: {
+    id: 'recipe.create.dir.placeholder',
+    description: 'Directions Placeholder',
+    defaultMessage: 'Dough:\nPrepare the dough.\n\nDip:\nPrepare the dip.\n...',
+  },
+});
 
 export interface IDirectionBox {
   name:       string;
@@ -22,23 +41,6 @@ const DirectionBox: React.FC<IDirectionBox> = ({
     name }: IDirectionBox) => {
   const intl = useIntl();
   const { formatMessage } = intl;
-  const messages = defineMessages({
-    directions_label: {
-      id: 'recipe.create.directions_label',
-      description: 'Directions label',
-      defaultMessage: 'Directions',
-    },
-    directions_tooltip: {
-      id: 'recipe.create.dir.tooltip',
-      description: 'Directions Tooltip',
-      defaultMessage: 'Each Direction should be on its own line. You can form chapters by ending the chapters heading with a colon (":").',
-    },
-    directions_placeholder: {
-      id: 'recipe.create.dir.placeholder',
-      description: 'Directions Placeholder',
-      defaultMessage: 'Dough:\nPrepare the dough.\n\nDip:\nPrepare the dip.\n...',
-    },
-  });
 
   const measurementsContext = useContext(MeasurementContext);
 
@@ -46,7 +48,7 @@ const DirectionBox: React.FC<IDirectionBox> = ({
   const [activeTab, setActiveTab] = useState<string>('0');
 
   useEffect(() => {
-    if (location.pathname.endsWith('/create')) {
+    if (location.pathname.endsWith(`/${NEW_ITEM_URL_ID}`)) {
       setActiveTab('0');
     }
   }, [location.pathname]);
@@ -91,7 +93,7 @@ interface IDirectionsPreviewProps {
 
 const recurseIngredients = (igs: Array<IngredientGroup>, cb: (ingr: Ingredient) => Ingredient): Array<IngredientGroup> => igs.map(ig => ({
   ...ig,
-  ingredients: ig.ingredients.map(ingredient => cb(ingredient)),
+  ingredients: ig.ingredients.map(cb),
 }));
 
 const DirectionsPreview: React.FC<IDirectionsPreviewProps> = ({ directions, ingredients }: IDirectionsPreviewProps) => {

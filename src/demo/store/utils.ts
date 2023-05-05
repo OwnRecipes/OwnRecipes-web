@@ -1,8 +1,8 @@
-export type ObjectIterator<T> = {
-  count: number;
-  next:  null;
+export interface ObjectIterator<T> {
+  count:    number;
+  next:     null;
   previous: null;
-  results: Array<T>;
+  results:  Array<T>;
 }
 
 export function toQueryParams(match: string): URLSearchParams {

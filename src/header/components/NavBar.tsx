@@ -1,5 +1,5 @@
+import { useCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Image, Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
@@ -11,20 +11,18 @@ import DynamicHeightContext from '../../common/context/DynamicHeightContext';
 import useWindowSize from '../../common/hooks/useWindowSize';
 import Icon from '../../common/components/Icon';
 import CreateRecipeMenuItem from './CreateRecipeMenuItem';
-// import GroceryListMenuItem, { ListItemType } from './GroceryListMenuItem';
-// import MenuMenuItem from './MenuMenuItem';
 import { AccountMenuMenuItem, AccountLoginMenuItem } from './MyAccountMenuItem';
 import { getEnvAsBoolean, getResourcePath, getRoutePath } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import LoginSettings from './LoginSettings';
+// import MenuMenuItem from './MenuMenuItem';
 import NavSearch from './NavSearch';
 import NavLink from './NavLink';
 
 export interface INavBarProps {
   account:  UserAccount | undefined;
   settings: Settings;
-  // lists:    Array<ListItemType> | undefined;
 
   locationPath: string;
 
@@ -33,27 +31,38 @@ export interface INavBarProps {
   onLogoutClick: () => void;
 }
 
+const messages = defineMessages({
+  page_navigation: {
+    id: 'nav.aria_label',
+    description: 'aria-label for the page navigation.',
+    defaultMessage: 'Page navigation',
+  },
+  home: {
+    id: 'nav.home',
+    description: 'Home',
+    defaultMessage: 'Home',
+  },
+  recipes: {
+    id: 'nav.recipes',
+    description: 'Navbar Recipes',
+    defaultMessage: 'Browse',
+  },
+  randomRecipe: {
+    id: 'nav.randomRecipe',
+    description: 'Random Recipe',
+    defaultMessage: 'Random',
+  },
+  groceryLists: {
+    id: 'nav.groceryLists',
+    description: 'Grocery Lists',
+    defaultMessage: 'Groceries',
+  },
+});
+
 const NavBar: React.FC<INavBarProps> = ({
     account, settings, locationPath,
     onChangeLanguage,  onChangeTheme, onLogoutClick }: INavBarProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    home: {
-      id: 'nav.home',
-      description: 'Home',
-      defaultMessage: 'Home',
-    },
-    recipes: {
-      id: 'nav.recipes',
-      description: 'Navbar Recipes',
-      defaultMessage: 'Browse',
-    },
-    randomRecipe: {
-      id: 'nav.randomRecipe',
-      description: 'Random Recipe',
-      defaultMessage: 'Random',
-    },
-  });
 
   const navbarRef = useRef<HTMLDivElement>(null);
   const dynamicHeightContext = useContext(DynamicHeightContext);
@@ -76,7 +85,7 @@ const NavBar: React.FC<INavBarProps> = ({
     setIsScreenMdUp(window.matchMedia('(min-width: 768px)').matches);
   }, []);
   const [isSearchExpanded, setIsSearchExpanded] = useState<boolean>(false);
-  const handleExpandSearch = (expanded: boolean) => { setIsSearchExpanded(expanded); };
+  const handleExpandSearch = useCallback((expanded: boolean) => { setIsSearchExpanded(expanded); }, []);
 
   const isAuthenticated = account != null && account.id !== 0;
   const isPrivilegedUser = account != null && ['user', 'staff', 'admin'].includes(account.role);
@@ -106,11 +115,11 @@ const NavBar: React.FC<INavBarProps> = ({
   );
 
   return (
-    <Navbar id='header-navbar' collapseOnSelect className='header' expand='md' fixed='top' ref={navbarRef}>
+    <Navbar id='header-navbar' collapseOnSelect className='header' expand='md' fixed='top' ref={navbarRef} aria-label={formatMessage(messages.page_navigation)}>
       <Container className={classNames({ 'search-expanded': isSearchExpanded })}>
-        <Navbar.Toggle><Icon icon='list' variant='light' size='2x' /></Navbar.Toggle>
+        <Navbar.Toggle className='print-hidden'><Icon icon='list' variant='light' size='2x' /></Navbar.Toggle>
         <Navbar.Brand>
-          <Link to={getRoutePath('/home')} title={formatMessage(messages.home)}>
+          <Link to={getRoutePath('/home')} title={formatMessage(messages.home)} aria-current={locationPath.endsWith('/home') ? 'page' : undefined}>
             <Image alt='Brand' src={getResourcePath('/images/chef.png')} width='30' height='30' className='d-inline-block align-top' />
           </Link>
         </Navbar.Brand>
@@ -131,15 +140,14 @@ const NavBar: React.FC<INavBarProps> = ({
         <Navbar.Collapse>
           <Nav className={classNames('header-nav', { 'collapse-d-lg': isSearchExpanded })}>
             {(!isLoginRequired || isAuthenticated) && (!isScreenMdUp || locationPath.endsWith('/browser')) && (
-              <NavLink to={getRoutePath('/browser')} active={locationPath.endsWith('/browser')}>
+              <NavLink to={getRoutePath('/browser')} active={locationPath.endsWith('/browser')} aria-current={locationPath.endsWith('/browser') ? 'page' : undefined}>
                 <Icon icon='search' variant='light' className='d-md-inline-block d-none' />
                 <span className='d-inline-block d-md-none'>{formatMessage(messages.recipes)}</span>
               </NavLink>
             )}
-            {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getRoutePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
+            {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getRoutePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} aria-current={locationPath.endsWith('/random') ? 'page' : undefined} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
             {/* isAuthenticated && <MenuMenuItem /> */}
             {isAuthenticated && isPrivilegedUser && <CreateRecipeMenuItem />}
-            {/* isAuthenticated && <GroceryListMenuItem data={props.lists} /> */}
           </Nav>
           {isScreenMdUp && (
             <div className='header-nav my-account-nav'>

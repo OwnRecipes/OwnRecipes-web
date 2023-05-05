@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { createRef } from 'react';
 import { Form } from 'react-bootstrap';
 import SelectReact, { MultiValue, SingleValue } from 'react-select';
@@ -43,9 +42,12 @@ export class Async extends BaseInputComponent {
 }
 */
 
-export type SelectDataType = { value: string, label: string };
+export interface SelectDataType {
+  value: string;
+  label: string;
+}
 
-interface ISelectProps extends IBaseInputComponentProps {
+export interface ISelectProps extends IBaseInputComponentProps {
   value?: string;
   data?:  Array<SelectDataType>;
 
@@ -70,33 +72,40 @@ export class Select extends BaseInputComponent<ISelectProps> {
       value: data,
     });
 
-    if (this.props.onChange) {
-      this.props.onChange(this.props.name, data?.value);
-    }
+    this.props.onChange?.(this.props.name, data?.value);
   };
 
   render() {
-    const selectedOption = this.props.data?.find(o => o.value === this.props.value);
+    const { value, data, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip, readOnly, disabled,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    const selectedOption = data?.find(o => o.value === value);
     return (
       <Form.Group
-          controlId = {this.props.name}
-          className = {classNames('form-group', this.props.className, {
-            error:    this.isErrorneous(),
-            readonly: this.props.readOnly,
-            required: this.props.required && !this.props.readOnly,
-          })}>
+          {...this.getGroupProps()}
+          className = {this.getFormGroupClassNames()}
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
-          {this.getLabel({ htmlFor: `${this.props.name}-input` })}
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
+          {this.getLabel({ htmlFor: `${name}-input` })}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <SelectReact
-              name     = {this.props.name}
-              value    = {selectedOption}
-              options  = {this.props.data}
-              onChange = {this.handleChange}
+              inputId     = {`${name}-input`}
+              name        = {name}
+              value       = {selectedOption}
+              options     = {data}
+
+              isDisabled  = {readOnly || disabled}
+
+              onChange    = {this.handleChange}
+              className = 'react-select-container'
+              classNamePrefix = 'creatable-select'
               placeholder = ''
+
+              {...rest}
               ref = {this.ref} />
         </ConditionalWrapper>
       </Form.Group>
@@ -199,37 +208,40 @@ export class CreatableSelect extends BaseInputComponent<ICreatableSelectProps, I
   render() {
     // console.log(`[Select] name=${this.props.name}, value=${JSON.stringify(this.props.value)}`);
 
-    const dataOptions = this.props.data ?? [];
+    const { value, data, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip, readOnly, disabled,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    const dataOptions = data ?? [];
     const options = dataOptions.concat(this.state.options);
-    const selectedOptions = findSelectedOptions(options, this.props.value);
+    const selectedOptions = findSelectedOptions(options, value);
 
     return (
       <Form.Group
-          className = {classNames('form-group', this.props.className, {
-            error:    this.isErrorneous(),
-            readonly: this.props.readOnly,
-            required: this.props.required && !this.props.readOnly,
-          })}>
+          {...this.getGroupProps()}
+          className = {this.getFormGroupClassNames()}
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
-          {this.getLabel({ htmlFor: `${this.props.name}-input` })}
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
+          {this.getLabel({ htmlFor: `${name}-input` })}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <CreatableSelectReact
-              inputId = {`${this.props.name}-input`}
+              inputId = {`${name}-input`}
               onChange = {this.handleChange}
-              onBlur   = {this.props.onBlur}
-              onFocus  = {this.props.onFocus}
               isValidNewOption = {isValidNewOption}
               onCreateOption = {this.handleCreate}
               isClearable
-              isMulti = {this.props.isMulti}
               value = {selectedOptions}
+              isDisabled  = {readOnly || disabled}
+
               className = 'react-select-container'
               classNamePrefix = 'creatable-select'
               options = {options}
               placeholder = ''
+
+              {...rest}
               ref = {this.ref} />
         </ConditionalWrapper>
       </Form.Group>

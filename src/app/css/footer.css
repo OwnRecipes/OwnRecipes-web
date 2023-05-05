@@ -5,6 +5,7 @@
   background-color: var(--midground);
   height: 2.75rem;
   box-shadow: 0 0 5px 1px var(--elevationShadow);
+  border-top: 1px solid var(--elevationShadow);
 }
 .footer > .container {
   padding-right: 15px;

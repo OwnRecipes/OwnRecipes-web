@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import classNames from 'classnames';
@@ -8,33 +8,33 @@ import Icon from '../../common/components/Icon';
 import { getRoutePath } from '../../common/utility';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import InputAdornment from '../../common/components/Input/InputAdornment';
 import NavLink from './NavLink';
 
 export interface INavSearchProps {
   onExpandSearch?: (expanded: boolean) => void;
 }
 
+const messages = defineMessages({
+  search_placeholder: {
+    id: 'nav.search.placeholder',
+    description: 'Placeholder for the search input',
+    defaultMessage: 'Search',
+  },
+});
+
 const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    search_placeholder: {
-      id: 'nav.search.placeholder',
-      description: 'Placeholder for the search input',
-      defaultMessage: 'Search',
-    },
-  });
 
   const urlRef = useRef(null);
   const searchRef = useRef(null);
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [islgUp, setIsLgUp] = useState<boolean>(false);
-  const handleSetExpanded = (expanded: boolean) => {
-    if (onExpandSearch) {
-      onExpandSearch(expanded);
-    }
+  const handleSetExpanded = useCallback((expanded: boolean) => {
+    onExpandSearch?.(expanded);
     setIsExpanded(expanded);
-  };
+  }, [onExpandSearch]);
   useEffect(() => {
     const handler = (e: MediaQueryListEvent) => {
       setIsLgUp(e.matches);
@@ -44,7 +44,7 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
     handleSetExpanded(window.matchMedia('(min-width: 64rem)').matches);
     setIsLgUp(window.matchMedia('(min-width: 64rem)').matches);
   }, []);
-  const handleExpandClick = () => {
+  const handleExpandClick = useCallback(() => {
     if (searchRef != null && searchRef.current != null) {
       setTimeout(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,13 +52,13 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
       }, 1);
     }
     handleSetExpanded(true);
-  };
-  const handleSearchClick = () => {
+  }, [handleSetExpanded, searchRef?.current]);
+  const handleSearchClick = useCallback(() => {
     if (!islgUp) {
       handleSetExpanded(false);
     }
-  };
-  const handleBlur = (event: React.FocusEvent<HTMLFormElement>) => {
+  }, [islgUp, handleSetExpanded]);
+  const handleBlur = useCallback((event: React.FocusEvent<HTMLFormElement>) => {
     const { relatedTarget } = event;
     if (relatedTarget instanceof Element && relatedTarget.id === 'search-button') {
       return;
@@ -66,8 +66,8 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
     if (!islgUp) {
       handleSetExpanded(false);
     }
-  };
-  const handleSubmit = () => {
+  }, [islgUp, handleSetExpanded]);
+  const handleSubmit = useCallback(() => {
     if (!islgUp) {
       handleSetExpanded(false);
     }
@@ -75,14 +75,14 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (urlRef.current as any).click();
     }
-  };
+  }, [islgUp, urlRef?.current, handleSetExpanded]);
 
   return (
     <ReduxForm
         onSubmit = {handleSubmit}
         subscription = {{}}
         render = {({ handleSubmit: renderSubmit }) => (
-          <Form onBlur={handleBlur} onSubmit={renderSubmit}>
+          <Form onBlur={handleBlur} onSubmit={renderSubmit} className='nav-search-form print-hidden'>
             <ReInput
                 name = 'search'
                 placeholder = {formatMessage(messages.search_placeholder)}
@@ -91,7 +91,9 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
                 inputAdornmentEnd = {(
                   <FieldSpyValues fieldNames={['search']}>
                     {values => (
-                      <SearchButton isExpanded={isExpanded} searchValue={values.search} onSearchClick={handleSearchClick} onExpandClick={handleExpandClick} ref={urlRef} />
+                      <InputAdornment position='end'>
+                        <SearchButton isExpanded={isExpanded} searchValue={values.search} onSearchClick={handleSearchClick} onExpandClick={handleExpandClick} ref={urlRef} />
+                      </InputAdornment>
                     )}
                   </FieldSpyValues>
                 )}

@@ -6,12 +6,12 @@ import { BasicAction, PayloadAction } from '../../common/store/redux';
 import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import UserRole from '../../common/types/UserRole';
 
-export type LoginDto = {
+export interface LoginDto {
   id:    number;
   token: string;
 }
 
-export type UserAccount = {
+export interface UserAccount {
   id:       number;
   token:    string;
   username: string;
@@ -20,11 +20,11 @@ export type UserAccount = {
   remember: boolean;
 }
 
-export type OwnrecipesPayload = {
+export interface OwnrecipesPayload extends JwtPayload {
   username: string;
   email:    string;
   user_id:  number;
-} & JwtPayload;
+}
 
 function getRole(decodedToken: OwnrecipesPayload): UserRole {
   const username = decodedToken.username?.toLocaleLowerCase();
@@ -59,7 +59,7 @@ export enum AccountActionTypes {
   LOGOUT = 'LOGOUT',
 }
 
-export const ACCOUNT_STORE = '@@account';
+export const ACCOUNT_STORE = 'account';
 export const ACCOUNT_TOKEN_STORAGE_KEY = 'token';
 
 export type IAccountLoginAction = {

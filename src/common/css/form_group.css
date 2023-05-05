@@ -53,10 +53,16 @@
 .form-group .form-text {
   padding-left: 0.4em;
   padding-right: 0.4em;
-  margin-top: -0.25em;
+  margin-top: 0.25em;
   margin-bottom: 0.25em;
   display: block;
   color: var(--secondaryText);
+}
+.form-group .form-text.pre-text {
+  margin-top: -0.25em;
+}
+.form-group .form-text.post-text {
+  text-align: end;
 }
 .form-group .form-text.help-text {
   color: var(--secondaryText);
@@ -87,7 +93,7 @@
   height:      3em;
   line-height: 3em;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 768px), print {
   .form-group.no-label .form-control:not(textarea) {
     height:      2.5em;
     line-height: 2.5em;

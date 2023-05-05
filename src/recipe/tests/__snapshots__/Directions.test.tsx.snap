@@ -2,7 +2,7 @@
 
 exports[`Direction component test 1`] = `
 <div
-  className="subgroup default-group"
+  className="subgroup default"
 >
   <div
     className="direction"

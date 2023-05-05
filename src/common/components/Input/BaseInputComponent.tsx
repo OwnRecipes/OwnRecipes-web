@@ -6,9 +6,10 @@ import classNames from 'classnames';
 import '../../css/button.css';
 import '../../css/form_group.css';
 
+import { CommonProps } from '../../types/OverridableComponent';
 import Icon from '../Icon';
 
-export interface IBaseInputComponentProps {
+export interface IBaseInputComponentProps extends CommonProps {
   name:       string;
   label?:     string;
 
@@ -25,14 +26,14 @@ export interface IBaseInputComponentProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?:      FieldMetaState<any>;
 
-  className?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (name: string, newValue: any) => void;
   onBlur?:   (event: React.FocusEvent<HTMLElement, Element>) => void;
   onFocus?:  (event: React.FocusEvent<HTMLElement, Element>) => void;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
 }
 
-export type BaseLabelProps = {
+export interface BaseLabelProps {
   htmlFor?: string;
 }
 
@@ -40,9 +41,7 @@ export default class BaseInputComponent<P extends IBaseInputComponentProps, S = 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleChange = (event: any) => { // eslint-disable-line react/no-unused-class-component-methods
     if (this.props.readOnly || this.props.disabled) return;
-    if (this.props.onChange) {
-      this.props.onChange(this.props.name, event.target.value);
-    }
+    this.props.onChange?.(this.props.name, event.target.value);
   };
 
   hasError(): boolean {
@@ -54,11 +53,17 @@ export default class BaseInputComponent<P extends IBaseInputComponentProps, S = 
   }
 
   getErrorMessage() { // eslint-disable-line react/no-unused-class-component-methods
-    return this.isErrorneous() ? <Form.Text className='error-text'>{this.props.errors}</Form.Text> : null;
+    return this.isErrorneous() ? <Form.Text className='pre-text error-text'>{this.props.errors}</Form.Text> : null;
+  }
+
+  getGroupProps() { // eslint-disable-line react/no-unused-class-component-methods
+    return ({
+      'data-api-field': this.props.name,
+    });
   }
 
   getHelpText() { // eslint-disable-line react/no-unused-class-component-methods
-    return this.props.helpText ? <Form.Text className='help-text'>{this.props.helpText}</Form.Text> : null;
+    return this.props.helpText ? <Form.Text className='pre-text help-text'>{this.props.helpText}</Form.Text> : null;
   }
 
   getLabel(labelProps?: BaseLabelProps): React.ReactNode | undefined { // eslint-disable-line react/no-unused-class-component-methods

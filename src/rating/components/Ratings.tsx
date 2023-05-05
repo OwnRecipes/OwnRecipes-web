@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Button } from 'react-bootstrap';
 
 import '../css/ratings.css';
@@ -17,11 +19,18 @@ interface IStarProps {
 }
 
 const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
-  const handleClick = () => {
-    if (onChange) {
-      onChange(num);
-    }
-  };
+  const { formatMessage } = useIntl();
+  const messages = defineMessages({
+    star_alt: {
+      id: 'rating_comments.star_alt',
+      description: 'Alt text for star button, for screen reader.',
+      defaultMessage: 'Select to rate item {stars, plural, one {# star} other {# stars}}',
+    },
+  });
+
+  const handleClick = useCallback(() => {
+    onChange?.(num);
+  }, [onChange, num]);
 
   const isHalfFilled = stars > (num - 1) && stars < num;
   const icon = isHalfFilled ? 'star-half' : 'star';
@@ -29,15 +38,24 @@ const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
 
   return (
     <ConditionalWrapper
-        condition={onChange != null}
+        condition = {onChange != null}
         render    = {childr => <Button variant='transparent' className='rating' onClick={handleClick}>{childr}</Button>}
         key={num}>
-      <Icon key={num} icon={icon} variant={variant} size={onChange != null ? '2x' : '1x'} />
+      <Icon key={num} icon={icon} variant={variant} size={onChange != null ? '2x' : '1x'} ariaLabel={onChange ? formatMessage(messages.star_alt, { stars: num }) : undefined} />
     </ConditionalWrapper>
   );
 };
 
 const Ratings: React.FC<IRatingsProps> = ({ stars, onChange }: IRatingsProps) => {
+  const { formatMessage } = useIntl();
+  const messages = defineMessages({
+    stars_alt: {
+      id: 'rating_comments.stars_alt',
+      description: 'Alt text for read-only stars (view).',
+      defaultMessage: '{stars} out of 5 stars',
+    },
+  });
+
   let starss = stars;
   if (stars > 5) {
     starss = 5;
@@ -51,7 +69,8 @@ const Ratings: React.FC<IRatingsProps> = ({ stars, onChange }: IRatingsProps) =>
 
   return (
     <div className='rating-stars'>
-      {starsList}
+      <span aria-hidden>{starsList}</span>
+      <span className='sr-only'>{formatMessage(messages.stars_alt, { stars: starss })}</span>
     </div>
   );
 };

@@ -1,0 +1,60 @@
+.add-to-grocery-list-modal .col.input-with-button {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+}
+.add-to-grocery-list-modal .col.input-with-button p {
+  min-width: 100%;
+  text-align: center;
+}
+.add-to-grocery-list-modal .col.input-with-button .form-group {
+  flex: 1;
+}
+
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes caption {
+  margin-top: 0.5em;
+}
+
+.add-to-grocery-list-modal .row.additional-checkbox-row {
+  border-bottom: 1px solid var(--inputBorder)
+}
+
+.add-to-grocery-list-modal .row.additional-checkbox-row .form-group {
+  padding: 0 0.25rem;
+  margin-bottom: 0;
+}
+
+.add-to-grocery-list-modal .ingredients-table {
+  border-color: transparent;
+}
+
+.add-to-grocery-list-modal .ingredients-table caption {
+  caption-side: top;
+  margin-left: 33%;
+  color: var(--primaryText);
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0.7rem;
+}
+
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td {
+  vertical-align: middle;
+}
+
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection {
+  padding-top: 0;
+  padding-bottom: 0;
+  width: 3em;
+}
+
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.label-sr-only {
+  margin: 0;
+}
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.label-sr-only > .form-check {
+  padding-left: 0;
+}
+.add-to-grocery-list-modal .row.ingredients-and-subrecipes td.selection .form-group.label-sr-only > .form-check > input {
+  margin-left: 0;
+}

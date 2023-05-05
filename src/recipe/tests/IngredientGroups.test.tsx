@@ -7,7 +7,7 @@ import { IngredientGroup } from '../store/RecipeTypes';
 test('Ingredient Group component test', () => {
   // const checkIngredient = jest.fn();
   const component = create(
-    <IngredientGroups groups={data.ingredient_groups as unknown as Array<IngredientGroup>} hasSubrecipes={false} /* checkIngredient={checkIngredient} */ />
+    <IngredientGroups groups={data.ingredient_groups as unknown as Array<IngredientGroup>} hasSubrecipes={false} withHeaderLink /* checkIngredient={checkIngredient} */ />
   );
   const tree = component.toJSON();
   expect(tree).toMatchSnapshot();

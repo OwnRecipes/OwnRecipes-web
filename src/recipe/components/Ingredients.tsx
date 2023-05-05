@@ -2,18 +2,36 @@ import { useContext } from 'react';
 import { Table } from 'react-bootstrap';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
+import '../css/ingredients.css';
+
 import MeasurementContext, { IMeasurementContext } from '../../common/context/MeasurementContext';
-// import { Checkbox } from '../../common/components/FormComponents';
-import { optionallyFormatMessage } from '../../common/utility';
-import { Ingredient } from '../store/RecipeTypes';
+import HeaderLink from '../../common/components/HeaderLink';
+import { optionallyFormatMessage, slugify } from '../../common/utility';
+import { Ingredient, IngredientGroup } from '../store/RecipeTypes';
+import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+
+const messages = defineMessages({
+  quantity: {
+    id: 'ingredients.table.quantity',
+    description: 'Ingredients table quantity header',
+    defaultMessage: 'Quantity',
+  },
+  ingredient: {
+    id: 'ingredients.table.ingredient',
+    description: 'Ingredients table ingredient header',
+    defaultMessage: 'Ingredient',
+  },
+});
 
 export interface IIngredientsProps {
-  caption: string | undefined;
+  showCaptions: boolean;
+  group: IngredientGroup;
   data: Array<Ingredient>;
-  // checkIngredient: (id: number, checked: boolean) => void;
+  withHeaderLink?: boolean;
+  selectable?: boolean;
 }
 
-export function formatMeasurement(measurementsContext: IMeasurementContext, measurement: string | undefined, intl: IntlShape, quantity: string | undefined): string {
+export function formatMeasurement(intl: IntlShape, measurementsContext: IMeasurementContext, measurement: string | undefined, quantity: string | undefined): string {
   let measurementString: string;
   if (measurement != null) {
     const measurementParserId = measurementsContext.formatter[measurementsContext.parser[measurement]];
@@ -30,42 +48,37 @@ export function formatMeasurement(measurementsContext: IMeasurementContext, meas
 }
 
 const Ingredients: React.FC<IIngredientsProps> = ({
-    caption, data /* , checkIngredient */ }: IIngredientsProps) => {
+    showCaptions, group, data, withHeaderLink, selectable }: IIngredientsProps) => {
   const intl = useIntl();
-  const messages = defineMessages({
-    quantity: {
-      id: 'ingredients.table.quantity',
-      description: 'Ingredients table quantity header',
-      defaultMessage: 'Quantity',
-    },
-    ingredient: {
-      id: 'ingredients.table.ingredient',
-      description: 'Ingredients table ingredient header',
-      defaultMessage: 'Ingredient',
-    },
-  });
+  const { formatMessage } = intl;
 
   const measurementsContext = useContext(MeasurementContext);
+  const caption = showCaptions && group.title ? group.title : undefined;
+  const captionSlug = slugify(caption ?? '');
 
   const ingredients = data.map((ingredient, index) => {
-    const quantityS    = ingredient.quantity;
-    const measurementString = formatMeasurement(measurementsContext, ingredient.measurement, intl, ingredient.quantity);
+    const quantityS   = ingredient.quantity;
+    const msrmtString = formatMeasurement(intl, measurementsContext, ingredient.measurement, ingredient.quantity);
     const titleString = ingredient.title;
-    const renderQuantity: boolean = Boolean(quantityS) || Boolean(measurementString);
+    const fullString  = [quantityS, msrmtString, titleString].join(' ');
+    const renderQuantity: boolean = Boolean(quantityS) || Boolean(msrmtString);
 
     return (
-      <tr className='ingredient' key={String(ingredient.id ?? index)}>
-        {/*
-        <Checkbox
-            name    = {String(ingredient.id)}
-            checked = {ingredient.checked ?? false}
-            change  = {(name, newValue) => checkIngredient(parseInt(name), newValue)} /> */}
+      <tr className='ingredient' key={(ingredient.id ?? index).toString()}>
+        {selectable && (
+          <td className='selection'>
+            <ReCheckbox
+                label = {fullString}
+                className = 'label-sr-only'
+                name  = {`ingredients.${group.slug}.cb-${ingredient.id}`} />
+          </td>
+        )}
         <td className='quantity'>
           {renderQuantity && (
             <span>
               {quantityS}
-              {quantityS != null && quantityS.length > 0 && measurementString.length > 0 && ' '}
-              {measurementString}
+              {quantityS != null && quantityS.length > 0 && msrmtString.length > 0 && ' '}
+              {msrmtString}
             </span>
           )}
         </td>
@@ -80,12 +93,19 @@ const Ingredients: React.FC<IIngredientsProps> = ({
 
   return (
     <Table striped size='sm' className='table ingredients-table'>
-      {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-      {caption && <caption className='subheading h3'>{caption}:</caption>}
+      {caption && (
+        <caption id={withHeaderLink ? `ingredients-${captionSlug}` : undefined} className='subheading h3'>
+          {`${caption}:`}
+          {withHeaderLink && <HeaderLink linkFor={`ingredients-${captionSlug}`} />}
+        </caption>
+      )}
       <thead className='hideme'>
         <tr>
-          <th><span>{intl.formatMessage(messages.quantity)}</span></th>
-          <th><span>{intl.formatMessage(messages.ingredient)}</span></th>
+          {selectable && (
+            <th><span>Selection</span></th>
+          )}
+          <th><span>{formatMessage(messages.quantity)}</span></th>
+          <th><span>{formatMessage(messages.ingredient)}</span></th>
         </tr>
       </thead>
       <tbody>

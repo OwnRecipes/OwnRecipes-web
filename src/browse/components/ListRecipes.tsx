@@ -15,26 +15,26 @@ export interface IListRecipes {
   onOpenRecipe: (rec: RecipeList) => void;
 }
 
+function getRecipeImage(recipe: RecipeList) {
+  if (recipe.photoThumbnail) {
+    return recipe.photoThumbnail;
+  } else {
+    const images = ['fish', 'fried-eggs', 'pizza', 'soup', 'steak'];
+    return getResourcePath(`/images/${images[Math.floor(Math.random() * images.length)]}.jpg`);
+  }
+}
+
 const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipes) => {
   const IMAGE_PLACEHOLDER = useMemo(() => getRecipeImagePlaceholder(), []);
-
-  const getRecipeImage = (recipe: RecipeList) => {
-    if (recipe.photoThumbnail) {
-      return recipe.photoThumbnail;
-    } else {
-      const images = ['fish', 'fried-eggs', 'pizza', 'soup', 'steak'];
-      return getResourcePath(`/images/${images[Math.floor(Math.random() * images.length)]}.jpg`);
-    }
-  };
 
   const recipes = data?.map(recipe => {
     const link = getRoutePath(`/recipe/${recipe.slug}`);
     return (
       <Col key={recipe.id}>
-        <Card className={classNames('recipe', 'print-hidden')}>
+        <Card className={classNames('recipe')}>
           <Link to={link} onClick={() => onOpenRecipe(recipe)}>
             <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' placeholder={IMAGE_PLACEHOLDER} />
-            <Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'><Card.Title as='h3'>{recipe.title}</Card.Title></Tooltip>
+            <Card.Title as='h3'><Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>{recipe.title}</Tooltip></Card.Title>
             <div><Ratings stars={recipe.rating} /></div>
             <Card.Text>{recipe.info}</Card.Text>
           </Link>

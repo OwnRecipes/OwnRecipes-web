@@ -35,6 +35,7 @@
 .react-select-container .creatable-select__menu .creatable-select__option.creatable-select__option--is-selected {
   background-color: var(--inputBgDisabled);
   color: var(--primaryText);
+  font-style: italic;
 }
 .react-select-container .creatable-select__option.creatable-select__option--is-focused {
   background-color: var(--hoverBg);

@@ -3,39 +3,33 @@ import { defineMessages, useIntl } from 'react-intl';
 import '../css/ingredients_panel.css';
 
 import { Recipe } from '../store/RecipeTypes';
-import SubRecipes from './SubRecipes';
-import IngredientGroups from './IngredientGroups';
-// import IngredientButtons from './IngredientButtons';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 import P from '../../common/components/P';
-import IngredientsHeader from './IngredientsHeader';
 import Loading from '../../common/components/Loading';
+import { ValidationResult } from '../../common/store/Validation';
+import SubRecipes from './SubRecipes';
+import IngredientGroups from './IngredientGroups';
+import IngredientsHeader from './IngredientsHeader';
+import IngredientFooter from './IngredientsFooter';
+
+const messages = defineMessages({
+  no_ingredients: {
+    id: 'recipe.recipe_ingredient_button.no_ingredients',
+    description: 'No ingredients provided message',
+    defaultMessage: '(This recipe has no ingredients.)',
+  },
+});
 
 export interface IIngredientsPanelProps {
   recipe:      Recipe | undefined;
   recipeMeta:  ReducerMeta;
+  userId:      number | undefined;
 
-  // lists: Array<any>;
-
-  // bulkAdd: (listId: number) => void;
-  // checkAllIngredients: () => void;
-  // uncheckAllIngredients: () => void;
-
-  // checkIngredient: (id: number, checked: boolean) => void;
-  // checkSubRecipe:  (id: number, checked: boolean) => void;
-
-  updateServings: (servings: number) => void;
+  updateServings: (servings: number) => Promise<ValidationResult>;
 }
 
-const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta, updateServings }: IIngredientsPanelProps) => {
+const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta, userId, updateServings }: IIngredientsPanelProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    no_ingredients: {
-      id: 'recipe.recipe_ingredient_button.no_ingredients',
-      description: 'No ingredients provided message',
-      defaultMessage: '(This recipe has no ingredients.)',
-    },
-  });
 
   const pending = recipeMeta.pending;
   const hasNoIngredients = pending === PendingState.COMPLETED
@@ -53,22 +47,19 @@ const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta
         <>
           <div className='ingredient-groups'>
             <SubRecipes
+                withHeaderLink
                 subRecipes = {recipe?.subrecipes}
-                // checkSubRecipe = {checkSubRecipe}
                 />
             <IngredientGroups
+                withHeaderLink
                 groups  = {recipe?.ingredientGroups}
                 hasSubrecipes = {recipe?.subrecipes != null && recipe?.subrecipes.length > 0}
-                // checkIngredient = {checkIngredient}
                 />
           </div>
-          {/*
-          <IngredientButtons
-              pending    = {pending}
-              lists      = {lists}
-              bulkAdd    = {bulkAdd}
-              checkAll   = {checkAllIngredients}
-              unCheckAll = {uncheckAllIngredients} /> */}
+          <IngredientFooter
+              subrecipes = {recipe?.subrecipes}
+              ingredients = {recipe?.ingredientGroups}
+              isAuthenticated = {userId != null} />
         </>
       )}
     </article>

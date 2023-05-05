@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import CookingModeContext, { ICookingModeContext } from './CookingModeContext';
 
@@ -17,7 +17,7 @@ const CookingModeContextProvider: React.FC<ICookingModeContextProviderProps> = (
     children }: ICookingModeContextProviderProps) => {
   const [isCookingMode, setIsCookingMode] = useState<boolean>(false);
 
-  const updateCookingMode = (active: boolean) => setIsCookingMode(active);
+  const updateCookingMode = useCallback((active: boolean) => { setIsCookingMode(active); }, []);
 
   const value: ICookingModeContext = useMemo(() => ({
     cookingMode:    isCookingMode,

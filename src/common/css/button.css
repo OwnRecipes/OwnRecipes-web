@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: center;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 768px), print {
   .btn {
     color: var(--secondaryText);
     min-height: 2.5rem;
@@ -48,17 +48,17 @@
   background-color: var(--primaryMain);
   border-color: var(--primaryMain);
 }
-.btn-primary:hover {
+.btn-primary:not(.disabled):hover {
   color: var(--primaryContrast);
   background-color: var(--primaryMain);
   border-color: var(--primaryMain);
 }
-.btn-check:focus + .btn-primary, .btn-primary:focus {
+.btn-check:not(.disabled):focus + .btn-primary, .btn-primary:not(.disabled):focus {
   color: var(--primaryContrast);
   background-color: var(--primaryMain);
   border-color: var(--primaryMain);
 }
-.btn-check:active + .btn-primary, .btn-check:checked + .btn-primary, .btn-primary.active, .btn-primary:active, .show > .btn-primary.dropdown-toggle {
+.btn-check:not(.disabled):active + .btn-primary, .btn-check:not(.disabled):checked + .btn-primary, .btn-primary:not(.disabled).active, .btn-primary:not(.disabled):active, .show > .btn-primary.dropdown-toggle {
   color: var(--primaryContrast);
   background-color: var(--primaryMain);
   border-color: var(--primaryMain);
@@ -71,17 +71,17 @@
   color: var(--secondaryText);
   border-color: var(--secondaryText);
 }
-.btn-outline-primary:hover {
+.btn-outline-primary:not(.disabled):hover {
   color: var(--primaryMain);
   background-color: transparent;
   border-color: var(--primaryMain);
 }
-.btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
+.btn-check:not(.disabled):focus + .btn-outline-primary, .btn-outline-primary:not(.disabled):focus {
   color: var(--primaryMain);
   background-color: transparent;
   border-color: var(--primaryMain);
 }
-.btn-check:active + .btn-outline-primary, .btn-check:checked + .btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active {
+.btn-check:not(.disabled):active + .btn-outline-primary, .btn-check:not(.disabled):checked + .btn-outline-primary, .btn-outline-primary:not(.disabled).active, .btn-outline-primary:not(.disabled).dropdown-toggle.show, .btn-outline-primary:not(.disabled):active {
   color: var(--primaryMain);
   background-color: transparent;
   border-color: var(--primaryMain);
@@ -103,17 +103,17 @@
   background-color: var(--secondaryMain);
   border-color: var(--secondaryMain);
 }
-.btn-secondary:hover {
+.btn-secondary:not(.disabled):hover {
   color: var(--secondaryContrast);
   background-color: var(--secondaryMain);
   border-color: var(--secondaryMain);
 }
-.btn-check:focus + .btn-secondary, .btn-secondary:focus {
+.btn-check:not(.disabled):focus + .btn-secondary, .btn-secondary:not(.disabled):focus {
   color: var(--secondaryContrast);
   background-color: var(--secondaryMain);
   border-color: var(--secondaryMain);
 }
-.btn-check:active + .btn-secondary, .btn-check:checked + .btn-secondary, .btn-secondary.active, .btn-secondary:active, .show > .btn-secondary.dropdown-toggle {
+.btn-check:not(.disabled):active + .btn-secondary, .btn-check:not(.disabled):checked + .btn-secondary, .btn-secondary:not(.disabled).active, .btn-secondary:not(.disabled):active, .show > .btn-secondary.dropdown-toggle {
   color: var(--secondaryContrast);
   background-color: var(--secondaryMain);
   border-color: var(--secondaryMain);
@@ -126,17 +126,17 @@
   color: var(--secondaryMain);
   border-color: var(--secondaryMain);
 }
-.btn-outline-secondary:hover {
+.btn-outline-secondary:not(.disabled):hover {
   color: var(--secondaryContrast);
   background-color: var(--secondaryMain);
   border-color: var(--secondaryMain);
 }
-.btn-check:focus + .btn-outline-secondary, .btn-outline-secondary:focus {
+.btn-check:not(.disabled):focus + .btn-outline-secondary, .btn-outline-secondary:not(.disabled):focus {
   color: var(--secondaryContrast);
   background-color: var(--secondaryMain);
   border-color: var(--secondaryMain);
 }
-.btn-check:active + .btn-outline-secondary, .btn-check:checked + .btn-outline-secondary, .btn-outline-secondary.active, .btn-outline-secondary.dropdown-toggle.show, .btn-outline-secondary:active {
+.btn-check:not(.disabled):active + .btn-outline-secondary, .btn-check:not(.disabled):checked + .btn-outline-secondary, .btn-outline-secondary:not(.disabled).active, .btn-outline-secondary:not(.disabled).dropdown-toggle.show, .btn-outline-secondary:not(.disabled):active {
   color: var(--secondaryContrast);
   background-color: var(--secondaryMain);
   border-color: var(--secondaryMain);
@@ -144,7 +144,7 @@
 .btn-check:active + .btn-outline-secondary:focus, .btn-check:checked + .btn-outline-secondary:focus, .btn-outline-secondary.active:focus, .btn-outline-secondary.dropdown-toggle.show:focus, .btn-outline-secondary:active:focus {
   box-shadow: 0 0 0 2px var(--primaryText);
 }
-.btn-outline-secondary.disabled, .btn-outline-secondary:disabled {
+.btn-outline-secondary:not(.disabled).disabled, .btn-outline-secondary:not(.disabled):disabled {
   color: var(--disabledText);
   background-color: var(--inputBgDisabled);
   border-color: var(--disabledText);
@@ -158,18 +158,18 @@
   background-color: var(--errorText);
   border-color: var(--errorText);
 }
-.btn-danger:hover {
+.btn-danger:not(.disabled):hover {
   color: var(--primaryContrast);
   background-color: var(--errorText);
   border-color: var(--errorText);
 }
-.btn-check:focus + .btn-danger, .btn-danger:focus {
+.btn-check:not(.disabled):focus + .btn-danger, .btn-danger:not(.disabled):focus {
   color: var(--primaryContrast);
   background-color: var(--errorText);
   border-color: var(--errorText);
   box-shadow: 0 0 0 2px var(--primaryText);
 }
-.btn-check:active + .btn-danger, .btn-check:checked + .btn-danger, .btn-danger.active, .btn-danger:active, .show > .btn-danger.dropdown-toggle {
+.btn-check:not(.disabled):active + .btn-danger, .btn-check:not(.disabled):checked + .btn-danger, .btn-danger:not(.disabled).active, .btn-danger:not(.disabled):active, .show > .btn-danger.dropdown-toggle {
   color: var(--primaryContrast);
   background-color: var(--errorText);
   border-color: var(--errorText);
@@ -182,17 +182,17 @@
   color: var(--secondaryText);
   border-color: var(--secondaryText);
 }
-.btn-outline-danger:hover {
+.btn-outline-danger:not(.disabled):hover {
   color: var(--errorText);
   background-color: transparent;
   border-color: var(--errorText);
 }
-.btn-check:focus + .btn-outline-danger, .btn-outline-danger:focus {
+.btn-check:not(.disabled):focus + .btn-outline-danger, .btn-outline-danger:not(.disabled):focus {
   color: var(--errorText);
   background-color: transparent;
   border-color: var(--errorText);
 }
-.btn-check:active + .btn-outline-danger, .btn-check:checked + .btn-outline-danger, .btn-outline-danger.active, .btn-outline-danger.dropdown-toggle.show, .btn-outline-danger:active {
+.btn-check:not(.disabled):active + .btn-outline-danger, .btn-check:not(.disabled):checked + .btn-outline-danger, .btn-outline-danger:not(.disabled).active, .btn-outline-danger:not(.disabled).dropdown-toggle.show, .btn-outline-danger:not(.disabled):active {
   color: var(--errorText);
   background-color: transparent;
   border-color: var(--errorText);

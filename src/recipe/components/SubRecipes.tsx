@@ -3,36 +3,38 @@ import { Table } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-// import { Checkbox } from '../../common/components/FormComponents';
+import HeaderLink from '../../common/components/HeaderLink';
+import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import { SubRecipe } from '../store/RecipeTypes';
 
+const messages = defineMessages({
+  subrecipes: {
+    id: 'subrecipes.subrecipes heading',
+    description: 'Subrecipes header',
+    defaultMessage: 'Subrecipes',
+  },
+  quantity: {
+    id: 'subrecipes.table.quantity',
+    description: 'Subrecipes table quantity header',
+    defaultMessage: 'Quantity',
+  },
+  subrecipe: {
+    id: 'subrecipes.table.subrecipe',
+    description: 'Subrecipes table ingredient header',
+    defaultMessage: 'Subrecipe',
+  },
+});
+
 export interface ISubRecipesProps {
   subRecipes: Array<SubRecipe> | undefined;
-
-  // checkSubRecipe: (id: number, checked: boolean) => void;
+  withHeaderLink?: boolean;
+  selectable?: boolean;
 }
 
-const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes /* , checkSubRecipe */ }: ISubRecipesProps) => {
+const SubRecipes: React.FC<ISubRecipesProps> = ({
+    subRecipes, withHeaderLink, selectable }: ISubRecipesProps) => {
   const intl = useIntl();
-
-  const messages = defineMessages({
-    subrecipes: {
-      id: 'subrecipes.subrecipes heading',
-      description: 'Subrecipes header',
-      defaultMessage: 'Subrecipes',
-    },
-    quantity: {
-      id: 'subrecipes.table.quantity',
-      description: 'Subrecipes table quantity header',
-      defaultMessage: 'Quantity',
-    },
-    subrecipe: {
-      id: 'subrecipes.table.subrecipe',
-      description: 'Subrecipes table ingredient header',
-      defaultMessage: 'Subrecipe',
-    },
-  });
 
   const showQuantityCol = subRecipes == null || subRecipes.filter(sr => (
     (sr.quantity != null && sr.quantity.length > 0 && sr.quantity !== '0')
@@ -40,23 +42,27 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes /* , checkSubRecipe
   )).length > 0;
 
   const subRecipesList = subRecipes?.map((subRecipe, index) => {
-    const quantityString    = subRecipe.quantity != null && subRecipe.quantity.length > 0 && subRecipe.quantity !== '0' ? subRecipe.quantity : '';
-    const measurementString = subRecipe.measurement != null ? optionallyFormatMessage(intl, 'measurement.', subRecipe.measurement, { itemCount: subRecipe.quantity }) : '';
-    const titleString       = subRecipe.title;
+    const quantityS   = subRecipe.quantity != null && subRecipe.quantity.length > 0 && subRecipe.quantity !== '0' ? subRecipe.quantity : '';
+    const msrmtString = subRecipe.measurement != null ? optionallyFormatMessage(intl, 'measurement.', subRecipe.measurement, { itemCount: subRecipe.quantity }) : '';
+    const titleString = subRecipe.title;
+    const fullString  = [quantityS, msrmtString, titleString].join(' ');
 
     return (
-      <tr className='ingredient' key={String(subRecipe.child_recipe_id ?? index)}>
-        {/*
-        <Checkbox
-            name    = {String(subRecipe.child_recipe_id)}
-            checked = {subRecipe.checked ?? false}
-            change  = {(_id, checked) => checkSubRecipe(subRecipe.child_recipe_id, checked)} /> */}
+      <tr className='ingredient' key={(subRecipe.child_recipe_id ?? index).toString()}>
+        {selectable && (
+          <td className='selection'>
+            <ReCheckbox
+                label = {fullString}
+                className = 'label-sr-only'
+                name  = {`subrecipes.cb-${subRecipe.child_recipe_id}`} />
+          </td>
+        )}
         {showQuantityCol && (
           <td className='quantity first-col'>
             <span>
-              {quantityString}
-              {quantityString != null && quantityString.length > 0 && measurementString.length > 0 && ' '}
-              {measurementString}
+              {quantityS}
+              {quantityS != null && quantityS.length > 0 && msrmtString.length > 0 && ' '}
+              {msrmtString}
             </span>
           </td>
         )}
@@ -74,10 +80,15 @@ const SubRecipes: React.FC<ISubRecipesProps> = ({ subRecipes /* , checkSubRecipe
   return (
     <div className='subgroup ingredient-group'>
       <Table striped size='sm' className='table ingredients-table'>
-        {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-        <caption className='subheading h3'>{intl.formatMessage(messages.subrecipes)}:</caption>
+        <caption id={withHeaderLink ? 'subrecipes' : undefined} className='subheading h3'>
+          {`${intl.formatMessage(messages.subrecipes)}:`}
+          {withHeaderLink && <HeaderLink linkFor='subrecipes' />}
+        </caption>
         <thead className='hideme'>
           <tr>
+            {selectable && (
+              <th><span>Selection</span></th>
+            )}
             {showQuantityCol && <th><span>{intl.formatMessage(messages.quantity)}</span></th>}
             <th><span>{intl.formatMessage(messages.subrecipe)}</span></th>
           </tr>

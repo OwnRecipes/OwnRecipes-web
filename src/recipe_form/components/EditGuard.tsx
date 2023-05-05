@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import * as _ from 'lodash-es';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
 import { getRoutePath } from '../../common/utility';
@@ -14,8 +14,8 @@ const EditGuard: React.FC = () => {
   const recipeSlug = params.recipe ?? '';
   const isNew = recipeSlug === 'create';
 
-  const accountState = useSelector((state: CombinedStore) => state.account);
-  const recipeState = useSelector((state: CombinedStore) => state.recipeForm);
+  const accountState = useSelector((state: RootState) => state.account);
+  const recipeState = useSelector((state: RootState) => state.recipeForm);
   const recipe = recipeState.item;
   const { pending } = recipeState.meta;
   const wasRenderedRef = useRef<boolean>(false);

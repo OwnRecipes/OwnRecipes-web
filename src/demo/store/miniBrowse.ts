@@ -40,7 +40,7 @@ const config = {
       count: resultRecipes.length,
       next: null,
       previous: null,
-      results: resultRecipes.map(rec => toRecipeListDto(rec)),
+      results: resultRecipes.map(toRecipeListDto),
     };
 
     return result;

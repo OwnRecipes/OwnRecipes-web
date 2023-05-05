@@ -8,7 +8,6 @@ export interface ILoginAlert {
 
 const LoginAlert: React.FC<ILoginAlert> = ({ submitError }: ILoginAlert) => {
   const { formatMessage } = useIntl();
-
   const messages = defineMessages({
     errorTitle: {
       id: 'login.alert.error_title',

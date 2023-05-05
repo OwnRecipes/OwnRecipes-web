@@ -1,13 +1,14 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { NavDropdown, Button } from 'react-bootstrap';
 
-import { getEnv, getRoutePath } from '../../common/utility';
+import { getEnv, getRoutePath, isDemoMode } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import Icon from '../../common/components/Icon';
 import { LanguageCode } from '../../common/language';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
+import GroceryListMenuItem from './GroceryListMenuItem';
 
 const LanguageDialog = lazy(() => import('./LanguageDialog'));
 const ThemeDialog = lazy(() => import('./ThemeDialog'));
@@ -78,20 +79,20 @@ export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
   const [showLanguageDialog, setShowLanguageDialog] = useState<boolean>(false);
   const [showThemeDialog, setShowThemeDialog] = useState<boolean>(false);
 
-  const handleChangeLanguageClick = () => { setShowLanguageDialog(true); };
-  const handleLanguageDialogClose = () => { setShowLanguageDialog(false); };
-  const handleChangeThemeClick    = () => { setShowThemeDialog(true); };
-  const handleThemeDialogClose    = () => { setShowThemeDialog(false); };
+  const handleChangeLanguageClick = useCallback(() => { setShowLanguageDialog(true); }, []);
+  const handleLanguageDialogClose = useCallback(() => { setShowLanguageDialog(false); }, []);
+  const handleChangeThemeClick    = useCallback(() => { setShowThemeDialog(true); }, []);
+  const handleThemeDialogClose    = useCallback(() => { setShowThemeDialog(false); }, []);
 
-  const handleChangeLanguage = (lang: LanguageCode) => {
+  const handleChangeLanguage = useCallback((lang: LanguageCode) => {
     handleLanguageDialogClose();
     onChangeLanguage(lang);
-  };
+  }, [handleLanguageDialogClose, onChangeLanguage]);
 
-  const handleChangeTheme = (theme: ThemeMode) => {
+  const handleChangeTheme = useCallback((theme: ThemeMode) => {
     handleThemeDialogClose();
     onChangeTheme(theme);
-  };
+  }, [handleThemeDialogClose, onChangeTheme]);
 
   return (
     <>
@@ -104,7 +105,10 @@ export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
             </>
           )}
           align = 'end'
+          className = 'header-dropdown my-account-dropdown'
           id='my-account-dropdown'>
+        {!isDemoMode() && <GroceryListMenuItem />}
+        <NavDropdown.Divider />
         <NavDropdown.Item onClick={handleChangeLanguageClick}>{`${formatMessage(messages.language)} …`}</NavDropdown.Item>
         <NavDropdown.Item onClick={handleChangeThemeClick}>{`${formatMessage(messages.theme)} …`}</NavDropdown.Item>
         <NavDropdown.Divider />

@@ -1,8 +1,27 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ListGroup } from 'react-bootstrap';
 
 import Modal from '../../common/components/Modal';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
+
+const messages = defineMessages({
+  theme_modal_title: {
+    id: 'nav.accountmenu.theme_modal_title',
+    description: 'Change theme mode dialog title',
+    defaultMessage: 'Choose theme',
+  },
+  theme_mode_dark: {
+    id: 'theme.mode.dark',
+    description: 'Dark mode',
+    defaultMessage: 'Dark',
+  },
+  theme_mode_light: {
+    id: 'theme.mode.light',
+    description: 'Light mode',
+    defaultMessage: 'Light',
+  },
+});
 
 export interface IThemeDialogProps {
   show:  boolean;
@@ -15,27 +34,18 @@ export interface IThemeDialogProps {
 export const ThemeDialog: React.FC<IThemeDialogProps> = ({
     show, settings, onChangeTheme, onClose }: IThemeDialogProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    theme_modal_title: {
-      id: 'nav.accountmenu.theme_modal_title',
-      description: 'Change theme mode dialog title',
-      defaultMessage: 'Choose theme',
-    },
-  });
-
-  const handleCloseClick = () => { onClose(); };
 
   return (
     <Modal
         show = {show}
         title = {formatMessage(messages.theme_modal_title)}
-        onClose = {handleCloseClick}
+        onClose = {onClose}
         size = 'sm'
         noCloseButton>
       <ThemeDialogContent
           settings = {settings}
           onChangeTheme = {onChangeTheme}
-          onClose = {handleCloseClick} />
+          onClose = {onClose} />
     </Modal>
   );
 };
@@ -50,35 +60,20 @@ interface IThemeDialogContentProps {
 const ThemeDialogContent: React.FC<IThemeDialogContentProps> = ({
     settings, onChangeTheme, onClose }: IThemeDialogContentProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    theme_modal_title: {
-      id: 'nav.accountmenu.theme_modal_title',
-      description: 'Change theme mode dialog title',
-      defaultMessage: 'Choose theme',
-    },
-    theme_mode_dark: {
-      id: 'theme.mode.dark',
-      description: 'Dark mode',
-      defaultMessage: 'Dark',
-    },
-    theme_mode_light: {
-      id: 'theme.mode.light',
-      description: 'Light mode',
-      defaultMessage: 'Light',
-    },
-  });
 
-  const handleChangeTheme = (theme: ThemeMode) => {
-    onChangeTheme(theme);
+  const handleChangeTheme = useCallback((theme: ThemeMode) => {
+    if (settings.themeMode !== theme) {
+      onChangeTheme(theme);
+    }
     onClose();
-  };
+  }, [onChangeTheme, onClose, settings.themeMode]);
 
   const themeButtons = Object.values(ThemeMode).map(t => (
-    <ListGroup.Item key={t} action disabled={settings.themeMode === t} onClick={() => handleChangeTheme(t)}>{formatMessage(messages[`theme_mode_${t}`])}</ListGroup.Item>
+    <ListGroup.Item key={t} role='listitem' action active={settings.themeMode === t} aria-current={settings.themeMode === t} onClick={() => handleChangeTheme(t)}>{formatMessage(messages[`theme_mode_${t}`])}</ListGroup.Item>
   ));
 
   return (
-    <ListGroup>
+    <ListGroup as='ol' role='list'>
       {themeButtons}
     </ListGroup>
   );

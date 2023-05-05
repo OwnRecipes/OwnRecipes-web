@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import '../css/news.css';
 
 import LocalStorageHelper from '../../common/LocalStorageHelper';
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import NewsCarousel from './NewsList';
 import FeaturesOverview from './FeaturesOverview';
@@ -13,24 +13,25 @@ import ErrorBoundary from '../../common/components/ErrorBoundary';
 const SHOW_NEWS_STORAGE_KEY = 'show_news';
 
 const NewsOverview: React.FC = () => {
-  const accountState = useSelector((state: CombinedStore) => state.account);
+  const accountState = useSelector((state: RootState) => state.account);
   const user = accountState.item;
+  const userName = user?.username;
 
   const [showNews, setShowNews] = useState<boolean>(false);
 
   useEffect(() => {
-    setShowNews(LocalStorageHelper.getItem(SHOW_NEWS_STORAGE_KEY, user?.username) !== 'false');
-  }, [user?.username]);
+    setShowNews(LocalStorageHelper.getItem(SHOW_NEWS_STORAGE_KEY, userName) !== 'false');
+  }, [userName]);
 
-  const handleToggleNewsClick = () => {
+  const handleToggleNewsClick = useCallback(() => {
     if (showNews) {
-      LocalStorageHelper.setItem(SHOW_NEWS_STORAGE_KEY, 'false', user?.username);
+      LocalStorageHelper.setItem(SHOW_NEWS_STORAGE_KEY, 'false', userName);
       setShowNews(false);
     } else {
-      LocalStorageHelper.removeItem(SHOW_NEWS_STORAGE_KEY, user?.username);
+      LocalStorageHelper.removeItem(SHOW_NEWS_STORAGE_KEY, userName);
       setShowNews(true);
     }
-  };
+  }, [showNews, userName]);
 
   return (
     <ErrorBoundary verbose printStack>

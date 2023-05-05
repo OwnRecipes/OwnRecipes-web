@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import { Carousel } from 'react-bootstrap';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import * as NewsActions from '../store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 
@@ -13,17 +13,18 @@ import { PendingState } from '../../common/store/GenericReducerType';
 import Loading from '../../common/components/Loading';
 import { optionallyFormatMessage } from '../../common/utility';
 
+defineMessages({
+  news_placeholder_introduction: {
+    id: 'news.placeholder.introduction',
+    defaultMessage: 'OwnRecipes is an open source recipe management site. You can share recipes with friends, rate recipes, store your favorite recipes to find easily, and more.',
+  },
+});
+
 const NewsCarousel: React.FC = () => {
   const intl = useIntl();
-  defineMessages({
-    news_placeholder_introduction: {
-      id: 'news.placeholder.introduction',
-      defaultMessage: 'OwnRecipes is an open source recipe management site. You can share recipes with friends, rate recipes, store your favorite recipes to find easily, and more.',
-    },
-  });
 
   const dispatch = useDispatch();
-  const news = useSelector((state: CombinedStore) => state.news);
+  const news = useSelector((state: RootState) => state.news);
   const newsList = news.items;
 
   useEffect(() => {

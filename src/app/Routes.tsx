@@ -1,7 +1,7 @@
 import { ComponentType, lazy, Suspense } from 'react';
 import { Route, Routes as RouterRoutes, Navigate } from 'react-router-dom';
 
-import { CombinedStore } from './Store';
+import { RootState } from './Store';
 import { useSelector } from '../common/store/redux';
 import { AnyComponent } from '../types/Types';
 import { getEnvAsBoolean, getRoutePath, isDemoMode } from '../common/utility';
@@ -15,17 +15,18 @@ function lazyJsx<T extends ComponentType<any>>(
   return lazy(factory) as unknown as AnyComponent;
 }
 
-const NewsPage       = lazyJsx(() => import('../news/container/NewsPage'));
-const LoginPage      = lazyJsx(() => import('../account/containers/LoginPage'));
-const BrowsePage     = lazyJsx(() => import('../browse/containers/BrowsePage'));
-const RecipeFormPage = lazyJsx(() => import('../recipe_form/containers/RecipeFormPage'));
-const RecipePage     = lazyJsx(() => import('../recipe/containers/RecipePage'));
-// const ListPage    = lazyJsx(() => import('../../list/containers/ListPage'));
-// const MenuPage    = lazyJsx(() => import('../../menu/containers/MenuPage'));
-const NotFoundPage   = lazyJsx(() => import('./components/NotFoundPage'));
-const RandomPage     = lazyJsx(() => import('../random/containers/RandomPage'));
+const BrowsePage       = lazyJsx(() => import('../browse/containers/BrowsePage'));
+const NewsPage         = lazyJsx(() => import('../news/container/NewsPage'));
+const LoginPage        = lazyJsx(() => import('../account/containers/LoginPage'));
+const GroceryListPage  = lazyJsx(() => import('../groceryList/containers/GroceryListPage'));
+const GroceryListsPage = lazyJsx(() => import('../groceryList/containers/GroceryListsPage'));
+// const MenuPage      = lazyJsx(() => import('../../menu/containers/MenuPage'));
+const NotFoundPage     = lazyJsx(() => import('./components/NotFoundPage'));
+const RandomPage       = lazyJsx(() => import('../random/containers/RandomPage'));
+const RecipePage       = lazyJsx(() => import('../recipe/containers/RecipePage'));
+const RecipeFormPage   = lazyJsx(() => import('../recipe_form/containers/RecipeFormPage'));
 
-export type IRouteType = {
+export interface IRouteType {
   /** URL path. Should start with a slash. */
   path:      string;
   /** Container for this route. */
@@ -43,6 +44,14 @@ const PrivateRoutes: Array<IRouteType> = [
     component: BrowsePage,
   },
   {
+    path:      '/grocery-lists/:list',
+    component: GroceryListPage,
+  },
+  {
+    path:      '/grocery-lists',
+    component: GroceryListsPage,
+  },
+  {
     path:      '/random',
     component: RandomPage,
   },
@@ -56,14 +65,6 @@ const PrivateRoutes: Array<IRouteType> = [
     component: RecipePage,
   },
   /*
-  {
-    path:      '/list/:list',
-    component: List,
-  },
-  {
-    path:      '/list',
-    component: List,
-  },
   {
     path:      '/Menu',
     component: Menu,
@@ -129,7 +130,7 @@ function toPageComponent(cmp: AnyComponent): React.ReactNode {
 }
 
 const Routes: React.FC = () => {
-  const account = useSelector((state: CombinedStore) => state.account.item);
+  const account = useSelector((state: RootState) => state.account.item);
   const isAuthenticated = account != null && account.id !== 0;
   const role = account?.role;
 

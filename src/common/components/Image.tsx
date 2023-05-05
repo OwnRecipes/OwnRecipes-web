@@ -1,30 +1,27 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 
-export interface IImageProps {
+import { CommonProps } from '../types/OverridableComponent';
+
+export interface IImageProps extends CommonProps {
   src: string;
   placeholder?: string;
   alt?: string;
 
   onError?: () => void;
-
-  style?: React.CSSProperties;
-  className?: string;
 }
 
-const Image: React.FC<IImageProps> = ({
-    src, placeholder, alt, onError, style, className }: IImageProps) => {
+const Image = forwardRef<HTMLImageElement, IImageProps>(({
+    src, placeholder, alt, onError, ...rest }: IImageProps, ref) => {
   const [hasError, setError] = useState<boolean>(false);
 
   useEffect(() => {
     setError(false);
   }, [src]);
 
-  const handleError = () => {
+  const handleError = useCallback(() => {
     setError(true);
-    if (onError) {
-      onError();
-    }
-  };
+    onError?.();
+  }, [onError]);
 
   return (
     <img
@@ -32,9 +29,9 @@ const Image: React.FC<IImageProps> = ({
         alt = {alt}
         onError = {handleError}
 
-        style = {style}
-        className = {className} />
+        {...rest}
+        ref = {ref} />
   );
-};
+});
 
 export default Image;

@@ -6,10 +6,10 @@ import { useIntl } from 'react-intl';
 import { formatValidation, requiredValidator } from '../../store/Validation';
 import Checkbox,  { ICheckboxProps } from '../Input/Checkbox';
 
-export type IReCheckboxProps = {
+export interface IReCheckboxProps extends Omit<ICheckboxProps, 'value'> {
   format?: (value: any, name: string) => boolean;
   parse?:  (value: any, name: string) => any;
-} & Omit<ICheckboxProps, 'value'>;
+}
 
 const ReCheckbox = forwardRef<Checkbox, IReCheckboxProps>(({
     name, required, format, parse,
@@ -24,7 +24,7 @@ const ReCheckbox = forwardRef<Checkbox, IReCheckboxProps>(({
             required = {required}
 
             name     = {fprops.input.name}
-            value    = {fprops.input.value ?? false}
+            value    = {fprops.input.value}
             errors   = {formatValidation(intl, fprops.meta.error || (!fprops.meta.dirtySinceLastSubmit ? fprops.meta.submitError : undefined))}
             meta     = {fprops.meta}
             onChange = {(namee: string, value: boolean) => { fprops.input.onChange(value); onChange?.(namee, value); }}

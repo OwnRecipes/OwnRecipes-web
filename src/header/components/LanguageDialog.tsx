@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { ListGroup } from 'react-bootstrap';
 
@@ -12,30 +13,29 @@ export interface ILanguageDialogProps {
   onClose:  () => void;
 }
 
+const messages = defineMessages({
+  language_modal_title: {
+    id: 'nav.accountmenu.language_modal_title',
+    description: 'Change language dialog title',
+    defaultMessage: 'Choose language',
+  },
+});
+
 export const LanguageDialog: React.FC<ILanguageDialogProps> = ({
     show, settings, onChangeLanguage, onClose }: ILanguageDialogProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    language_modal_title: {
-      id: 'nav.accountmenu.language_modal_title',
-      description: 'Change language dialog title',
-      defaultMessage: 'Choose language',
-    },
-  });
-
-  const handleCloseClick = () => { onClose(); };
 
   return (
     <Modal
         show = {show}
         title = {formatMessage(messages.language_modal_title)}
-        onClose = {handleCloseClick}
+        onClose = {onClose}
         size = 'sm'
         noCloseButton>
       <LanguageDialogContent
           settings = {settings}
           onChangeLanguage = {onChangeLanguage}
-          onClose = {handleCloseClick} />
+          onClose = {onClose} />
     </Modal>
   );
 };
@@ -48,17 +48,19 @@ interface ILanguageDialogContentProps {
 
 const LanguageDialogContent: React.FC<ILanguageDialogContentProps> = ({
     settings, onChangeLanguage, onClose }: ILanguageDialogContentProps) => {
-  const handleChangeLanguage = (lang: LanguageCode) => {
-    onChangeLanguage(lang);
+  const handleChangeLanguage = useCallback((lang: LanguageCode) => {
+    if (settings.language !== lang) {
+      onChangeLanguage(lang);
+    }
     onClose();
-  };
+  }, [onChangeLanguage, onClose, settings.language]);
 
   const languageButtons = Object.values(LanguageCode).map(l => (
-    <ListGroup.Item key={l} action disabled={settings.language === l} onClick={() => handleChangeLanguage(l)}>{getMessagesFromLang(l)['1.display_name']}</ListGroup.Item>
+    <ListGroup.Item key={l} role='listitem' action active={settings.language === l} aria-current={settings.language === l} onClick={() => handleChangeLanguage(l)}>{getMessagesFromLang(l)['1.display_name']}</ListGroup.Item>
   ));
 
   return (
-    <ListGroup>
+    <ListGroup as='ol' role='list'>
       {languageButtons}
     </ListGroup>
   );

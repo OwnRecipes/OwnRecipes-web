@@ -1,4 +1,3 @@
-import React from 'react';
 import { useIntl } from 'react-intl';
 
 import '../css/news.css';
@@ -11,7 +10,7 @@ import NewsOverview from '../components/NewsOverview';
 
 const NewsPage: React.FC = () => {
   const intl = useIntl();
-  // const accountState = useSelector((state: CombinedStore) => state.account);
+  // const accountState = useSelector((state: RootState) => state.account);
   // const user = accountState.item;
 
   return (

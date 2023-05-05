@@ -10,7 +10,7 @@ import { Beforeunload } from 'react-beforeunload';
 
 import './css/404.css';
 
-import { CombinedStore } from './Store';
+import { RootState } from './Store';
 import * as AccountActions from '../account/store/actions';
 import { AccountState } from '../account/store/types';
 import { getEnvAsBoolean, getRoutePath } from '../common/utility';
@@ -42,8 +42,9 @@ interface IStateProps {
 }
 
 interface IAutoLoginState {
-  originUrl: string;
+  originUrl:    string;
   originSearch: string;
+  originHash:   string;
 }
 
 type IProps = IStateProps & IDispatchProps & IAutoLoginClassProps;
@@ -52,9 +53,12 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
   constructor(props: IProps) {
     super(props);
 
+    // console.log(`[AutoLogin::ctor] loc=${JSON.stringify(props.loc)}`);
+
     this.state = {
-      originUrl: props.loc.pathname,
+      originUrl:    props.loc.pathname,
       originSearch: props.loc.search,
+      originHash:   props.loc.hash,
     };
   }
 
@@ -78,7 +82,7 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
         // console.log(`[AutoLogin::componentDidUpdate] user is logged in, forward to home ("${path}")`);
         this.props.nav(path, { replace: true });
       } else if (this.props.loc.pathname !== originUrl) {
-        const path = `${originUrl}${this.state.originSearch}`;
+        const path = `${originUrl}${this.state.originSearch}${this.state.originHash}`;
         // console.log(`[AutoLogin::componentDidUpdate] user is logged in, forward to origin url ("${path}")`);
         this.props.nav(path, { replace: true });
       }
@@ -106,11 +110,11 @@ class AutoLoginClass extends Component<IProps, IAutoLoginState> {
   }
 }
 
-const mapStateToProps = (state: CombinedStore): IStateProps => ({
+const mapStateToProps = (state: RootState): IStateProps => ({
   account: state.account,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<CombinedStore, unknown, AnyAction>): IDispatchProps => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, unknown, AnyAction>): IDispatchProps => ({
   tryAutoLogin:  () => dispatch(AccountActions.tryAutoLogin()),
   forgetLogin:   () => dispatch(AccountActions.forgetLogin()),
 });

@@ -46,36 +46,35 @@ export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
     // event: React.ChangeEvent<HTMLInputElement>
     // NOTE: bootstrap will pass as event.target.value always "on".
     if (this.props.readOnly || this.props.disabled) return;
-    if (this.props.onChange) {
-      this.props.onChange(this.props.name, !this.props.value);
-    }
+    this.props.onChange?.(this.props.name, !this.props.value);
   };
 
   render() {
     // console.log(`[Checkbox] name=${this.props.name}`);
 
+    const { value, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
     return (
       <Form.Group
-          controlId = {this.props.name}
-          className = {this.getFormGroupClassNames()}>
+          {...this.getGroupProps()}
+          controlId = {name}
+          className = {this.getFormGroupClassNames()}
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
           {this.getHelpText()}
           {this.getErrorMessage()}
           <Form.Check
-              name  = {this.props.name}
-              checked = {this.props.value}
+              name  = {name}
+              checked = {value}
               label = {this.getLabel()}
-
-              required  = {this.props.required}
-              readOnly  = {this.props.readOnly}
-              autoComplete = {this.props.autoComplete}
-              autoFocus = {this.props.autoFocus}
-
+              className = 'form-check' // BUG: always set form-check
               onChange  = {this.handleChange}
-              onBlur    = {this.props.onBlur}
-              onFocus   = {this.props.onFocus}
+
+              {...rest}
               ref = {this.ref} />
         </ConditionalWrapper>
       </Form.Group>

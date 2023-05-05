@@ -1,26 +1,30 @@
+import { forwardRef } from 'react';
 import classNames from 'classnames';
 
 import '../css/width_height_ratio.css';
+import { CommonProps } from '../types/OverridableComponent';
 
-export interface IWidthHeightRatioProps {
+export interface IWidthHeightRatioProps extends CommonProps {
   height: number;
   width:  number;
-
-  className?: string;
   children: React.ReactNode;
 }
 
-const WidthHeightRatio: React.FC<IWidthHeightRatioProps> = ({
-  height, width, className, children }: IWidthHeightRatioProps) => (
+const WidthHeightRatio = forwardRef<HTMLDivElement, IWidthHeightRatioProps>(({
+  height, width, children,
+  className, style, ...rest }: IWidthHeightRatioProps, ref) => (
     <div
         style = {{
           paddingTop: `${height}%`,
           width:      `${width}%`,
           position:   'relative',
+          ...style,
         }}
-        className={classNames('width-height-ratio', className)}>
+        className={classNames('width-height-ratio', className)}
+        {...rest}
+        ref = {ref}>
       {children}
     </div>
-);
+));
 
 export default WidthHeightRatio;

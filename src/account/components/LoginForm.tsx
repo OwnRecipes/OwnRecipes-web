@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import { Form as ReduxForm, FormSpy } from 'react-final-form';
@@ -9,22 +9,21 @@ import Icon from '../../common/components/Icon';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+import { ValidationResult } from '../../common/store/Validation';
 import LoginAlert from './LoginAlert';
 
 export interface ILoginFormProps {
-  onSubmit: (username: string, password: string, remember: boolean) => void;
+  onSubmit: (username: string, password: string, remember: boolean) => Promise<ValidationResult>;
 }
 
-type LoginFormData = {
+interface LoginFormData {
   username: string;
   password: string;
   remember: boolean;
 }
 
 const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => {
-  const intl = useIntl();
-
-  const { formatMessage } = intl;
+  const { formatMessage } = useIntl();
   const messages = defineMessages({
     please_sign_in: {
       id: 'login.please_sign_in',
@@ -53,7 +52,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
     },
   });
 
-  const handleSubmit = (form: LoginFormData) => onSubmit(form.username, form.password, form.remember);
+  const handleSubmit = useCallback(async (form: LoginFormData) => onSubmit(form.username, form.password, form.remember), [onSubmit]);
 
   const initialValues = useMemo(() => ({ remember: true }), []);
 

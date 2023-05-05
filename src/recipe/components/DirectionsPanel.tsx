@@ -7,7 +7,21 @@ import { IngredientGroup } from '../store/RecipeTypes';
 import P from '../../common/components/P';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 import Loading from '../../common/components/Loading';
+import HeaderLink from '../../common/components/HeaderLink';
 import Directions from './Directions';
+
+const messages = defineMessages({
+  directions: {
+    id: 'recipe.directions',
+    description: 'Directions',
+    defaultMessage: 'Directions',
+  },
+  no_directions: {
+    id: 'recipe.directions.no_directions',
+    description: 'No directions provided message',
+    defaultMessage: '(This recipe has no directions.)',
+  },
+});
 
 export interface IDirectionsPanelProps {
   directions: string;
@@ -18,18 +32,6 @@ export interface IDirectionsPanelProps {
 const DirectionsPanel: React.FC<IDirectionsPanelProps> = ({
     directions: directionsString, recipeMeta, ingredients }: IDirectionsPanelProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    directions: {
-      id: 'recipe.directions',
-      description: 'Directions',
-      defaultMessage: 'Directions',
-    },
-    no_directions: {
-      id: 'recipe.directions.no_directions',
-      description: 'No directions provided message',
-      defaultMessage: '(This recipe has no directions.)',
-    },
-  });
 
   const pending = recipeMeta.pending;
   const hasNoData = pending === PendingState.COMPLETED
@@ -39,7 +41,10 @@ const DirectionsPanel: React.FC<IDirectionsPanelProps> = ({
 
   return (
     <article className={classNames('directions-panel', { 'multi-directions': isMultiDirections })}>
-      <h2>{formatMessage(messages.directions)}</h2>
+      <h2 id='directions-heading'>
+        {formatMessage(messages.directions)}
+        <HeaderLink linkFor='directions-heading' />
+      </h2>
       {pending === PendingState.LOADING && directionsString === '' && <Loading />}
       {hasNoData && (
         <P className='placeholder'>{formatMessage(messages.no_directions)}</P>

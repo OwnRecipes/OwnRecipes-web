@@ -1,12 +1,22 @@
-import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import { Button } from 'react-bootstrap';
 
-import { CombinedStore } from '../../app/Store';
+import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
+
+const messages = defineMessages({
+  news_hide: {
+    id: 'news.hide news button',
+    defaultMessage: 'Got it!',
+  },
+  news_show: {
+    id: 'news.show news button',
+    defaultMessage: 'Show news',
+  },
+});
 
 export interface IToggleNewsButtonProps {
   showNews: boolean;
@@ -15,19 +25,9 @@ export interface IToggleNewsButtonProps {
 
 const ToggleNewsButton: React.FC<IToggleNewsButtonProps> = ({ showNews, onClick }: IToggleNewsButtonProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    news_hide: {
-      id: 'news.hide news button',
-      defaultMessage: 'Got it!',
-    },
-    news_show: {
-      id: 'news.show news button',
-      defaultMessage: 'Show news',
-    },
-  });
 
-  const connection = useSelector((state: CombinedStore) => state.connection);
-  const news = useSelector((state: CombinedStore) => state.news);
+  const connection = useSelector((state: RootState) => state.connection);
+  const news = useSelector((state: RootState) => state.news);
   const newsList = news.items;
 
   if (!connection.hasConnection) {
@@ -42,7 +42,7 @@ const ToggleNewsButton: React.FC<IToggleNewsButtonProps> = ({ showNews, onClick 
         id = 'toggle-news-button'
         variant = 'outline-primary'
         onClick = {onClick}
-        className = {classNames({
+        className = {classNames('print-hidden', {
           show: !showNews,
           hide:  showNews,
         })}>

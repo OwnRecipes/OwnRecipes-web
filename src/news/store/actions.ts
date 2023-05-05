@@ -1,6 +1,6 @@
 import { handleError, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { NewsDispatch, NewsItemDto, NEWS_STORE, toNewsItem } from './types';
+import { NewsDispatch, NEWS_STORE, toNewsItem } from './types';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { toBasicAction } from '../../common/store/redux';
 
@@ -16,7 +16,7 @@ export const load = () => (dispatch: NewsDispatch) => {
           NEWS_STORE,
           ACTION.GET_SUCCESS
         ),
-        payload: res.body.results?.map((i: NewsItemDto) => toNewsItem(i)),
+        payload: res.body.results?.map(toNewsItem),
       });
     })
     .catch(err => dispatch(handleError(err, NEWS_STORE)));

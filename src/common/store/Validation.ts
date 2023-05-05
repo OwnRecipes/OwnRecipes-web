@@ -5,7 +5,7 @@ import { FORM_ERROR } from 'final-form';
 import { ResponseError } from '../CustomSuperagent';
 import { optionallyFormatMessage } from '../utility';
 
-export type ValidationErrorType = {
+export interface ValidationErrorType {
   code:         string;
   message:      string;
   sourceError?: Error;
@@ -14,6 +14,12 @@ export type ValidationErrorType = {
 export type ValidationError = ValidationErrorType | Array<ValidationErrorType>;
 
 export const INTERNAL_ERROR_KEY = '$$-internal-error-$$';
+
+export function createInternalHiddenValidationResult(code: string, message: string, sourceError?: Error): ValidationResult {
+  const result = createValidationResult();
+  result[`_${code}`] = { code: code, message: message ?? code, sourceError: sourceError };
+  return result;
+}
 
 export function toValidationErrors(error: ResponseError): ValidationResult | undefined {
   const toCode = (msg: string): string => {
@@ -78,7 +84,7 @@ export const isValidationResult = (obj: unknown): obj is ValidationResult => (ob
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ValueValidatorFunction = (value: any, data?: any) => ValidationErrorType | undefined;
 
-export type FieldValidatorType = {
+export interface FieldValidatorType {
   name: string;
   validators: Array<ValueValidatorFunction>;
 }

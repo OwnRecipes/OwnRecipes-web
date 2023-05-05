@@ -17,10 +17,10 @@ function createFilterWithNamedType(defaultState: any): Reducer<any, FilterAction
 }
 
 const filters: Reducer<FilterState, FilterAction> = combineReducers({
-  courses:  createFilterWithNamedType(defaultCourseState),
-  cuisines: createFilterWithNamedType(defaultCuisineState),
-  ratings:  createFilterWithNamedType(defaultRatingsState),
-  tags:     createFilterWithNamedType(defaultTagsState),
+  [BROWSE_FILTER_COURSE_STORE]:  createFilterWithNamedType(defaultCourseState),
+  [BROWSE_FILTER_CUISINE_STORE]: createFilterWithNamedType(defaultCuisineState),
+  [BROWSE_FILTER_RATING_STORE]:  createFilterWithNamedType(defaultRatingsState),
+  [BROWSE_FILTER_TAGS_STORE]:    createFilterWithNamedType(defaultTagsState),
 });
 
 export default filters;

@@ -1,10 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as _ from 'lodash-es';
 
+import Button from '../../common/components/Button';
 import Icon from '../../common/components/Icon';
 import Input from '../../common/components/Input/Input';
+import InputAdornment from '../../common/components/Input/InputAdornment';
+
+const messages = defineMessages({
+  search_title: {
+    id: 'searchbar.title',
+    description: 'Heading for the search page',
+    defaultMessage: 'Search',
+  },
+  input_placeholder: {
+    id: 'searchbar.placeholder',
+    description: 'SearchBar input placeholder',
+    defaultMessage: 'Enter a title, tag, or ingredient',
+  },
+  input_clear: {
+    id: 'input.clear',
+    description: 'Button to clear the input value (text)',
+    defaultMessage: 'Clear input',
+  },
+});
 
 export interface ISearchBarProps {
   value:  string;
@@ -16,16 +35,7 @@ interface IFormData {
 }
 
 const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarProps) => {
-  const intl = useIntl();
-
-  const { formatMessage } = intl;
-  const messages = defineMessages({
-    input_placeholder: {
-      id: 'searchbar.placeholder',
-      description: 'SearchBar input placeholder',
-      defaultMessage: 'Enter a title, tag, or ingredient',
-    },
-  });
+  const { formatMessage } = useIntl();
 
   const [formData, setFormData] = useState<IFormData>({ value: value ?? '' });
   const previousSearch = useRef<string>(value ?? '');
@@ -43,35 +53,40 @@ const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarPro
     }
   }, [formData]);
 
-  const handleChange = (attr: string, val: string) => {
+  const handleChange = useCallback((attr: string, val: string) => {
     setFormData(prev => {
       const newState = _.cloneDeep(prev);
       _.set(newState, attr, val);
       return newState;
     });
-  };
+  }, []);
 
-  const handleClearInput = () => {
+  const handleClearInput = useCallback(() => {
     setFormData({ value: '' });
-  };
+  }, []);
 
   const clearInput = (
-    <Button variant='secondary' className='search-clear' onClick={handleClearInput}>
-      <Icon icon='x' variant='light' size='2x' />
-    </Button>
+    <InputAdornment position='end'>
+      <Button id='clear_search_input' variant='secondary' className='search-clear' onClick={handleClearInput} aria-label={formatMessage(messages.input_clear)}>
+        <Icon icon='x' variant='light' size='2x' />
+      </Button>
+    </InputAdornment>
   );
 
   return (
-    <Input
-        name  = 'value'
-        value = {formData.value}
-        placeholder = {formatMessage(messages.input_placeholder)}
-        required
-        inputAdornmentStart = {<Icon icon='search' variant='light' />}
-        inputAdornmentEnd = {formData.value.length > 0 ? clearInput : undefined}
-        onChange = {handleChange}
-        debounceTimeout = {400}
-        className = 'search-bar' />
+    <>
+      <h1 className='sr-only'>{formatMessage(messages.search_title)}</h1>
+      <Input
+          name  = 'value'
+          value = {formData.value}
+          placeholder = {formatMessage(messages.input_placeholder)}
+          required
+          inputAdornmentStart = {<Icon icon='search' variant='light' />}
+          inputAdornmentEnd = {formData.value.length > 0 ? clearInput : undefined}
+          onChange = {handleChange}
+          debounceTimeout = {400}
+          className = 'search-bar' />
+    </>
   );
 };
 

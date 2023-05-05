@@ -1,6 +1,7 @@
-import { createRef } from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import { createRef, forwardRef } from 'react';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import classNames from 'classnames';
+import { defineMessages, useIntl } from 'react-intl';
 
 import '../../css/input.css';
 
@@ -9,17 +10,20 @@ import DebounceInput from './DebounceInput';
 import Tooltip from '../Tooltip';
 import ConditionalWrapper from '../ConditionalWrapper';
 import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
+import { CommonProps } from '../../types/OverridableComponent';
+import Icon from '../Icon';
+import InputAdornment from './InputAdornment';
+
+export const IS_SAVED_PASSWORD = '~$$~PASSWORD~$$~';
 
 export interface IInputProps extends IBaseInputComponentProps {
-  label?: string;
-
   placeholder?:  string;
-  autoComplete?: string;
 
   inputAdornmentStart?: React.ReactNode;
   inputAdornmentEnd?:   React.ReactNode;
 
   debounceTimeout?: number;
+  saveValue?: string;
 
   onChange?: (name: string, newValue: string) => void;
 }
@@ -27,9 +31,9 @@ export interface IInputProps extends IBaseInputComponentProps {
 export type ITextInputProps = {
   type?:  'text' | 'password';
   rows?:  number;
+  maxLength?: number;
 
   value?: string;
-  saveValue?: string;
 
   onChange?: (name: string, newValue: string) => void;
 } & IBaseInputComponentProps & IInputProps;
@@ -37,13 +41,7 @@ export type ITextInputProps = {
 export type INumberInputProps = {
   type?:  'number';
 
-  placeholder?:  string;
-  autoComplete?: string;
-
-  inputAdornmentStart?: React.ReactNode;
-
   value?: string | number;
-  saveValue?: string;
   min?:   number;
   max?:   number;
 
@@ -54,9 +52,24 @@ export type IAnyInputProps = ITextInputProps | INumberInputProps;
 export const isTextInput   = (inp: IAnyInputProps): inp is ITextInputProps => (inp as ITextInputProps).type == null || (inp as ITextInputProps).type === 'text' || (inp as ITextInputProps).type === 'password';
 export const isNumberInput = (inp: IAnyInputProps): inp is INumberInputProps => (inp as INumberInputProps).type === 'number';
 
-export default class Input extends BaseInputComponent<IAnyInputProps> {
+interface IInputState {
+  hasFocus: boolean;
+  showCapsWarning: boolean;
+  showPassword: boolean;
+}
+
+export default class Input extends BaseInputComponent<IAnyInputProps, IInputState> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
+
+  constructor(props: IAnyInputProps) {
+    super(props);
+    this.state = {
+      hasFocus: false,
+      showCapsWarning: false,
+      showPassword: false,
+    };
+  }
 
   focus(): boolean { // eslint-disable-line react/no-unused-class-component-methods
     if (this.ref != null && this.ref.current) {
@@ -108,8 +121,10 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
     }
   };
 
-  handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return;
+  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.defaultPrevented) return;
+    this.props.onKeyDown?.(event);
+    if (event.ctrlKey || event.shiftKey) return;
 
     const value = this.formatValue((event.target as HTMLInputElement).value, true);
     const type  = this.props.type ?? 'text';
@@ -152,97 +167,293 @@ export default class Input extends BaseInputComponent<IAnyInputProps> {
     }
   };
 
+  doHandleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
+    this.setState({
+      hasFocus: false,
+      showPassword: false,
+    });
+    this.props.onBlur?.(event);
+  };
+
   handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    if (this.props.onBlur) {
-      this.props.onBlur(event);
-    }
     if (!this.props.onChange || this.props.readOnly || this.props.disabled) return;
     const value = this.formatValue(event.target.value, true);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.props.onChange(this.props.name, value as any);
+
+    const { relatedTarget } = event;
+    const endAdornmentId = `${this.props.name}-endadornment`;
+    if (relatedTarget instanceof Element && relatedTarget?.id === endAdornmentId) {
+      return;
+    }
+
+    this.doHandleBlurInput(event);
+  };
+
+  handleBlurAdornment = (event: React.FocusEvent<HTMLButtonElement>) => {
+    const { relatedTarget } = event;
+    if (relatedTarget instanceof Element && relatedTarget?.id === this.props.name) {
+      return;
+    }
+
+    this.doHandleBlurInput(event as React.FocusEvent<HTMLInputElement>);
+  };
+
+  updateShowCapsWarning = (isCaps: boolean) => {
+    if (isCaps && !this.state.showCapsWarning) {
+      this.setState({
+        showCapsWarning: true,
+      });
+    } else if (!isCaps && this.state.showCapsWarning) {
+      this.setState({
+        showCapsWarning: false,
+      });
+    }
+  };
+
+  handleClick = (event: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>) => {
+    this.updateShowCapsWarning(event.getModifierState('CapsLock'));
+    if (this.props.type === 'password' && this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD) {
+      setTimeout(() => {
+        // TODO
+        // combinedRef.current?.select();
+      }, 0);
+    }
+  };
+
+  handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    this.updateShowCapsWarning(event.getModifierState('CapsLock'));
+  };
+
+  handleFocus = () => {
+    this.setState({
+      hasFocus: true,
+    });
+    if (this.props.type === 'password' && this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD) {
+      // TODO
+      // combinedRef.current?.select();
+    }
+  };
+
+  handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.defaultPrevented || event.ctrlKey || event.shiftKey) return;
+
+    if (this.props.type === 'password') {
+      if (this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD
+        && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'ArrowDown')) {
+          event.preventDefault();
+        }
+    }
+  };
+
+  handleToggleShowPassword = () => {
+    this.setState({
+      showPassword: !this.state.showPassword,
+    });
   };
 
   render() {
     // console.log(`[Input] name=${this.props.name}`);
 
-    const type = this.props.type ?? 'text';
-    const isDebounce = this.props.debounceTimeout != null && this.props.debounceTimeout > 0;
+    const { inputAdornmentStart, inputAdornmentEnd, debounceTimeout, value, saveValue, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        type = 'text',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        rows, maxLength,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        min, max,
+        name, style, tooltip,
+        label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    const isDebounce = type === 'text' && debounceTimeout != null && debounceTimeout > 0;
+
+    const currentLength = (value?.toString() ?? '').length;
+
+    const showPasswordReveal = type === 'password' && value != null && String(value).length > 0 && String(value) !== IS_SAVED_PASSWORD;
+    let endAdornmentJsx: React.ReactElement | undefined;
+    if (showPasswordReveal) {
+      endAdornmentJsx = <InputPasswordRevealAdornment showPassword={this.state.showPassword} onClick={this.handleToggleShowPassword} onBlur={this.handleBlurAdornment} />;
+    }
+
+    if (inputAdornmentEnd) {
+      endAdornmentJsx = (
+        <>
+          {endAdornmentJsx}
+          {inputAdornmentEnd}
+        </>
+      );
+    }
 
     return (
       <Form.Group
-          controlId = {this.props.name}
-          className = {this.getFormGroupClassNames()}>
+          {...this.getGroupProps()}
+          controlId = {name}
+          className = {this.getFormGroupClassNames()}
+          style     = {style}>
         <ConditionalWrapper
-            condition = {this.props.tooltip != null}
-            render    = {childr => <Tooltip id={`${this.props.name}-tooltip`} tooltip={this.props.tooltip}>{childr}</Tooltip>}>
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
           {this.getLabel()}
           {this.getHelpText()}
           {this.getErrorMessage()}
           <InputGroup>
-            {this.props.inputAdornmentStart && <InputGroup.Text className='input-adornment-start'>{this.props.inputAdornmentStart}</InputGroup.Text>}
+            {inputAdornmentStart && <InputGroup.Text className='input-adornment-start'>{inputAdornmentStart}</InputGroup.Text>}
             {isDebounce && (
               <DebounceInput
                   minLength = {2}
-                  debounceTimeout = {this.props.debounceTimeout}
+                  debounceTimeout = {debounceTimeout}
 
-                  name  = {this.props.name}
-                  element = {isTextInput(this.props) && type === 'text' && this.props.rows != null ? 'textarea' : undefined}
-                  value = {this.props.value ?? ''}
-                  rows  = {isTextInput(this.props) && type === 'text' ? this.props.rows : undefined}
-                  min   = {isNumberInput(this.props) ? this.props.min : undefined}
-                  max   = {isNumberInput(this.props) ? this.props.max : undefined}
+                  name  = {name}
+                  element = {isTextInput(this.props) && type === 'text' && rows != null ? 'textarea' : undefined}
+                  value = {value ?? ''}
+                  rows  = {isTextInput(this.props) && type === 'text' ? rows : undefined}
+                  min   = {isNumberInput(this.props) ? min : undefined}
+                  max   = {isNumberInput(this.props) ? max : undefined}
 
-                  required  = {this.props.required}
-                  readOnly  = {this.props.readOnly}
-                  autoComplete = {this.props.autoComplete}
-                  placeholder  = {this.props.placeholder}
-                  autoFocus = {this.props.autoFocus}
+                  {...rest}
 
-                  onChange  = {this.handleChange}
-                  onKeyDown = {this.handleKeyPress}
                   onBlur    = {this.handleBlur}
-                  onFocus   = {this.props.onFocus}
+                  onChange  = {this.handleChange}
+                  onClick   = {this.handleClick}
+                  onKeyDown = {this.handleKeyDown}
+                  onKeyUp   = {this.handleKeyUp}
 
                   className = {classNames('form-control', {
-                    'adorned-start': this.props.inputAdornmentStart,
-                    'adorned-end': this.props.inputAdornmentEnd,
+                    'adorned-start': inputAdornmentStart != null,
+                    'adorned-end':   inputAdornmentEnd != null,
                   })}
                   ref = {this.ref} />
             )}
             {!isDebounce && (
               <Form.Control
-                  name  = {this.props.name}
-                  type  = {type === 'number' ? 'text' : type}
-                  as    = {isTextInput(this.props) && type === 'text' && this.props.rows != null ? 'textarea' : undefined}
-                  value = {this.props.value ?? ''}
-                  rows  = {isTextInput(this.props) && type === 'text' ? this.props.rows : undefined}
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  min   = {isNumberInput(this.props) ? this.props.min : undefined}
-                  max   = {isNumberInput(this.props) ? this.props.max : undefined}
+                  name  = {name}
+                  type  = {type === 'number' || this.state.showPassword ? 'text' : type}
+                  as    = {isTextInput(this.props) && type === 'text' && rows != null ? 'textarea' : undefined}
+                  value = {value ?? ''}
+                  rows  = {isTextInput(this.props) && type === 'text' ? rows : undefined}
 
-                  required  = {this.props.required}
-                  readOnly  = {this.props.readOnly}
-                  autoComplete = {this.props.autoComplete}
-                  placeholder  = {this.props.placeholder}
-                  autoFocus = {this.props.autoFocus}
+                  {...rest}
 
                   className = {classNames({
-                    'adorned-start': this.props.inputAdornmentStart,
-                    'adorned-end': this.props.inputAdornmentEnd,
+                    'adorned-start': inputAdornmentStart != null,
+                    'adorned-end':   endAdornmentJsx != null,
+                    'with-password-reveal': showPasswordReveal,
                   })}
 
-                  onChange  = {this.handleChange}
-                  onKeyDown = {this.handleKeyPress}
                   onBlur    = {this.handleBlur}
-                  onFocus   = {this.props.onFocus}
+                  onChange  = {this.handleChange}
+                  onClick   = {this.handleClick}
+                  onKeyDown = {this.handleKeyDown}
+                  onKeyUp   = {this.handleKeyUp}
 
                   ref = {this.ref} />
               )}
-            {this.props.inputAdornmentEnd && <InputGroup.Text className='input-adornment-end'>{this.props.inputAdornmentEnd}</InputGroup.Text>}
+            {endAdornmentJsx}
           </InputGroup>
+          {type === 'password' && this.state.showCapsWarning && (
+            <InputCapslockWarning />
+          )}
+          {isTextInput(this.props) && maxLength && (
+            <InputLengthWarning length={currentLength} maxLength={maxLength} />
+          )}
         </ConditionalWrapper>
       </Form.Group>
     );
   }
 }
+
+interface IInputPasswordRevealAdornment extends CommonProps {
+  showPassword: boolean;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onBlur:  (event: React.FocusEvent<HTMLButtonElement>) => void;
+}
+
+const messages = defineMessages({
+  hidePassword: {
+    id: 'input.hide_password',
+    description: 'Button label to mask the password.',
+    defaultMessage: 'Hide the password',
+  },
+  revealPassword: {
+    id: 'input.reveal_password',
+    description: 'Button label to reveal the password.',
+    defaultMessage: 'Reveal the password',
+  },
+  capslockWarning: {
+    id: 'input.capslock_warning',
+    description: 'Warning when password input has focus and capslock is active.',
+    defaultMessage: 'Capslock is active.',
+  },
+  lengthWarning: {
+    id: 'input.length_warning',
+    description: 'Warning when text input with maxLength has only few remaining characters.',
+    defaultMessage: '{amount, plural, one {# character} other {# characters}} remaining.',
+  },
+  lengthExceeded: {
+    id: 'input.length_exceeded',
+    description: 'Error when text input with maxLength has too many characters.',
+    defaultMessage: 'Exceeded the character limit by {amount}.',
+  },
+});
+
+const InputPasswordRevealAdornment = forwardRef<HTMLDivElement, IInputPasswordRevealAdornment>(({
+    showPassword, onClick, onBlur,
+    className, ...rest }: IInputPasswordRevealAdornment, ref) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <InputAdornment position='end' inline {...rest} className={classNames('inline-adornment', className)} ref={ref}>
+      <Button
+          variant = 'text'
+          onClick = {onClick}
+          onBlur  = {onBlur}
+          aria-label = {showPassword ? formatMessage(messages.hidePassword) : formatMessage(messages.revealPassword)}>
+        <Icon icon={showPassword ? 'eye-slash' : 'eye'} variant='light' />
+      </Button>
+    </InputAdornment>
+  );
+});
+
+const InputCapslockWarning = forwardRef<HTMLDivElement, CommonProps>(({ ...rest }: CommonProps, ref) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <Form.Text
+        className = {classNames('post-text', 'help-text')}
+        {...rest}
+        ref = {ref}>
+      {formatMessage(messages.capslockWarning)}
+    </Form.Text>
+  );
+});
+
+interface IInputLengthWarning extends CommonProps {
+  length: number;
+  maxLength: number;
+}
+
+const InputLengthWarning = forwardRef<HTMLDivElement, IInputLengthWarning>(({
+    length, maxLength, ...rest }: IInputLengthWarning, ref) => {
+  const { formatMessage } = useIntl();
+
+  const showLengthWarning = maxLength && maxLength > 19 && length >= (maxLength - Math.max(Math.floor(maxLength * 0.1), 9));
+  const remainingChars = maxLength && maxLength > 0 ? (maxLength - length) : Number.POSITIVE_INFINITY;
+
+  if (!showLengthWarning) return null;
+
+  return (
+    <Form.Text
+        className = {classNames('post-text', {
+          'help-text': remainingChars >= 0,
+          'error-text': remainingChars < 0,
+        })}
+        {...rest}
+        ref = {ref}>
+      <>
+        {remainingChars >= 0 && formatMessage(messages.lengthWarning, { amount: remainingChars })}
+        {remainingChars < 0  && formatMessage(messages.lengthExceeded, { amount: remainingChars * -1 })}
+      </>
+    </Form.Text>
+  );
+});

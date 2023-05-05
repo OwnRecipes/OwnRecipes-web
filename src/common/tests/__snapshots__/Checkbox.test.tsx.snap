@@ -3,9 +3,10 @@
 exports[`Checkbox 1`] = `
 <div
   className="form-group some class"
+  data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
@@ -30,6 +31,7 @@ exports[`Checkbox 1`] = `
 exports[`Checkbox complex 1`] = `
 <div
   className="form-group some class error required"
+  data-api-field="cb"
 >
   <span
     className="tooltip-inline-block"
@@ -39,17 +41,17 @@ exports[`Checkbox complex 1`] = `
     onMouseOver={[Function]}
   >
     <small
-      className="help-text form-text"
+      className="pre-text help-text form-text"
     >
       some advice
     </small>
     <small
-      className="error-text form-text"
+      className="pre-text error-text form-text"
     >
       Oh no!
     </small>
     <div
-      className="form-check"
+      className="form-check form-check"
     >
       <input
         checked={true}
@@ -80,14 +82,15 @@ exports[`Checkbox complex 1`] = `
 exports[`Checkbox disabled 1`] = `
 <div
   className="form-group some class required"
+  data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
       className="form-check-input"
-      disabled={false}
+      disabled={true}
       id="cb"
       name="cb"
       onChange={[Function]}
@@ -108,14 +111,15 @@ exports[`Checkbox disabled 1`] = `
 exports[`Checkbox error 1`] = `
 <div
   className="form-group some class error required"
+  data-api-field="cb"
 >
   <small
-    className="error-text form-text"
+    className="pre-text error-text form-text"
   >
     Oh no!
   </small>
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
@@ -141,9 +145,10 @@ exports[`Checkbox error 1`] = `
 exports[`Checkbox readonly 1`] = `
 <div
   className="form-group some class readonly"
+  data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}
@@ -170,9 +175,10 @@ exports[`Checkbox readonly 1`] = `
 exports[`Checkbox required 1`] = `
 <div
   className="form-group some class required"
+  data-api-field="cb"
 >
   <div
-    className="form-check"
+    className="form-check form-check"
   >
     <input
       checked={true}

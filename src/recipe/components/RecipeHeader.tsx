@@ -1,8 +1,6 @@
-/* eslint-disable camelcase */
-import { Link } from 'react-router-dom';
-import { Button, Col, Row } from 'react-bootstrap';
+import { useCallback, useMemo, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import React, { useState } from 'react';
 
 import '../css/recipe_header.css';
 
@@ -15,143 +13,161 @@ import { Recipe } from '../store/RecipeTypes';
 import Modal from '../../common/components/Modal';
 import WidthHeightRatio from '../../common/components/WidthHeightRatio';
 import Image from '../../common/components/Image';
-import Tooltip from '../../common/components/Tooltip';
 import ImageViewer from '../../common/components/ImageViewer';
 import CookingModeButton from './CookingModeButton';
+import Button from '../../common/components/Button';
+import NavButton from '../../common/components/NavButton';
 
 export interface IRecipeHeaderProps {
   recipe:       Recipe | undefined;
-  showEditLink: boolean;
+  userIsAuthor: boolean;
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
   // onAddToMenuClick: () => void;
 }
 
+const messages = defineMessages({
+  edit_tooltip: {
+    id: 'recipe.edit_tooltip',
+    description: 'Tooltip displayed when hovering the edit recipe icon button',
+    defaultMessage: 'Edit this recipe',
+  },
+  delete_tooltip: {
+    id: 'recipe.delete_tooltip',
+    description: 'Tooltip displayed when hovering the delete recipe icon button',
+    defaultMessage: 'Delete this recipe',
+  },
+  print_tooltip: {
+    id: 'recipe.print_tooltip',
+    description: 'Tooltip displayed when hovering the print icon button',
+    defaultMessage: 'Print this recipe',
+  },
+  recipe_comments: {
+    id: 'recipe.comments',
+    description: 'Button to comments',
+    defaultMessage: 'Comments',
+  },
+  prep_time: {
+    id: 'recipe.prep_time',
+    description: 'Preparation time',
+    defaultMessage: 'Prep time',
+  },
+  cooking_time: {
+    id: 'recipe.cooking_time',
+    description: 'Cooking time',
+    defaultMessage: 'Cooking time',
+  },
+  minutes: {
+    id: 'recipe.minutes',
+    description: 'minutes',
+    defaultMessage: 'minutes',
+  },
+  source: {
+    id: 'recipe.source',
+    description: 'Source of the recipe',
+    defaultMessage: 'Source',
+  },
+  created_by: {
+    id: 'recipe.created_by',
+    description: 'Created by',
+    defaultMessage: 'Created by',
+  },
+  last_updated: {
+    id: 'recipe.last_updated',
+    description: 'Last Updated',
+    defaultMessage: 'Last Updated',
+  },
+  confirm_delete_title: {
+    id: 'recipe.confirm_delete_title',
+    description: 'Confirm deletion - dialog title',
+    defaultMessage: 'Confirm deletion',
+  },
+  confirm_delete_message: {
+    id: 'recipe.confirm_delete',
+    description: 'Are you sure you want to delete this recipe?',
+    defaultMessage: 'Are you sure you want to delete this recipe?',
+  },
+  confirm_delete_accept: {
+    id: 'recipe.confirm_delete_accept',
+    description: 'Confirm deletion - Accept button title',
+    defaultMessage: 'Delete',
+  },
+});
+
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, showEditLink, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+    recipe, userIsAuthor, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
-  const messages = defineMessages({
-    edit_tooltip: {
-      id: 'recipe.edit_tooltip',
-      description: 'Tooltip displayed when hovering the edit recipe icon button',
-      defaultMessage: 'Edit this recipe',
-    },
-    delete_tooltip: {
-      id: 'recipe.delete_tooltip',
-      description: 'Tooltip displayed when hovering the delete recipe icon button',
-      defaultMessage: 'Delete this recipe',
-    },
-    print_tooltip: {
-      id: 'recipe.print_tooltip',
-      description: 'Tooltip displayed when hovering the print icon button',
-      defaultMessage: 'Print this recipe',
-    },
-    recipe_comments: {
-      id: 'recipe.comments',
-      description: 'Button to comments',
-      defaultMessage: 'Comments',
-    },
-    prep_time: {
-      id: 'recipe.prep_time',
-      description: 'Preparation time',
-      defaultMessage: 'Prep time',
-    },
-    cooking_time: {
-      id: 'recipe.cooking_time',
-      description: 'Cooking time',
-      defaultMessage: 'Cooking time',
-    },
-    minutes: {
-      id: 'recipe.minutes',
-      description: 'minutes',
-      defaultMessage: 'minutes',
-    },
-    source: {
-      id: 'recipe.source',
-      description: 'Source of the recipe',
-      defaultMessage: 'Source',
-    },
-    created_by: {
-      id: 'recipe.created_by',
-      description: 'Created by',
-      defaultMessage: 'Created by',
-    },
-    last_updated: {
-      id: 'recipe.last_updated',
-      description: 'Last Updated',
-      defaultMessage: 'Last Updated',
-    },
-    confirm_delete_title: {
-      id: 'recipe.confirm_delete_title',
-      description: 'Confirm deletion - dialog title',
-      defaultMessage: 'Confirm deletion',
-    },
-    confirm_delete_message: {
-      id: 'recipe.confirm_delete',
-      description: 'Are you sure you want to delete this recipe?',
-      defaultMessage: 'Are you sure you want to delete this recipe?',
-    },
-    confirm_delete_accept: {
-      id: 'recipe.confirm_delete_accept',
-      description: 'Confirm deletion - Accept button title',
-      defaultMessage: 'Delete',
-    },
-  });
-
-  const handleEditClick    = () => { onEditRecipe(); };
+  const handleEditClick    = useCallback(() => { onEditRecipe(); }, [onEditRecipe]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
-  const handleDeleteClick  = () => { setShowDeleteConfirm(true); };
-  const handleDeleteAccept = () => { deleteRecipe(); };
-  const handleDeleteClose  = () => { setShowDeleteConfirm(false); };
+  const handleDeleteClick  = useCallback(() => { setShowDeleteConfirm(true); }, []);
+  const handleDeleteAccept = useCallback(() => { deleteRecipe(); }, [deleteRecipe]);
+  const handleDeleteClose  = useCallback(() => { setShowDeleteConfirm(false); }, []);
 
-  const editLink = showEditLink ? (
-    <Tooltip id='edit tooltip' tooltip={formatMessage(messages.edit_tooltip)}>
-      <Link to={getRoutePath(`/recipe/edit/${recipe?.slug}`)} onClick={handleEditClick}>
-        <Button variant='outline-primary' size='sm'>
-          <i className='bi bi-pencil-fill' />
-        </Button>
-      </Link>
-    </Tooltip>
+  const editLink = userIsAuthor ? (
+    <NavButton
+        id='edit-recipe-button'
+        variant = 'outline-primary'
+        tooltip={formatMessage(messages.edit_tooltip)}
+        to={getRoutePath(`/recipe/edit/${recipe?.slug}`)}
+        onClick={handleEditClick}
+        size='sm'>
+      <Icon icon='pencil' />
+    </NavButton>
   ) : null;
 
-  const deleteLink = showEditLink ? (
-    <Tooltip id='trash tooltip' tooltip={formatMessage(messages.delete_tooltip)}>
-      <Button variant='outline-danger' size='sm' onClick={handleDeleteClick}>
-        <Icon icon='trash' />
-      </Button>
-    </Tooltip>
+  const deleteLink = userIsAuthor ? (
+    <Button id='trash-recipe-button' variant='outline-danger' size='sm' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
+      <Icon icon='trash' />
+    </Button>
   ) : null;
 
-  let hostname = '';
-  if (recipe?.source && recipe.source.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g)) {
-    // Get Host name of a URL
-    const a = document.createElement('a');
-    a.href = recipe.source;
-    hostname = a.hostname;
-  }
+  const source = useMemo(() => {
+    if (recipe?.source) {
+      let hostname = '';
+      if (recipe?.source && recipe.source.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g)) {
+        // Get Host name of a URL
+        const a = document.createElement('a');
+        a.href = recipe.source;
+        hostname = a.hostname;
+      }
+
+      return (
+        <div>
+          {`${formatMessage(messages.source)}: `}
+          {hostname.length > 0 && (
+            <>
+              <a href={recipe.source} target='_blank' rel='noreferrer' className='print-hidden'>{hostname}</a>
+              <a href={recipe.source} target='_blank' rel='noreferrer' className='print-only'>{recipe.source}</a>
+            </>
+          )}
+          {hostname.length === 0 && recipe.source}
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }, [recipe?.source]);
 
   const printButton = (
-    <Tooltip id='print tooltip' tooltip={formatMessage(messages.print_tooltip)}>
-      <Button variant='outline-primary' aria-label='Print receipt' onClick={window.print}>
-        <Icon icon='printer' />
-      </Button>
-    </Tooltip>
+    <Button id='print-recipe-button' variant='outline-primary' onClick={window.print} tooltip={formatMessage(messages.print_tooltip)}>
+      <Icon icon='printer' />
+    </Button>
   );
 
   const optionButtons = (
     <div className='options print-hidden'>
       <div className='options-wrapper'>
-        {showEditLink && (
+        {userIsAuthor && (
           <>
             {editLink}
             {deleteLink}
           </>
         )}
         {/*
-          <Button variant='outline-primary' aria-label='Add receipt to menu' onClick={onAddToMenuClick}>
+          <Button variant='outline-primary' tooltip='Add receipt to menu' onClick={onAddToMenuClick}>
             <Icon icon='calendar' />
           </Button>
         */}
@@ -254,13 +270,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             <P>{recipe?.info}</P>
             <Ratings stars={recipe?.rating ?? 0} />
             {chips}
-            {recipe?.source && (
-              <div>
-                {`${formatMessage(messages.source)}: `}
-                {hostname.length > 0 && <a href={recipe.source} target='_blank' rel='noreferrer'>{hostname}</a>}
-                {hostname.length === 0 && recipe.source}
-              </div>
-            )}
+            {source}
           </Col>
         </Row>
       </article>

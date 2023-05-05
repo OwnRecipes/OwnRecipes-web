@@ -5,13 +5,13 @@ import '../css/theme.css';
 import { ThemeMode } from '../../account/store/settings/types';
 import * as SettingsActions from '../../account/store/settings/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
-import { CombinedStore } from '../Store';
+import { RootState } from '../Store';
 
 const ThemeProvider: React.FC = () => {
   const dispatch = useDispatch();
 
-  const token    = useSelector((state: CombinedStore) => state.account.item);
-  const settings = useSelector((state: CombinedStore) => state.settings);
+  const token    = useSelector((state: RootState) => state.account.item);
+  const settings = useSelector((state: RootState) => state.settings);
   const tokenId = token?.username;
 
   const [theme, setTheme] = useState<ThemeMode>();

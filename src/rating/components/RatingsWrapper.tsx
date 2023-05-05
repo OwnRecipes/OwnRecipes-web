@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Card } from 'react-bootstrap';
 
 import '../css/recipe-rating-wrapper.css';
@@ -9,6 +9,7 @@ import { Rating, RatingCreate } from '../store/types';
 import RatingComments from './RatingComments';
 import NewRating from './NewRating';
 import RatingsHeader from './RatingsHeader';
+import { ValidationResult } from '../../common/store/Validation';
 
 export interface IRatingsWrapperProps {
   recipeSlug: string;
@@ -17,16 +18,16 @@ export interface IRatingsWrapperProps {
   userRole:   UserRole | undefined;
   pending:    PendingState;
 
-  addRating: (recipeSlug: string, rating: RatingCreate) => void;
+  addRating: (recipeSlug: string, rating: RatingCreate) => Promise<ValidationResult>;
   removeRating: (recipeSlug: string, ratingId: number) => void;
 }
 
 const RatingsWrapper: React.FC<IRatingsWrapperProps> = ({ recipeSlug, ratings, userId, userRole, pending, addRating, removeRating }: IRatingsWrapperProps) => {
   const [showNewRating, setShowNewRating] = useState<boolean>(false);
 
-  const handleAddRatingSuccess = () => {
+  const handleAddRatingSuccess = useCallback(() => {
     setShowNewRating(false);
-  };
+  }, []);
 
   return (
     <Card className='rating-panel' as='article'>

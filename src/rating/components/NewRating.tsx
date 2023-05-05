@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import { Field, Form as ReduxForm, FormSpy } from 'react-final-form';
@@ -6,7 +6,7 @@ import { Field, Form as ReduxForm, FormSpy } from 'react-final-form';
 import { RatingCreate } from '../store/types';
 import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
 import ReInput from '../../common/components/ReduxForm/ReInput';
-import { requiredValidator } from '../../common/store/Validation';
+import { requiredValidator, ValidationResult } from '../../common/store/Validation';
 import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
 import Ratings from './Ratings';
 
@@ -15,7 +15,7 @@ export interface INewRatingProps {
   recipeSlug: string;
   userId: number;
 
-  addRating: (recipeSlug: string, rating: RatingCreate) => void;
+  addRating: (recipeSlug: string, rating: RatingCreate) => Promise<ValidationResult>;
   onAddRatingSuccess: () => void;
 }
 
@@ -61,68 +61,66 @@ const NewRating: React.FC<INewRatingProps> = ({ show, recipeSlug, userId, addRat
 
   const [initialValues] = useState<Partial<IFormDataProps>>({ rating: 0, comment: '' });
 
-  const handleSubmit = async (form: IFormDataProps) => {
+  const handleSubmit = useCallback(async (form: IFormDataProps) => {
     const newRating: RatingCreate = {
       rating:     form.rating,
       comment:    form.comment,
       userId:     userId,
     };
     return addRating(recipeSlug, newRating);
-  };
+  }, [recipeSlug, userId, addRating]);
 
   if (!show) return null;
 
   return (
-    <>
-      <ReduxForm
-          initialValues = {initialValues}
-          onSubmit = {handleSubmit}
-          subscription = {{}}
-          render = {({ form, handleSubmit: renderSubmit }) => (
-            <Form onSubmit={renderSubmit} className='new-rating'>
-              <ReFormStatus onSubmitSuccess={onAddRatingSuccess} />
+    <ReduxForm
+        initialValues = {initialValues}
+        onSubmit = {handleSubmit}
+        subscription = {{}}
+        render = {({ form, handleSubmit: renderSubmit }) => (
+          <Form onSubmit={renderSubmit} className='new-rating'>
+            <ReFormStatus onSubmitSuccess={onAddRatingSuccess} />
 
-              <InitialValuesResetter form={form} initialValues={initialValues} />
-              <fieldset>
-                <legend className='new-rating-heading'>{formatMessage(messages.new_rating_title)}</legend>
-                <Row>
-                  <Col className='form-group required'>
-                    <div className='form-label'>{formatMessage(messages.rating_label)}</div>
-                    <Field name='rating' validate={requiredValidator} validateFields={[]}>
-                      {fprops => (
-                        <Ratings
-                            stars = {fprops.input.value}
-                            onChange = {(value: number) => { fprops.input.onChange(value); }} />
-                      )}
-                    </Field>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <ReInput
-                        name   = 'comment'
-                        rows   = {4}
-                        label  = {formatMessage(messages.rating_comment_label)}
-                        placeholder = {formatMessage(messages.rating_comment_placeholder)}
-                        required />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col xs={12}>
-                    <FormSpy subscription={{ values: true, submitting: true }}>
-                      {({ values, submitting }) => (
-                        <Button type='submit' variant='primary' disabled={!values.rating || !values.comment || submitting}>
-                          {formatMessage(messages.submit)}
-                        </Button>
-                      )}
-                    </FormSpy>
-                  </Col>
-                </Row>
-              </fieldset>
-            </Form>
-          )} />
-      <hr />
-    </>
+            <InitialValuesResetter form={form} initialValues={initialValues} />
+            <fieldset>
+              <legend className='new-rating-heading'>{formatMessage(messages.new_rating_title)}</legend>
+              <Row>
+                <Col className='form-group required'>
+                  <div className='form-label'>{formatMessage(messages.rating_label)}</div>
+                  <Field name='rating' validate={requiredValidator} validateFields={[]}>
+                    {fprops => (
+                      <Ratings
+                          stars = {fprops.input.value}
+                          onChange = {(value: number) => { fprops.input.onChange(value); }} />
+                    )}
+                  </Field>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <ReInput
+                      name   = 'comment'
+                      rows   = {4}
+                      label  = {formatMessage(messages.rating_comment_label)}
+                      placeholder = {formatMessage(messages.rating_comment_placeholder)}
+                      maxLength = {1000}
+                      required />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} className='toolbar'>
+                  <FormSpy subscription={{ values: true, submitting: true }}>
+                    {({ values, submitting }) => (
+                      <Button type='submit' variant='primary' disabled={!values.rating || !values.comment || submitting}>
+                        {formatMessage(messages.submit)}
+                      </Button>
+                    )}
+                  </FormSpy>
+                </Col>
+              </Row>
+            </fieldset>
+          </Form>
+        )} />
   );
 };
 

@@ -1,0 +1,61 @@
+main[class*="grocery-lists/"] .grocery-list-item-margin {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+@media print {
+  main[class*="grocery-lists/"] .grocery-list-item-margin {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+main[class*="grocery-lists/"] .toggle-all {
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--inputBorder);
+}
+
+.grocery-list-items {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+main[class*="grocery-lists/"] .grocery-list-flex-container {
+  display: flex;
+}
+main[class*="grocery-lists/"] .dummy-checkbox.visibility-hidden {
+  position: initial;
+}
+main[class*="grocery-lists/"] .grocery-list-flex-container .new-item-input {
+  height: 2.5em;
+  line-height: 2.5em;
+}
+main[class*="grocery-lists/"] .grocery-list-flex-container button {
+  height: 2.5em;
+  line-height: 2.5em;
+}
+
+.grocery-list-items .grocery-list-item {
+  align-items: center;
+}
+
+.grocery-list-items .grocery-list-item .grocery-list-item-cb {
+  flex: 1;
+}
+.grocery-list-items .options-dropdown > button {
+  margin-left: 0.25em;
+}
+.grocery-list-items .options-dropdown > button::after {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .grocery-list-items .grocery-list-item .grocery-list-item-cb {
+    flex: initial;
+  }
+  .grocery-list-items .options-dropdown > button {
+    visibility: hidden;
+  }
+  .grocery-list-items .grocery-list-item:hover .options-dropdown > button {
+    visibility: visible;
+  }
+}
