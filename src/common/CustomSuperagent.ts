@@ -42,10 +42,10 @@ export const refreshToken = (() => {
     superRequest
       .post(serverURLs.refresh_token)
       .set('Accept', 'application/json')
-      .send({ token: token })
+      .send({ refresh: token })
       .then(res => {
         blocking = false;
-        const data: LoginDto = res.body;
+        const data: LoginDto = { ...res.body };
         store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data, remember) } as AccountAction);
       })
       .catch(() => {
@@ -82,13 +82,13 @@ export const request = (): SuperAgentStatic => {
         // If the token is undefined.
         // Log the user out and direct them to the login page.
         store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
-      } else if (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp)) {
+      } else if (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp) && account.refresh) {
         // If it is then call for a refreshed token.
         // If the token is to old, the request will fail and
         // the user will be logged-out and redirect to the login screen.
-        refreshToken.instance(account.token, account.remember);
+        refreshToken.instance(account.refresh, account.remember);
       }
-      customRequest.set('Authorization', `JWT ${account.token}`);
+      customRequest.set('Authorization', `Bearer ${account.token}`);
     }
   }
 

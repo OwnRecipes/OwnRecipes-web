@@ -12,6 +12,7 @@ interface IRecipeSchemeProps {
   recipe:       Recipe | undefined;
   recipeMeta:   ReducerMeta;
   userId:       number | undefined;
+  editable:     boolean;
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
@@ -20,11 +21,11 @@ interface IRecipeSchemeProps {
   // onAddToMenuClick: () => void;
 }
 
-const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId, onEditRecipe, deleteRecipe }: IRecipeSchemeProps) => (
+const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId, editable, onEditRecipe, deleteRecipe }: IRecipeSchemeProps) => (
   <div className='recipe-details'>
     <RecipeHeader
         recipe = {recipe}
-        userIsAuthor = {userId != null && userId === recipe?.author}
+        editable = {editable}
         onEditRecipe = {onEditRecipe}
         // onAddToMenuClick={props.onAddToMenuClick}
         deleteRecipe = {deleteRecipe} />

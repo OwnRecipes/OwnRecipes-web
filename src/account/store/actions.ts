@@ -30,7 +30,7 @@ export const tryAutoLogin = () => (dispatch: AccountDispatch) => {
   }
 
   const user: UserAccount = JSON.parse(storageItem);
-  if (!user.remember) {
+  if (!user.remember || !user.refresh) {
     dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.FORGET_LOGIN) });
     return;
   }
@@ -40,7 +40,7 @@ export const tryAutoLogin = () => (dispatch: AccountDispatch) => {
 
   if (user.token != null && decodedToken != null) {
     if (decodedToken.exp != null && (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp))) {
-      refreshToken.instance(user.token, user.remember);
+      refreshToken.instance(user.refresh, user.remember);
     } else {
       dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: user });
     }

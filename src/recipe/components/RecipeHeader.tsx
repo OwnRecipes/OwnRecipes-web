@@ -19,8 +19,8 @@ import Button from '../../common/components/Button';
 import NavButton from '../../common/components/NavButton';
 
 export interface IRecipeHeaderProps {
-  recipe:       Recipe | undefined;
-  userIsAuthor: boolean;
+  recipe:   Recipe | undefined;
+  editable: boolean;
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
@@ -96,7 +96,7 @@ const messages = defineMessages({
 });
 
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, userIsAuthor, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+    recipe, editable, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -106,7 +106,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   const handleDeleteAccept = useCallback(() => { deleteRecipe(); }, [deleteRecipe]);
   const handleDeleteClose  = useCallback(() => { setShowDeleteConfirm(false); }, []);
 
-  const editLink = userIsAuthor ? (
+  const editLink = editable ? (
     <NavButton
         id='edit-recipe-button'
         variant = 'outline-primary'
@@ -118,7 +118,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     </NavButton>
   ) : null;
 
-  const deleteLink = userIsAuthor ? (
+  const deleteLink = editable ? (
     <Button id='trash-recipe-button' variant='outline-danger' size='sm' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
       <Icon icon='trash' />
     </Button>
@@ -160,7 +160,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   const optionButtons = (
     <div className='options print-hidden'>
       <div className='options-wrapper'>
-        {userIsAuthor && (
+        {editable && (
           <>
             {editLink}
             {deleteLink}

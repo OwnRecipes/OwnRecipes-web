@@ -27,7 +27,6 @@ export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: Rat
       recipe:  recipeSlug,
       rating:  rating.rating,
       comment: rating.comment,
-      author:  rating.userId,
     })
     .then(res => {
       dispatch({
