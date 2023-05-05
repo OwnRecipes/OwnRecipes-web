@@ -1,7 +1,21 @@
 import { useMemo } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Pagination as BootstraPagination } from 'react-bootstrap';
 
 import { PaginationLink } from '../../common/components/Pagination';
+
+const messages = defineMessages({
+  pagination_previous: {
+    id: 'pagination.previous',
+    description: 'Button to previous pagination page',
+    defaultMessage: 'Previous',
+  },
+  pagination_next: {
+    id: 'pagination.next',
+    description: 'Button to next pagination page',
+    defaultMessage: 'Next',
+  },
+});
 
 export interface IPaginationProps {
   offset:   number;
@@ -156,6 +170,8 @@ const PaginationNumbersList: React.FC<IPaginationNumbersListProps> = ({ offset, 
 };
 
 const Pagination: React.FC<IPaginationProps> = ({ offset, limit, count, buildUrl }: IPaginationProps) => {
+  const { formatMessage } = useIntl();
+
   const next = offset + limit;
   const previous = offset - limit;
 
@@ -164,9 +180,9 @@ const Pagination: React.FC<IPaginationProps> = ({ offset, limit, count, buildUrl
   return (
     <nav>
       <BootstraPagination>
-        <PaginationLink title='←' offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} />
+        <PaginationLink title='←' offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} aria-label={formatMessage(messages.pagination_previous)} />
         <PaginationNumbersList    offset={offset}   limit={limit}  buildUrl={buildUrl} count={count} />
-        <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} />
+        <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} aria-label={formatMessage(messages.pagination_previous)} />
       </BootstraPagination>
     </nav>
   );

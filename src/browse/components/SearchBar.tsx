@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import * as _ from 'lodash-es';
 
+import Button from '../../common/components/Button';
 import Icon from '../../common/components/Icon';
 import Input from '../../common/components/Input/Input';
 import InputAdornment from '../../common/components/Input/InputAdornment';
@@ -17,6 +17,11 @@ const messages = defineMessages({
     id: 'searchbar.placeholder',
     description: 'SearchBar input placeholder',
     defaultMessage: 'Enter a title, tag, or ingredient',
+  },
+  input_clear: {
+    id: 'input.clear',
+    description: 'Button to clear the input value (text)',
+    defaultMessage: 'Clear input',
   },
 });
 
@@ -62,7 +67,7 @@ const SearchBar: React.FC<ISearchBarProps> = ({ value, doSearch }: ISearchBarPro
 
   const clearInput = (
     <InputAdornment position='end'>
-      <Button variant='secondary' className='search-clear' onClick={handleClearInput}>
+      <Button id='clear_search_input' variant='secondary' className='search-clear' onClick={handleClearInput} aria-label={formatMessage(messages.input_clear)}>
         <Icon icon='x' variant='light' size='2x' />
       </Button>
     </InputAdornment>
