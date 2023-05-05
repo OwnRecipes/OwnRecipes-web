@@ -44,6 +44,7 @@
   "cuisine.Thai": "Thai",
   "cuisine.Vietnamese": "Vietnamesisch",
   "demo.alert.title": "DEMO MODUS: Manche Funktionen sind nur eingeschränkt verfügbar.",
+  "filter.active": "ausgewählt",
   "filter.filter_course": "Gänge",
   "filter.filter_cuisine": "Küchen",
   "filter.filter_ordering": "Sortieren nach",

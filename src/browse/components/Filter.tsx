@@ -1,13 +1,21 @@
 import { useMemo } from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import { useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { Accordion } from 'react-bootstrap';
 
 import Icon from '../../common/components/Icon';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
 import ConditionalWrapper from '../../common/components/ConditionalWrapper';
+
+const messages = defineMessages({
+  filter_active: {
+    id: 'filter.active',
+    description: 'Hint for ScreenReader that the filter is active',
+    defaultMessage: 'active',
+  },
+});
 
 export interface RecipeFilter {
   id:      number;
@@ -37,6 +45,7 @@ interface EnhancedFilterData extends RecipeFilter {
 
 const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect, cssClass, buildUrl, sort }: IFilterProps) => {
   const intl = useIntl();
+  const { formatMessage } = intl;
 
   const dataFormatted: Array<EnhancedFilterData> = useMemo(() => {
     let res = (data
@@ -77,7 +86,8 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
           <Link to={buildUrl(qsTitle, item.slug, multiSelect)} className={classNames('list-group-item list-group-item-action', { active: item.active })}>
             <span className='name'>{item.label}</span>
             <span className='count'>{`(${item.total})`}</span>
-            {item.active && <Icon icon='x-square' variant='light' />}
+            {item.active && <Icon icon='x-square' variant='light' aria-hidden='true' />}
+            <span className='sr-only'>{formatMessage(messages.filter_active)}</span>
           </Link>
         </ConditionalWrapper>
       </li>

@@ -44,6 +44,7 @@
   "cuisine.Thai": "Thai",
   "cuisine.Vietnamese": "Vietnamese",
   "demo.alert.title": "DEMO NOTICE: Everything is Read-Only!",
+  "filter.active": "active",
   "filter.filter_course": "Courses",
   "filter.filter_cuisine": "Cuisines",
   "filter.filter_ordering": "Ordering",

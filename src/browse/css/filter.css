@@ -156,6 +156,12 @@ html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-ti
   }
 }
 
+@media screen and (min-width: 1200px) {
+  .container.browser .sidebar .filter-group .list-group-item {
+    font-size: 0.92rem;
+  }
+}
+
 .container.browser .results-panel .rating-stars {
   font-size: 0.875rem;
 }

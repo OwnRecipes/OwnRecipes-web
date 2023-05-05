@@ -9,7 +9,6 @@ import '../css/filter.css';
 import Filter from './Filter';
 import Icon from '../../common/components/Icon';
 import { CategoryCount, RatingCount } from '../store/FilterTypes';
-import Tooltip from '../../common/components/Tooltip';
 
 const messages = defineMessages({
   reset: {
@@ -142,11 +141,9 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
       <Card.Header className='hidden-xs filter-title'>
         <h2>{formatMessage(messages.filters)}</h2>
         {hasActiveFilter && (
-          <Tooltip id='clear-tooltip' tooltip={formatMessage(messages.reset_filters)} placement='bottom'>
-            <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl}>
-              <Icon icon='arrow-counterclockwise' variant='light' />
-            </Link>
-          </Tooltip>
+          <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl} aria-label={formatMessage(messages.reset_filters)}>
+            <Icon icon='arrow-counterclockwise' variant='light' />
+          </Link>
         )}
       </Card.Header>
       <Card.Text as='div' className={classNames('sidebar', { 'hidden-xs': !showMenu })}>

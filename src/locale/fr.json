@@ -44,6 +44,7 @@
   "cuisine.Thai": "Thai",
   "cuisine.Vietnamese": "Vietnamien",
   "demo.alert.title": "MODE DEMO: Certaines fonctions sont limitées.",
+  "filter.active": "actif",
   "filter.filter_course": "Plats",
   "filter.filter_cuisine": "Cuisines",
   "filter.filter_ordering": "Trier par",
