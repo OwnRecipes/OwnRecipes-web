@@ -95,6 +95,8 @@ const messages = defineMessages({
   },
 });
 
+const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
+    recipe, userIsAuthor, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
