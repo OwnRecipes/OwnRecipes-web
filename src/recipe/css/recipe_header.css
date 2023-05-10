@@ -33,11 +33,21 @@
     padding: 0.25em 0.25em 0.25em 0;
     border-top-left-radius: 0.25em;
   }
-  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .options-wrapper {
-    background-color: rgba(0, 0, 35, 0.5);
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .options-wrapper,
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .options-wrapper .btn {
+    background-color: rgba(0, 0, 15, 0.55);
   }
-  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .options-wrapper {
-    background-color: rgba(255, 255, 255, 0.5);
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .options-wrapper .btn:hover,
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .options-wrapper .btn:focus {
+    background-color: var(--midground) !important;
+  }
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .options-wrapper,
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .options-wrapper .btn {
+    background-color: rgba(255, 255, 255, 0.55);
+  }
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .options-wrapper .btn:hover,
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .options-wrapper .btn:focus {
+    background-color: #fff !important;
   }
 }
 
