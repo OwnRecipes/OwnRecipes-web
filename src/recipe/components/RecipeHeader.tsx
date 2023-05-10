@@ -4,19 +4,20 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/recipe_header.css';
 
+import { Recipe } from '../store/RecipeTypes';
 import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 import Chip from '../../common/components/Chip';
 import Ratings from '../../rating/components/Ratings';
 import P from '../../common/components/P';
-import { Recipe } from '../store/RecipeTypes';
 import Modal from '../../common/components/Modal';
 import WidthHeightRatio from '../../common/components/WidthHeightRatio';
 import Image from '../../common/components/Image';
 import ImageViewer from '../../common/components/ImageViewer';
-import CookingModeButton from './CookingModeButton';
 import Button from '../../common/components/Button';
 import NavButton from '../../common/components/NavButton';
+import { Toolbar } from '../../common/components/Toolbar';
+import CookingModeButton from './CookingModeButton';
 
 export interface IRecipeHeaderProps {
   recipe:   Recipe | undefined;
@@ -159,7 +160,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
 
   const optionButtons = (
     <div className='options print-hidden'>
-      <div className='options-wrapper'>
+      <Toolbar position='end'>
         {editable && (
           <>
             {editLink}
@@ -173,7 +174,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
         */}
         <CookingModeButton />
         {printButton}
-      </div>
+      </Toolbar>
     </div>
   );
 

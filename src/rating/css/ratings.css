@@ -24,12 +24,18 @@
   }
 }
 
+.rating-panel .card-body .rating-comment {
+  position: relative;
+}
+
 .rating-panel .card-body .rating-comment:not(:first-of-type) {
   border-top: 1px solid var(--inputBorder);
-  padding-top: 1.5em;
-  margin-top: 0.5em;
+  padding-top: 0.5em;
 }
-.rating-panel .card-body .new-rating {
+.rating-panel .card-body .rating-comment:not(:last-of-type) {
+  padding-bottom: 0.5em;
+}
+.rating-panel .card-body .rating-form.create {
   border-bottom: 1px solid var(--inputBorder);
   padding-bottom: 1.5em;
   margin-bottom: 1.5em;
@@ -44,26 +50,42 @@
 }
 
 .rating-panel .card-body .rating-timestamp {
-  color: var(--disabledText);
-  font-size: 0.92rem;
   text-decoration: none;
-  margin-right: 0.5em;
 }
 .rating-panel .card-body .rating-timestamp:hover {
   text-decoration: underline;
 }
 
-.new-rating .rating-stars .btn {
+@media screen and (min-width: 1200px) {
+  .rating-panel .card-body .rating-comment .rating-toolbar {
+    position: absolute;
+    bottom: 0.5em;
+    right: 0.5em;
+    background-color: var(--elevation);
+
+    display: none;
+  }
+
+  .rating-panel .card-body .rating-comment:hover .rating-toolbar {
+    display: initial;
+  }
+}
+
+.rating-panel .card-body .rating-comment p {
+  max-width: 100ch;
+}
+
+.rating-form .rating-stars .btn {
   margin-top: 0;
 }
 
-.new-rating .toolbar {
-  display: flex;
-  flex-direction: row-reverse;
+.rating-panel .rating-form-heading {
+  font-size: 1.1em;
+  font-weight: bold;
 }
-
-@media screen and (min-width: 1200px) {
-  .new-rating .toolbar {
-    flex-direction: row;
-  }
+.rating-panel .rating-form {
+  margin-bottom: 1.5em;
+}
+.rating-panel .rating-form button {
+  margin-top: 0.5em;
 }

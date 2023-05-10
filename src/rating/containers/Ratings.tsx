@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 
 import RatingsWrapper from '../components/RatingsWrapper';
 import * as RatingsActions from '../store/actions';
-import { RatingCreate } from '../store/types';
+import { RatingCreate, RatingUpdate } from '../store/types';
 import { RootState } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
@@ -17,8 +17,9 @@ const Ratings: React.FC = () => {
   const recipeSlug = recipe?.slug;
   const recipeRating = recipe?.rating;
 
-  const addRating = useCallback(async (recSlug: string, rating: RatingCreate) => RatingsActions.add(dispatch, recSlug, rating), [dispatch]);
-  const removeRatingCallback = useCallback((recSlug: string, ratingId: number) => dispatch(RatingsActions.remove(recSlug, ratingId)), [dispatch]);
+  const addRating  = useCallback(async (rating: RatingCreate) => RatingsActions.add(dispatch, recipeSlug ?? '', rating), [dispatch, recipeSlug]);
+  const editRating = useCallback(async (rating: RatingUpdate) => RatingsActions.update(dispatch, recipeSlug ?? '', rating), [dispatch, recipeSlug]);
+  const removeRatingCallback = useCallback((ratingId: number) => dispatch(RatingsActions.remove(recipeSlug ?? '', ratingId)), [dispatch, recipeSlug]);
 
   useEffect(() => {
     if (recipeSlug == null || recipeRating == null || recipeRating === 0) return;
@@ -31,13 +32,13 @@ const Ratings: React.FC = () => {
   return (
     <ErrorBoundary verbose printStack>
       <RatingsWrapper
-          recipeSlug = {recipeSlug}
           userId     = {account?.id}
           userRole   = {account?.role}
           ratings    = {ratings}
           pending    = {ratingsState.meta.pending}
 
           addRating  = {addRating}
+          editRating = {editRating}
           removeRating = {removeRatingCallback} />
     </ErrorBoundary>
   );

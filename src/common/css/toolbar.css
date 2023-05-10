@@ -1,0 +1,12 @@
+.toolbar {
+  display: flex;
+}
+.toolbar.end {
+  justify-content: flex-end;
+}
+.toolbar.start .btn {
+  margin-right: 0.5em;
+}
+.toolbar.end .btn {
+  margin-left: 0.5em;
+}

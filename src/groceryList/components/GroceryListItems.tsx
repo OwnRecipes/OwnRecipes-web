@@ -83,7 +83,7 @@ const GroceryListItems: React.FC<IGroceryListItemsProps> = ({
           label = {formatMessage(messages.toggle_all)}
           value = {items != null && items.length > 0 && !hasUncheckedItem}
           readOnly = {items == null || filteredItems.length === 0}
-          errors = {undefined} /* TODO get error from meta */
+          errors = {undefined}
           className = 'toggle-all grocery-list-item-margin'
           onChange = {handleToggleItemsClick}
           />

@@ -7,8 +7,9 @@ import { FormSpy } from 'react-final-form';
 import { RootState } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import { getRoutePath, isDemoMode } from '../../common/utility';
-import * as RecipeActions from '../../recipe/store/RecipeActions';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
+import { Toolbar } from '../../common/components/Toolbar';
+import * as RecipeActions from '../../recipe/store/RecipeActions';
 
 const messages = defineMessages({
   submit: {
@@ -71,19 +72,21 @@ const SubmitViewButton = forwardRef<HTMLButtonElement, ISubmitViewButtonProps>((
   }, [asView, onLink, onSubmit]);
 
   return (
-    <Button
-        variant  = 'primary'
-        type     = {asView ? 'button' : 'submit'}
-        // Do not disable on submitting, to prevent losing focus
-        disabled = {(isDemoMode() && !asView)}
-        onClick = {onClick}
-        accessKey = {asView ? undefined : 's'}
-        {...rest}
-        className = {submitting ? 'disabled' : undefined}
-        ref = {ref}>
-      <span style={{ visibility: submitting ? 'hidden' : 'initial' }}>{formatMessage(asView ? messages.view : messages.submit)}</span>
-      {submitting && <LoadingSpinner style={{ position: 'absolute', color: 'var(--primaryText)' }} />}
-    </Button>
+    <Toolbar position='end'>
+      <Button
+          variant  = 'primary'
+          type     = {asView ? 'button' : 'submit'}
+          // Do not disable on submitting, to prevent losing focus
+          disabled = {(isDemoMode() && !asView)}
+          onClick = {onClick}
+          accessKey = {asView ? undefined : 's'}
+          {...rest}
+          className = {submitting ? 'disabled' : undefined}
+          ref = {ref}>
+        <span style={{ visibility: submitting ? 'hidden' : 'initial' }}>{formatMessage(asView ? messages.view : messages.submit)}</span>
+        {submitting && <LoadingSpinner style={{ position: 'absolute', color: 'var(--primaryText)' }} />}
+      </Button>
+    </Toolbar>
   );
 });
 

@@ -82,6 +82,14 @@ h4, .h4 {
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
   color: var(--hoverText);
 }
+.subtitle {
+  font-size: 0.92rem;
+  color: var(--secondaryText);
+}
+.subtitle2 {
+  font-size: 0.92rem;
+  color: var(--disabledText);
+}
 
 
 .accordion.accordion-flush .accordion-item {
@@ -284,18 +292,24 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
 
 @media (max-width: 767px) {
   .hidden-xs {
-    display: none;
-  };
+    display: none !important;
+  }
+  .d-sm-min {
+    display: none !important;
+  }
 }
 @media (min-width: 768px) {
   .visible-xs {
-    display: none;
-  };
+    display: none !important;
+  }
+  .d-sm-max {
+    display: none !important;
+  }
 }
 
 @media screen {
   html[data-theme="dark"] img {
-    opacity: 0.875;
+    opacity: 0.92;
   }
   html[data-theme="dark"] img:hover {
     opacity: 1.0;

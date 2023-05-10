@@ -4,6 +4,19 @@ import { defineMessages, useIntl } from 'react-intl';
 import HeaderLink from '../../common/components/HeaderLink';
 import UserRole from '../../common/types/UserRole';
 
+const messages = defineMessages({
+  title: {
+    id: 'recipe.comments.title',
+    description: 'Comments heading',
+    defaultMessage: 'Comments',
+  },
+  new_rating_button: {
+    id: 'recipe.comments.new_rating',
+    description: 'Label for the new rating button',
+    defaultMessage: 'New rating',
+  },
+});
+
 export interface IRatingsHeaderProps {
   userRole:  UserRole | undefined;
   showNewRating: boolean;
@@ -12,18 +25,6 @@ export interface IRatingsHeaderProps {
 
 const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ userRole, showNewRating, onShowNewRating }: IRatingsHeaderProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    title: {
-      id: 'recipe.comments.title',
-      description: 'Comments heading',
-      defaultMessage: 'Comments',
-    },
-    new_rating_button: {
-      id: 'recipe.comments.new_rating',
-      description: 'Label for the new rating button',
-      defaultMessage: 'New rating',
-    },
-  });
 
   return (
     <Card.Header>
@@ -34,8 +35,8 @@ const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ userRole, showNewRating,
             <HeaderLink linkFor='ratings-heading' />
           </h2>
         </Col>
-        {!showNewRating && userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
-          <Col xs='auto'>
+        {userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
+          <Col xs='auto' style={showNewRating ? { visibility : 'hidden' } : undefined}>
             <Button variant='outline-primary' onClick={onShowNewRating}>{formatMessage(messages.new_rating_button)}</Button>
           </Col>
         )}

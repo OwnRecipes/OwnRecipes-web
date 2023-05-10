@@ -215,8 +215,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps, IInputStat
     this.updateShowCapsWarning(event.getModifierState('CapsLock'));
     if (this.props.type === 'password' && this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD) {
       setTimeout(() => {
-        // TODO
-        // combinedRef.current?.select();
+        this.ref.current?.select();
       }, 0);
     }
   };
@@ -230,8 +229,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps, IInputStat
       hasFocus: true,
     });
     if (this.props.type === 'password' && this.props.value != null && String(this.props.value) === IS_SAVED_PASSWORD) {
-      // TODO
-      // combinedRef.current?.select();
+      this.ref.current?.select();
     }
   };
 

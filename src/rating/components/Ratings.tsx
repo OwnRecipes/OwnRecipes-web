@@ -7,6 +7,19 @@ import '../css/ratings.css';
 import Icon from '../../common/components/Icon';
 import ConditionalWrapper from '../../common/components/ConditionalWrapper';
 
+const messages = defineMessages({
+  star_alt: {
+    id: 'rating_comments.star_alt',
+    description: 'Alt text for star button, for screen reader.',
+    defaultMessage: 'Select to rate item {stars, plural, one {# star} other {# stars}}',
+  },
+  stars_alt: {
+    id: 'rating_comments.stars_alt',
+    description: 'Alt text for read-only stars (view).',
+    defaultMessage: '{stars} out of 5 stars',
+  },
+});
+
 export interface IRatingsProps {
   stars: number;
   onChange?: (stars: number) => void;
@@ -20,13 +33,6 @@ interface IStarProps {
 
 const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    star_alt: {
-      id: 'rating_comments.star_alt',
-      description: 'Alt text for star button, for screen reader.',
-      defaultMessage: 'Select to rate item {stars, plural, one {# star} other {# stars}}',
-    },
-  });
 
   const handleClick = useCallback(() => {
     onChange?.(num);
@@ -48,13 +54,6 @@ const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
 
 const Ratings: React.FC<IRatingsProps> = ({ stars, onChange }: IRatingsProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    stars_alt: {
-      id: 'rating_comments.stars_alt',
-      description: 'Alt text for read-only stars (view).',
-      defaultMessage: '{stars} out of 5 stars',
-    },
-  });
 
   let starss = stars;
   if (stars > 5) {

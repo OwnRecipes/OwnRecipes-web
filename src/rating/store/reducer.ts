@@ -1,7 +1,7 @@
 import * as _ from 'lodash-es';
 
 import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
-import { Rating, RatingAction, RatingsAction, IRatingAddAction, IRatingDeleteAction, RatingsState, RATINGS_STORE, RATING_STORE } from './types';
+import { Rating, RatingAction, RatingsAction, IRatingAddAction, IRatingDeleteAction, RatingsState, RATINGS_STORE, RATING_STORE, IRatingUpdateAction } from './types';
 
 const defaultState = ReduxHelper.getMapReducerDefaultState<Rating[]>(RATINGS_STORE);
 
@@ -12,6 +12,21 @@ function addRating(state: RatingsState, recipe: string, rating: Rating): Ratings
   let ratings = _.get(updMap, recipe) ?? [];
   ratings = [...ratings];
   ratings.push(rating);
+
+  _.set(updMap, recipe, ratings);
+  updState.items = updMap;
+  return updState;
+}
+
+function updateRating(state: RatingsState, recipe: string, rating: Rating): RatingsState {
+  const updState = { ...state };
+  const updMap = state.items != null ? _.clone(state.items) : {};
+
+  let ratings = _.get(updMap, recipe) ?? [];
+  ratings = [...ratings];
+  const oldRatingIx = ratings.findIndex(r => r.id === rating.id);
+  if (oldRatingIx === -1) return state;
+  ratings.splice(oldRatingIx, 1, rating);
 
   _.set(updMap, recipe, ratings);
   updState.items = updMap;
@@ -38,6 +53,8 @@ const reducer = (state = defaultState, action: RatingsAction): RatingsState => {
     switch (ratingAction.typs) {
       case ACTION.CREATE_SUCCESS:
         return addRating(state, (ratingAction as IRatingAddAction).payload.recipe, (ratingAction as IRatingAddAction).payload.rating);
+      case ACTION.UPDATE_SUCCESS:
+        return updateRating(state, (ratingAction as IRatingUpdateAction).payload.recipe, (ratingAction as IRatingUpdateAction).payload.rating);
       case ACTION.DELETE_SUCCESS:
         return deleteRating(state, (ratingAction as IRatingDeleteAction).payload.recipe, (ratingAction as IRatingDeleteAction).payload.ratingId);
       default:
