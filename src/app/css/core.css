@@ -14,8 +14,8 @@ html {
   flex: 1;
   background-color: var(--midground);
 
-  padding-top: 15px;
-  padding-bottom: 20px;
+  padding-top: 0.75em;
+  padding-bottom: 1em;
 }
 
 @media screen and (max-width: 81rem) {

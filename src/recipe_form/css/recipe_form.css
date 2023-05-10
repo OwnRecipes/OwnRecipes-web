@@ -1,5 +1,5 @@
 #content > .container[class*="recipe\/edit"] {
-  padding-top:   10px;
+  padding-top:   0.5em;
   padding-left:  0;
   padding-right: 0;
 }

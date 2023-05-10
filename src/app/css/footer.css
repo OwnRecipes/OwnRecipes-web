@@ -8,8 +8,8 @@
   border-top: 1px solid var(--elevationShadow);
 }
 .footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: var(--bs-gutter-x, .75rem);
+  padding-left: var(--bs-gutter-x, .75rem);
   text-align: center;
 
   height: 100%;

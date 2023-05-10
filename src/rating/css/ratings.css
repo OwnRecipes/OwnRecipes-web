@@ -40,7 +40,7 @@
 
 .rating-panel .card-body .rating-username {
   color: var(--primaryMain);
-  margin-bottom: 5px;
+  margin-bottom: 0.25em;
 }
 
 .rating-panel .card-body .rating-timestamp {

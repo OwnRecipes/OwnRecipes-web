@@ -10,7 +10,7 @@ main[class*="grocery-lists/"] .grocery-list-item-margin {
 }
 
 main[class*="grocery-lists/"] .toggle-all {
-  padding-bottom: 5px;
+  padding-bottom: 0.25em;
   border-bottom: 1px solid var(--inputBorder);
 }
 

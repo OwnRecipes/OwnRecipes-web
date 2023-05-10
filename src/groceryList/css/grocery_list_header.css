@@ -42,7 +42,7 @@
 
 .grocery-list-summary p {
   margin-bottom: 0;
-  padding-left: 10px;
+  padding-left: 0.25em;
 }
 
 .grocery-list-summary.filter-by-dropdown {
