@@ -76,15 +76,15 @@ export const request = (): SuperAgentStatic => {
       const decodedToken: JwtPayload | undefined = account.token ? jwtDecode<JwtPayload>(account.token) : undefined;
 
       // Check if the user's token is outdated.
-      // The token expired after 14 days.
-      // See: https://github.com/open-eats/openeats-api/blob/master/base/settings.py#L174
+      // The access token expires after 30 minutes, the refresh token after 2 weeks.
+      // See: https://github.com/ownrecipes/ownrecipes-api/blob/master/base/settings.py#L174
       if (decodedToken == null || decodedToken.exp == null) {
         // If the token is undefined.
         // Log the user out and direct them to the login page.
         store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
-      } else if (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp) && account.refresh) {
-        // If it is then call for a refreshed token.
-        // If the token is to old, the request will fail and
+      } else if (account.refresh && moment(new Date()).add(2, 'minutes') > moment.unix(decodedToken.exp)) {
+        // If it is expired then call for a refreshed token.
+        // If the token is too old, the request will fail and
         // the user will be logged-out and redirect to the login screen.
         refreshToken.instance(account.refresh, account.remember);
       }
