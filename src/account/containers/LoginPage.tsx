@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = useCallback(async (username: string, password: string, remember: boolean) => (
     AuthActions.getToken(dispatch, username, password, remember)
-  ), [dispatch]);
+  ), []);
 
   return (
     <PageWrapper title={intl.messages['nav.login.title'] as string}>
@@ -33,12 +33,12 @@ const LoginPage: React.FC = () => {
         </Modal.Header>
         <Modal.Body>
           <>
-            <div className={classNames('login-form-wrapper', { autologin: [PendingState.LOADING].includes(accountMeta.pending) })}>
+            <div className={classNames('login-form-wrapper', { autologin: accountMeta.pending === PendingState.LOADING })}>
               <LoginForm onSubmit={handleLogin} />
               <hr />
               <SignUpInfo />
             </div>
-            {[PendingState.LOADING].includes(accountMeta.pending) && (
+            {accountMeta.pending === PendingState.LOADING && (
               <PageSpinner />
             )}
           </>

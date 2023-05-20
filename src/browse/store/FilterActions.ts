@@ -1,9 +1,10 @@
-import { handleError, request } from '../../common/CustomSuperagent';
+import { request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
-import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_RATING_STORE, BROWSE_FILTER_TAGS_STORE, FilterDispatch } from './FilterTypes';
+import { handleError } from '../../common/requestUtils';
 import { objToSearchString } from '../../common/utility';
 import { toBasicAction } from '../../common/store/redux';
+import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_RATING_STORE, BROWSE_FILTER_TAGS_STORE, FilterDispatch } from './FilterTypes';
 
 const parsedFilter = (filters: Record<string, string>): Record<string, string> => {
   const parsedFilters: Record<string, string> = {};
@@ -18,7 +19,7 @@ const parsedFilter = (filters: Record<string, string>): Record<string, string> =
 export const loadCourses = (filters: Record<string, string>) => (dispatch: FilterDispatch) => {
   dispatch({ ...toBasicAction(BROWSE_FILTER_COURSE_STORE, ACTION.LOADING) });
 
-  request()
+  request
     .get(serverURLs.course_count)
     .query(parsedFilter(filters))
     .then(res => (
@@ -37,7 +38,7 @@ export const loadCourses = (filters: Record<string, string>) => (dispatch: Filte
 export const loadCuisines = (filters: Record<string, string>) => (dispatch: FilterDispatch) => {
   dispatch({ ...toBasicAction(BROWSE_FILTER_CUISINE_STORE, ACTION.LOADING) });
 
-  request()
+  request
     .get(serverURLs.cuisine_count)
     .query(parsedFilter(filters))
     .then(res => (
@@ -56,7 +57,7 @@ export const loadCuisines = (filters: Record<string, string>) => (dispatch: Filt
 export const loadRatings = (filter: Record<string, string>) => (dispatch: FilterDispatch) => {
   dispatch({ ...toBasicAction(BROWSE_FILTER_RATING_STORE, ACTION.LOADING) });
 
-  request()
+  request
     .get(serverURLs.rating_count)
     .query(parsedFilter(filter))
     .then(res => (
@@ -75,7 +76,7 @@ export const loadRatings = (filter: Record<string, string>) => (dispatch: Filter
 export const loadTags = (filters: Record<string, string>) => (dispatch: FilterDispatch) => {
   dispatch({ ...toBasicAction(BROWSE_FILTER_TAGS_STORE, ACTION.LOADING) });
 
-  request()
+  request
     .get(serverURLs.tag_count)
     .query(parsedFilter(filters))
     .then(res => (

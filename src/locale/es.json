@@ -125,6 +125,7 @@
   "login.sign_in": "Iniciar sesión",
   "login.sign_up_info": "¿No está registrado aún? OwnRecipes es una aplicación privada. Solicite una cuenta con el administrador.",
   "login.username": "Usuario",
+  "logout.title": "",
   "measurement.box": "{itemCount, plural, one {lata} other {latas}}",
   "measurement.box_abbrev": "",
   "measurement.bunch": "{itemCount, plural, one {manojo} other {manojos}}",

@@ -125,6 +125,7 @@
   "login.sign_in": "Sign in",
   "login.sign_up_info": "Not signed up, yet? OwnRecipes is a private instance. Kindly ask the administrator to sign up an account for you.",
   "login.username": "Username",
+  "logout.title": "Logging out",
   "measurement.box": "{itemCount, plural, one {box} other {boxes}}",
   "measurement.bunch": "bunch",
   "measurement.can": "can",

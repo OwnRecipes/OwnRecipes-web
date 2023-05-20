@@ -50,8 +50,8 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
   const measurementContext = useContext(MeasurementContext);
   const formatMeasurementCb = useCallback((measurement: string | undefined, quantity: string | undefined) => formatMeasurement(intl, measurementContext, measurement, quantity), [measurementContext, intl]);
 
-  const bulkAdd = useCallback(async (list: number, data: GroceryListBulkAdd) => GroceryListActions.bulkAdd(dispatch, list, data, formatMeasurementCb), [dispatch]);
-  const createList = useCallback(async (item: GroceryListCreate) => GroceryListActions.create(dispatch, item), [dispatch]);
+  const bulkAdd = useCallback(async (list: number, data: GroceryListBulkAdd) => GroceryListActions.bulkAdd(dispatch, list, data, formatMeasurementCb), []);
+  const createList = useCallback(async (item: GroceryListCreate) => GroceryListActions.create(dispatch, item), []);
 
   const groceryListsState = useSelector((state: RootState) => state.groceryLists);
   const { items: lists } = groceryListsState;

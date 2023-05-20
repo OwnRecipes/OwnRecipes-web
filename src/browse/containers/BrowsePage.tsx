@@ -102,7 +102,7 @@ const BrowsePage: React.FC = () => {
 
   const handleOpenRecipe = useCallback((rec: RecipeList) => {
     dispatch(RecipeActions.preload(rec));
-  }, [dispatch]);
+  }, []);
 
   return (
     <PageWrapper title={intl.messages['nav.recipes'] as string}>

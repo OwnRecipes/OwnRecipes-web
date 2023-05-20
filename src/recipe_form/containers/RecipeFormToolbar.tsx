@@ -30,8 +30,8 @@ const RecipeFormToolbar: React.FC = () => {
 
   const recipeState = useSelector((state: RootState) => state.recipeForm);
 
-  const preload = useCallback(() => { if (recipeState.item) dispatch(RecipeActions.preload(recipeState.item)); }, [dispatch, recipeState.item]);
-  const onLink = useCallback(() => nav(getRoutePath(`/recipe/${recipeState.item?.slug}`)), [recipeState.item?.slug]);
+  const preload = useCallback(() => { if (recipeState.item) dispatch(RecipeActions.preload(recipeState.item)); }, [recipeState.item]);
+  const onLink = useCallback(() => { nav(getRoutePath(`/recipe/${recipeState.item?.slug}`)); }, [recipeState.item?.slug]);
 
   const id = recipeState.item?.id;
   const isNew = id == null || id === 0;

@@ -12,6 +12,34 @@ import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import { ValidationResult } from '../../common/store/Validation';
 import LoginAlert from './LoginAlert';
 
+const messages = defineMessages({
+  please_sign_in: {
+    id: 'login.please_sign_in',
+    description: 'Please sign in header',
+    defaultMessage: 'Sign In',
+  },
+  username: {
+    id: 'login.username',
+    description: 'Username placeholder',
+    defaultMessage: 'Username',
+  },
+  password: {
+    id: 'login.password',
+    description: 'Password placeholder',
+    defaultMessage: 'Password',
+  },
+  remember: {
+    id: 'login.remember',
+    description: 'Remember checkbox',
+    defaultMessage: 'Remember me for 14 days',
+  },
+  sign_in: {
+    id: 'login.sign_in',
+    description: 'Sign in button',
+    defaultMessage: 'Sign in',
+  },
+});
+
 export interface ILoginFormProps {
   onSubmit: (username: string, password: string, remember: boolean) => Promise<ValidationResult>;
 }
@@ -24,33 +52,6 @@ interface LoginFormData {
 
 const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    please_sign_in: {
-      id: 'login.please_sign_in',
-      description: 'Please sign in header',
-      defaultMessage: 'Sign In',
-    },
-    username: {
-      id: 'login.username',
-      description: 'Username placeholder',
-      defaultMessage: 'Username',
-    },
-    password: {
-      id: 'login.password',
-      description: 'Password placeholder',
-      defaultMessage: 'Password',
-    },
-    remember: {
-      id: 'login.remember',
-      description: 'Remember checkbox',
-      defaultMessage: 'Remember me for 14 days',
-    },
-    sign_in: {
-      id: 'login.sign_in',
-      description: 'Sign in button',
-      defaultMessage: 'Sign in',
-    },
-  });
 
   const handleSubmit = useCallback(async (form: LoginFormData) => onSubmit(form.username, form.password, form.remember), [onSubmit]);
 
@@ -64,9 +65,9 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
         render = {({ form, handleSubmit: renderSubmit }) => (
           <Form className='form-signin' onSubmit={renderSubmit}>
             <InitialValuesResetter form={form} initialValues={initialValues} />
-            <FormSpy subscription={{ submitError: true }}>
-              {({ submitError }) => (
-                <LoginAlert submitError={submitError} />
+            <FormSpy subscription={{ submitErrors: true }}>
+              {({ submitErrors }) => (
+                <LoginAlert submitError={submitErrors != null} />
               )}
             </FormSpy>
 

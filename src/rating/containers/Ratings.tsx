@@ -17,9 +17,9 @@ const Ratings: React.FC = () => {
   const recipeSlug = recipe?.slug;
   const recipeRating = recipe?.rating;
 
-  const addRating  = useCallback(async (rating: RatingCreate) => RatingsActions.add(dispatch, recipeSlug ?? '', rating), [dispatch, recipeSlug]);
-  const editRating = useCallback(async (rating: RatingUpdate) => RatingsActions.update(dispatch, recipeSlug ?? '', rating), [dispatch, recipeSlug]);
-  const removeRatingCallback = useCallback((ratingId: number) => dispatch(RatingsActions.remove(recipeSlug ?? '', ratingId)), [dispatch, recipeSlug]);
+  const addRating  = useCallback(async (rating: RatingCreate) => RatingsActions.add(dispatch, recipeSlug ?? '', rating), [recipeSlug]);
+  const editRating = useCallback(async (rating: RatingUpdate) => RatingsActions.update(dispatch, recipeSlug ?? '', rating), [recipeSlug]);
+  const removeRatingCallback = useCallback((ratingId: number) => dispatch(RatingsActions.remove(recipeSlug ?? '', ratingId)), [recipeSlug]);
 
   useEffect(() => {
     if (recipeSlug == null || recipeRating == null || recipeRating === 0) return;

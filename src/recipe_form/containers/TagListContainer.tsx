@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
-import * as RecipeFormActions from '../store/actions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { RootState } from '../../app/Store';
 import { useDispatch, useSelector } from '../../common/store/redux';
@@ -20,7 +19,7 @@ const TagListContainer: React.FC<ITagListContainerProps> = ({
   const intl = useIntl();
   const dispatch = useDispatch();
 
-  const fetchTags = useCallback(() => dispatch(RecipeGroupActions.fetchTags()), [dispatch, RecipeFormActions]);
+  const fetchTags = useCallback(() => { dispatch(RecipeGroupActions.fetchTags()); }, []);
   const tags = useSelector((state: RootState) => state.recipeGroups.tags.items);
   useSingle(fetchTags, tags);
 

@@ -1,9 +1,10 @@
-import { handleError, request } from '../../common/CustomSuperagent';
+import { request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { BROWSER_SEARCH_STORE, SearchDispatch, SearchResultDto, toSearchResult } from './SearchTypes';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { objToSearchString } from '../../common/utility';
 import { toBasicAction } from '../../common/store/redux';
+import { handleError } from '../../common/requestUtils';
+import { BROWSER_SEARCH_STORE, SearchDispatch, SearchResultDto, toSearchResult } from './SearchTypes';
 
 const FILTER_QUERY_PARAMETER_MAPPING: Record<string, string> = {
   cuisine: 'cuisine__slug',
@@ -21,7 +22,7 @@ export const loadRecipes = (filters: Record<string, string>) => (dispatch: Searc
     }
   });
 
-  request()
+  request
     .get(serverURLs.browse)
     .query(parsedFilters)
     .then(res => {
@@ -48,7 +49,7 @@ export const loadRandomRecipes = (filters: Record<string, string>) => (dispatch:
     }
   });
 
-  request()
+  request
     .get(serverURLs.mini_browse)
     .query(parsedFilters)
     .then(res => {

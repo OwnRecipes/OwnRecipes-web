@@ -25,7 +25,7 @@ const RecipeFormPage: React.FC = () => {
   const location = useLocation();
 
   const fetchRecipeList = RecipeFormActions.fetchRecipeList;
-  const handleSubmit = useCallback(async (data: Recipe) => RecipeFormActions.save(dispatch, data), [dispatch]);
+  const handleSubmit = useCallback(async (data: Recipe) => RecipeFormActions.save(dispatch, data), []);
 
   const recipeSlug = params.recipe ?? '';
   const isNew = recipeSlug === 'create';

@@ -2,7 +2,7 @@ import { IntlShape } from 'react-intl';
 import * as _ from 'lodash-es';
 import { FORM_ERROR } from 'final-form';
 
-import { ResponseError } from '../CustomSuperagent';
+import { ResponseError } from '../requestUtils';
 import { optionallyFormatMessage } from '../utility';
 
 export interface ValidationErrorType {
@@ -56,16 +56,19 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
     const nextVal = body[nextKey];
 
     if (Array.isArray(nextVal)) {
-      result[attr] = nextVal.map(v => ({
-        code:      toCode(v),
-        message:   v,
-        attribute: attr,
-      }));
+      result[attr] = nextVal.map(v => {
+        const valErr: ValidationErrorType = {
+          code:      toCode(v),
+          message:   v,
+        };
+        return valErr;
+      });
     } else {
-      result[attr] = {
+      const valErr: ValidationErrorType = {
         code:      toCode(nextVal),
         message:   nextVal,
-      };
+      } as ValidationErrorType;
+      result[attr] = [valErr];
     }
   });
 

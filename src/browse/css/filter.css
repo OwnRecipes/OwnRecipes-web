@@ -84,6 +84,7 @@ html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-ti
   }
   .container.browser .results-panel {
     flex: 1;
+    width: 1px;
   }
   .container.browser .filter-panel .reset-search-row {
     padding: 5px;

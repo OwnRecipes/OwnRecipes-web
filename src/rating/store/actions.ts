@@ -1,12 +1,13 @@
-import { RatingCreate, RatingDispatch, RatingsDispatch, RATINGS_STORE, RATING_STORE, toRating, RatingUpdate } from './types';
-import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
+import { request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import ReduxHelper, { ACTION } from '../../common/store/ReduxHelper';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
+import { handleError, handleFormError } from '../../common/requestUtils';
+import { RatingCreate, RatingDispatch, RatingsDispatch, RATINGS_STORE, RATING_STORE, toRating, RatingUpdate } from './types';
 
 export const load = (recipeSlug: string) => (dispatch: RatingsDispatch) => {
   dispatch({ ...toBasicAction(RATINGS_STORE, ACTION.GET_START) });
-  request()
+  request
     .get(`${serverURLs.ratings}?recipe__slug=${recipeSlug}`)
     .then(res => dispatch({
       ...toBasicAction(
@@ -21,7 +22,7 @@ export const load = (recipeSlug: string) => (dispatch: RatingsDispatch) => {
 
 export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: RatingCreate) => {
   dispatch({ ...toBasicAction(RATING_STORE, ACTION.CREATE_START) });
-  return request()
+  return request
     .post(serverURLs.ratings)
     .send({
       recipe:  recipeSlug,
@@ -46,7 +47,7 @@ export const add = async (dispatch: AnyDispatch, recipeSlug: string, rating: Rat
 
 export const update = async (dispatch: AnyDispatch, recipeSlug: string, rating: RatingUpdate) => {
   dispatch({ ...toBasicAction(RATING_STORE, ACTION.UPDATE_START) });
-  return request()
+  return request
     .patch(`${serverURLs.ratings}${rating.id}/`)
     .send({
       rating:  rating.rating,
@@ -70,7 +71,7 @@ export const update = async (dispatch: AnyDispatch, recipeSlug: string, rating: 
 
 export const remove = (recipeSlug: string, id: number) => (dispatch: RatingDispatch) => {
   dispatch({ ...toBasicAction(RATING_STORE, ACTION.DELETE_START) });
-  request()
+  request
     .delete(`${serverURLs.ratings}${id}/`)
     .then(() => dispatch({
       ...toBasicAction(

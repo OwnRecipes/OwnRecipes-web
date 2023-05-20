@@ -1,4 +1,6 @@
+import { clearToken } from '../../common/CustomSuperagent';
 import LocalStorageHelper from '../../common/LocalStorageHelper';
+import { PendingState } from '../../common/store/GenericReducerType';
 import ReduxHelper from '../../common/store/ReduxHelper';
 import { AccountAction, AccountActionTypes, AccountState, ACCOUNT_STORE, ACCOUNT_TOKEN_STORAGE_KEY } from './types';
 
@@ -13,16 +15,25 @@ const reducer = (state = defaultState, action: AccountAction): AccountState => {
           LocalStorageHelper.setItem(ACCOUNT_TOKEN_STORAGE_KEY, JSON.stringify(user));
           return ReduxHelper.setItem(state, user);
         }
+      case AccountActionTypes.SIDELOAD_TOKEN:
+        {
+          const user = action.payload;
+          return ReduxHelper.setItem(state, user);
+        }
       case AccountActionTypes.FORGET_LOGIN:
-          {
-            LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY);
-            // do not reset state to avoid automatic redirect navigation
-            return state;
-          }
+        {
+          // console.log('account reducer: FORGET_LOGIN');
+          clearToken();
+          // do not reset state to avoid automatic redirect navigation
+          return state;
+        }
       case AccountActionTypes.LOGOUT:
         {
-          LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY);
-          return defaultState;
+          // console.log('account reducer: LOGOUT');
+          clearToken();
+          const newState = ReduxHelper.setPending(state, PendingState.COMPLETED);
+          newState.item = undefined;
+          return newState;
         }
       default:
         return ReduxHelper.caseItemDefaultReducer(state, action, defaultState);

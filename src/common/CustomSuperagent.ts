@@ -1,44 +1,17 @@
-import * as _ from 'lodash-es';
+/* eslint-disable no-underscore-dangle */
 import * as defaults from 'superagent-defaults';
-import superRequest, { SuperAgentStatic } from 'superagent';
-import jwtDecode, { JwtPayload } from 'jwt-decode';
-import moment from 'moment';
+import superRequest, { SuperAgentRequest, SuperAgentStatic } from 'superagent';
 
 import store from './store/store';
 import { serverURLs } from './config';
-import { AccountAction, AccountActionTypes, ACCOUNT_STORE, LoginDto, toUserAccount } from '../account/store/types';
-import { ACTION } from './store/ReduxHelper';
-import * as InternalErrorActions from '../internal_error/store/actions';
-import { logUserOut } from '../account/store/actions';
-import { createInternalHiddenValidationResult, toValidationErrors, ValidationError } from './store/Validation';
-import { isDemoMode } from './utility';
-import { AnyDispatch, toBasicAction } from './store/redux';
-
-export type ResponseError = superRequest.ResponseError;
-export const isResponseError = (obj: unknown): obj is ResponseError => (
-  obj != null
-      && (obj as ResponseError).status != null
-      && typeof (obj as ResponseError).status === 'number'
-      && (obj as ResponseError).response != null); // eslint-disable-line no-underscore-dangle, @typescript-eslint/no-explicit-any
-
-export interface NetworkError {
-  message: string;
-  method: 'DELETE' | 'GET' | 'PATCH' | 'PUT' | 'POST';
-  status: undefined;
-  url: string;
-}
-export const isNetworkError = (obj: unknown): obj is NetworkError => (
-  obj != null
-      && (obj as NetworkError).status === undefined
-      && ['DELETE', 'GET', 'PATCH', 'PUT', 'POST'].includes((obj as NetworkError).method)
-      && (obj as NetworkError).url != null && (obj as NetworkError).url.length > 0
-      && !isResponseError(obj)
-);
+import { AccountAction, AccountActionTypes, ACCOUNT_STORE, LoginDto, toUserAccount, ACCOUNT_TOKEN_STORAGE_KEY, UserAccount } from '../account/store/types';
+import { toBasicAction } from './store/redux';
+import LocalStorageHelper from './LocalStorageHelper';
 
 export const refreshToken = (() => {
   let blocking = false;
 
-  const refresh = (token: string, remember: boolean) => {
+  const refresh = async (token: string, remember: boolean) => (
     superRequest
       .post(serverURLs.refresh_token)
       .set('Accept', 'application/json')
@@ -46,51 +19,46 @@ export const refreshToken = (() => {
       .then(res => {
         blocking = false;
         const data: LoginDto = { ...res.body };
+        const user = toUserAccount(data, remember);
+        LocalStorageHelper.setItem(ACCOUNT_TOKEN_STORAGE_KEY, JSON.stringify(user));
+        request.set('Authorization', `Bearer ${user.token}`);
+
         store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data, remember) } as AccountAction);
+        return res;
       })
       .catch(() => {
         blocking = false;
         store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) } as AccountAction);
-      });
-  };
+        return null;
+      })
+  );
 
   return {
-    instance: (token: string, remember: boolean) => {
+    instance: async (remember: boolean) => {
       if (!blocking) {
         blocking = true;
-        refresh(token, remember);
+
+        const storageItem = LocalStorageHelper.getItem(ACCOUNT_TOKEN_STORAGE_KEY);
+        if (storageItem == null) {
+          return null;
+        }
+        const user: UserAccount = JSON.parse(storageItem);
+
+        if (!user.refresh) {
+          return null;
+        }
+
+        return refresh(user.refresh, remember);
+      } else {
+        return null;
       }
     },
   };
 })();
 
 // Create a defaults context
-export const request = (): SuperAgentStatic => {
+export const initializeSuperagent = (): SuperAgentStatic & SuperAgentRequest => {
   const customRequest = defaults();
-
-  if (!isDemoMode()) {
-    // Add the user token if the user is logged in
-    const accountState = store.getState().account;
-    const account = accountState.item;
-    if (account && account.id) {
-      const decodedToken: JwtPayload | undefined = account.token ? jwtDecode<JwtPayload>(account.token) : undefined;
-
-      // Check if the user's token is outdated.
-      // The access token expires after 30 minutes, the refresh token after 2 weeks.
-      // See: https://github.com/ownrecipes/ownrecipes-api/blob/master/base/settings.py#L174
-      if (decodedToken == null || decodedToken.exp == null) {
-        // If the token is undefined.
-        // Log the user out and direct them to the login page.
-        store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
-      } else if (account.refresh && moment(new Date()).add(2, 'minutes') > moment.unix(decodedToken.exp)) {
-        // If it is expired then call for a refreshed token.
-        // If the token is too old, the request will fail and
-        // the user will be logged-out and redirect to the login screen.
-        refreshToken.instance(account.refresh, account.remember);
-      }
-      customRequest.set('Authorization', `Bearer ${account.token}`);
-    }
-  }
 
   // Make sure every request we get is json
   customRequest.set('Accept', 'application/json');
@@ -102,141 +70,23 @@ export const request = (): SuperAgentStatic => {
   return customRequest;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getResponseMethod(resp: any): string {
-  const mth = _.get(resp, 'req.method');
-  if (mth) {
-    return String(mth).toLocaleUpperCase();
-  } else {
-    return '';
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const handleError = (error: Error, storeIdent: string): any => (dispatch: any): any => {
-  if (isResponseError(error)) {
-    const respErr: ResponseError = error;
-    if (respErr.response != null && (respErr.response.status === 400 || respErr.response.status === 409)) {
-      // Validation Error
-      dispatch({
-        ...toBasicAction(
-          storeIdent,
-          ACTION.VALIDATION
-        ),
-        payload: toValidationErrors(respErr),
-      });
-    } else if (getResponseMethod(respErr.response) === 'GET' && respErr.response != null && respErr.response.status === 404) {
-      dispatch({
-        ...toBasicAction(
-          storeIdent,
-          ACTION.GET_SUCCESS
-        ),
-        payload: undefined,
-      });
-    } else if (respErr.response != null && respErr.response.status === 401) {
-      // Invalid token
-      dispatch(logUserOut());
-    } else if (respErr.response != null && respErr.response.status === 403) {
-      // Forbidden
-      dispatch(InternalErrorActions.setInternalError(storeIdent, error));
-    } else {
-      // Internal server error
-      const validationError: ValidationError = { code: '500', message: respErr.message, sourceError: respErr };
-      dispatch(InternalErrorActions.setInternalError(storeIdent, error));
-      dispatch({
-        ...toBasicAction(
-          storeIdent,
-          ACTION.ERROR
-        ),
-        payload: validationError,
-      });
-    }
-
-    dispatch({
-      ...toBasicAction(
-        storeIdent,
-        ACTION.ERROR
-      ),
-      payload: error,
-    });
-  } else if (isNetworkError(error)) {
-    dispatch({ ...toBasicAction(storeIdent, ACTION.NO_CONNECTION) });
-  } else {
-    // Unknown internal error
-    dispatch(InternalErrorActions.setInternalError(storeIdent, error));
-    dispatch({
-      ...toBasicAction(
-        storeIdent,
-        ACTION.ERROR
-      ),
-      payload: error,
-    });
-  }
+export const getToken = (): UserAccount | undefined => {
+  const storageItem = LocalStorageHelper.getItem(ACCOUNT_TOKEN_STORAGE_KEY);
+  const user: UserAccount = storageItem ? JSON.parse(storageItem) : undefined;
+  return user;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const handleFormError = (dispatch: AnyDispatch, error: Error, storeIdent: string): any => {
-  if (isResponseError(error)) {
-    const respErr: ResponseError = error;
-
-    dispatch({
-      ...toBasicAction(
-        storeIdent,
-        ACTION.ERROR
-      ),
-      payload: error,
-    });
-
-    if (respErr.response != null && (respErr.response.status === 400 || respErr.response.status === 409)) {
-      return toValidationErrors(respErr);
-    } else if (getResponseMethod(respErr.response) === 'GET' && respErr.response != null && respErr.response.status === 404) {
-      // TODO This is error-prone. GET_SUCCESS should have a payload.
-      // -> Use a new action to set the 404 error state.
-      dispatch({
-        ...toBasicAction(
-          storeIdent,
-          ACTION.GET_SUCCESS
-        ),
-        payload: undefined,
-      });
-    } else if (respErr.response != null && respErr.response.status === 401) {
-      // Invalid token
-      dispatch(logUserOut());
-      return createInternalHiddenValidationResult('401', 'token_invalid', error);
-    } else if (respErr.response != null && respErr.response.status === 403) {
-      // Forbidden
-      dispatch(InternalErrorActions.setInternalError(storeIdent, error));
-      return createInternalHiddenValidationResult('403', 'forbidden', error);
-    } else {
-      // Internal server error
-      const validationError: ValidationError = { code: '500', message: respErr.message, sourceError: respErr };
-      dispatch(InternalErrorActions.setInternalError(storeIdent, error));
-      dispatch({
-        ...toBasicAction(
-          storeIdent,
-          ACTION.ERROR
-        ),
-        payload: validationError,
-      });
-      return createInternalHiddenValidationResult('500', respErr.message, error);
-    }
-  } else if (isNetworkError(error)) {
-    dispatch({ ...toBasicAction(storeIdent, ACTION.NO_CONNECTION) });
-    return createInternalHiddenValidationResult('Connection', 'NetworkError', error);
-  } else {
-    // Unknown internal error
-    dispatch(InternalErrorActions.setInternalError(storeIdent, error));
-    dispatch({
-      ...toBasicAction(
-        storeIdent,
-        ACTION.ERROR
-      ),
-      payload: error,
-    });
-    return createInternalHiddenValidationResult('500', 'Internal error', error);
+export const clearToken = () => {
+  const storageItem = LocalStorageHelper.getItem(ACCOUNT_TOKEN_STORAGE_KEY);
+  const user: UserAccount = storageItem ? JSON.parse(storageItem) : undefined;
+  if (user) {
+    LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY, user.username);
   }
 
-  return null;
+  request.unset('Authorization');
 };
+
+// Create a defaults context
+export const request = initializeSuperagent();
 
 export default request;

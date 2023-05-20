@@ -1,18 +1,31 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import moment from 'moment';
 
-import { handleFormError, refreshToken, request } from '../../common/CustomSuperagent';
+import { refreshToken, request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { AccountActionTypes, ACCOUNT_STORE, AccountDispatch, ACCOUNT_TOKEN_STORAGE_KEY, UserAccount, LoginDto, toUserAccount } from './types';
 import { ACTION } from '../../common/store/ReduxHelper';
 import LocalStorageHelper from '../../common/LocalStorageHelper';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
+import { handleFormError } from '../../common/requestUtils';
+import { AccountActionTypes, ACCOUNT_STORE, AccountDispatch, ACCOUNT_TOKEN_STORAGE_KEY, UserAccount, LoginDto, toUserAccount, AccountAction } from './types';
+
+export function shouldForceReLogin(refresh: string): boolean {
+  const decodedToken: JwtPayload = jwtDecode<JwtPayload>(refresh);
+  return decodedToken.exp == null
+      || (moment(new Date()).add(1, 'day') > moment.unix(decodedToken.exp));
+}
+
+export function shouldRefreshToken(token: string | undefined): boolean {
+  const decodedToken: JwtPayload | undefined = token ? jwtDecode<JwtPayload>(token) : undefined;
+  return decodedToken != null && decodedToken.exp != null
+      && (moment(new Date()).add(2, 'minutes') > moment.unix(decodedToken.exp));
+}
 
 export const getToken = async (dispatch: AnyDispatch, username: string, pass: string, remember: boolean) => {
   dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.UPDATE_START) });
 
   const url = serverURLs.auth_token;
-  return request()
+  return request
     .post(url)
     .send({ username: username, password: pass })
     .then(res => {
@@ -30,17 +43,16 @@ export const tryAutoLogin = () => (dispatch: AccountDispatch) => {
   }
 
   const user: UserAccount = JSON.parse(storageItem);
-  if (!user.remember || !user.refresh) {
+  if (!user.remember || !user.refresh || shouldForceReLogin(user.refresh)) {
     dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.FORGET_LOGIN) });
     return;
   }
 
   dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.GET_START) });
-  const decodedToken: JwtPayload | undefined = user.token ? jwtDecode<JwtPayload>(user.token) : undefined;
 
-  if (user.token != null && decodedToken != null) {
-    if (decodedToken.exp != null && (moment(new Date()).add(2, 'days') > moment.unix(decodedToken.exp))) {
-      refreshToken.instance(user.refresh, user.remember);
+  if (user.token) {
+    if (shouldRefreshToken(user.token)) {
+      refreshToken.instance(user.remember);
     } else {
       dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: user });
     }
@@ -49,10 +61,50 @@ export const tryAutoLogin = () => (dispatch: AccountDispatch) => {
   }
 };
 
+export const tryRefresh = () => (dispatch: AccountDispatch) => {
+  const storageItem = LocalStorageHelper.getItem(ACCOUNT_TOKEN_STORAGE_KEY);
+  if (storageItem == null) {
+    return;
+  }
+
+  const user: UserAccount = JSON.parse(storageItem);
+  if (!user.remember || !user.token) {
+    return;
+  }
+
+  const decodedToken: JwtPayload | undefined = jwtDecode<JwtPayload>(user.token);
+  if (decodedToken.exp && decodedToken.exp <= moment().unix()) {
+    dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.FORGET_LOGIN) });
+  } else if (shouldRefreshToken(user.token)) {
+    refreshToken.instance(user.remember);
+  } else {
+    dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: user });
+  }
+};
+
+const authSideloadToken = (user: UserAccount): AccountAction => ({
+  ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.SIDELOAD_TOKEN), payload: { ...user },
+});
+
+export const sideloadToken = (user: UserAccount) => (dispatch: AccountDispatch) => {
+  dispatch(authSideloadToken(user));
+};
+
 export const forgetLogin = () => (dispatch: AccountDispatch) => {
   dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.FORGET_LOGIN) });
 };
 
-export const logUserOut = () => (dispatch: AccountDispatch) => {
-  dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
+export const logUserOut = async (dispatch: AccountDispatch, oldToken: string | undefined) => {
+  const url = serverURLs.revoke_token;
+  return request
+    .post(url)
+    .send({ refresh: oldToken })
+    .then(() => {
+      dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
+      return null;
+    })
+    .catch(() => {
+      dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) });
+      return null;
+    });
 };

@@ -19,9 +19,9 @@ const CourseSelectContainer: React.FC<ICourseSelectContainerProps> = ({
   const intl = useIntl();
   const dispatch = useDispatch();
 
-  const fetchCourses = useCallback(() => dispatch(RecipeGroupActions.fetchCourses()) , [dispatch, RecipeGroupActions]);
-  const courses  = useSelector((state: RootState) => state.recipeGroups.courses.items);
-  useSingle(fetchCourses , courses);
+  const fetchCourses = useCallback(() => { dispatch(RecipeGroupActions.fetchCourses()); }, []);
+  const courses = useSelector((state: RootState) => state.recipeGroups.courses.items);
+  useSingle(fetchCourses, courses);
 
   const data = useMemo(() => courses
       ?.map(c => ({ value: c.title, label: optionallyFormatMessage(intl, 'course.', c.title) }))

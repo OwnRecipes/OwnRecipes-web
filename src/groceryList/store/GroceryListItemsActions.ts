@@ -1,13 +1,14 @@
-import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
+import { request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { toBasicAction } from '../../common/store/redux';
 import { ACTION } from '../../common/store/ReduxHelper';
+import { handleError, handleFormError } from '../../common/requestUtils';
 import { GroceryListItemsActionTypes, GroceryListItemsDispatch, GROCERY_LIST_ITEMS_STORE } from './GroceryListItemsTypes';
 import { GroceryListItem, GroceryListItemDto, toGroceryListItem } from './GroceryListItemTypes';
 
 export const load = (listId: number) => (dispatch: GroceryListItemsDispatch) => {
   dispatch({ ...toBasicAction(GROCERY_LIST_ITEMS_STORE, ACTION.GET_START) });
-  request()
+  request
     .get(`${serverURLs.list_item}?list=${listId}`)
     .then(res => {
       dispatch({
@@ -26,7 +27,7 @@ export const toggleItems = (listId: number, items: Array<GroceryListItem>, check
 
   const ids = items.filter(i => i.completed !== checked).map(i => ({ id: i.id, completed: checked }));
 
-  request()
+  request
     .patch(serverURLs.bulk_list_item)
     .send(ids)
     .then(() => {
@@ -44,7 +45,7 @@ export const toggleItems = (listId: number, items: Array<GroceryListItem>, check
 export const clearCompleted = async (dispatch: GroceryListItemsDispatch, listId: number, items: Array<GroceryListItem>) => {
   const ids = items.filter(i => i.completed).map(i => i.id);
 
-  return request()
+  return request
     .delete(serverURLs.bulk_list_item)
     .send(ids)
     .then(() => {

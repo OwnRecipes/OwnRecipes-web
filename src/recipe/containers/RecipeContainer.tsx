@@ -38,14 +38,14 @@ const RecipeContainer: React.FC = () => {
   const handlePreloadRecipe = useCallback(() => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
     dispatch(RecipeFormActions.preload(recipe));
-  }, [recipe, dispatch]);
+  }, [recipe]);
 
-  // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, [dispatch]);
+  // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, []);
   const deleteRecipe = useCallback(() => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
     setIsDeleting(true);
     dispatch(RecipeActions.deleteRecipe(recipe.id, recipe.slug));
-  }, [recipe, dispatch]);
+  }, [recipe]);
 
   // Handle deletion
   useEffect(() => {

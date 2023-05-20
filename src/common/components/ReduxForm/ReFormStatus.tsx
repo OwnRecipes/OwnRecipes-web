@@ -13,7 +13,7 @@ const ReFormStatus: React.FC<IReFormStatusProps> = ({
         <FormStatus
             dirty = {dirty}
             submitting = {submitting}
-            errors = {(submitErrors) as Record<string, ValidationError>}
+            errors = {submitErrors as Record<string, ValidationError>}
             onSubmitSuccess = {onSubmitSuccess} />
       )}
     </FormSpy>

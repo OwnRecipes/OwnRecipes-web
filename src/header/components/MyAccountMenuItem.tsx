@@ -13,20 +13,51 @@ import GroceryListMenuItem from './GroceryListMenuItem';
 const LanguageDialog = lazy(() => import('./LanguageDialog'));
 const ThemeDialog = lazy(() => import('./ThemeDialog'));
 
+const messages = defineMessages({
+  navLoginTitle: {
+    id: 'nav.login.title',
+    description: 'Login title',
+    defaultMessage: 'Login',
+  },
+  hello: {
+    id: 'nav.accountmenu.hello',
+    description: 'Account menu greeting',
+    defaultMessage: 'Hello, {name}',
+  },
+  title: {
+    id: 'nav.accountmenu.title',
+    description: 'Account menu title',
+    defaultMessage: 'Account',
+  },
+  language: {
+    id: 'nav.accountmenu.language',
+    description: 'Item to open the language change dialog',
+    defaultMessage: 'Language',
+  },
+  theme: {
+    id: 'nav.accountmenu.theme',
+    description: 'Item to open the theme change dialog',
+    defaultMessage: 'Theme',
+  },
+  admin: {
+    id: 'nav.accountmenu.admin',
+    description: 'Djanog Admin Page',
+    defaultMessage: 'Administration',
+  },
+  logout: {
+    id: 'nav.accountmenu.logout',
+    description: 'Logout title',
+    defaultMessage: 'Logout',
+  },
+});
+
 export const AccountLoginMenuItem: React.FC = () => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    label: {
-      id: 'nav.login.title',
-      description: 'Login title',
-      defaultMessage: 'Login',
-    },
-  });
 
   return (
     <Button id='login-button' variant='primary' href={getRoutePath('/login')} className='nav-link'>
       <Icon icon='box-arrow-in-right' variant='light' size='2x' className='visible-xs' />
-      <span className='hidden-xs'>{formatMessage(messages.label)}</span>
+      <span className='hidden-xs'>{formatMessage(messages.navLoginTitle)}</span>
     </Button>
   );
 };
@@ -43,38 +74,6 @@ export interface IAccountMenuMenuItemProps {
 export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
     account, settings, onChangeLanguage, onChangeTheme, onLogoutClick }: IAccountMenuMenuItemProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    hello: {
-      id: 'nav.accountmenu.hello',
-      description: 'Account menu greeting',
-      defaultMessage: 'Hello, {name}',
-    },
-    title: {
-      id: 'nav.accountmenu.title',
-      description: 'Account menu title',
-      defaultMessage: 'Account',
-    },
-    language: {
-      id: 'nav.accountmenu.language',
-      description: 'Item to open the language change dialog',
-      defaultMessage: 'Language',
-    },
-    theme: {
-      id: 'nav.accountmenu.theme',
-      description: 'Item to open the theme change dialog',
-      defaultMessage: 'Theme',
-    },
-    admin: {
-      id: 'nav.accountmenu.admin',
-      description: 'Djanog Admin Page',
-      defaultMessage: 'Administration',
-    },
-    logout: {
-      id: 'nav.accountmenu.logout',
-      description: 'Logout title',
-      defaultMessage: 'Logout',
-    },
-  });
 
   const [showLanguageDialog, setShowLanguageDialog] = useState<boolean>(false);
   const [showThemeDialog, setShowThemeDialog] = useState<boolean>(false);
