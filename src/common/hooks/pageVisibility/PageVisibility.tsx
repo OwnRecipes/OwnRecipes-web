@@ -1,7 +1,7 @@
 // Coded by Gilad Peleg (https://github.com/pgilad/react-page-visibility)
 
 import { Children, Component } from 'react';
-import { getHandlerArgs, isSupported, visibility } from './utils';
+import { getPageVisibleHandlerArgs, isSupported, visibility } from './utils';
 
 export interface IPageVisibilityProps {
   onChange: (visibile: boolean, visibleString: string) => void;
@@ -42,7 +42,7 @@ class PageVisibility extends Component<IPageVisibilityProps, IPageVisibilityStat
       // propagate change to callback
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.props.onChange(...getHandlerArgs());
+      this.props.onChange(...getPageVisibleHandlerArgs());
     }
     if (typeof this.props.children === 'function') {
       // we pass the props directly to the function as children
@@ -61,7 +61,7 @@ class PageVisibility extends Component<IPageVisibilityProps, IPageVisibilityStat
         // don't pass any arguments if PageVisibility is not supported
         return childrenFunc();
       }
-      return childrenFunc(...getHandlerArgs());
+      return childrenFunc(...getPageVisibleHandlerArgs());
     }
 
     return Children.only(this.props.children);

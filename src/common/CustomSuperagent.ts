@@ -7,6 +7,8 @@ import { serverURLs } from './config';
 import { AccountAction, AccountActionTypes, ACCOUNT_STORE, LoginDto, toUserAccount, ACCOUNT_TOKEN_STORAGE_KEY, UserAccount } from '../account/store/types';
 import { toBasicAction } from './store/redux';
 import LocalStorageHelper from './LocalStorageHelper';
+import { isNetworkError } from './requestUtils';
+import { ACTION } from './store/ReduxHelper';
 
 export const refreshToken = (() => {
   let blocking = false;
@@ -26,9 +28,13 @@ export const refreshToken = (() => {
         store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data, remember) } as AccountAction);
         return res;
       })
-      .catch(() => {
+      .catch(error => {
         blocking = false;
-        store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) } as AccountAction);
+        if (isNetworkError(error)) {
+          store.dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.NO_CONNECTION) });
+        } else {
+          store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) } as AccountAction);
+        }
         return null;
       })
   );

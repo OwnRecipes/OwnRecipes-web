@@ -17,16 +17,22 @@ import { getEnvAsBoolean, getRoutePath } from '../../common/utility';
 import request, { getToken } from '../../common/CustomSuperagent';
 import AuthContext from '../context/AuthContext';
 import { useSelector } from '../../common/store/redux';
+import usePageVisibility from '../../common/hooks/pageVisibility/usePageVisibility';
+import useHasInternetConnection from '../../common/hooks/useHasInternetConnection';
 
 const AuthObserver: React.FC = () => {
   const nav = useNavigate();
   const location = useLocation();
+  const isAppVisible = usePageVisibility();
+  const hasConnection = useHasInternetConnection();
 
   return (
     <>
       <EnhancedAuthObserverClass
           nav = {nav}
           loc = {location}
+          isAppVisible = {isAppVisible}
+          hasConnection = {hasConnection}
           />
       <AuthContextObserver />
     </>
@@ -36,6 +42,9 @@ const AuthObserver: React.FC = () => {
 interface IAuthObserverClassProps {
   nav: NavigateFunction;
   loc: Location;
+
+  isAppVisible: boolean;
+  hasConnection: boolean;
 }
 
 interface IDispatchProps {
@@ -102,6 +111,16 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
     } else if (prevToken != null && currToken == null) {
       this.postProcessLogout();
     }
+
+    const prevIsAppVisible = prevProps.isAppVisible;
+    const currIsAppVisible = this.props.isAppVisible;
+
+    const prevHasConnection = prevProps.hasConnection;
+    const currHasConnection = this.props.hasConnection;
+
+    if (prevIsAppVisible !== currIsAppVisible || prevHasConnection !== currHasConnection) {
+      this.postProcessAppActivityChange(currIsAppVisible, currHasConnection);
+    }
   }
 
   postProcessLogin() {
@@ -139,6 +158,7 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
 
     if (this.timeoutID) {
       clearTimeout(this.timeoutID);
+      this.timeoutID = undefined;
     }
     this.checkAuth(currUser);
   }
@@ -146,6 +166,7 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
   updateAppToken(user: UserAccount) {
     if (this.timeoutID != null) {
       clearTimeout(this.timeoutID);
+      this.timeoutID = undefined;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -170,15 +191,32 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
     // console.log('[AuthObserver::postProcessLogout]');
     if (this.timeoutID != null) {
       clearTimeout(this.timeoutID);
+      this.timeoutID = undefined;
     }
 
     setTimeout(() => {
       const isLoginRequired = getEnvAsBoolean('REACT_APP_REQUIRE_LOGIN');
       const path = getRoutePath(isLoginRequired ? '/login' : '/home');
-      // console.log(`[AuthObserver::componentDidUpdate] user has logged out, forward to "${path}"`);
+      // console.log(`[AuthObserver::postProcessLogout] user has logged out, forward to "${path}"`);
       this.props.nav(path);
       this.props.nav(0);
     }, 500);
+  }
+
+  postProcessAppActivityChange(isAppVisible: boolean, hasConnection: boolean) {
+    if ((!isAppVisible || !hasConnection) && this.timeoutID != null) {
+      // console.log('[AuthObserver::postProcessAppActivityChange] app is in background, stop refreshing the token.');
+      clearTimeout(this.timeoutID);
+      this.timeoutID = undefined;
+    } else if (isAppVisible && hasConnection && this.timeoutID == null) {
+      const newToken = getToken();
+      if (newToken != null) {
+        // console.log('[AuthObserver::postProcessAppActivityChange] app is active again, restart refreshing the token.');
+        this.checkAuth(newToken);
+      } else {
+        // console.log('[AuthObserver::postProcessAppActivityChange] app is active again, with no token.');
+      }
+    }
   }
 
   handleForgetLogin() {
