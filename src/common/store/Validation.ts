@@ -33,7 +33,9 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
   const result = createValidationResult();
 
   const body =  error.response?.body;
-  if (body == null) return undefined;
+  if (body == null) {
+    return result;
+  }
 
   if (typeof body !== 'object') {
     result[INTERNAL_ERROR_KEY] = { code: '500', message: body };
