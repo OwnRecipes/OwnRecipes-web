@@ -18,15 +18,60 @@ import Button from '../../common/components/Button';
 import NavButton from '../../common/components/NavButton';
 import { Toolbar } from '../../common/components/Toolbar';
 import CookingModeButton from './CookingModeButton';
+import Tooltip from '../../common/components/Tooltip';
 
-export interface IRecipeHeaderProps {
-  recipe:   Recipe | undefined;
-  editable: boolean;
+const editorMessages = defineMessages({
+  edited_by: {
+    id: 'recipe.edited_by',
+    description: 'The recipe was edited by ...',
+    defaultMessage: 'Edited by',
+  },
+});
 
-  onEditRecipe: () => void;
-  deleteRecipe: () => void;
-  // onAddToMenuClick: () => void;
+interface IRecipeEditorProps {
+  recipe: Recipe;
 }
+
+export const RecipeEditor: React.FC<IRecipeEditorProps> = ({ recipe }: IRecipeEditorProps) => {
+  const { formatMessage, locale } = useIntl();
+
+  if (recipe.update_date && new Date(recipe.update_date).getTime() > 0 && recipe.update_username) {
+    const editorS = `${formatMessage(editorMessages.edited_by)}: ${recipe.update_username}`;
+    const editDateS = new Date(recipe.update_date).toLocaleString(locale);
+    const tooltipJsx = (
+      <div className='d-flex-column'>
+        <div>{editorS}</div>
+        <div>{editDateS}</div>
+      </div>
+    );
+    return (
+      <Tooltip id={`${recipe.id}-editor-tooltip`} tooltip={tooltipJsx}>
+        <Icon icon='pencil' size='1x' style={{ marginLeft: '5px', marginRight: 0 }} ariaLabel={`${formatMessage(editorMessages.edited_by)}: ${recipe.update_username}. ${editDateS}`} />
+      </Tooltip>
+    );
+  } else {
+    return null;
+  }
+};
+
+export const RecipeTimestamp: React.FC<IRecipeEditorProps> = ({ recipe }: IRecipeEditorProps) => {
+  const { locale } = useIntl();
+  if (recipe.update_date && new Date(recipe.update_date).getTime() > 0 && recipe.update_username === recipe.pub_username) {
+    return (
+      <>
+        <Icon icon='calendar' />
+        {new Date(recipe.update_date).toLocaleDateString(locale)}
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Icon icon='calendar' />
+        {new Date(recipe.pub_date).toLocaleDateString(locale)}
+      </>
+    );
+  }
+};
 
 const messages = defineMessages({
   edit_tooltip: {
@@ -95,6 +140,15 @@ const messages = defineMessages({
     defaultMessage: 'Delete',
   },
 });
+
+export interface IRecipeHeaderProps {
+  recipe:   Recipe | undefined;
+  editable: boolean;
+
+  onEditRecipe: () => void;
+  deleteRecipe: () => void;
+  // onAddToMenuClick: () => void;
+}
 
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     recipe, editable, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
@@ -210,12 +264,12 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
       </div>
       <div className='recipe-header-chips'>
         <Chip variant='secondary'>
-          <Icon icon='calendar' />
-          {recipe?.updateDate && new Date(recipe.updateDate).toLocaleDateString(intl.locale)}
+          <RecipeTimestamp recipe={recipe} />
+          <RecipeEditor recipe={recipe} />
         </Chip>
         <Chip variant='secondary'>
           <Icon icon='person' />
-          {recipe?.username ?? ''}
+          {recipe?.pub_username ?? ''}
         </Chip>
       </div>
       {recipe.tags != null && recipe.tags.length > 0 && (

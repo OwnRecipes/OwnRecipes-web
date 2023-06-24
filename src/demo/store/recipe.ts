@@ -91,9 +91,9 @@ export const demoRecipes: Array<RecipeDto> = [
         "child_recipe_id": 3
       }
     ],
+    "pub_username": "roy",
     "pub_date": "2011-05-21",
     "update_date": "2022-04-29",
-    "username": "roy",
     "title": "Tasty Chili",
     "slug": "tasty-chili",
     "info": "This chili is requested every winter by friends and family. I have been  making this chili every since I was a small child and learned from my grandma",
@@ -195,9 +195,9 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "subrecipes": [],
+    "pub_username": "Demo User",
     "pub_date": "2011-05-21",
     "update_date": "2018-02-05",
-    "username": "Demo User",
     "title": "Tasty Chili 4",
     "slug": "tasty-chili-4",
     "info": "This chili is requested every winter by friends and family. I have been  making this chili every since I was a small child and learned from my grandma",
@@ -335,9 +335,9 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "subrecipes": [],
+    "pub_username": "roy",
     "pub_date": "2018-05-21",
     "update_date": "2018-05-21",
-    "username": "roy",
     "title": "Tomato-Chili-Potato-Rosti",
     "slug": "tomato-chili-potato-rosti",
     "info": "Delicious side dish for buffet or parties.",
@@ -469,9 +469,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "vici",
     "pub_date": "2022-06-08T13:27:15.525308-05:00",
     "update_date": "2022-06-08T13:27:15.525562-05:00",
-    "username": "vici",
     "course": {
       "id": 4,
       "title": "Main"
@@ -600,9 +600,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "vici",
     "pub_date": "2022-06-08T13:32:44.087643-05:00",
     "update_date": "2022-06-08T13:32:45.917856-05:00",
-    "username": "vici",
     "course": {
       "id": 0,
       "title": "-"
@@ -743,9 +743,9 @@ export const demoRecipes: Array<RecipeDto> = [
     "tags": [],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "vici",
     "pub_date": "2022-06-08T13:36:56.882587-05:00",
     "update_date": "2022-06-08T13:36:59.943829-05:00",
-    "username": "vici",
     "course": {
       "id": 4,
       "title": "Main"
@@ -908,9 +908,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "vici",
     "pub_date": "2022-06-08T13:45:53.938359-05:00",
     "update_date": "2022-06-08T13:46:18.137762-05:00",
-    "username": "vici",
     "course": {
       "id": 6,
       "title": "Cake"
@@ -1024,9 +1024,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "vici",
     "pub_date": "2022-06-08T13:53:10.220946-05:00",
     "update_date": "2022-06-08T13:53:11.667687-05:00",
-    "username": "vici",
     "course": {
       "id": 1,
       "title": "Breakfast"
@@ -1143,9 +1143,9 @@ export const demoRecipes: Array<RecipeDto> = [
     "tags": [],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-08T14:07:56.461828-05:00",
     "update_date": "2022-06-08T14:08:02.948341-05:00",
-    "username": "Demo User",
     "course": {
       "id": 4,
       "title": "Main"
@@ -1247,9 +1247,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-09T14:27:03.468629-05:00",
     "update_date": "2022-06-09T14:27:04.501239-05:00",
-    "username": "Demo User",
     "course": {
       "id": 7,
       "title": "Side Dish"
@@ -1363,9 +1363,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-09T14:34:43.436216-05:00",
     "update_date": "2022-06-09T14:35:35.474435-05:00",
-    "username": "Demo User",
     "course": {
       "id": 6,
       "title": "Cake"
@@ -1463,9 +1463,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-09T14:44:04.001019-05:00",
     "update_date": "2022-06-09T14:45:15.736852-05:00",
-    "username": "Demo User",
     "course": {
       "id": 4,
       "title": "Main"
@@ -1570,9 +1570,9 @@ export const demoRecipes: Array<RecipeDto> = [
         "title": "Magical Menu"
       }
     ],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-10T00:02:36.771801-05:00",
     "update_date": "2022-06-10T00:18:39.511006-05:00",
-    "username": "Demo User",
     "course": {
       "id": 2,
       "title": "Entry"
@@ -1688,9 +1688,9 @@ export const demoRecipes: Array<RecipeDto> = [
         "title": "Magical Menu"
       }
     ],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-10T00:14:06.846116-05:00",
     "update_date": "2022-06-10T00:18:46.061308-05:00",
-    "username": "Demo User",
     "course": {
       "id": 4,
       "title": "Main"
@@ -1772,9 +1772,9 @@ export const demoRecipes: Array<RecipeDto> = [
         "title": "Magical Menu"
       }
     ],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-10T00:16:39.330134-05:00",
     "update_date": "2022-06-10T00:18:51.368542-05:00",
-    "username": "Demo User",
     "course": {
       "id": 5,
       "title": "Dessert"
@@ -1827,9 +1827,9 @@ export const demoRecipes: Array<RecipeDto> = [
         "title": "Eggnog coffee"
       }
     ],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-10T00:18:07.279894-05:00",
     "update_date": "2022-06-10T00:18:18.673456-05:00",
-    "username": "Demo User",
     "course": {
       "id": 0,
       "title": "-"
@@ -1933,9 +1933,9 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "rating": 0,
     "subrecipes": [],
+    "pub_username": "Demo User",
     "pub_date": "2022-06-10T00:31:06.962942-05:00",
     "update_date": "2022-06-10T00:31:07.857306-05:00",
-    "username": "Demo User",
     "course": {
       "id": 2,
       "title": "Entry"

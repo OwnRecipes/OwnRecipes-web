@@ -179,7 +179,7 @@ export interface RecipeList {
 
   info:     string;
   rating:   number;
-  pubDate:  string; // 2011-05-20
+  pub_date:  string; // 2011-05-20
 }
 
 export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
@@ -189,14 +189,12 @@ export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
 
   photoThumbnail: dto.photo_thumbnail ?? undefined,
 
-  info:    dto.info,
-  rating:  dto.rating,
-  pubDate: dto.pub_date,
+  info:     dto.info,
+  rating:   dto.rating,
+  pub_date: dto.pub_date,
 });
 
 export interface RecipeDto extends RecipeListDto {
-  username:   string;
-  author:     number;
   source:     string;
 
   cook_time?: number;
@@ -215,12 +213,15 @@ export interface RecipeDto extends RecipeListDto {
   directions: string;
 
   public: boolean;
-  update_date: string;
+
+  author:       number;
+  pub_username: string;
+  update_author?:   number;
+  update_username?: string;
+  update_date:      string;
 }
 
 export interface Recipe extends RecipeList {
-  username:    string;
-  author:      number;
   source:      string;
 
   cookTime?: number;
@@ -239,7 +240,12 @@ export interface Recipe extends RecipeList {
   directions: string;
 
   public: boolean;
-  updateDate: string;
+
+  author:       number;
+  pub_username: string;
+  update_author?:   number;
+  update_username?: string;
+  update_date:      string;
 
   customServings: number;
 }
@@ -249,8 +255,6 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   title: dto.title,
   slug:  dto.slug,
 
-  username: dto.username,
-  author:   dto.author,
   source:   dto.source,
 
   cookTime: parseBackendNumber(dto.cook_time),
@@ -272,8 +276,13 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
 
   rating: dto.rating,
   public: dto.public,
-  pubDate:    dto.pub_date,
-  updateDate: dto.update_date,
+
+  author:       dto.author,
+  pub_username: dto.pub_username,
+  pub_date:     dto.pub_date,
+  update_author:   dto.update_author,
+  update_username: dto.update_username,
+  update_date:     dto.update_date,
 
   customServings: dto.servings,
 });

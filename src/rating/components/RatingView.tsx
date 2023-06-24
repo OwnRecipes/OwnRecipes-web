@@ -18,7 +18,7 @@ const messages = defineMessages({
   edited_by: {
     id: 'rating.edited_by',
     description: 'The rating was edited by ...',
-    defaultMessage: 'Edited by:',
+    defaultMessage: 'Edited by',
   },
   edit_button: {
     id: 'rating_comments.edit_button',
