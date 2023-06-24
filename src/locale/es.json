@@ -284,7 +284,7 @@
   "recipe.ingredients": "Ingredientes",
   "recipe.ingredients_for_servings": "Ingredientes para",
   "recipe.last_updated": "Última actualización",
-  "recipe.minutes": "Minutos",
+  "recipe.minutes": "{count, plural, one {# minuto} other {# minutos}}",
   "recipe.prep_time": "Tiempo de preparación",
   "recipe.print_tooltip": "Imprimir receta",
   "recipe.recipe_ingredient_button.add_groceries": "",

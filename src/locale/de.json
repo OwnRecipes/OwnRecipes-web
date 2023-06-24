@@ -284,7 +284,7 @@
   "recipe.ingredients": "Zutaten",
   "recipe.ingredients_for_servings": "Zutaten für",
   "recipe.last_updated": "Letzte Bearbeitung",
-  "recipe.minutes": "Minuten",
+  "recipe.minutes": "{count, plural, one {# Minute} other {# Minuten}}",
   "recipe.prep_time": "Vorbereitungszeit",
   "recipe.print_tooltip": "Rezept drucken",
   "recipe.recipe_ingredient_button.add_groceries": "Auf die Einkaufsliste",

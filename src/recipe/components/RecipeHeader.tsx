@@ -62,7 +62,7 @@ const messages = defineMessages({
   minutes: {
     id: 'recipe.minutes',
     description: 'minutes',
-    defaultMessage: 'minutes',
+    defaultMessage: '{count, plural, one {# minute} other {# minutes}}',
   },
   source: {
     id: 'recipe.source',
@@ -185,16 +185,14 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
           <Chip variant='secondary'>
             <Icon icon='clock' />
             {`${formatMessage(messages.prep_time)}: `}
-            {recipe.prepTime}
-            {` ${formatMessage(messages.minutes)}`}
+            {` ${formatMessage(messages.minutes, { count: recipe.prepTime })}`}
           </Chip>
         )}
         {recipe.cookTime != null && recipe.cookTime > 0 && (
           <Chip variant='secondary'>
             <Icon icon='clock' />
             {`${formatMessage(messages.cooking_time)}: `}
-            {recipe.cookTime}
-            {` ${formatMessage(messages.minutes)}`}
+            {` ${formatMessage(messages.minutes, { count: recipe.prepTime })}`}
           </Chip>
         )}
         {recipe.course != null && recipe.course.title != null && recipe.course.title.length > 0 && (
