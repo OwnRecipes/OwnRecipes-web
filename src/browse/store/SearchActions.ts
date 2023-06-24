@@ -1,4 +1,4 @@
-import { request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { objToSearchString } from '../../common/utility';
@@ -22,7 +22,7 @@ export const loadRecipes = (filters: Record<string, string>) => (dispatch: Searc
     }
   });
 
-  request
+  request()
     .get(serverURLs.browse)
     .query(parsedFilters)
     .then(res => {
@@ -49,7 +49,7 @@ export const loadRandomRecipes = (filters: Record<string, string>) => (dispatch:
     }
   });
 
-  request
+  request()
     .get(serverURLs.mini_browse)
     .query(parsedFilters)
     .then(res => {

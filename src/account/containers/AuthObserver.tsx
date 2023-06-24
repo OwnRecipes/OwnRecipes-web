@@ -170,7 +170,7 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    request.set('Authorization', `Bearer ${user.token}`);
+    request().set('Authorization', `Bearer ${user.token}`);
 
     this.checkAuth(user);
   }

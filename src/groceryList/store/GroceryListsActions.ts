@@ -1,4 +1,4 @@
-import { request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { toBasicAction } from '../../common/store/redux';
 import { ACTION } from '../../common/store/ReduxHelper';
@@ -9,7 +9,7 @@ import { toGroceryList } from './GroceryListTypes';
 // eslint-disable-next-line import/prefer-default-export
 export const load = () => (dispatch: GroceryListsDispatch) => {
   dispatch({ ...toBasicAction(GROCERY_LISTS_STORE, ACTION.GET_START) });
-  request
+  request()
     .get(serverURLs.list)
     .then(res => {
       dispatch({

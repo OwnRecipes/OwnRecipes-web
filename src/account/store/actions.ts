@@ -1,7 +1,7 @@
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import moment from 'moment';
 
-import { refreshToken, request } from '../../common/CustomSuperagent';
+import request, { refreshToken } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import LocalStorageHelper from '../../common/LocalStorageHelper';
@@ -25,7 +25,7 @@ export const getToken = async (dispatch: AnyDispatch, username: string, pass: st
   dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.UPDATE_START) });
 
   const url = serverURLs.auth_token;
-  return request
+  return request()
     .post(url)
     .send({ username: username, password: pass })
     .then(res => {
@@ -96,7 +96,7 @@ export const forgetLogin = () => (dispatch: AccountDispatch) => {
 
 export const logUserOut = async (dispatch: AccountDispatch, oldToken: string | undefined) => {
   const url = serverURLs.revoke_token;
-  return request
+  return request()
     .post(url)
     .send({ refresh: oldToken })
     .then(() => {

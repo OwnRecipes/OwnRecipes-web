@@ -23,7 +23,7 @@ export const refreshToken = (() => {
         const data: LoginDto = { ...res.body };
         const user = toUserAccount(data, remember);
         LocalStorageHelper.setItem(ACCOUNT_TOKEN_STORAGE_KEY, JSON.stringify(user));
-        request.set('Authorization', `Bearer ${user.token}`);
+        request().set('Authorization', `Bearer ${user.token}`);
 
         store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: toUserAccount(data, remember) } as AccountAction);
         return res;
@@ -89,10 +89,17 @@ export const clearToken = () => {
     LocalStorageHelper.removeItem(ACCOUNT_TOKEN_STORAGE_KEY, user.username);
   }
 
-  request.unset('Authorization');
+  request().unset('Authorization');
 };
 
+let requestInstance: SuperAgentStatic & SuperAgentRequest;
+
 // Create a defaults context
-export const request = initializeSuperagent();
+export function request() {
+  if (!requestInstance) {
+    requestInstance = initializeSuperagent();
+  }
+  return requestInstance;
+}
 
 export default request;

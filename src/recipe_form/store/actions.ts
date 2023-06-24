@@ -1,4 +1,4 @@
-import { request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
@@ -11,7 +11,7 @@ import { RecipeFormDispatch, RECIPE_FORM_STORE } from './types';
 
 export const load = (recipeSlug: string) => (dispatch: RecipeFormDispatch) => {
   dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.GET_START) });
-  request
+  request()
     .get(`${serverURLs.recipe}${recipeSlug}/`)
     .then(res => {
       const recipe = toRecipe(res.body);
@@ -41,8 +41,8 @@ export const save = async (dispatch: AnyDispatch, data: Recipe) => {
 
   const isNew = !data.id;
   const r = isNew
-      ? request.post(serverURLs.recipe)
-      : request.patch(`${serverURLs.recipe}${data.slug}/`);
+      ? request().post(serverURLs.recipe)
+      : request().patch(`${serverURLs.recipe}${data.slug}/`);
 
   dispatch({
     ...toBasicAction(
@@ -55,7 +55,7 @@ export const save = async (dispatch: AnyDispatch, data: Recipe) => {
   return r.send(dto)
     .then(res => {
       if (photo) {
-        return request
+        return request()
           .patch(`${serverURLs.recipe}${res.body.slug}/`)
           .attach('photo', photo)
           .then(resPhoto => {
@@ -105,7 +105,7 @@ export const invalidateCreatableLists = (oldRecipe: Recipe, savedRecipe: Recipe)
   }
 };
 
-export const fetchRecipeList = (searchTerm: string): Promise<Array<AutocompleteListItem>> => request
+export const fetchRecipeList = (searchTerm: string): Promise<Array<AutocompleteListItem>> => request()
     .get(`${serverURLs.recipe}?fields=id,title,slug&limit=5&search=${searchTerm}`)
     .then(res => res.body.results.map((recipe: RecipeDto) => ({ key: recipe.slug, name: recipe.slug, char: recipe.title } as AutocompleteListItem)))
     .catch(() => []);

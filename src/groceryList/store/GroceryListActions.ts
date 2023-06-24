@@ -1,4 +1,4 @@
-import { request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { Ingredient, SubRecipe } from '../../recipe/store/RecipeTypes';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
@@ -13,7 +13,7 @@ export const getGroceryListSuccess = (groceryList: GroceryList): GroceryListActi
 
 export const load = (listId: string) => (dispatch: GroceryListDispatch) => {
   dispatch({ ...toBasicAction(GROCERY_LIST_STORE, ACTION.GET_START) });
-  request
+  request()
     .get(`${serverURLs.list}${listId}/`)
     .then(res => {
       dispatch(getGroceryListSuccess(toGroceryList(res.body as GroceryListDto)));
@@ -24,7 +24,7 @@ export const load = (listId: string) => (dispatch: GroceryListDispatch) => {
 export const create = async (dispatch: AnyDispatch, item: GroceryListCreate) => {
   dispatch({ ...toBasicAction(GROCERY_LIST_STORE, ACTION.CREATE_START) });
 
-  return request
+  return request()
     .post(serverURLs.list)
     .send(item)
     .then(res => {
@@ -43,7 +43,7 @@ export const create = async (dispatch: AnyDispatch, item: GroceryListCreate) => 
 export const update = async (dispatch: AnyDispatch, slug: string, item: Partial<GroceryListUpdate>) => {
   dispatch({ ...toBasicAction(GROCERY_LIST_STORE, ACTION.UPDATE_START) });
 
-  return request
+  return request()
     .patch(`${serverURLs.list}${slug}/`)
     .send(item)
     .then(res => {
@@ -62,7 +62,7 @@ export const update = async (dispatch: AnyDispatch, slug: string, item: Partial<
 export const remove = (id: number, slug: string) => (dispatch: GroceryListDispatch) => {
   dispatch({ ...toBasicAction(GROCERY_LIST_STORE, ACTION.DELETE_START) });
 
-  request
+  request()
     .delete(`${serverURLs.list}${slug}/`)
     .then(() => {
       dispatch({
@@ -91,7 +91,7 @@ export const bulkAdd = async (dispatch: AnyDispatch, list: number, data: Grocery
 
   if (allItems.length > 0) {
     dispatch({ ...toBasicAction(GROCERY_LIST_STORE, ACTION.UPDATE_START) });
-    return request
+    return request()
       .post(serverURLs.bulk_list_item)
       .send(allItems)
       .then(res => {

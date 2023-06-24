@@ -1,4 +1,4 @@
-import { request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { CourseDto, toCourse, CuisineDto, toCuisine, toTag } from '../../recipe/store/RecipeTypes';
@@ -9,7 +9,7 @@ import { COURSES_STORE, CUISINES_STORE, RecipeGroupsDispatch, TAGS_STORE } from 
 export const fetchCourses = () => (dispatch: RecipeGroupsDispatch) => {
   dispatch({ ...toBasicAction(COURSES_STORE, ACTION.GET_START) });
 
-  request
+  request()
     .get(serverURLs.course)
     .then(res => {
       dispatch({
@@ -28,7 +28,7 @@ export const fetchCourses = () => (dispatch: RecipeGroupsDispatch) => {
 export const fetchCuisines = () => (dispatch: RecipeGroupsDispatch) => {
   dispatch({ ...toBasicAction(CUISINES_STORE, ACTION.GET_START) });
 
-  request
+  request()
     .get(serverURLs.cuisine)
     .then(res => {
       dispatch({
@@ -47,7 +47,7 @@ export const fetchCuisines = () => (dispatch: RecipeGroupsDispatch) => {
 export const fetchTags = () => (dispatch: RecipeGroupsDispatch) => {
   dispatch({ ...toBasicAction(TAGS_STORE, ACTION.GET_START) });
 
-  request
+  request()
     .get(serverURLs.tag)
     .then(res => {
       dispatch({

@@ -1,4 +1,4 @@
-import { request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { toBasicAction } from '../../common/store/redux';
@@ -11,7 +11,7 @@ export const getRecipeSuccess = (recipe: Recipe): RecipeAction => (
 
 export const load = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
   dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.GET_START) });
-  request
+  request()
     .get(`${serverURLs.recipe}${recipeSlug}/`)
     .then(res => {
       dispatch(getRecipeSuccess(toRecipe(res.body as RecipeDto)));
@@ -21,7 +21,7 @@ export const load = (recipeSlug: string) => (dispatch: RecipeDispatch) => {
 
 export const deleteRecipe = (id: number, recipeSlug: string) => (dispatch: RecipeDispatch) => {
   dispatch({ ...toBasicAction(RECIPE_STORE, ACTION.DELETE_START) });
-  request
+  request()
     .delete(`${serverURLs.recipe}${recipeSlug}/`)
     .then(() => {
       dispatch({ ...toBasicAction(RECIPE_STORE, RecipeActionTypes.RECIPE_DELETE), payload: { id: id } });
