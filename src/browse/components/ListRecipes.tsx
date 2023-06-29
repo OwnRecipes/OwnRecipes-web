@@ -15,12 +15,28 @@ export interface IListRecipes {
   onOpenRecipe: (rec: RecipeList) => void;
 }
 
+function hashCode(str: string): number {
+  // Code by Barak (https://stackoverflow.com/a/8831937).
+
+  let hash = 0;
+  for (let i = 0; i < str.length; ++i) {
+    const char = str.charCodeAt(i);
+    // eslint-disable-next-line no-bitwise
+    hash = ((hash << 5) - hash) + char;
+    // eslint-disable-next-line no-bitwise
+    hash &= hash;
+  }
+
+  return hash;
+}
+
 function getRecipeImage(recipe: RecipeList) {
   if (recipe.photoThumbnail) {
     return recipe.photoThumbnail;
   } else {
     const images = ['fish', 'fried-eggs', 'pizza', 'soup', 'steak'];
-    return getResourcePath(`/images/${images[Math.floor(Math.random() * images.length)]}.jpg`);
+    const recipeImageHash = Math.abs(hashCode(recipe.title));
+    return getResourcePath(`/images/${images[recipeImageHash % 5]}.jpg`);
   }
 }
 
