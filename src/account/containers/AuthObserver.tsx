@@ -156,10 +156,6 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
       this.props.sideloadToken(currUser);
     }
 
-    if (this.timeoutID) {
-      clearTimeout(this.timeoutID);
-      this.timeoutID = undefined;
-    }
     this.checkAuth(currUser);
   }
 
@@ -180,8 +176,14 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
     const expTime = decodedToken?.exp;
     if (!expTime) return;
 
+    if (this.timeoutID) {
+      clearTimeout(this.timeoutID);
+      this.timeoutID = undefined;
+    }
+
     const tokenValidDuration = expTime - moment().unix();
     const refreshInSeconds = Math.max(0, tokenValidDuration - 60);
+    // console.log(`[AuthObserver::checkAuth] queue tryRefresh for in ${refreshInSeconds} seconds.`);
     this.timeoutID = setTimeout(() => {
       this.props.tryRefresh();
     }, refreshInSeconds * 1000);

@@ -61,7 +61,7 @@ export const tryAutoLogin = () => (dispatch: AccountDispatch) => {
   }
 };
 
-export const tryRefresh = () => (dispatch: AccountDispatch) => {
+export const tryRefresh = () => () => {
   const storageItem = LocalStorageHelper.getItem(ACCOUNT_TOKEN_STORAGE_KEY);
   if (storageItem == null) {
     return;
@@ -72,13 +72,8 @@ export const tryRefresh = () => (dispatch: AccountDispatch) => {
     return;
   }
 
-  const decodedToken: JwtPayload | undefined = jwtDecode<JwtPayload>(user.token);
-  if (decodedToken.exp && decodedToken.exp <= moment().unix()) {
-    dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.FORGET_LOGIN) });
-  } else if (shouldRefreshToken(user.token)) {
+  if (shouldRefreshToken(user.token)) {
     refreshToken.instance(user.remember);
-  } else {
-    dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGIN), payload: user });
   }
 };
 
