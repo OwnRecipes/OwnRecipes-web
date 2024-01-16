@@ -119,6 +119,7 @@
   "internal_error.response": "Serverantwort",
   "login.alert.error_title": "Anmeldung fehlgeschlagen",
   "login.alert.incorrect_credentials": "Benutzername oder Passwort stimmen nicht überein.",
+  "login.logout": "Ausloggen",
   "login.password": "Passwort",
   "login.please_sign_in": "Anmelden",
   "login.remember": "Für 14 Tage an mich erinnern",

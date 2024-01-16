@@ -119,6 +119,7 @@
   "internal_error.response": "Réponse du serveur",
   "login.alert.error_title": "Échec de la connexion",
   "login.alert.incorrect_credentials": "Le nom d'utilisateur ou le mot de passe ne correspond pas.",
+  "login.logout": "Déconnecter",
   "login.password": "Mot de passe",
   "login.please_sign_in": "Connecter",
   "login.remember": "Se souvenir de moi pendant 14 jours",

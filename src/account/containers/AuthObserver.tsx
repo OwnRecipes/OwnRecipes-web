@@ -91,6 +91,9 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
     const prevToken = prevProps.account.item;
     const currToken = this.props.account.item;
 
+    const prevValid = prevProps.account.valid;
+    const currValid = this.props.account.valid;
+
     // console.log(`[AuthObserver::componentDidUpdate] originUrl=${this.state.originUrl}, prevUrl=${prevProps.loc.pathname}, nextUrl=${this.props.loc.pathname}, prevToken=${JSON.stringify(prevToken)}, currToken=${JSON.stringify(currToken)}`);
 
     if (currToken && currToken.token !== prevToken?.token) {
@@ -110,6 +113,8 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
       this.postProcessTokenChanged(prevToken, currToken, false);
     } else if (prevToken != null && currToken == null) {
       this.postProcessLogout();
+    } else if (prevValid != null && currValid != null && prevValid && !currValid && this.timeoutID != null) {
+      this.postProcessTokenInvalidated();
     }
 
     const prevIsAppVisible = prevProps.isAppVisible;
@@ -220,6 +225,13 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
       }
     }
   }
+
+  postProcessTokenInvalidated = () => {
+    // console.log('[LoginGuard] postProcessAuthInvalidated');
+    if (this.timeoutID != null) {
+      clearTimeout(this.timeoutID);
+    }
+  };
 
   handleForgetLogin() {
     // console.log('[AuthObserver::handleForgetLogin]');

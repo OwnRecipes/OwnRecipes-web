@@ -60,6 +60,7 @@ export const toUserAccount = (loginDto: LoginDto, remember: boolean): UserAccoun
 export enum AccountActionTypes {
   LOGIN  = 'LOGIN',
   SIDELOAD_TOKEN = 'SIDELOAD_TOKEN',
+  INVALIDATE_TOKEN = 'INVALIDATE_TOKEN',
   FORGET_LOGIN = 'FORGET_LOGIN',
   LOGOUT = 'LOGOUT',
 }
@@ -77,6 +78,11 @@ export type IAccountSideloadTokenAction = {
   typs:  typeof AccountActionTypes.SIDELOAD_TOKEN;
 } & PayloadAction<UserAccount>;
 
+export type IAccountInvalidateTokenAction = {
+  store: typeof ACCOUNT_STORE;
+  typs:  typeof AccountActionTypes.INVALIDATE_TOKEN;
+} & BasicAction;
+
 export type IAccountForgetLoginAction = {
   store: typeof ACCOUNT_STORE;
   typs:  typeof AccountActionTypes.FORGET_LOGIN;
@@ -87,6 +93,6 @@ export type IAccountLogoutAction = {
   typs:  typeof AccountActionTypes.LOGOUT;
 } & BasicAction;
 
-export type AccountState    = ItemReducerType<UserAccount>;
-export type AccountAction   = IAccountLoginAction | IAccountSideloadTokenAction | IAccountForgetLoginAction | IAccountLogoutAction | GenericItemReducerAction<UserAccount>;
+export type AccountState    = ItemReducerType<UserAccount> & { valid?: boolean };
+export type AccountAction   = IAccountLoginAction | IAccountSideloadTokenAction | IAccountInvalidateTokenAction | IAccountForgetLoginAction | IAccountLogoutAction | GenericItemReducerAction<UserAccount>;
 export type AccountDispatch = ReduxDispatch<AccountAction>;

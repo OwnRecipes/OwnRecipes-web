@@ -119,6 +119,7 @@
   "internal_error.response": "Response",
   "login.alert.error_title": "Login failed",
   "login.alert.incorrect_credentials": "Incorrect username or password.",
+  "login.logout": "Logout",
   "login.password": "Password",
   "login.please_sign_in": "Sign In",
   "login.remember": "Remember me for 14 days",

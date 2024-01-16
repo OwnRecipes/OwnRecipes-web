@@ -33,7 +33,7 @@ export const refreshToken = (() => {
         if (isNetworkError(error)) {
           store.dispatch({ ...toBasicAction(ACCOUNT_STORE, ACTION.NO_CONNECTION) });
         } else {
-          store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.LOGOUT) } as AccountAction);
+          store.dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.INVALIDATE_TOKEN) } as AccountAction);
         }
         return null;
       })

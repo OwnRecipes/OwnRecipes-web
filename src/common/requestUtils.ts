@@ -3,11 +3,11 @@ import superRequest from 'superagent';
 
 import { ACTION } from './store/ReduxHelper';
 import * as InternalErrorActions from '../internal_error/store/actions';
-import { logUserOut } from '../account/store/actions';
+import { invalidateToken } from '../account/store/actions';
+import { ACCOUNT_TOKEN_STORAGE_KEY, UserAccount } from '../account/store/types';
 import { createInternalHiddenValidationResult, toValidationErrors, ValidationError } from './store/Validation';
 import { AnyDispatch, toBasicAction } from './store/redux';
 import LocalStorageHelper from './LocalStorageHelper';
-import { ACCOUNT_TOKEN_STORAGE_KEY, UserAccount } from '../account/store/types';
 import { isDemoMode } from './utility';
 
 export type ResponseError = superRequest.ResponseError;
@@ -49,12 +49,11 @@ const handleErrorUnauthorized = async (dispatch: AnyDispatch, error: ResponseErr
   const storageItem = LocalStorageHelper.getItem(ACCOUNT_TOKEN_STORAGE_KEY);
   const user: UserAccount | undefined = storageItem ? JSON.parse(storageItem) : undefined;
 
-  if (!user) {
-    return toValidationErrors(error);
-  } else {
-    logUserOut(dispatch, user?.token);
-    return null;
+  if (user) {
+    dispatch(invalidateToken());
   }
+
+  return toValidationErrors(error);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

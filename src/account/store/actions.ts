@@ -89,6 +89,10 @@ export const forgetLogin = () => (dispatch: AccountDispatch) => {
   dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.FORGET_LOGIN) });
 };
 
+export const invalidateToken = () => (dispatch: AccountDispatch) => {
+  dispatch({ ...toBasicAction(ACCOUNT_STORE, AccountActionTypes.INVALIDATE_TOKEN) });
+};
+
 export const logUserOut = async (dispatch: AccountDispatch, oldToken: string | undefined) => {
   const url = serverURLs.revoke_token;
   return request()

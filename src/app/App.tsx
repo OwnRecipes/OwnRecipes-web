@@ -19,6 +19,7 @@ import IntlMessagesCreator from './components/IntlMessagesCreator';
 import { isDemoMode } from '../common/utility';
 import PageSpinner from './components/PageSpinner';
 import PageScroller from '../common/components/PageScroller';
+import LoginModal from '../account/containers/LoginModal';
 import LogoutModal from '../account/containers/LogoutModal';
 
 const App = () => {
@@ -45,6 +46,7 @@ const AppFC: React.FC = () => (
     <Footer />
     <InternalErrorDialog />
     <AuthObserver />
+    <LoginModal />
     <LogoutModal />
     <PageScroller />
   </>

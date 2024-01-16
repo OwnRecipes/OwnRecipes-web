@@ -13,12 +13,22 @@ const reducer = (state = defaultState, action: AccountAction): AccountState => {
         {
           const user = action.payload;
           LocalStorageHelper.setItem(ACCOUNT_TOKEN_STORAGE_KEY, JSON.stringify(user));
-          return ReduxHelper.setItem(state, user);
+          const newState = ReduxHelper.setItem(state, user);
+          newState.valid = true;
+          return newState;
         }
       case AccountActionTypes.SIDELOAD_TOKEN:
         {
           const user = action.payload;
-          return ReduxHelper.setItem(state, user);
+          const newState = ReduxHelper.setItem(state, user);
+          newState.valid = true;
+          return newState;
+        }
+      case AccountActionTypes.INVALIDATE_TOKEN:
+        {
+          const newState = ReduxHelper.setPending(state, PendingState.COMPLETED);
+          newState.valid = false;
+          return newState;
         }
       case AccountActionTypes.FORGET_LOGIN:
         {

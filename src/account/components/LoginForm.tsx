@@ -38,10 +38,17 @@ const messages = defineMessages({
     description: 'Sign in button',
     defaultMessage: 'Sign in',
   },
+  logout: {
+    id: 'login.logout',
+    description: 'Sign out button',
+    defaultMessage: 'Sign out',
+  },
 });
 
 export interface ILoginFormProps {
+  username?: string;
   onSubmit: (username: string, password: string, remember: boolean) => Promise<ValidationResult>;
+  onLogout?: () => void;
 }
 
 interface LoginFormData {
@@ -50,12 +57,12 @@ interface LoginFormData {
   remember: boolean;
 }
 
-const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ username, onSubmit, onLogout }: ILoginFormProps) => {
   const { formatMessage } = useIntl();
 
   const handleSubmit = useCallback(async (form: LoginFormData) => onSubmit(form.username, form.password, form.remember), [onSubmit]);
 
-  const initialValues = useMemo(() => ({ remember: true }), []);
+  const initialValues = useMemo(() => ({ username: username, remember: true }), [username]);
 
   return (
     <ReduxForm
@@ -77,6 +84,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
                 placeholder = {formatMessage(messages.username)}
                 autoComplete = 'username'
                 required
+                readOnly = {Boolean(username)}
                 inputAdornmentStart = {<Icon icon='person' size='2x' />} />
             <ReInput
                 name  = 'password'
@@ -97,6 +105,11 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
                 </Button>
               )}
             </FormSpy>
+            {username && (
+              <Button variant='outline-secondary' style={{ marginTop: '1em' }} onClick={onLogout}>
+                {formatMessage(messages.logout)}
+              </Button>
+            )}
           </Form>
     )} />
   );

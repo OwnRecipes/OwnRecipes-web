@@ -119,6 +119,7 @@
   "internal_error.response": "Respuesta",
   "login.alert.error_title": "Inicio de sesión fallido",
   "login.alert.incorrect_credentials": "El nombre de usuario y la contraseña no concuerdan.",
+  "login.logout": "cerrar sesión",
   "login.password": "Contraseña",
   "login.please_sign_in": "Por favor inicie sesión",
   "login.remember": "Recuérdame por 14 días",
