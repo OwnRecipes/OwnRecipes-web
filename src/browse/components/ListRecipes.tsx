@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Col, Row } from 'react-bootstrap';
 import classNames from 'classnames';
@@ -9,6 +8,7 @@ import Ratings from '../../rating/components/Ratings';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { getRecipeImagePlaceholder, getResourcePath, getRoutePath } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
+import { useMemo } from 'react';
 
 export interface IListRecipes {
   data:   Array<RecipeList> | undefined;
@@ -32,7 +32,7 @@ function hashCode(str: string): number {
 
 function getRecipeImage(recipe: RecipeList) {
   if (recipe.photoThumbnail) {
-    return recipe.photoThumbnail;
+    return recipe.photoThumbnail ?? getRecipeImagePlaceholder();
   } else {
     const images = ['fish', 'fried-eggs', 'pizza', 'soup', 'steak'];
     const recipeImageHash = Math.abs(hashCode(recipe.title));
@@ -42,6 +42,7 @@ function getRecipeImage(recipe: RecipeList) {
 
 const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipes) => {
   const IMAGE_PLACEHOLDER = useMemo(() => getRecipeImagePlaceholder(), []);
+  const PLACEHOLDER_STYLE = useMemo(() => ({ background: `url(${IMAGE_PLACEHOLDER}) 100% center / cover` }), [IMAGE_PLACEHOLDER]);
 
   const recipes = data?.map(recipe => {
     const link = getRoutePath(`/recipe/${recipe.slug}`);
@@ -49,7 +50,7 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipe
       <Col key={recipe.id}>
         <Card className={classNames('recipe')}>
           <Link to={link} onClick={() => onOpenRecipe(recipe)}>
-            <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' placeholder={IMAGE_PLACEHOLDER} />
+            <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' style={PLACEHOLDER_STYLE} />
             <Card.Title as='h3'><Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>{recipe.title}</Tooltip></Card.Title>
             <div><Ratings stars={recipe.rating} /></div>
             <Card.Text>{recipe.info}</Card.Text>

@@ -72,8 +72,7 @@ const ImageViewerContent = forwardRef<HTMLDivElement, IImageViewerContentProps>(
     <>
       <Modal.Header {...rest} ref={ref}>
         <Modal.Title>{nextTitle}</Modal.Title>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a title={nextTitle} download={nextTitle} href={nextSrc} className='btn btn-transparent close-button download-button'>
+        <a title={nextTitle} download={nextTitle} href={nextSrc} className='btn btn-transparent close-button download-button' aria-label='Download'>
           <Icon icon='download' variant='light' size='2x' />
         </a>
         <ModalHeaderCloseButton onClose={onClose} />
