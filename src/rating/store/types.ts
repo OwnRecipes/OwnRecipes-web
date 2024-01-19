@@ -19,18 +19,7 @@ export interface RatingDto {
   update_date:      string; // ISO8601
 }
 
-export interface Rating {
-  id:       number;
-  comment:  string;
-  rating:   number;
-
-  author:       number;
-  pub_username: string;
-  pub_date:     string;
-  update_author?:   number;
-  update_username?: string;
-  update_date:      string;
-}
+export type Rating = Omit<RatingDto, 'recipe'>;
 
 export interface RatingCreate {
   comment:  string;
@@ -43,18 +32,7 @@ export interface RatingUpdate {
   rating:   number;
 }
 
-export const toRating = (dto: RatingDto): Rating => ({
-  id:       dto.id,
-  comment:  dto.comment,
-  rating:   dto.rating,
-
-  author:       dto.author,
-  pub_username: dto.pub_username,
-  pub_date:     dto.pub_date,
-  update_author:   dto.update_author,
-  update_username: dto.update_username,
-  update_date:     dto.update_date,
-});
+export const toRating = (dto: RatingDto): Rating => dto;
 
 export type IRatingAddAction = {
   store:  typeof RATING_STORE;

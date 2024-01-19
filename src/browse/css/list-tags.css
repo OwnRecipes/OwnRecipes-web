@@ -1,0 +1,4 @@
+.recipes-list .recipe .quick-infos .tags-list {
+  color: var(--primaryMain);
+  font-size: 0.875rem;
+}

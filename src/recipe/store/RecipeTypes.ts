@@ -1,4 +1,5 @@
 import { Dispatch as ReduxDispatch } from 'redux';
+import * as _ from 'lodash-es';
 
 import { NUMBER_UNDEFINED, STRING_UNDEFINED } from '../../common/constants';
 import ItemReducerType from '../../common/store/ItemReducerType';
@@ -22,10 +23,7 @@ export interface IngredientDto extends Quantity {
   id:           number;
   title:        string;
 }
-export interface Ingredient extends Quantity {
-  id:           number;
-  title:        string;
-
+export interface Ingredient extends IngredientDto {
   quantity?:    string;
 }
 export const toIngredientDto = (obj: Ingredient): IngredientDto => ({
@@ -163,6 +161,8 @@ export interface RecipeListDto {
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
 
+  tags?: Array<TagDto>;
+
   photo_thumbnail?: string | null;
 
   info:     string;
@@ -170,10 +170,14 @@ export interface RecipeListDto {
   pub_date: string; // 2011-05-20
 }
 
+export type TagObj = { [key: string]: Tag };
 export interface RecipeList {
   id:    number;
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
+
+  tags?: Array<TagDto>;
+  oTags?: TagObj;
 
   photoThumbnail?: string;
 
@@ -186,6 +190,9 @@ export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
   id:    dto.id,
   title: dto.title,
   slug:  dto.slug,
+
+  tags:  dto.tags?.map(toTag),
+  oTags: _.keyBy(dto.tags?.map(toTag) ?? [], 'title'),
 
   photoThumbnail: dto.photo_thumbnail ?? undefined,
 
@@ -231,6 +238,7 @@ export interface Recipe extends RecipeList {
   course?:  Course;
   cuisine?: Cuisine;
   tags:     Array<Tag>;
+  oTags:    TagObj;
 
   photo?: string;
 
@@ -264,6 +272,7 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   course:  (dto.course == null || dto.course.title  === '-')  ? undefined : toCourse(dto.course),
   cuisine: (dto.cuisine == null || dto.cuisine.title === '-') ? undefined : toCuisine(dto.cuisine),
   tags:    dto.tags.map(toTag),
+  oTags:   _.keyBy(dto.tags.map(toTag), 'title'),
 
   photo: dto.photo ?? undefined,
   photoThumbnail: dto.photo_thumbnail ?? undefined,

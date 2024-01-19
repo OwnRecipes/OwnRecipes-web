@@ -1,14 +1,15 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, Col, Row } from 'react-bootstrap';
 import classNames from 'classnames';
 
 import '../css/list-recipes.css';
 
+import ListTags from './ListTags';
 import Ratings from '../../rating/components/Ratings';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { getRecipeImagePlaceholder, getResourcePath, getRoutePath } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
-import { useMemo } from 'react';
 
 export interface IListRecipes {
   data:   Array<RecipeList> | undefined;
@@ -52,7 +53,10 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipe
           <Link to={link} onClick={() => onOpenRecipe(recipe)}>
             <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' style={PLACEHOLDER_STYLE} />
             <Card.Title as='h3'><Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>{recipe.title}</Tooltip></Card.Title>
-            <div><Ratings stars={recipe.rating} /></div>
+            <div className='quick-infos'>
+              <Ratings stars={recipe.rating} />
+              {recipe.oTags && <ListTags recipe={recipe} />}
+            </div>
             <Card.Text>{recipe.info}</Card.Text>
           </Link>
         </Card>

@@ -35,9 +35,12 @@
   max-width: 100%;
 }
 
-.recipes-list .recipe .ratings {
-  color: var(--secondaryMain);
-  margin-bottom: 0.5em;
+.recipes-list .recipe .quick-infos {
+  display: flex;
+}
+
+.recipes-list .recipe .quick-infos .rating-stars {
+  flex: 1;
 }
 
 .recipes-list .recipe .card-img-top {
