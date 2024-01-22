@@ -1,14 +1,15 @@
 import { lazy, Suspense, useCallback, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { NavDropdown, Button } from 'react-bootstrap';
+import { NavDropdown } from 'react-bootstrap';
 
+import GroceryListMenuItem from './GroceryListMenuItem';
+import { Settings, ThemeMode } from '../../account/store/settings/types';
 import { getEnv, getRoutePath, isDemoMode } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
-import { Settings, ThemeMode } from '../../account/store/settings/types';
 import Icon from '../../common/components/Icon';
 import { LanguageCode } from '../../common/language';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
-import GroceryListMenuItem from './GroceryListMenuItem';
+import NavButton from '../../common/components/NavButton';
 
 const LanguageDialog = lazy(() => import('./LanguageDialog'));
 const ThemeDialog = lazy(() => import('./ThemeDialog'));
@@ -55,10 +56,10 @@ export const AccountLoginMenuItem: React.FC = () => {
   const { formatMessage } = useIntl();
 
   return (
-    <Button id='login-button' variant='primary' href={getRoutePath('/login')} className='nav-link'>
+    <NavButton id='login-button' variant='primary' to={getRoutePath('/login')} className='nav-link'>
       <Icon icon='box-arrow-in-right' variant='light' size='2x' className='visible-xs' />
       <span className='hidden-xs'>{formatMessage(messages.navLoginTitle)}</span>
-    </Button>
+    </NavButton>
   );
 };
 
