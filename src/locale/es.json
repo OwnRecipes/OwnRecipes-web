@@ -6,6 +6,7 @@
   "browse.no_results": "No hay resultados para su búsqueda.\nVerifique la ortografía de los términos de su búsqueda o intente usar otros términos.",
   "browse.results_heading": "Resultados",
   "browse.shuffle_suggestions_button_title": "Nuevas sugerencias",
+  "connection.no_connection_malformed_api_host": "Póngase en contacto con el administrador: la configuración parece tener un formato incorrecto (REACT_APP_API_URL).",
   "connection.no_connection_message": "No se pudo establecer una conexión con el servidor de OwnRecipes. Por favor intente de nuevo en un par de minutos.",
   "connection.no_connection_title": "Error de conexión",
   "course.Appetizer": "Aperitivo",
