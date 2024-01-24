@@ -236,38 +236,38 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     <>
       <div className='recipe-header-chips'>
         {recipe.prepTime != null && recipe.prepTime > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='clock' />
             {`${formatMessage(messages.prep_time)}: `}
             {` ${formatMessage(messages.minutes, { count: recipe.prepTime })}`}
           </Chip>
         )}
         {recipe.cookTime != null && recipe.cookTime > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='clock' />
             {`${formatMessage(messages.cooking_time)}: `}
             {` ${formatMessage(messages.minutes, { count: recipe.prepTime })}`}
           </Chip>
         )}
         {recipe.course != null && recipe.course.title != null && recipe.course.title.length > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='bar-chart' />
             {optionallyFormatMessage(intl, 'course.', recipe.course.title)}
           </Chip>
         )}
         {recipe.cuisine != null && recipe.cuisine.title != null && recipe.cuisine.title.length > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='globe' variant='light' />
             {optionallyFormatMessage(intl, 'cuisine.', recipe.cuisine.title)}
           </Chip>
         )}
       </div>
       <div className='recipe-header-chips'>
-        <Chip variant='secondary'>
+        <Chip color='secondary'>
           <RecipeTimestamp recipe={recipe} />
           <RecipeEditor recipe={recipe} />
         </Chip>
-        <Chip variant='secondary'>
+        <Chip color='secondary'>
           <Icon icon='person' />
           {recipe?.pub_username ?? ''}
         </Chip>
@@ -275,7 +275,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
       {recipe.tags != null && recipe.tags.length > 0 && (
         <div className='recipe-header-chips'>
           {recipe.tags.map(t => (
-            <Chip key={String(t.title)} variant='secondary'>
+            <Chip key={String(t.title)} color='secondary'>
               {optionallyFormatMessage(intl, 'tag.', t.title)}
             </Chip>
           ))}

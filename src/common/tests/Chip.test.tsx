@@ -5,7 +5,7 @@ import Chip from '../components/Chip';
 test('Chip', () => {
   const component = renderer.create(
     <Chip
-        variant='secondary'
+        color='secondary'
         className='some class'
         >
       Some string test

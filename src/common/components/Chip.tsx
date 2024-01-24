@@ -6,15 +6,15 @@ import '../css/chip.css';
 import { CommonProps } from '../types/OverridableComponent';
 
 export interface IChipProps extends CommonProps {
-  variant: 'primary' | 'secondary';
+  color?: 'primary' | 'secondary';
 
   children: React.ReactNode;
 }
 
 const Chip = forwardRef<HTMLSpanElement, IChipProps>(({
-  variant, className, children, ...rest }: IChipProps, ref) => (
+  color, className, children, ...rest }: IChipProps, ref) => (
     <span
-        className={classNames('chip', variant, className)}
+        className={classNames('chip', color, className)}
         {...rest}
         ref = {ref}>
       {children}

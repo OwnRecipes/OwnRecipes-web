@@ -22,8 +22,8 @@
 
 .chip.primary {
   color: var(--primaryContrast);
-  background-color: var(--primaryTheme);
-  border-color: var(--primaryTheme);
+  background-color: var(--primaryMain);
+  border-color: var(--primaryMain);
 }
 .chip.secondary {
   color: var(--secondaryText);
