@@ -246,7 +246,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
           <Chip color='secondary'>
             <Icon icon='clock' />
             {`${formatMessage(messages.cooking_time)}: `}
-            {` ${formatMessage(messages.minutes, { count: recipe.prepTime })}`}
+            {` ${formatMessage(messages.minutes, { count: recipe.cookTime })}`}
           </Chip>
         )}
         {recipe.course != null && recipe.course.title != null && recipe.course.title.length > 0 && (
