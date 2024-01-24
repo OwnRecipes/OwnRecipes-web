@@ -80,6 +80,12 @@
 
     display: none;
   }
+  .rating-panel .card-body .rating-comment .rating-toolbar .btn {
+    margin-left: 0;
+  }
+  .rating-panel .card-body .rating-comment .rating-toolbar .tooltip-inline-block:not(:first-child) {
+    margin-left: 0.5em;
+  }
 
   .rating-panel .card-body .rating-comment:hover .rating-toolbar {
     display: initial;

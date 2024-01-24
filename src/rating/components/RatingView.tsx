@@ -115,7 +115,7 @@ export const RatingToolbar: React.FC<IRatingToolbarProps> = ({
     <>
       <Toolbar position='end' className={classNames('rating-toolbar', className)} {...rest}>
         {onEdit && (
-          <Button id={`edit-${rating.id}`} variant='outline-primary' className='rating-delete-button' size='sm' tooltip={formatMessage(messages.edit_button)} onClick={onEdit}>
+          <Button id={`edit-${rating.id}`} variant='outline-primary' className='rating-edit-button' size='sm' tooltip={formatMessage(messages.edit_button)} onClick={onEdit}>
             <Icon icon='pencil' />
           </Button>
         )}
