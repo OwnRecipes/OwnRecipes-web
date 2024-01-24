@@ -1,4 +1,16 @@
-.recipes-list .recipe .quick-infos .tags-list {
+.recipes-list .recipe .tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em;
+  margin-top: 0.25em;
+}
+
+.recipes-list .recipe .tags-list .chip {
+  padding: 0;
+  color: var(--secondaryText);
+  border-color: transparent;
+}
+
+.recipes-list .recipe .tags-list .bi {
   color: var(--primaryMain);
-  font-size: 0.875rem;
 }

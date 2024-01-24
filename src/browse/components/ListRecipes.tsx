@@ -13,6 +13,7 @@ import Tooltip from '../../common/components/Tooltip';
 
 export interface IListRecipes {
   data:   Array<RecipeList> | undefined;
+  lg?:    3 | 4;
   onOpenRecipe: (rec: RecipeList) => void;
 }
 
@@ -41,7 +42,7 @@ function getRecipeImage(recipe: RecipeList) {
   }
 }
 
-const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipes) => {
+const ListRecipes: React.FC<IListRecipes> = ({ data, lg = 4, onOpenRecipe }: IListRecipes) => {
   const IMAGE_PLACEHOLDER = useMemo(() => getRecipeImagePlaceholder(), []);
   const PLACEHOLDER_STYLE = useMemo(() => ({ background: `url(${IMAGE_PLACEHOLDER}) 100% center / cover` }), [IMAGE_PLACEHOLDER]);
 
@@ -52,11 +53,9 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipe
         <Card className={classNames('recipe')}>
           <Link to={link} onClick={() => onOpenRecipe(recipe)}>
             <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' style={PLACEHOLDER_STYLE} />
+            <Ratings stars={recipe.rating} collapsed />
             <Card.Title as='h3'><Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>{recipe.title}</Tooltip></Card.Title>
-            <div className='quick-infos'>
-              <Ratings stars={recipe.rating} />
-              {recipe.oTags && <ListTags recipe={recipe} />}
-            </div>
+            {recipe.oTags && <ListTags recipe={recipe} />}
             <Card.Text>{recipe.info}</Card.Text>
           </Link>
         </Card>
@@ -65,7 +64,7 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, onOpenRecipe }: IListRecipe
   });
 
   return (
-    <Row xs={1} sm={2} lg={4} className='g-4 recipes-list'>
+    <Row xs={1} sm={2} lg={lg} className='g-3 recipes-list'>
       {recipes}
     </Row>
   );

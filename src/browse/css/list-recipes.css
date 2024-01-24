@@ -24,7 +24,7 @@
 }
 .recipes-list .recipe .card-title {
   font-size: 1rem;
-  margin-top: 0.5em;
+  margin-top: 0.25em;
   padding-bottom: 0;
   margin-bottom: 0;
   white-space: nowrap;
@@ -33,14 +33,6 @@
 }
 .recipes-list .recipe .card-title-tooltip {
   max-width: 100%;
-}
-
-.recipes-list .recipe .quick-infos {
-  display: flex;
-}
-
-.recipes-list .recipe .quick-infos .rating-stars {
-  flex: 1;
 }
 
 .recipes-list .recipe .card-img-top {
@@ -53,6 +45,11 @@
     height: 10rem;
   }
 }
+@media screen and (min-width: 1200px), print {
+  .recipes-list .recipe .card-img-top {
+    height: 12rem;
+  }
+}
 .recipes-list .recipe .card-text {
   font-size: 0.92rem;
   display: -webkit-box;
@@ -60,6 +57,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-top: 0.25em;
 }
 
 .results-panel .results-container.pending {

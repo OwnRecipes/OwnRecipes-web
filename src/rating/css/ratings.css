@@ -1,7 +1,22 @@
 .rating-stars {
-  color: var(--secondaryMain);
+  margin-top: 0.2em;
   margin-bottom: 0;
   white-space: nowrap;
+}
+
+.rating-stars .rating-text {
+  margin-left: 0.25em;
+  color: var(--secondaryText);
+  font-weight: bold;
+}
+
+.rating-stars .rating-count {
+  margin-left: 0.25em;
+  color: var(--secondaryText);
+}
+
+.rating-stars .stars-icons.active {
+  color: var(--secondaryMain);
 }
 
 .rating-stars .btn.rating {
