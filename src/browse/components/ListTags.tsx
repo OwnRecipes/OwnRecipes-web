@@ -62,7 +62,7 @@ const ListTags: React.FC<IListTagsProps> = ({
     });
 
     return res;
-  }, [recipe.oTags]);
+  }, [recipe.oTags, intl.locale]);
 
   if (renderTagsJsx.length === 0) return null;
 
