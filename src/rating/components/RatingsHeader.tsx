@@ -8,7 +8,7 @@ const messages = defineMessages({
   title: {
     id: 'recipe.comments.title',
     description: 'Comments heading',
-    defaultMessage: 'Comments',
+    defaultMessage: 'Comments ({count})',
   },
   new_rating_button: {
     id: 'recipe.comments.new_rating',
@@ -18,12 +18,13 @@ const messages = defineMessages({
 });
 
 export interface IRatingsHeaderProps {
+  commentsCount: number;
   userRole:  UserRole | undefined;
   showNewRating: boolean;
   onShowNewRating: () => void;
 }
 
-const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ userRole, showNewRating, onShowNewRating }: IRatingsHeaderProps) => {
+const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ commentsCount, userRole, showNewRating, onShowNewRating }: IRatingsHeaderProps) => {
   const { formatMessage } = useIntl();
 
   return (
@@ -31,7 +32,7 @@ const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ userRole, showNewRating,
       <Row>
         <Col className='ratings-heading-col'>
           <h2 id='ratings-heading'>
-            {formatMessage(messages.title)}
+            {formatMessage(messages.title, { count: commentsCount })}
             <HeaderLink linkFor='ratings-heading' />
           </h2>
         </Col>

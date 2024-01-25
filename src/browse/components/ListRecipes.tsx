@@ -53,7 +53,7 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, lg = 4, onOpenRecipe }: ILi
         <Card className={classNames('recipe')}>
           <Link to={link} onClick={() => onOpenRecipe(recipe)}>
             <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' style={PLACEHOLDER_STYLE} />
-            <Ratings stars={recipe.rating} collapsed />
+            <Ratings stars={recipe.rating} count={recipe.ratingCount} collapsed />
             <Card.Title as='h3'><Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>{recipe.title}</Tooltip></Card.Title>
             {recipe.oTags && <ListTags recipe={recipe} />}
             <Card.Text>{recipe.info}</Card.Text>

@@ -103,6 +103,7 @@ export const demoRecipes: Array<RecipeDto> = [
     "cook_time": 40,
     "servings": 6,
     "rating": 5,
+    "rating_count": 2,
     "public": true,
     "author": 1,
     "cuisine": {
@@ -207,6 +208,7 @@ export const demoRecipes: Array<RecipeDto> = [
     "cook_time": 60,
     "servings": 8,
     "rating": 3,
+    "rating_count": 132,
     "public": true,
     "author": 3,
     "cuisine": {
@@ -347,6 +349,7 @@ export const demoRecipes: Array<RecipeDto> = [
     "cook_time": 25,
     "servings": 4,
     "rating": 4,
+    "rating_count": 42,
     "public": true,
     "author": 2,
     "cuisine": {
@@ -468,6 +471,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "vici",
     "pub_date": "2022-06-08T13:27:15.525308-05:00",
@@ -599,6 +603,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "vici",
     "pub_date": "2022-06-08T13:32:44.087643-05:00",
@@ -742,6 +747,7 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "tags": [],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "vici",
     "pub_date": "2022-06-08T13:36:56.882587-05:00",
@@ -907,6 +913,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "vici",
     "pub_date": "2022-06-08T13:45:53.938359-05:00",
@@ -1023,6 +1030,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "vici",
     "pub_date": "2022-06-08T13:53:10.220946-05:00",
@@ -1142,6 +1150,7 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "tags": [],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "Demo User",
     "pub_date": "2022-06-08T14:07:56.461828-05:00",
@@ -1246,6 +1255,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "Demo User",
     "pub_date": "2022-06-09T14:27:03.468629-05:00",
@@ -1362,6 +1372,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "Demo User",
     "pub_date": "2022-06-09T14:34:43.436216-05:00",
@@ -1462,6 +1473,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "Demo User",
     "pub_date": "2022-06-09T14:44:04.001019-05:00",
@@ -1560,6 +1572,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [
       {
         "child_recipe_id": 521,
@@ -1678,6 +1691,7 @@ export const demoRecipes: Array<RecipeDto> = [
     ],
     "tags": [],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [
       {
         "child_recipe_id": 521,
@@ -1762,6 +1776,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [
       {
         "child_recipe_id": 521,
@@ -1801,6 +1816,7 @@ export const demoRecipes: Array<RecipeDto> = [
     "ingredient_groups": [],
     "tags": [],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [
       {
         "child_recipe_id": 518,
@@ -1932,6 +1948,7 @@ export const demoRecipes: Array<RecipeDto> = [
       }
     ],
     "rating": 0,
+    "rating_count": 0,
     "subrecipes": [],
     "pub_username": "Demo User",
     "pub_date": "2022-06-10T00:31:06.962942-05:00",
@@ -1959,13 +1976,14 @@ export const demoRecipes: Array<RecipeDto> = [
 /* eslint-enable quotes, quote-props, comma-dangle */
 
 export const toRecipeListDto = (recipeDto: RecipeDto): RecipeListDto => ({
-  id:       recipeDto.id,
-  title:    recipeDto.title,
-  slug:     recipeDto.slug,
+  id:              recipeDto.id,
+  title:           recipeDto.title,
+  slug:            recipeDto.slug,
   photo_thumbnail: recipeDto.photo_thumbnail,
-  info:     recipeDto.info,
-  rating:   recipeDto.rating,
-  pub_date: recipeDto.pub_date,
+  info:            recipeDto.info,
+  rating:          recipeDto.rating,
+  rating_count:    recipeDto.rating_count,
+  pub_date:        recipeDto.pub_date,
 });
 
 const config = {

@@ -31,7 +31,7 @@ const RatingsWrapper: React.FC<IRatingsWrapperProps> = ({ ratings, userId, userR
 
   return (
     <Card className='rating-panel' as='article'>
-      <RatingsHeader userRole={userRole} showNewRating={showNewRating} onShowNewRating={() => setShowNewRating(true)} />
+      <RatingsHeader commentsCount={ratings?.length ?? 0} userRole={userRole} showNewRating={showNewRating} onShowNewRating={() => setShowNewRating(true)} />
       <Card.Body>
         {showNewRating && userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
           <RatingForm addRating={addRating} editRating={editRating} onSubmitSuccess={handleNewRatingUndisplay} onCancel={handleNewRatingUndisplay} />

@@ -167,6 +167,7 @@ export interface RecipeListDto {
 
   info:     string;
   rating:   number;
+  rating_count: number;
   pub_date: string; // 2011-05-20
 }
 
@@ -183,6 +184,7 @@ export interface RecipeList {
 
   info:     string;
   rating:   number;
+  ratingCount: number;
   pub_date:  string; // 2011-05-20
 }
 
@@ -198,6 +200,7 @@ export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
 
   info:     dto.info,
   rating:   dto.rating,
+  ratingCount: dto.rating_count,
   pub_date: dto.pub_date,
 });
 
@@ -284,6 +287,7 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   info: dto.info,
 
   rating: dto.rating,
+  ratingCount: dto.rating_count,
   public: dto.public,
 
   author:       dto.author,

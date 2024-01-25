@@ -19,12 +19,18 @@ const messages = defineMessages({
     description: 'Alt text for read-only stars (view).',
     defaultMessage: '{stars} out of 5 stars',
   },
+  rating_count: {
+    id: 'rating_comments.rating_count',
+    description: 'Rating count (view).',
+    defaultMessage: '{count} ratings',
+  },
 });
 
 export interface IRatingsProps {
-  stars: number;
+  stars:      number;
+  count?:     number;
   collapsed?: boolean;
-  onChange?: (stars: number) => void;
+  onChange?:  (stars: number) => void;
 }
 
 interface IStarProps {
@@ -68,7 +74,7 @@ const CollapsedStar: React.FC<ICollapsedStarProps> = ({ stars }: ICollapsedStarP
   );
 };
 
-const Ratings: React.FC<IRatingsProps> = ({ stars, collapsed = false, onChange }: IRatingsProps) => {
+const Ratings: React.FC<IRatingsProps> = ({ stars, count, collapsed = false, onChange }: IRatingsProps) => {
   const { formatMessage } = useIntl();
 
   let starss = stars;
@@ -89,14 +95,18 @@ const Ratings: React.FC<IRatingsProps> = ({ stars, collapsed = false, onChange }
   }, [starss, collapsed, onChange]);
 
   const starsText = stars > 0 ? `${stars}/5` : '';
-  const ratingCount = stars === 0 ? '(0)' : '';
+  const ratingCount = ((stars === 0 || count) && !onChange) ? count ?? 0 : undefined;
 
   return (
     <div className='rating-stars'>
       <span className={classNames('stars-icons', { active: stars > 0 })} aria-hidden>{starsList}</span>
       {starsText   && <span className='rating-text'  aria-hidden>{starsText}</span>}
-      {ratingCount && <span className='rating-count' aria-hidden>{ratingCount}</span>}
       <span className='sr-only'>{formatMessage(messages.stars_alt, { stars: starss })}</span>
+      {ratingCount != null && (
+        <span className='rating-count'>
+          {`(${collapsed ? ratingCount : formatMessage(messages.rating_count, { count: ratingCount })})`}
+        </span>
+      )}
     </div>
   );
 };
