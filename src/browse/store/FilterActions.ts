@@ -9,7 +9,7 @@ import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_
 const parsedFilter = (filters: Record<string, string>): Record<string, string> => {
   const parsedFilters: Record<string, string> = {};
   Object.keys(filters).forEach(f => {
-    if (!['limit', 'offset'].includes(f)) {
+    if (!['limit', 'offset', 'ordering'].includes(f)) {
       parsedFilters[f] = filters[f];
     }
   });
