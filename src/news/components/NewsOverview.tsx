@@ -9,6 +9,7 @@ import NewsCarousel from './NewsList';
 import FeaturesOverview from './FeaturesOverview';
 import ToggleNewsButton from './ToggleNewsButton';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
+import { getEnvAsBoolean } from '../../common/utility';
 
 const SHOW_NEWS_STORAGE_KEY = 'show_news';
 
@@ -16,6 +17,8 @@ const NewsOverview: React.FC = () => {
   const accountState = useSelector((state: RootState) => state.account);
   const user = accountState.item;
   const userName = user?.username;
+
+  const disableNews = useSelector((state: RootState) => state.settings.disableNews) || getEnvAsBoolean('REACT_APP_DISABLE_NEWS') || false;
 
   const [showNews, setShowNews] = useState<boolean>(false);
 
@@ -35,13 +38,14 @@ const NewsOverview: React.FC = () => {
 
   return (
     <ErrorBoundary verbose printStack>
-      {showNews && (
+      {disableNews && <h1 style={{ textAlign: 'center' }}>OwnRecipes</h1>}
+      {!disableNews && showNews && (
         <>
           <NewsCarousel />
           <FeaturesOverview />
         </>
       )}
-      <ToggleNewsButton showNews={showNews} onClick={handleToggleNewsClick} />
+      {!disableNews && <ToggleNewsButton showNews={showNews} onClick={handleToggleNewsClick} />}
     </ErrorBoundary>
   );
 };

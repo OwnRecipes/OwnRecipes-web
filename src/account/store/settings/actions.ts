@@ -11,10 +11,18 @@ export const init = (tokenId: string | undefined): SettingsAction => ({
   tokenId: tokenId,
 });
 
-export const changeThemeMode = (newThemeMode: ThemeMode) => (dispatch: SettingsDispatch, getState: () => RootState) => {
-  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.THEME_MODE), payload: newThemeMode, tokenId: getState().account.item?.username });
+export const changeDisableRecipeDiscovery = (newValue: boolean) => (dispatch: SettingsDispatch, getState: () => RootState) => {
+  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.DISABLE_RECIPE_DISCOVERY), payload: newValue, tokenId: getState().account.item?.username });
 };
 
-export const changeLanguage = (newLanguage: LanguageCode) => (dispatch: SettingsDispatch, getState: () => RootState) => {
-  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.LANGUAGE), payload: newLanguage, tokenId: getState().account.item?.username });
+export const changeDisableNews = (newValue: boolean) => (dispatch: SettingsDispatch, getState: () => RootState) => {
+  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.DISABLE_NEWS), payload: newValue, tokenId: getState().account.item?.username });
+};
+
+export const changeLanguage = (newValue: LanguageCode) => (dispatch: SettingsDispatch, getState: () => RootState) => {
+  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.LANGUAGE), payload: newValue, tokenId: getState().account.item?.username });
+};
+
+export const changeThemeMode = (newValue: ThemeMode) => (dispatch: SettingsDispatch, getState: () => RootState) => {
+  dispatch({ ...toBasicAction(SETTINGS_STORE, SettingsActionTypes.THEME_MODE), payload: newValue, tokenId: getState().account.item?.username });
 };

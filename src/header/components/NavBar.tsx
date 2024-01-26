@@ -96,9 +96,6 @@ const NavBar: React.FC<INavBarProps> = ({
   const myAccountBtn = isAuthenticated && (
     <AccountMenuMenuItem
         account  = {account}
-        settings = {settings}
-        onChangeLanguage = {onChangeLanguage}
-        onChangeTheme = {onChangeTheme}
         onLogoutClick = {onLogoutClick} />
   );
   const settingsBnt = (
