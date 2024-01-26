@@ -321,7 +321,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
           <Col xl={6} lg={12} className='info-wrapper'>
             <h1 className='d-none d-xl-block'>{recipe?.title}</h1>
             <P>{recipe?.info}</P>
-            <Ratings stars={recipe?.rating ?? 0} />
+            <Ratings stars={recipe?.rating ?? 0} showCount={false} />
             {chips}
             {source}
           </Col>

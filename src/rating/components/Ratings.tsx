@@ -29,6 +29,7 @@ const messages = defineMessages({
 export interface IRatingsProps {
   stars:      number;
   count?:     number;
+  showCount?: boolean;
   collapsed?: boolean;
   onChange?:  (stars: number) => void;
 }
@@ -74,7 +75,7 @@ const CollapsedStar: React.FC<ICollapsedStarProps> = ({ stars }: ICollapsedStarP
   );
 };
 
-const Ratings: React.FC<IRatingsProps> = ({ stars, count, collapsed = false, onChange }: IRatingsProps) => {
+const Ratings: React.FC<IRatingsProps> = ({ stars, count, showCount = true, collapsed = false, onChange }: IRatingsProps) => {
   const { formatMessage } = useIntl();
 
   let starss = stars;
@@ -95,7 +96,7 @@ const Ratings: React.FC<IRatingsProps> = ({ stars, count, collapsed = false, onC
   }, [starss, collapsed, onChange]);
 
   const starsText = stars > 0 ? `${stars}/5` : '';
-  const ratingCount = ((stars === 0 || count) && !onChange) ? count ?? 0 : undefined;
+  const ratingCount = (showCount && (stars === 0 || count) && !onChange) ? (count ?? 0) : undefined;
 
   return (
     <div className='rating-stars'>
