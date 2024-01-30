@@ -344,6 +344,7 @@
   "tag.vegetarian": "végétarien",
   "theme.mode.dark": "Sombre",
   "theme.mode.light": "Lumineux",
+  "validation.error.max_length": "Ce champ dépasse la limite de caractères.",
   "validation.error.number": "Veuillez entrer un nombre.",
   "validation.error.required": "Le champ doit être rempli.",
   "validation.error.url": "Veuillez indiquer une URL valide."

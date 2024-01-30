@@ -35,6 +35,8 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
   const toCode = (msg: string): string => {
     if (msg === 'This item is required.') {
       return 'required';
+    } else if (msg.startsWith('Ensure this value has at most ')) {
+      return 'max_length';
     }
 
     return msg;

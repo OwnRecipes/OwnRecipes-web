@@ -344,6 +344,7 @@
   "tag.vegetarian": "vegetarisch",
   "theme.mode.dark": "Dunkel",
   "theme.mode.light": "Hell",
+  "validation.error.max_length": "Das Feld überschreitet die Zeichenbeschränkung.",
   "validation.error.number": "Bitte geben Sie eine Zahl ein.",
   "validation.error.required": "Das Feld muss ausgefüllt sein.",
   "validation.error.url": "Bitte geben Sie eine gültige URL an."
