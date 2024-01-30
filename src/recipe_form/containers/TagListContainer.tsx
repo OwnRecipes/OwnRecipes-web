@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import * as _ from 'lodash-es';
 
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { RootState } from '../../app/Store';
@@ -42,13 +43,9 @@ const TagListContainer: React.FC<ITagListContainerProps> = ({
     }
   }, [tags]);
 
-  const formatter = useCallback((value: Array<Tag> | Tag): Array<string> | string => {
-    if (Array.isArray(value)) {
-      return value.map(v => v.title);
-    } else {
-      return value.title;
-    }
-  }, []);
+  const formatter = useCallback((value: Array<Tag> | Tag): Array<string> | string => (
+    _.castArray(value).map(v => v.title)
+  ), []);
 
   return (
     <ReCreatableSelect

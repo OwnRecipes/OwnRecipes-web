@@ -21,6 +21,16 @@ export function createInternalHiddenValidationResult(code: string, message: stri
   return result;
 }
 
+export function camelCase(str: string): string {
+  if (!(/[_-]/).test(str)) return str;
+  return str.toLowerCase().replace(
+    /([-_][a-z])/g, group => group
+      .toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  );
+}
+
 export function toValidationErrors(error: ResponseError): ValidationResult | undefined {
   const toCode = (msg: string): string => {
     if (msg === 'This item is required.') {
@@ -53,25 +63,17 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
     if (nextKey === 'non_field_errors') {
       attr = FORM_ERROR;
     } else {
-      attr = ((/[_-]/).test(nextKey)) ? _.camelCase(nextKey) : nextKey;
+      attr = ((/[_-]/).test(nextKey)) ? camelCase(nextKey) : nextKey;
     }
     const nextVal = body[nextKey];
 
-    if (Array.isArray(nextVal)) {
-      result[attr] = nextVal.map(v => {
-        const valErr: ValidationErrorType = {
-          code:      toCode(v),
-          message:   v,
-        };
-        return valErr;
-      });
-    } else {
+    result[attr] = _.castArray(nextVal).map(v => {
       const valErr: ValidationErrorType = {
-        code:      toCode(nextVal),
-        message:   nextVal,
-      } as ValidationErrorType;
-      result[attr] = [valErr];
-    }
+        code:      toCode(v),
+        message:   v,
+      };
+      return valErr;
+    });
   });
 
   return result;
@@ -96,17 +98,13 @@ export interface FieldValidatorType {
 
 export type ValidatorsType = Array<FieldValidatorType>;
 
-export function formatValidation(intl: IntlShape, validation: ValidationError | undefined, baseMessageId = 'validation.error.'): string | undefined {
+export function formatValidation(intl: IntlShape, validation: ValidationError | undefined, values?: Record<string, React.ReactNode>, baseMessageId = 'validation.error.'): string | undefined {
   if (validation == null) return undefined;
 
   let errors = '';
-  if (Array.isArray(validation)) {
-    validation.forEach(v => {
-      errors += optionallyFormatMessage(intl, baseMessageId, v.code);
-    });
-  } else {
-    errors += optionallyFormatMessage(intl, baseMessageId, validation.code);
-  }
+  _.castArray(validation).forEach(v => {
+    errors += optionallyFormatMessage(intl, baseMessageId, v.code, values);
+  });
 
   return errors.length ? errors : undefined;
 }
