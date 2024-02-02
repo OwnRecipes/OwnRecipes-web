@@ -5,22 +5,61 @@ import { objToSearchString } from '../../common/utility';
 import { toBasicAction } from '../../common/store/redux';
 import { handleError } from '../../common/requestUtils';
 import { BROWSER_SEARCH_STORE, SearchDispatch, SearchResultDto, toSearchResult } from './SearchTypes';
+import { parseCSV } from '../utilts/utility';
 
 const FILTER_QUERY_PARAMETER_MAPPING: Record<string, string> = {
   cuisine: 'cuisine__slug',
   course:  'course__slug',
   tag:     'tag__slug',
+  author:  'author__username',
 };
+
+const FIELDS = ['author', 'cuisine', 'course', 'directions', 'info', 'ordering', 'rating', 'source', 'tag', 'title'];
+
+export function extractSearchStringToFields(filters: Record<string, string>): Record<string, string> {
+  if (!filters.search || !filters.search.includes(':')) return filters;
+
+  const result = { ...filters };
+  const parsedFields = parseCSV(result.search, { delimiter: ' ' })[0];
+
+  const extractedSearchArray: Array<string> = [];
+  parsedFields.forEach(delimitedString => {
+    if (delimitedString.includes(':')) {
+      const keyValues = parseCSV(delimitedString, { delimiter: ':' })[0];
+      if (keyValues.length === 2) {
+        const fieldKey = keyValues[0].toLocaleLowerCase();
+        if (FIELDS.includes(fieldKey)) {
+          result[fieldKey] = keyValues[1];
+          return;
+        }
+      }
+    }
+
+    extractedSearchArray.push(delimitedString);
+  });
+
+  result.search = extractedSearchArray.join(' ');
+
+  return result;
+}
+
+function mapFilterNames(filters: Record<string, string>, mapping: Record<string, string>): Record<string, string> {
+  const mappedFilters: Record<string, string> = {};
+
+  Object.keys(filters).forEach(f => {
+    if (filters[f] !== null) {
+      mappedFilters[f in mapping ? mapping[f] : f] = filters[f];
+    }
+  });
+
+  return mappedFilters;
+}
 
 export const loadRecipes = (filters: Record<string, string>) => (dispatch: SearchDispatch) => {
   dispatch({ ...toBasicAction(BROWSER_SEARCH_STORE, ACTION.LOADING) });
 
-  const parsedFilters: Record<string, string> = {};
-  Object.keys(filters).forEach(f => {
-    if (filters[f] !== null) {
-      parsedFilters[f in FILTER_QUERY_PARAMETER_MAPPING ? FILTER_QUERY_PARAMETER_MAPPING[f] : f] = filters[f];
-    }
-  });
+  let parsedFilters: Record<string, string> = extractSearchStringToFields(filters);
+  parsedFilters = mapFilterNames(parsedFilters, FILTER_QUERY_PARAMETER_MAPPING);
 
   request()
     .get(serverURLs.browse)

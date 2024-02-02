@@ -166,3 +166,10 @@ html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-ti
 .container.browser .results-panel .rating-stars {
   font-size: 0.875rem;
 }
+
+.container.browser .sidebar .filters-tip {
+  color: var(--secondaryText);
+  margin-top:   0.5em;
+  margin-right: 0.5em;
+  margin-left:  0.5em;
+}

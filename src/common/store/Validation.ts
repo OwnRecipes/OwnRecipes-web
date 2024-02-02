@@ -69,9 +69,9 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
     }
     const nextVal = body[nextKey];
 
-    result[attr] = _.castArray(nextVal).map(v => {
+    result[attr] = _.castArray(nextVal).filter(v => (_.isNumber(v) || _.isBoolean(v) || _.isString(v))).map(v => {
       const valErr: ValidationErrorType = {
-        code:      toCode(v),
+        code:      toCode(String(v)),
         message:   v,
       };
       return valErr;

@@ -8,6 +8,7 @@ import '../css/filter.css';
 
 import Filter from './Filter';
 import Icon from '../../common/components/Icon';
+import P from '../../common/components/P';
 import { CategoryCount, RatingCount } from '../store/FilterTypes';
 
 const messages = defineMessages({
@@ -80,6 +81,11 @@ const messages = defineMessages({
     id: 'filter.x_stars',
     description: 'X Stars',
     defaultMessage: '{rating, number} stars',
+  },
+  tips_advanced: {
+    id: 'filter.tips_advanced',
+    description: 'Advanced tips for filtering',
+    defaultMessage: 'Looking for more filters? Enter "author:your-username" in the search to find only your recipes.',
   },
 });
 
@@ -191,6 +197,11 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
             </Link>
           </div>
         )}
+
+        <P variant='body2' className='filters-tip'>
+          <Icon icon='lightbulb' style={{ color: 'var(--secondaryMain)' }} />
+          {formatMessage(messages.tips_advanced)}
+        </P>
       </Card.Text>
     </Card>
   );

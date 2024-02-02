@@ -58,6 +58,7 @@
   "filter.reset": "Zurücksetzen",
   "filter.reset_filters": "Filter zurücksetzen",
   "filter.show_filters": "Filter anzeigen",
+  "filter.tips_advanced": "Auf der Suche nach weiteren Filtern? Gib in die Suche \"author:dein-benutzername\" ein, um nur deine Rezepte zu finden.",
   "filter.title": "Titel",
   "filter.x_stars": "{rating, plural, =0 {Ohne} other {# Sterne}}",
   "footer.about.credits": "Credits",

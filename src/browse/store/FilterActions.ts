@@ -1,3 +1,5 @@
+import * as _ from 'lodash-es';
+
 import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
@@ -5,14 +7,11 @@ import { handleError } from '../../common/requestUtils';
 import { objToSearchString } from '../../common/utility';
 import { toBasicAction } from '../../common/store/redux';
 import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_RATING_STORE, BROWSE_FILTER_TAGS_STORE, FilterDispatch } from './FilterTypes';
+import { extractSearchStringToFields } from './SearchActions';
 
 const parsedFilter = (filters: Record<string, string>): Record<string, string> => {
-  const parsedFilters: Record<string, string> = {};
-  Object.keys(filters).forEach(f => {
-    if (!['limit', 'offset', 'ordering'].includes(f)) {
-      parsedFilters[f] = filters[f];
-    }
-  });
+  let parsedFilters: Record<string, string> = _.omit(filters, ['limit', 'offset', 'ordering']);
+  parsedFilters = extractSearchStringToFields(parsedFilters);
   return parsedFilters;
 };
 

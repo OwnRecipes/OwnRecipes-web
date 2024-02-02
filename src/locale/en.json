@@ -58,6 +58,7 @@
   "filter.reset": "Reset",
   "filter.reset_filters": "Reset Filters",
   "filter.show_filters": "Show Filters",
+  "filter.tips_advanced": "Looking for more filters? Enter \"author:your-username\" in the search to find only your recipes.",
   "filter.title": "Title",
   "filter.x_stars": "{rating, number} stars",
   "footer.about.credits": "Credits",
