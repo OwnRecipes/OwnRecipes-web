@@ -57,6 +57,22 @@ function demoFilterTag(resultRecipes: Array<RecipeDto>, queryParams: URLSearchPa
   return resultRecipes;
 }
 
+function demoDoFilterByAuthor(resultRecipes: Array<RecipeDto>, authors: Array<string>): Array<RecipeDto> {
+  const authorsS = `,${authors.map(a => a.toLocaleLowerCase()).join(',')},`;
+  return resultRecipes.filter(r => authorsS.includes(r.pub_username.toLocaleLowerCase()));
+}
+function demoFilterAuthor(resultRecipes: Array<RecipeDto>, queryParams: URLSearchParams): Array<RecipeDto> {
+  if (queryParams.has('author')) {
+    const queryAuthor = queryParams.get('author')?.split(',').map(c => c.toLocaleLowerCase());
+    return demoDoFilterByAuthor(resultRecipes, queryAuthor ?? []);
+  }
+  if (queryParams.has('author__username')) {
+    const queryAuthor = queryParams.get('author__username')?.split(',').map(c => c.toLocaleLowerCase());
+    return demoDoFilterByAuthor(resultRecipes, queryAuthor ?? []);
+  }
+  return resultRecipes;
+}
+
 function demoDoFilterByTitle(resultRecipes: Array<RecipeDto>, titles: Array<string>): Array<RecipeDto> {
   return resultRecipes.filter(r => {
     const rTitle = r.title.toLocaleLowerCase();
@@ -93,6 +109,7 @@ function demoFilterSearch(resultRecipes: Array<RecipeDto>, queryParams: URLSearc
     demoDoFilterByCuisine(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByCourse(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByTag(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
+    demoDoFilterByAuthor(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByTitle(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByIngredient(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
 
@@ -141,10 +158,10 @@ export function demoFindSearchRecipes(allRecipes: Array<RecipeDto>, queryParams:
   resultRecipes = demoFilterCuisine(resultRecipes, queryParams);
   resultRecipes = demoFilterCourse(resultRecipes, queryParams);
   resultRecipes = demoFilterTag(resultRecipes, queryParams);
+  resultRecipes = demoFilterAuthor(resultRecipes, queryParams);
   resultRecipes = demoFilterSearch(resultRecipes, queryParams);
 
   resultRecipes = demoOrdering(resultRecipes, queryParams);
-  resultRecipes = demoLimit(resultRecipes, queryParams);
 
   return resultRecipes;
 }
@@ -158,12 +175,13 @@ const config = {
     const queryParams: URLSearchParams = toQueryParams(match[2]);
 
     const resultRecipes = demoFindSearchRecipes(demoRecipes, queryParams);
+    const limitedResultRecipes = demoLimit(resultRecipes, queryParams);
 
     const result: ObjectIterator<RecipeListDto> = {
-      count: demoRecipes.length,
+      count: resultRecipes.length,
       next: null,
       previous: null,
-      results: resultRecipes.map(rec => toRecipeListDto(rec)),
+      results: limitedResultRecipes.map(rec => toRecipeListDto(rec)),
     };
 
     return result;

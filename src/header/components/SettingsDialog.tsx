@@ -14,7 +14,7 @@ import { Select } from '../../common/components/Input/Select';
 import classNames from 'classnames';
 import Button from '../../common/components/Button';
 import Checkbox from '../../common/components/Input/Checkbox';
-import { getEnv, getEnvAsBoolean } from '../../common/utility';
+import { getEnv, getEnvAsBoolean, getResourcePath } from '../../common/utility';
 
 const languageMessages = defineMessages({
   language_settings: {
@@ -141,7 +141,7 @@ const LanguageSettings: React.FC<ILanguageSettingsProps> = ({
 };
 
 function getThemeImage(theme: ThemeMode) {
-  return theme === ThemeMode.DARK ? '/images/DarkMode.png' : '/images/LightMode.png';
+  return getResourcePath(theme === ThemeMode.DARK ? '/images/DarkMode.png' : '/images/LightMode.png');
 }
 
 interface IThemeSettingsProps {

@@ -13,7 +13,7 @@ import { Beforeunload } from 'react-beforeunload';
 import { RootState } from '../../app/Store';
 import * as AccountActions from '../store/actions';
 import { AccountState, UserAccount } from '../store/types';
-import { getEnvAsBoolean, getRoutePath } from '../../common/utility';
+import { getEnvAsBoolean, getRoutePath, isDemoMode } from '../../common/utility';
 import request, { getToken } from '../../common/CustomSuperagent';
 import AuthContext from '../context/AuthContext';
 import { useSelector } from '../../common/store/redux';
@@ -106,7 +106,7 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
       const newToken = getToken();
       if (currToken != null && newToken == null) {
         this.postProcessLogout();
-      } else if (currToken != null && newToken != null) {
+      } else if (currToken != null && newToken != null && !isDemoMode()) {
         this.postProcessTokenChanged(currToken, newToken, true);
       }
     } else if (prevToken != null && currToken != null) {
@@ -215,7 +215,7 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
       // console.log('[AuthObserver::postProcessAppActivityChange] app is in background, stop refreshing the token.');
       clearTimeout(this.timeoutID);
       this.timeoutID = undefined;
-    } else if (isAppVisible && hasConnection && this.timeoutID == null) {
+    } else if (isAppVisible && hasConnection && this.timeoutID == null && !isDemoMode()) {
       const newToken = getToken();
       if (newToken != null) {
         // console.log('[AuthObserver::postProcessAppActivityChange] app is active again, restart refreshing the token.');
