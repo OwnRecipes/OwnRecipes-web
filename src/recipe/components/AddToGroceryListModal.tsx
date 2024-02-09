@@ -27,6 +27,7 @@ import MeasurementContext from '../../common/context/MeasurementContext';
 import IngredientGroups from './IngredientGroups';
 import SubRecipes from './SubRecipes';
 import { formatMeasurement } from './Ingredients';
+import { isDemoMode } from '../../common/utility';
 
 export interface IAddToGroceryListModalProps {
   show: boolean;
@@ -56,6 +57,7 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
   const groceryListsState = useSelector((state: RootState) => state.groceryLists);
   const { items: lists } = groceryListsState;
   useEffect(() => {
+    if (isDemoMode()) return;
     dispatch(GroceryListsActions.load());
   }, []);
 

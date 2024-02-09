@@ -102,11 +102,11 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
 
     if ((prevToken == null && currToken != null) || (prevToken != null && currToken != null && this.props.loc.pathname === getRoutePath('/login'))) {
       this.postProcessLogin();
-    } else if (prevProps.loc.pathname !== this.props.loc.pathname && prevProps.loc.pathname !== getRoutePath('/login') && this.props.loc.pathname !== getRoutePath('/login')) {
+    } else if (prevProps.loc.pathname !== this.props.loc.pathname && prevProps.loc.pathname !== getRoutePath('/login') && this.props.loc.pathname !== getRoutePath('/login') && !isDemoMode()) {
       const newToken = getToken();
       if (currToken != null && newToken == null) {
         this.postProcessLogout();
-      } else if (currToken != null && newToken != null && !isDemoMode()) {
+      } else if (currToken != null && newToken != null) {
         this.postProcessTokenChanged(currToken, newToken, true);
       }
     } else if (prevToken != null && currToken != null) {
