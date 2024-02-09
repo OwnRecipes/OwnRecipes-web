@@ -9,15 +9,18 @@ import ErrorBoundary from '../common/components/ErrorBoundary';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './css/core.css';
 import './css/print.css';
+import './css/404.css';
 
 import Routes from './Routes';
-import AutoLogin from './AutoLogin';
+import AuthObserver from '../account/containers/AuthObserver';
 import ConnectionObserver from './components/ConnectionObserver';
 import InternalErrorDialog from './components/InternalErrorDialog';
 import IntlMessagesCreator from './components/IntlMessagesCreator';
 import { isDemoMode } from '../common/utility';
 import PageSpinner from './components/PageSpinner';
 import PageScroller from '../common/components/PageScroller';
+import LoginModal from '../account/containers/LoginModal';
+import LogoutModal from '../account/containers/LogoutModal';
 
 const App = () => {
   const main = (
@@ -42,7 +45,9 @@ const AppFC: React.FC = () => (
     </div>
     <Footer />
     <InternalErrorDialog />
-    <AutoLogin />
+    <AuthObserver />
+    <LoginModal />
+    <LogoutModal />
     <PageScroller />
   </>
 );

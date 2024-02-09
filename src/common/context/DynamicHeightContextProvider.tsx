@@ -13,7 +13,7 @@ interface IDynamicHeightContextProviderProps {
  *
  * @param props - {@link IDynamicHeightContextProviderProps}.
  */
-const DynamicHeightContextProvider: React.FC<IDynamicHeightContextProviderProps> = (props: IDynamicHeightContextProviderProps) => {
+const DynamicHeightContextProvider: React.FC<IDynamicHeightContextProviderProps> = ({ children }: IDynamicHeightContextProviderProps) => {
   const [toolbarHeight, setToolbarHeight] = useState<number>(0);
 
   const updateToolbarHeight = (height: number) => setToolbarHeight(height);
@@ -25,7 +25,7 @@ const DynamicHeightContextProvider: React.FC<IDynamicHeightContextProviderProps>
 
   return (
     <DynamicHeightContext.Provider value={value}>
-      {props.children}
+      {children}
     </DynamicHeightContext.Provider>
    );
 };

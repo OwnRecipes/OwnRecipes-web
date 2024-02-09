@@ -2,7 +2,7 @@ import { IntlShape } from 'react-intl';
 import * as _ from 'lodash-es';
 import { FORM_ERROR } from 'final-form';
 
-import { ResponseError } from '../CustomSuperagent';
+import { ResponseError } from '../requestUtils';
 import { optionallyFormatMessage } from '../utility';
 
 export interface ValidationErrorType {
@@ -21,10 +21,22 @@ export function createInternalHiddenValidationResult(code: string, message: stri
   return result;
 }
 
+export function camelCase(str: string): string {
+  if (!(/[_-]/).test(str)) return str;
+  return str.toLowerCase().replace(
+    /([-_][a-z])/g, group => group
+      .toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  );
+}
+
 export function toValidationErrors(error: ResponseError): ValidationResult | undefined {
   const toCode = (msg: string): string => {
     if (msg === 'This item is required.') {
       return 'required';
+    } else if (msg.startsWith('Ensure this value has at most ')) {
+      return 'max_length';
     }
 
     return msg;
@@ -33,7 +45,9 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
   const result = createValidationResult();
 
   const body =  error.response?.body;
-  if (body == null) return undefined;
+  if (body == null) {
+    return result;
+  }
 
   if (typeof body !== 'object') {
     result[INTERNAL_ERROR_KEY] = { code: '500', message: body };
@@ -51,22 +65,17 @@ export function toValidationErrors(error: ResponseError): ValidationResult | und
     if (nextKey === 'non_field_errors') {
       attr = FORM_ERROR;
     } else {
-      attr = ((/[_-]/).test(nextKey)) ? _.camelCase(nextKey) : nextKey;
+      attr = ((/[_-]/).test(nextKey)) ? camelCase(nextKey) : nextKey;
     }
     const nextVal = body[nextKey];
 
-    if (Array.isArray(nextVal)) {
-      result[attr] = nextVal.map(v => ({
-        code:      toCode(v),
+    result[attr] = _.castArray(nextVal).filter(v => (_.isNumber(v) || _.isBoolean(v) || _.isString(v))).map(v => {
+      const valErr: ValidationErrorType = {
+        code:      toCode(String(v)),
         message:   v,
-        attribute: attr,
-      }));
-    } else {
-      result[attr] = {
-        code:      toCode(nextVal),
-        message:   nextVal,
       };
-    }
+      return valErr;
+    });
   });
 
   return result;
@@ -91,17 +100,13 @@ export interface FieldValidatorType {
 
 export type ValidatorsType = Array<FieldValidatorType>;
 
-export function formatValidation(intl: IntlShape, validation: ValidationError | undefined, baseMessageId = 'validation.error.'): string | undefined {
+export function formatValidation(intl: IntlShape, validation: ValidationError | undefined, values?: Record<string, React.ReactNode>, baseMessageId = 'validation.error.'): string | undefined {
   if (validation == null) return undefined;
 
   let errors = '';
-  if (Array.isArray(validation)) {
-    validation.forEach(v => {
-      errors += optionallyFormatMessage(intl, baseMessageId, v.code);
-    });
-  } else {
-    errors += optionallyFormatMessage(intl, baseMessageId, validation.code);
-  }
+  _.castArray(validation).forEach(v => {
+    errors += optionallyFormatMessage(intl, baseMessageId, v.code, values);
+  });
 
   return errors.length ? errors : undefined;
 }

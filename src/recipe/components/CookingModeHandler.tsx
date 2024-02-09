@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import '../css/recipe_header.css';
 
 import { useWakeLock } from '../../common/hooks/useWakeLock';
-import usePageVisibility from '../../common/components/pageVisibility/usePageVisibility';
+import usePageVisibility from '../../common/hooks/pageVisibility/usePageVisibility';
 
 import Toast from '../../common/components/Toast';
 import Modal from '../../common/components/Modal';
@@ -108,6 +108,7 @@ const CookingModeHandler: React.FC = () => {
     }
     if (timer != null) {
       clearTimeout(timer);
+      timer = undefined;
     }
   };
 

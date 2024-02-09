@@ -3,7 +3,7 @@
     "ident": "@@account",
     "item": {
       "id": 99,
-      "token": "fghjfghj",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsInVzZXJfaWQiOjk5LCJ1c2VybmFtZSI6IkRlbW8gVXNlciIsImVtYWlsIjoiZGVtb0B1c2VyLndlYiIsImlzX3N0YWZmIjpmYWxzZX0",
       "username": "Demo User",
       "email": "demo@user.web",
       "role": "user",

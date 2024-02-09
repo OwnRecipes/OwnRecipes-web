@@ -1,8 +1,9 @@
-import { handleError, request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { NewsDispatch, NEWS_STORE, toNewsItem } from './types';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { toBasicAction } from '../../common/store/redux';
+import { handleError } from '../../common/requestUtils';
+import { NewsDispatch, NEWS_STORE, toNewsItem } from './types';
 
 // eslint-disable-next-line import/prefer-default-export
 export const load = () => (dispatch: NewsDispatch) => {

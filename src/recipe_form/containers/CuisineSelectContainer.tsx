@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import * as _ from 'lodash-es';
 
-import * as RecipeFormActions from '../store/actions';
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import { RootState } from '../../app/Store';
@@ -20,7 +20,7 @@ const CuisineSelectContainer: React.FC<ICuisineSelectContainerProps> = ({
   const intl = useIntl();
   const dispatch = useDispatch();
 
-  const fetchCuisines = useCallback(() => dispatch(RecipeGroupActions.fetchCuisines()), [dispatch, RecipeFormActions]);
+  const fetchCuisines = useCallback(() => { dispatch(RecipeGroupActions.fetchCuisines()); }, []);
   const cuisines = useSelector((state: RootState) => state.recipeGroups.cuisines.items);
   useSingle(fetchCuisines, cuisines);
 
@@ -36,13 +36,9 @@ const CuisineSelectContainer: React.FC<ICuisineSelectContainerProps> = ({
     }
   }, [cuisines]);
 
-  const formatter = useCallback((value: Array<Cuisine> | Cuisine): Array<string> | string => {
-    if (Array.isArray(value)) {
-      return value.map(v => v.title);
-    } else {
-      return value.title;
-    }
-  }, []);
+  const formatter = useCallback((value: Array<Cuisine> | Cuisine): Array<string> | string => (
+    _.castArray(value).map(v => v.title)
+  ), []);
 
   return (
     <ReCreatableSelect

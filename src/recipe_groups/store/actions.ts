@@ -1,9 +1,10 @@
-import { handleError, request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
 import { CourseDto, toCourse, CuisineDto, toCuisine, toTag } from '../../recipe/store/RecipeTypes';
-import { COURSES_STORE, CUISINES_STORE, RecipeGroupsDispatch, TAGS_STORE } from './types';
 import { toBasicAction } from '../../common/store/redux';
+import { handleError } from '../../common/requestUtils';
+import { COURSES_STORE, CUISINES_STORE, RecipeGroupsDispatch, TAGS_STORE } from './types';
 
 export const fetchCourses = () => (dispatch: RecipeGroupsDispatch) => {
   dispatch({ ...toBasicAction(COURSES_STORE, ACTION.GET_START) });

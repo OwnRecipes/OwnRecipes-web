@@ -23,7 +23,7 @@ const Tooltip = forwardRef<HTMLDivElement, ITooltipProps>(({
         placement = {placement}
         delay = {{ show: 500, hide: 250 }}
         overlay = {(
-          <BootstrapTooltip id={id} ref={ref}>
+          <BootstrapTooltip id={id} ref={ref} className='styled' style={{ position: 'fixed' }}>
             {tooltip}
           </BootstrapTooltip>
       )}>

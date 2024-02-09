@@ -14,5 +14,9 @@ export default function initValidations() {
       id: 'validation.error.url',
       defaultMessage: 'Please enter a valid URL.',
     },
+    validation_error_max_length: {
+      id: 'validation.error.max_length',
+      defaultMessage: 'This field exceeds the character limit.',
+    },
   });
 }

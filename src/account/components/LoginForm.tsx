@@ -12,8 +12,43 @@ import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
 import { ValidationResult } from '../../common/store/Validation';
 import LoginAlert from './LoginAlert';
 
+const messages = defineMessages({
+  please_sign_in: {
+    id: 'login.please_sign_in',
+    description: 'Please sign in header',
+    defaultMessage: 'Sign In',
+  },
+  username: {
+    id: 'login.username',
+    description: 'Username placeholder',
+    defaultMessage: 'Username',
+  },
+  password: {
+    id: 'login.password',
+    description: 'Password placeholder',
+    defaultMessage: 'Password',
+  },
+  remember: {
+    id: 'login.remember',
+    description: 'Remember checkbox',
+    defaultMessage: 'Remember me for 14 days',
+  },
+  sign_in: {
+    id: 'login.sign_in',
+    description: 'Sign in button',
+    defaultMessage: 'Sign in',
+  },
+  logout: {
+    id: 'login.logout',
+    description: 'Sign out button',
+    defaultMessage: 'Sign out',
+  },
+});
+
 export interface ILoginFormProps {
+  username?: string;
   onSubmit: (username: string, password: string, remember: boolean) => Promise<ValidationResult>;
+  onLogout?: () => void;
 }
 
 interface LoginFormData {
@@ -22,39 +57,12 @@ interface LoginFormData {
   remember: boolean;
 }
 
-const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ username, onSubmit, onLogout }: ILoginFormProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    please_sign_in: {
-      id: 'login.please_sign_in',
-      description: 'Please sign in header',
-      defaultMessage: 'Sign In',
-    },
-    username: {
-      id: 'login.username',
-      description: 'Username placeholder',
-      defaultMessage: 'Username',
-    },
-    password: {
-      id: 'login.password',
-      description: 'Password placeholder',
-      defaultMessage: 'Password',
-    },
-    remember: {
-      id: 'login.remember',
-      description: 'Remember checkbox',
-      defaultMessage: 'Remember me for 14 days',
-    },
-    sign_in: {
-      id: 'login.sign_in',
-      description: 'Sign in button',
-      defaultMessage: 'Sign in',
-    },
-  });
 
   const handleSubmit = useCallback(async (form: LoginFormData) => onSubmit(form.username, form.password, form.remember), [onSubmit]);
 
-  const initialValues = useMemo(() => ({ remember: true }), []);
+  const initialValues = useMemo(() => ({ username: username, remember: true }), [username]);
 
   return (
     <ReduxForm
@@ -64,9 +72,9 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
         render = {({ form, handleSubmit: renderSubmit }) => (
           <Form className='form-signin' onSubmit={renderSubmit}>
             <InitialValuesResetter form={form} initialValues={initialValues} />
-            <FormSpy subscription={{ submitError: true }}>
-              {({ submitError }) => (
-                <LoginAlert submitError={submitError} />
+            <FormSpy subscription={{ submitErrors: true }}>
+              {({ submitErrors }) => (
+                <LoginAlert submitError={submitErrors != null} />
               )}
             </FormSpy>
 
@@ -76,6 +84,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
                 placeholder = {formatMessage(messages.username)}
                 autoComplete = 'username'
                 required
+                readOnly = {Boolean(username)}
                 inputAdornmentStart = {<Icon icon='person' size='2x' />} />
             <ReInput
                 name  = 'password'
@@ -96,6 +105,11 @@ const LoginForm: React.FC<ILoginFormProps> = ({ onSubmit }: ILoginFormProps) => 
                 </Button>
               )}
             </FormSpy>
+            {username && (
+              <Button variant='outline-secondary' style={{ marginTop: '1em' }} onClick={onLogout}>
+                {formatMessage(messages.logout)}
+              </Button>
+            )}
           </Form>
     )} />
   );

@@ -18,26 +18,34 @@
   flex-wrap: wrap;
   z-index: 1;
 }
-.recipe-header .options button, .recipe-header .options a {
-  margin-left: 10px;
-}
+
 @media screen and (min-width: 768px) {
   .recipe-header .row .img-wrapper .options {
     position: absolute;
     bottom: 0;
     right:  0;
   }
-  .recipe-header .options .options-wrapper {
+  .recipe-header .options .toolbar {
     margin-right: calc(var(--bs-gutter-x) * 0.5);
 
     padding: 0.25em 0.25em 0.25em 0;
     border-top-left-radius: 0.25em;
   }
-  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .options-wrapper {
-    background-color: rgba(0, 0, 35, 0.5);
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .toolbar,
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .toolbar .btn {
+    background-color: rgba(0, 0, 15, 0.55);
   }
-  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .options-wrapper {
-    background-color: rgba(255, 255, 255, 0.5);
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .toolbar .btn:hover,
+  html[data-theme="dark"] .recipe-header .row .img-wrapper .options .toolbar .btn:focus {
+    background-color: var(--midground) !important;
+  }
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar,
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar .btn {
+    background-color: rgba(255, 255, 255, 0.55);
+  }
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar .btn:hover,
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar .btn:focus {
+    background-color: #fff !important;
   }
 }
 
@@ -49,9 +57,11 @@
   text-align: center;
   margin-bottom: 0.5em;
 }
-.recipe-header .recipe-header-chips {
-  margin-left:  calc(var(--bs-gutter-x) * -0.5);
-  margin-right: calc(var(--bs-gutter-x) * -0.5);
+@media screen {
+  .recipe-header .recipe-header-chips {
+    margin-left:  calc(var(--bs-gutter-x) * -0.5);
+    margin-right: calc(var(--bs-gutter-x) * -0.5);
+  }
 }
 @media screen and (min-width: 1200px) {
   .recipe-header .info-wrapper {

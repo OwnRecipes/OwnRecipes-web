@@ -6,6 +6,7 @@ import { RootState } from '../../app/Store';
 import { useSelector } from '../../common/store/redux';
 import { PendingState } from '../../common/store/GenericReducerType';
 import { getRoutePath } from '../../common/utility';
+import UserRole from '../../common/types/UserRole';
 
 const EditGuard: React.FC = () => {
   const params = useParams();
@@ -21,7 +22,7 @@ const EditGuard: React.FC = () => {
   const wasRenderedRef = useRef<boolean>(false);
 
   const user = accountState.item;
-  const mayEdit = user != null && (isNew || (user.id === recipe?.author));
+  const mayEdit = user != null && (isNew || (user.id === recipe?.author || user.role === UserRole.STAFF || user.role === UserRole.ADMIN));
 
   useEffect(() => {
     if (user != null && pending === PendingState.COMPLETED && recipe != null && !mayEdit) {

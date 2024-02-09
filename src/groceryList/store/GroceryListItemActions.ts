@@ -1,7 +1,8 @@
-import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 import { ACTION } from '../../common/store/ReduxHelper';
+import { handleError, handleFormError } from '../../common/requestUtils';
 import { GroceryListItem, GroceryListItemAction, GroceryListItemActionTypes, GroceryListItemCreate, GroceryListItemCreateDto, GroceryListItemDispatch, GroceryListItemUpdate, GROCERY_LIST_ITEM_STORE, toGroceryListItem } from './GroceryListItemTypes';
 
 export const getGroceryListItemSuccess = (groceryList: GroceryListItem): GroceryListItemAction => (

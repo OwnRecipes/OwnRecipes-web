@@ -52,13 +52,13 @@ const MiniBrowse: React.FC<IMiniBrowseProps> = ({ heading, count, filters }: IMi
 
   const handleShuffleClick = useCallback(() => {
     dispatch(MiniBrowseActions.loadMiniBrowse(buildUrlFilter(count, filters)));
-  }, [dispatch, buildUrlFilter, count, filters]);
+  }, [buildUrlFilter, count, filters]);
 
   const handleOpenRecipe = useCallback((rec: RecipeList) => {
     if (recipeSlug !== rec.slug) {
       dispatch(RecipeActions.preload(rec as Recipe));
     }
-  }, [recipeSlug, dispatch]);
+  }, [recipeSlug]);
 
   if (differentMiniBrowseItems != null && differentMiniBrowseItems.length === 0) return null;
 

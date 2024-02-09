@@ -1,12 +1,13 @@
-import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
-import { Recipe, RecipeDto, toRecipe, toRecipeRequest } from '../../recipe/store/RecipeTypes';
-import { COURSES_STORE, CUISINES_STORE, TAGS_STORE } from '../../recipe_groups/store/types';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
-import { RecipeFormDispatch, RECIPE_FORM_STORE } from './types';
+import { handleError, handleFormError } from '../../common/requestUtils';
+import { Recipe, RecipeDto, toRecipe, toRecipeRequest } from '../../recipe/store/RecipeTypes';
+import { COURSES_STORE, CUISINES_STORE, TAGS_STORE } from '../../recipe_groups/store/types';
 import { getRecipeSuccess } from '../../recipe/store/RecipeActions';
+import { RecipeFormDispatch, RECIPE_FORM_STORE } from './types';
 
 export const load = (recipeSlug: string) => (dispatch: RecipeFormDispatch) => {
   dispatch({ ...toBasicAction(RECIPE_FORM_STORE, ACTION.GET_START) });

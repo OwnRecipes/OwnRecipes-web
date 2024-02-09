@@ -1,5 +1,5 @@
 const defaultFilters: Record<string, string | number> = {
-  limit: 4,
+  limit: 6,
 };
 
 export default defaultFilters;

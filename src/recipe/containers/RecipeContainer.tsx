@@ -18,6 +18,7 @@ import { getRoutePath } from '../../common/utility';
 import useCrash from '../../common/hooks/useCrash';
 import CookingModeContextProvider from '../context/CookingModeContextProvider';
 import CookingModeHandler from '../components/CookingModeHandler';
+import UserRole from '../../common/types/UserRole';
 
 const RecipeContainer: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const RecipeContainer: React.FC = () => {
   const crash = useCrash();
 
   const userId = useSelector((state: RootState) => state.account.item?.id);
+  const userRole = useSelector((state: RootState) => state.account.item?.role);
   const recipeState = useSelector((state: RootState) => state.recipe);
   const recipe      = recipeState.item;
   const recipeMeta  = recipeState.meta;
@@ -36,14 +38,14 @@ const RecipeContainer: React.FC = () => {
   const handlePreloadRecipe = useCallback(() => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
     dispatch(RecipeFormActions.preload(recipe));
-  }, [recipe, dispatch]);
+  }, [recipe]);
 
-  // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, [dispatch]);
+  // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, []);
   const deleteRecipe = useCallback(() => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
     setIsDeleting(true);
     dispatch(RecipeActions.deleteRecipe(recipe.id, recipe.slug));
-  }, [recipe, dispatch]);
+  }, [recipe]);
 
   // Handle deletion
   useEffect(() => {
@@ -71,6 +73,7 @@ const RecipeContainer: React.FC = () => {
             recipe       = {recipe}
             recipeMeta   = {recipeMeta}
             userId       = {userId}
+            editable     = {recipe.author === userId || userRole === UserRole.STAFF || userRole === UserRole.ADMIN}
 
             onEditRecipe = {handlePreloadRecipe}
             deleteRecipe = {deleteRecipe} />

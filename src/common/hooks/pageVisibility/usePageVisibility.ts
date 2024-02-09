@@ -2,21 +2,21 @@
 
 import { useEffect, useState } from 'react';
 
-import { getHandlerArgs, isSupported, visibility } from './utils';
+import { getPageVisibleHandlerArgs, isSupported, visibility } from './utils';
 
 const isSupportedLocal = isSupported && visibility;
 
-const usePageVisibility = () => {
-  const [initiallyVisible] = getHandlerArgs();
+const usePageVisibility = (): boolean => {
+  const [initiallyVisible] = getPageVisibleHandlerArgs();
 
-  const [isVisible, setIsVisible] = useState(initiallyVisible);
+  const [isVisible, setIsVisible] = useState<boolean>(initiallyVisible as boolean);
 
   useEffect(() => {
     if (isSupportedLocal && visibility) {
       const handler = () => {
-        const [currentlyVisible] = getHandlerArgs();
+        const [currentlyVisible] = getPageVisibleHandlerArgs();
 
-        setIsVisible(currentlyVisible);
+        setIsVisible(currentlyVisible as boolean);
       };
 
       document.addEventListener(visibility.event, handler);
@@ -25,9 +25,9 @@ const usePageVisibility = () => {
     return () => {
       if (isSupportedLocal && visibility) {
         const handler = () => {
-          const [currentlyVisible] = getHandlerArgs();
+          const [currentlyVisible] = getPageVisibleHandlerArgs();
 
-          setIsVisible(currentlyVisible);
+          setIsVisible(currentlyVisible as boolean);
         };
 
         document.removeEventListener(visibility.event, handler);

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import * as _ from 'lodash-es';
 
 import '../css/form_errors.css';
 
-import { ValidationError } from '../store/Validation';
+import { formatValidation, ValidationError } from '../store/Validation';
 import Alert from './Alert';
 import NavigationPrompt from './NavigationPrompt';
 import P from './P';
@@ -38,6 +39,12 @@ const messages = defineMessages({
   },
 });
 
+function joinSentences(msgs: Array<string>, separator = '\n', defLineEnding = '.'): string {
+  const msgsWithLineEnding = msgs.map(s => s.trim()).map(s => ((s.endsWith('.') || s.endsWith('!') || s.endsWith('?')) ? s : `${s}${defLineEnding}`));
+
+  return msgsWithLineEnding.join(separator);
+}
+
 interface IFormStatusProps {
   dirty: boolean;
   submitting: boolean;
@@ -65,19 +72,16 @@ interface IFormErrorRowErrorProps {
 }
 
 const FormErrorRowError: React.FC<IFormErrorRowErrorProps> = ({ name, err }: IFormErrorRowErrorProps) => {
+  const intl = useIntl();
+
   const label = document.querySelector(`[data-api-field="${name}"] > label`)?.textContent ?? name;
 
-  const errMsgs: Array<string> = [];
-  if (Array.isArray(err)) {
-    errMsgs.push(...(err.map(errr => errr.message)));
-  } else {
-    errMsgs.push(err.message);
-  }
+  const errMsgs: Array<string> = _.castArray(err).map(errr => formatValidation(intl, errr) || errr.message);
 
   return (
     <tr>
       <td>{label}</td>
-      <td>{errMsgs.join('. ')}</td>
+      <td>{joinSentences(errMsgs)}</td>
     </tr>
   );
 };

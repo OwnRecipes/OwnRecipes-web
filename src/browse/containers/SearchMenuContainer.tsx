@@ -55,7 +55,7 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
 
   useEffect(() => {
     reloadData();
-  }, [reloadData, qsString, openFilters]);
+  }, [qsString, openFilters]);
 
   const resetFilterUrl = useMemo(() => {
     if (!qs.search) {

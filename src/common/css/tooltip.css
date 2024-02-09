@@ -1,12 +1,12 @@
-.tooltip.show {
+.tooltip.styled.show {
   opacity: 1;
 }
 
-.tooltip .tooltip-arrow {
+.tooltip.styled .tooltip-arrow {
   display: none;
 }
 
-.tooltip-inner {
+.tooltip.styled .tooltip-inner {
   max-width: 18.75em;
   background-color: var(--elevation);
   color: var(--primaryText);

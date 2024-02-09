@@ -7,23 +7,25 @@ import { GenericItemReducerAction } from '../../common/store/ReduxHelper';
 import UserRole from '../../common/types/UserRole';
 
 export interface LoginDto {
-  id:    number;
-  token: string;
+  access:  string;
+  refresh: string;
 }
 
 export interface UserAccount {
   id:       number;
-  token:    string;
   username: string;
   email:    string;
   role:     UserRole;
   remember: boolean;
+  token:    string;
+  refresh?: string;
 }
 
 export interface OwnrecipesPayload extends JwtPayload {
+  user_id:  number;
   username: string;
   email:    string;
-  user_id:  number;
+  is_staff: boolean;
 }
 
 function getRole(decodedToken: OwnrecipesPayload): UserRole {
@@ -32,20 +34,22 @@ function getRole(decodedToken: OwnrecipesPayload): UserRole {
 
   if (username.startsWith('guest') || username.startsWith('gast')) return UserRole.GUEST;
   else if (['admin'].includes(username)) return UserRole.ADMIN;
+  else if (decodedToken.is_staff) return UserRole.STAFF;
   else return UserRole.USER;
 }
 
 export const toUserAccount = (loginDto: LoginDto, remember: boolean): UserAccount => {
-  const { token } = loginDto;
-  if (token == null) throw new Error('Invalid response: token may not be null');
-  const decodedToken: OwnrecipesPayload | undefined = jwtDecode<OwnrecipesPayload>(token);
+  const { access, refresh } = loginDto;
+  if (access == null) throw new Error('Invalid response: access token may not be null');
+  const decodedToken: OwnrecipesPayload | undefined = jwtDecode<OwnrecipesPayload>(access);
 
   if (decodedToken.username == null) throw new Error('Invalid response: The token is incomplete (username is missing)');
   if (decodedToken.email == null)    throw new Error('Invalid response: The token is incomplete (email is missing)');
 
   return {
-    id:       loginDto.id,
-    token:    token,
+    id:       decodedToken.user_id,
+    token:    access,
+    refresh:  remember ? refresh : undefined,
     username: decodedToken.username,
     email:    decodedToken.email,
     role:     getRole(decodedToken),
@@ -55,6 +59,8 @@ export const toUserAccount = (loginDto: LoginDto, remember: boolean): UserAccoun
 
 export enum AccountActionTypes {
   LOGIN  = 'LOGIN',
+  SIDELOAD_TOKEN = 'SIDELOAD_TOKEN',
+  INVALIDATE_TOKEN = 'INVALIDATE_TOKEN',
   FORGET_LOGIN = 'FORGET_LOGIN',
   LOGOUT = 'LOGOUT',
 }
@@ -67,6 +73,16 @@ export type IAccountLoginAction = {
   typs:  typeof AccountActionTypes.LOGIN;
 } & PayloadAction<UserAccount>;
 
+export type IAccountSideloadTokenAction = {
+  store: typeof ACCOUNT_STORE;
+  typs:  typeof AccountActionTypes.SIDELOAD_TOKEN;
+} & PayloadAction<UserAccount>;
+
+export type IAccountInvalidateTokenAction = {
+  store: typeof ACCOUNT_STORE;
+  typs:  typeof AccountActionTypes.INVALIDATE_TOKEN;
+} & BasicAction;
+
 export type IAccountForgetLoginAction = {
   store: typeof ACCOUNT_STORE;
   typs:  typeof AccountActionTypes.FORGET_LOGIN;
@@ -77,6 +93,6 @@ export type IAccountLogoutAction = {
   typs:  typeof AccountActionTypes.LOGOUT;
 } & BasicAction;
 
-export type AccountState    = ItemReducerType<UserAccount>;
-export type AccountAction   = IAccountLoginAction | IAccountForgetLoginAction | IAccountLogoutAction | GenericItemReducerAction<UserAccount>;
+export type AccountState    = ItemReducerType<UserAccount> & { valid?: boolean };
+export type AccountAction   = IAccountLoginAction | IAccountSideloadTokenAction | IAccountInvalidateTokenAction | IAccountForgetLoginAction | IAccountLogoutAction | GenericItemReducerAction<UserAccount>;
 export type AccountDispatch = ReduxDispatch<AccountAction>;

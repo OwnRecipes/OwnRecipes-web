@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Toolbar 1`] = `
+<div
+  className="toolbar start"
+>
+  <span>
+    x
+  </span>
+</div>
+`;
+
+exports[`Toolbar end 1`] = `
+<div
+  className="toolbar end"
+>
+  <span>
+    x
+  </span>
+</div>
+`;

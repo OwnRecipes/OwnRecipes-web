@@ -5,6 +5,7 @@ import { useSelector } from '../../common/store/redux';
 import { Recipe } from '../store/RecipeTypes';
 import MiniBrowse from '../../browse/containers/MiniBrowse';
 import ErrorBoundary from '../../common/components/ErrorBoundary';
+import { getEnvAsBoolean } from '../../common/utility';
 
 export interface IRecipeFooterProps {
   recipe?: Recipe;
@@ -25,8 +26,9 @@ const RecipeFooter: React.FC<IRecipeFooterProps> = ({ recipe }: IRecipeFooterPro
   const intl = useIntl();
 
   const miniBrowseMeta = useSelector((state: RootState) => state.browse.browserMini.meta);
+  const disableRecipeDiscovery = useSelector((state: RootState) => state.settings.disableRecipeDiscovery) || getEnvAsBoolean('REACT_APP_DISABLE_RECIPE_DISCOVERY') || false;
 
-  if (!miniBrowseMeta.hasConnection || miniBrowseMeta.error
+  if (!miniBrowseMeta.hasConnection || miniBrowseMeta.error || disableRecipeDiscovery
       || !recipe?.author) return null;
 
   return (

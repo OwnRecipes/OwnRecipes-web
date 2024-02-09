@@ -1,7 +1,8 @@
-import { handleError, request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { toBasicAction } from '../../common/store/redux';
 import { ACTION } from '../../common/store/ReduxHelper';
+import { handleError } from '../../common/requestUtils';
 import { GroceryListsDispatch, GROCERY_LISTS_STORE } from './GroceryListsTypes';
 import { toGroceryList } from './GroceryListTypes';
 

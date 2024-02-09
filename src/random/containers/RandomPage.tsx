@@ -31,17 +31,17 @@ const RandomPage: React.FC = () => {
   const qsMergedDefaults = useMemo(() => mergeDefaultFilters(DefaultFilters, qs), [DefaultFilters, qs]);
   const qsMergedString = useMemo(() => objToSearchString(qsMergedDefaults), [qsMergedDefaults]);
 
-  const fetchCourses = useCallback(() => { dispatch(RecipeGroupActions.fetchCourses()); }, [dispatch, RecipeGroupActions]);
+  const fetchCourses = useCallback(() => { dispatch(RecipeGroupActions.fetchCourses()); }, []);
   const courses  = useSelector((state: RootState) => state.recipeGroups.courses.items);
   useSingle(fetchCourses, courses);
 
-  const fetchCuisines = useCallback(() => { dispatch(RecipeGroupActions.fetchCuisines()); }, [dispatch, RecipeGroupActions]);
+  const fetchCuisines = useCallback(() => { dispatch(RecipeGroupActions.fetchCuisines()); }, []);
   const cuisines  = useSelector((state: RootState) => state.recipeGroups.cuisines.items);
   useSingle(fetchCuisines, cuisines);
 
   const reloadData = useCallback(() => {
     dispatch(SearchActions.loadRandomRecipes(qsMergedDefaults));
-  }, [dispatch, qsMergedDefaults]);
+  }, [qsMergedDefaults]);
 
   useEffect(() => {
     reloadData();
@@ -53,7 +53,7 @@ const RandomPage: React.FC = () => {
 
   const handleOpenRecipe = useCallback((rec: RecipeList) => {
     dispatch(RecipeActions.preload(rec));
-  }, [dispatch]);
+  }, []);
 
   return (
     <PageWrapper title={intl.messages['nav.recipes'] as string}>

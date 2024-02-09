@@ -38,7 +38,7 @@ export const visibility = (() => {
   return vendorEvents.find(e => e.hidden in document) ?? null;
 })();
 
-export const getHandlerArgs = () => {
+export const getPageVisibleHandlerArgs = () => {
   if (!visibility) {
     return [true, 'visible'];
   }

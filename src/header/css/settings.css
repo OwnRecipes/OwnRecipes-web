@@ -1,0 +1,29 @@
+.modal.settings .modal-body fieldset:not(:first-of-type) {
+  margin-top: 1.5em;
+}
+
+.modal.settings .modal-body fieldset legend {
+  font-size: 1.35em;
+}
+
+.modal.settings .modal-body .card > button {
+  display: block;
+  padding: 0;
+  border-bottom: 0.25rem transparent solid;
+}
+.modal.settings .modal-body .card.active > button {
+  border-bottom-color: var(--secondaryMain);
+}
+
+.modal.settings .modal-body .card > button > img {
+  border-bottom: 1px var(--actionDisabled) solid;
+}
+
+.modal.settings .modal-body .card > button > .card-title {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  text-align: start;
+  font-size: 1rem;
+  font-weight: normal;
+}

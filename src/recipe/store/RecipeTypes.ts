@@ -1,4 +1,5 @@
 import { Dispatch as ReduxDispatch } from 'redux';
+import * as _ from 'lodash-es';
 
 import { NUMBER_UNDEFINED, STRING_UNDEFINED } from '../../common/constants';
 import ItemReducerType from '../../common/store/ItemReducerType';
@@ -22,10 +23,7 @@ export interface IngredientDto extends Quantity {
   id:           number;
   title:        string;
 }
-export interface Ingredient extends Quantity {
-  id:           number;
-  title:        string;
-
+export interface Ingredient extends IngredientDto {
   quantity?:    string;
 }
 export const toIngredientDto = (obj: Ingredient): IngredientDto => ({
@@ -163,23 +161,31 @@ export interface RecipeListDto {
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
 
+  tags?: Array<TagDto>;
+
   photo_thumbnail?: string | null;
 
   info:     string;
   rating:   number;
+  rating_count: number;
   pub_date: string; // 2011-05-20
 }
 
+export type TagObj = { [key: string]: Tag };
 export interface RecipeList {
   id:    number;
   title: string; // Tasty Chili 24
   slug:  string; // tasty-werwerchili-4
 
+  tags?: Array<TagDto>;
+  oTags?: TagObj;
+
   photoThumbnail?: string;
 
   info:     string;
   rating:   number;
-  pubDate:  string; // 2011-05-20
+  ratingCount: number;
+  pub_date:  string; // 2011-05-20
 }
 
 export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
@@ -187,16 +193,18 @@ export const toRecipeList = (dto: RecipeListDto): RecipeList => ({
   title: dto.title,
   slug:  dto.slug,
 
+  tags:  dto.tags?.map(toTag),
+  oTags: _.keyBy(dto.tags?.map(toTag) ?? [], 'title'),
+
   photoThumbnail: dto.photo_thumbnail ?? undefined,
 
-  info:    dto.info,
-  rating:  dto.rating,
-  pubDate: dto.pub_date,
+  info:     dto.info,
+  rating:   dto.rating,
+  ratingCount: dto.rating_count,
+  pub_date: dto.pub_date,
 });
 
 export interface RecipeDto extends RecipeListDto {
-  username:   string;
-  author:     number;
   source:     string;
 
   cook_time?: number;
@@ -215,12 +223,15 @@ export interface RecipeDto extends RecipeListDto {
   directions: string;
 
   public: boolean;
-  update_date: string;
+
+  author:       number;
+  pub_username: string;
+  update_author?:   number;
+  update_username?: string;
+  update_date:      string;
 }
 
 export interface Recipe extends RecipeList {
-  username:    string;
-  author:      number;
   source:      string;
 
   cookTime?: number;
@@ -230,6 +241,7 @@ export interface Recipe extends RecipeList {
   course?:  Course;
   cuisine?: Cuisine;
   tags:     Array<Tag>;
+  oTags:    TagObj;
 
   photo?: string;
 
@@ -239,7 +251,12 @@ export interface Recipe extends RecipeList {
   directions: string;
 
   public: boolean;
-  updateDate: string;
+
+  author:       number;
+  pub_username: string;
+  update_author?:   number;
+  update_username?: string;
+  update_date:      string;
 
   customServings: number;
 }
@@ -249,8 +266,6 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   title: dto.title,
   slug:  dto.slug,
 
-  username: dto.username,
-  author:   dto.author,
   source:   dto.source,
 
   cookTime: parseBackendNumber(dto.cook_time),
@@ -260,6 +275,7 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   course:  (dto.course == null || dto.course.title  === '-')  ? undefined : toCourse(dto.course),
   cuisine: (dto.cuisine == null || dto.cuisine.title === '-') ? undefined : toCuisine(dto.cuisine),
   tags:    dto.tags.map(toTag),
+  oTags:   _.keyBy(dto.tags.map(toTag), 'title'),
 
   photo: dto.photo ?? undefined,
   photoThumbnail: dto.photo_thumbnail ?? undefined,
@@ -271,9 +287,15 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
   info: dto.info,
 
   rating: dto.rating,
+  ratingCount: dto.rating_count,
   public: dto.public,
-  pubDate:    dto.pub_date,
-  updateDate: dto.update_date,
+
+  author:       dto.author,
+  pub_username: dto.pub_username,
+  pub_date:     dto.pub_date,
+  update_author:   dto.update_author,
+  update_username: dto.update_username,
+  update_date:     dto.update_date,
 
   customServings: dto.servings,
 });

@@ -10,14 +10,3 @@
   font-size: 1.1em;
   margin-bottom: 0;
 }
-
-.rating-panel .new-rating-heading {
-  font-size: 1.1em;
-  font-weight: bold;
-}
-.rating-panel .new-rating {
-  margin-bottom: 30px;
-}
-.rating-panel .new-rating button {
-  margin-top: 10px;
-}

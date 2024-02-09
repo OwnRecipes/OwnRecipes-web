@@ -14,9 +14,8 @@ const item: ObjectIterator<RatingDto> = {
       "rating": 5,
       "comment": "Yummi!",
       "recipe": "tasty-chili",
-      "user_id": 0,
-      "username": "roy",
-      "author": 2,
+      "author": 0,
+      "pub_username": "roy",
       "pub_date": "2022-05-20T13:45:04.322238-05:00",
       "update_date": "2022-05-20T13:45:04.322238-05:00"
     }

@@ -21,6 +21,7 @@ const Results: React.FC<IResultsProps> = ({ pending, search, qs, defaults, build
   const listJsx = useMemo(() => (
     <ListRecipes
         data = {search.recipes}
+        lg   = {3}
         onOpenRecipe = {onOpenRecipe} />
   ), [search.recipes, onOpenRecipe]);
 

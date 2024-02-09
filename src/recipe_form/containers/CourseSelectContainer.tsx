@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import * as _ from 'lodash-es';
 
 import * as RecipeGroupActions from '../../recipe_groups/store/actions';
 import { useDispatch, useSelector } from '../../common/store/redux';
@@ -19,9 +20,9 @@ const CourseSelectContainer: React.FC<ICourseSelectContainerProps> = ({
   const intl = useIntl();
   const dispatch = useDispatch();
 
-  const fetchCourses = useCallback(() => dispatch(RecipeGroupActions.fetchCourses()) , [dispatch, RecipeGroupActions]);
-  const courses  = useSelector((state: RootState) => state.recipeGroups.courses.items);
-  useSingle(fetchCourses , courses);
+  const fetchCourses = useCallback(() => { dispatch(RecipeGroupActions.fetchCourses()); }, []);
+  const courses = useSelector((state: RootState) => state.recipeGroups.courses.items);
+  useSingle(fetchCourses, courses);
 
   const data = useMemo(() => courses
       ?.map(c => ({ value: c.title, label: optionallyFormatMessage(intl, 'course.', c.title) }))
@@ -35,13 +36,9 @@ const CourseSelectContainer: React.FC<ICourseSelectContainerProps> = ({
     }
   }, [courses]);
 
-  const formatter = useCallback((value: Array<Course> | Course): Array<string> | string => {
-    if (Array.isArray(value)) {
-      return value.map(v => v.title);
-    } else {
-      return value.title;
-    }
-  }, []);
+  const formatter = useCallback((value: Array<Course> | Course): Array<string> | string => (
+    _.castArray(value).map(v => v.title)
+  ), []);
 
   return (
     <ReCreatableSelect

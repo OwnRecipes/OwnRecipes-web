@@ -11,21 +11,9 @@ export interface NewsItemDto {
   frontpage: boolean;
 }
 
-export interface NewsItem {
-  id:        number;
-  image:     string;
-  title:     string;
-  content:   string;
-  frontpage: boolean;
-}
+export type NewsItem = NewsItemDto;
 
-export const toNewsItem = (dto: NewsItemDto): NewsItem => ({
-  id:        dto.id,
-  image:     dto.image,
-  title:     dto.title,
-  content:   dto.content,
-  frontpage: dto.frontpage,
-});
+export const toNewsItem = (dto: NewsItemDto): NewsItem => dto;
 
 export const NEWS_STORE = 'news';
 

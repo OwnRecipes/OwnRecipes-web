@@ -1,9 +1,10 @@
-import { handleError, handleFormError, request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { GroceryList, GroceryListAction, GroceryListActionTypes, GroceryListBulkAdd, GroceryListCreate, GroceryListDispatch, GroceryListDto, GroceryListUpdate, GROCERY_LIST_STORE, toGroceryList } from './GroceryListTypes';
 import { Ingredient, SubRecipe } from '../../recipe/store/RecipeTypes';
 import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 import { ACTION } from '../../common/store/ReduxHelper';
+import { handleError, handleFormError } from '../../common/requestUtils';
+import { GroceryList, GroceryListAction, GroceryListActionTypes, GroceryListBulkAdd, GroceryListCreate, GroceryListDispatch, GroceryListDto, GroceryListUpdate, GROCERY_LIST_STORE, toGroceryList } from './GroceryListTypes';
 import { GroceryListItemDto, toGroceryListItem } from './GroceryListItemTypes';
 
 export const getGroceryListSuccess = (groceryList: GroceryList): GroceryListAction => (

@@ -4,10 +4,10 @@
   margin-bottom: 0.2em;
 }
 .recipe-details .directions-panel > .direction-groups .subgroup {
-  margin-bottom: 20px;
+  margin-bottom: 1em;
 }
 .recipe-details .directions-panel > .direction-groups > .subgroup:not(:first-of-type) {
-  margin-top: 40px;
+  margin-top: 2em;
 }
 .recipe-details .directions-panel > .direction-groups ol {
   display: block;
@@ -31,14 +31,14 @@
 
   display: inline-block;
   width: 1.5em;
-  margin-right: 10px;
+  margin-right: 0.5em;
   text-align: center;
 }
 
 /* INGREDIENTS */
 
 .recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients {
-  margin: 0 10px 10px;
+  margin: 0 0.5em 0.5em;
 }
 
 .recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table {

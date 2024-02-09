@@ -11,19 +11,13 @@ export interface GroceryListItemDto {
   order: number;
 }
 
-export interface GroceryListItem {
+export interface GroceryListItem extends GroceryListItemDto {
   listId: number;
-
-  id:    number;
-  title: string; // Tasty Chili 24
-  completed: boolean;
 }
 
 export const toGroceryListItem = (listId: number, dto: GroceryListItemDto): GroceryListItem => ({
+  ...dto,
   listId: listId,
-
-  id:    dto.id,
-  title: dto.title,
   completed: dto.completed ?? false,
 });
 

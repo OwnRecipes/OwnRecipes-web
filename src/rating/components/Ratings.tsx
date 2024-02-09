@@ -1,5 +1,6 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import classNames from 'classnames';
 import { Button } from 'react-bootstrap';
 
 import '../css/ratings.css';
@@ -7,9 +8,30 @@ import '../css/ratings.css';
 import Icon from '../../common/components/Icon';
 import ConditionalWrapper from '../../common/components/ConditionalWrapper';
 
+const messages = defineMessages({
+  star_alt: {
+    id: 'rating_comments.star_alt',
+    description: 'Alt text for star button, for screen reader.',
+    defaultMessage: 'Select to rate item {stars, plural, one {# star} other {# stars}}',
+  },
+  stars_alt: {
+    id: 'rating_comments.stars_alt',
+    description: 'Alt text for read-only stars (view).',
+    defaultMessage: '{stars} out of 5 stars',
+  },
+  rating_count: {
+    id: 'rating_comments.rating_count',
+    description: 'Rating count (view).',
+    defaultMessage: '{count} ratings',
+  },
+});
+
 export interface IRatingsProps {
-  stars: number;
-  onChange?: (stars: number) => void;
+  stars:      number;
+  count?:     number;
+  showCount?: boolean;
+  collapsed?: boolean;
+  onChange?:  (stars: number) => void;
 }
 
 interface IStarProps {
@@ -20,13 +42,6 @@ interface IStarProps {
 
 const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    star_alt: {
-      id: 'rating_comments.star_alt',
-      description: 'Alt text for star button, for screen reader.',
-      defaultMessage: 'Select to rate item {stars, plural, one {# star} other {# stars}}',
-    },
-  });
 
   const handleClick = useCallback(() => {
     onChange?.(num);
@@ -46,15 +61,22 @@ const Star: React.FC<IStarProps> = ({ stars, num, onChange }: IStarProps) => {
   );
 };
 
-const Ratings: React.FC<IRatingsProps> = ({ stars, onChange }: IRatingsProps) => {
+interface ICollapsedStarProps {
+  stars: number;
+}
+
+const CollapsedStar: React.FC<ICollapsedStarProps> = ({ stars }: ICollapsedStarProps) => {
+  const isHalfFilled = stars > 0 && stars < 4;
+  const icon = isHalfFilled ? 'star-half' : 'star';
+  const variant = stars === 0 || isHalfFilled ? 'light' : 'filled';
+
+  return (
+    <Icon key={stars} icon={icon} variant={variant} size='1x' />
+  );
+};
+
+const Ratings: React.FC<IRatingsProps> = ({ stars, count, showCount = true, collapsed = false, onChange }: IRatingsProps) => {
   const { formatMessage } = useIntl();
-  const messages = defineMessages({
-    stars_alt: {
-      id: 'rating_comments.stars_alt',
-      description: 'Alt text for read-only stars (view).',
-      defaultMessage: '{stars} out of 5 stars',
-    },
-  });
 
   let starss = stars;
   if (stars > 5) {
@@ -63,14 +85,29 @@ const Ratings: React.FC<IRatingsProps> = ({ stars, onChange }: IRatingsProps) =>
     starss = 0;
   }
 
-  const starsList: Array<React.ReactNode> = Array.from({ length: 5 }, (_, i) => i + 1).map(num => (
-    <Star key={num} stars={starss} num={num} onChange={onChange} />
-  ));
+  const starsList: React.ReactNode | Array<React.ReactNode> = useMemo(() => {
+    if (collapsed) {
+      return <CollapsedStar stars={starss} />;
+    } else {
+      return Array.from({ length: 5 }, (_, i) => i + 1).map(num => (
+        <Star key={num} stars={starss} num={num} onChange={onChange} />
+      ));
+    }
+  }, [starss, collapsed, onChange]);
+
+  const starsText = stars > 0 ? `${stars}/5` : '';
+  const ratingCount = (showCount && (stars === 0 || count) && !onChange) ? (count ?? 0) : undefined;
 
   return (
     <div className='rating-stars'>
-      <span aria-hidden>{starsList}</span>
+      <span className={classNames('stars-icons', { active: stars > 0 })} aria-hidden>{starsList}</span>
+      {starsText   && <span className='rating-text'  aria-hidden>{starsText}</span>}
       <span className='sr-only'>{formatMessage(messages.stars_alt, { stars: starss })}</span>
+      {ratingCount != null && (
+        <span className='rating-count'>
+          {`(${collapsed ? ratingCount : formatMessage(messages.rating_count, { count: ratingCount })})`}
+        </span>
+      )}
     </div>
   );
 };

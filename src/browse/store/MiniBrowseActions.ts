@@ -1,9 +1,10 @@
-import { handleError, request } from '../../common/CustomSuperagent';
+import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
-import { MiniBrowseDispatch, MINI_BROWSE_STORE } from './MiniBrowseTypes';
 import { ACTION } from '../../common/store/ReduxHelper';
-import { toRecipeList } from '../../recipe/store/RecipeTypes';
 import { toBasicAction } from '../../common/store/redux';
+import { handleError } from '../../common/requestUtils';
+import { toRecipeList } from '../../recipe/store/RecipeTypes';
+import { MiniBrowseDispatch, MINI_BROWSE_STORE } from './MiniBrowseTypes';
 
 // eslint-disable-next-line import/prefer-default-export
 export const loadMiniBrowse = (filter: string) => (dispatch: MiniBrowseDispatch) => {

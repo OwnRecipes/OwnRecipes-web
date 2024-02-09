@@ -21,6 +21,7 @@ const NavButton = forwardRef<HTMLButtonElement, INavButtonProps>(({
         condition = {Boolean(tooltip)}
         render = {childr => <Tooltip id={`${id}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
       <Button
+          id = {id}
           type = 'button'
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           as = {Link as any}

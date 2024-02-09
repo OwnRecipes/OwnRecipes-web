@@ -24,7 +24,7 @@ const IngredientsPanelContainer: React.FC<IIngredientsPanelContainerProps> = ({ 
   const handleUpdateServings = useCallback((servings: number) => {
     setSearchParams({ ...searchParams, servings: String(servings) });
     return dispatch(updateServings(recipeSlug, servings));
-  }, [searchParams, recipeSlug, dispatch]);
+  }, [searchParams, recipeSlug]);
 
   const locationServings = useMemo(() => {
     const serv = searchParams.get('servings');

@@ -36,7 +36,7 @@ const ThemeProvider: React.FC = () => {
 
   useEffect(() => {
     dispatch(SettingsActions.init(tokenId));
-  }, [dispatch, tokenId]);
+  }, [tokenId]);
 
   return null;
 };

@@ -46,7 +46,7 @@ const GroceryListsContainer: React.FC = () => {
     <li key={list.slug}>
       <NavLink to={getRoutePath(`/grocery-lists/${list.slug}`)} key={list.slug}>
         {list.title}
-        <Chip variant='secondary'>{list.item_count}</Chip>
+        <Chip color='secondary'>{list.item_count}</Chip>
       </NavLink>
     </li>
   )) ?? [];

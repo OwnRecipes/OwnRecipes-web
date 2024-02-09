@@ -33,7 +33,7 @@ const GroceryListMenuItem: React.FC = () => {
   const listsJsx = items?.map(list => (
     <NavLink to={getRoutePath(`/grocery-lists/${list.slug}`)} key={list.id}>
       <span className='title'>{list.title}</span>
-      <Chip variant='secondary' className='grocery-list-item-count'>{list.item_count}</Chip>
+      <Chip color='secondary' className='grocery-list-item-count'>{list.item_count}</Chip>
     </NavLink>
   ));
   const sumItemCount = items?.reduce((a, b) => a + b.item_count, 0);
@@ -44,7 +44,7 @@ const GroceryListMenuItem: React.FC = () => {
         title = {(
           <>
             <span>{intl.messages['nav.groceryLists'] as string}</span>
-            {sumItemCount != null && sumItemCount > 0 && <Chip variant='secondary' className='grocery-list-item-count'>{sumItemCount}</Chip>}
+            {sumItemCount != null && sumItemCount > 0 && <Chip color='secondary' className='grocery-list-item-count'>{sumItemCount}</Chip>}
           </>
         )}
         drop = 'start'

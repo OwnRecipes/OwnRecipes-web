@@ -92,7 +92,7 @@
 }
 
 .container.browser .no-results {
-  margin-top: 20px;
+  margin-top: 1em;
   text-align: center;
 }
 .container.browser .spinner {
@@ -101,7 +101,7 @@
 .container.browser .spinner .circular-progress {
   height: 100px !important;
   width: 100px !important;
-  margin-top: 30px;
+  margin-top: 1.5rem;
   display: inline-block;
 }
 

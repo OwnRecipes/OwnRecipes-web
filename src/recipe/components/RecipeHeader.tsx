@@ -4,28 +4,74 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import '../css/recipe_header.css';
 
+import { Recipe } from '../store/RecipeTypes';
 import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 import Chip from '../../common/components/Chip';
 import Ratings from '../../rating/components/Ratings';
 import P from '../../common/components/P';
-import { Recipe } from '../store/RecipeTypes';
 import Modal from '../../common/components/Modal';
 import WidthHeightRatio from '../../common/components/WidthHeightRatio';
 import Image from '../../common/components/Image';
 import ImageViewer from '../../common/components/ImageViewer';
-import CookingModeButton from './CookingModeButton';
 import Button from '../../common/components/Button';
 import NavButton from '../../common/components/NavButton';
+import { Toolbar } from '../../common/components/Toolbar';
+import CookingModeButton from './CookingModeButton';
+import Tooltip from '../../common/components/Tooltip';
 
-export interface IRecipeHeaderProps {
-  recipe:       Recipe | undefined;
-  userIsAuthor: boolean;
+const editorMessages = defineMessages({
+  edited_by: {
+    id: 'recipe.edited_by',
+    description: 'The recipe was edited by ...',
+    defaultMessage: 'Edited by',
+  },
+});
 
-  onEditRecipe: () => void;
-  deleteRecipe: () => void;
-  // onAddToMenuClick: () => void;
+interface IRecipeEditorProps {
+  recipe: Recipe;
 }
+
+export const RecipeEditor: React.FC<IRecipeEditorProps> = ({ recipe }: IRecipeEditorProps) => {
+  const { formatMessage, locale } = useIntl();
+
+  if (recipe.update_date && new Date(recipe.update_date).getTime() > 0 && recipe.update_username) {
+    const editorS = `${formatMessage(editorMessages.edited_by)}: ${recipe.update_username}`;
+    const editDateS = new Date(recipe.update_date).toLocaleString(locale);
+    const tooltipJsx = (
+      <div className='d-flex-column'>
+        <div>{editorS}</div>
+        <div>{editDateS}</div>
+      </div>
+    );
+    return (
+      <Tooltip id={`${recipe.id}-editor-tooltip`} tooltip={tooltipJsx}>
+        <Icon icon='pencil' size='1x' style={{ marginLeft: '5px', marginRight: 0 }} ariaLabel={`${formatMessage(editorMessages.edited_by)}: ${recipe.update_username}. ${editDateS}`} />
+      </Tooltip>
+    );
+  } else {
+    return null;
+  }
+};
+
+export const RecipeTimestamp: React.FC<IRecipeEditorProps> = ({ recipe }: IRecipeEditorProps) => {
+  const { locale } = useIntl();
+  if (recipe.update_date && new Date(recipe.update_date).getTime() > 0 && recipe.update_username === recipe.pub_username) {
+    return (
+      <>
+        <Icon icon='calendar' />
+        {new Date(recipe.update_date).toLocaleDateString(locale)}
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Icon icon='calendar' />
+        {new Date(recipe.pub_date).toLocaleDateString(locale)}
+      </>
+    );
+  }
+};
 
 const messages = defineMessages({
   edit_tooltip: {
@@ -61,7 +107,7 @@ const messages = defineMessages({
   minutes: {
     id: 'recipe.minutes',
     description: 'minutes',
-    defaultMessage: 'minutes',
+    defaultMessage: '{count, plural, one {# minute} other {# minutes}}',
   },
   source: {
     id: 'recipe.source',
@@ -95,8 +141,17 @@ const messages = defineMessages({
   },
 });
 
+export interface IRecipeHeaderProps {
+  recipe:   Recipe | undefined;
+  editable: boolean;
+
+  onEditRecipe: () => void;
+  deleteRecipe: () => void;
+  // onAddToMenuClick: () => void;
+}
+
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, userIsAuthor, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+    recipe, editable, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -106,7 +161,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   const handleDeleteAccept = useCallback(() => { deleteRecipe(); }, [deleteRecipe]);
   const handleDeleteClose  = useCallback(() => { setShowDeleteConfirm(false); }, []);
 
-  const editLink = userIsAuthor ? (
+  const editLink = editable ? (
     <NavButton
         id='edit-recipe-button'
         variant = 'outline-primary'
@@ -118,7 +173,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     </NavButton>
   ) : null;
 
-  const deleteLink = userIsAuthor ? (
+  const deleteLink = editable ? (
     <Button id='trash-recipe-button' variant='outline-danger' size='sm' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
       <Icon icon='trash' />
     </Button>
@@ -159,8 +214,8 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
 
   const optionButtons = (
     <div className='options print-hidden'>
-      <div className='options-wrapper'>
-        {userIsAuthor && (
+      <Toolbar position='end'>
+        {editable && (
           <>
             {editLink}
             {deleteLink}
@@ -173,7 +228,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
         */}
         <CookingModeButton />
         {printButton}
-      </div>
+      </Toolbar>
     </div>
   );
 
@@ -181,48 +236,46 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     <>
       <div className='recipe-header-chips'>
         {recipe.prepTime != null && recipe.prepTime > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='clock' />
             {`${formatMessage(messages.prep_time)}: `}
-            {recipe.prepTime}
-            {` ${formatMessage(messages.minutes)}`}
+            {` ${formatMessage(messages.minutes, { count: recipe.prepTime })}`}
           </Chip>
         )}
         {recipe.cookTime != null && recipe.cookTime > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='clock' />
             {`${formatMessage(messages.cooking_time)}: `}
-            {recipe.cookTime}
-            {` ${formatMessage(messages.minutes)}`}
+            {` ${formatMessage(messages.minutes, { count: recipe.cookTime })}`}
           </Chip>
         )}
         {recipe.course != null && recipe.course.title != null && recipe.course.title.length > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='bar-chart' />
             {optionallyFormatMessage(intl, 'course.', recipe.course.title)}
           </Chip>
         )}
         {recipe.cuisine != null && recipe.cuisine.title != null && recipe.cuisine.title.length > 0 && (
-          <Chip variant='secondary'>
+          <Chip color='secondary'>
             <Icon icon='globe' variant='light' />
             {optionallyFormatMessage(intl, 'cuisine.', recipe.cuisine.title)}
           </Chip>
         )}
       </div>
       <div className='recipe-header-chips'>
-        <Chip variant='secondary'>
-          <Icon icon='calendar' />
-          {recipe?.updateDate && new Date(recipe.updateDate).toLocaleDateString(intl.locale)}
+        <Chip color='secondary'>
+          <RecipeTimestamp recipe={recipe} />
+          <RecipeEditor recipe={recipe} />
         </Chip>
-        <Chip variant='secondary'>
+        <Chip color='secondary'>
           <Icon icon='person' />
-          {recipe?.username ?? ''}
+          {recipe?.pub_username ?? ''}
         </Chip>
       </div>
       {recipe.tags != null && recipe.tags.length > 0 && (
         <div className='recipe-header-chips'>
           {recipe.tags.map(t => (
-            <Chip key={String(t.title)} variant='secondary'>
+            <Chip key={String(t.title)} color='secondary'>
               {optionallyFormatMessage(intl, 'tag.', t.title)}
             </Chip>
           ))}
@@ -268,7 +321,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
           <Col xl={6} lg={12} className='info-wrapper'>
             <h1 className='d-none d-xl-block'>{recipe?.title}</h1>
             <P>{recipe?.info}</P>
-            <Ratings stars={recipe?.rating ?? 0} />
+            <Ratings stars={recipe?.rating ?? 0} showCount={false} />
             {chips}
             {source}
           </Col>

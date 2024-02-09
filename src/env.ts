@@ -22,6 +22,9 @@ export type EnvType = {
   REACT_APP_ADMIN_URL?: string;
   REACT_APP_LEGAL_URL?: string;
   REACT_APP_PRIVACY_URL?: string;
+
+  REACT_APP_DISABLE_NEWS?: string;
+  REACT_APP_DISABLE_RECIPE_DISCOVERY?: string;
 }
 const env: EnvType = { ...process.env, ...window.env };
 export default env;

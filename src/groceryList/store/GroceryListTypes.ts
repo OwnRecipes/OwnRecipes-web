@@ -12,19 +12,9 @@ export interface GroceryListDto {
   item_count: number;
 }
 
-export interface GroceryList {
-  id:    number;
-  title: string; // Tasty Chili 24
-  slug:  string; // tasty-werwerchili-4
-  item_count: number;
-}
+export type GroceryList = GroceryListDto;
 
-export const toGroceryList = (dto: GroceryListDto): GroceryList => ({
-  id:    dto.id,
-  title: dto.title,
-  slug:  dto.slug,
-  item_count: dto.item_count,
-});
+export const toGroceryList = (dto: GroceryListDto): GroceryList => dto;
 
 export interface GroceryListCreate {
   title: string;
