@@ -1,6 +1,6 @@
 {
   "name": "ownrecipes-web",
-  "version": "3.2.1-SNAPSHOT",
+  "version": "3.3.0",
   "private": false,
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
