@@ -5,6 +5,11 @@ import { Pagination as BootstraPagination } from 'react-bootstrap';
 import { PaginationLink } from '../../common/components/Pagination';
 
 const messages = defineMessages({
+  pagination_nav_label: {
+    id: 'pagination.nav_label',
+    description: 'Label for the nav region for screenreader',
+    defaultMessage: 'Search results',
+  },
   pagination_previous: {
     id: 'pagination.previous',
     description: 'Button to previous pagination page',
@@ -178,11 +183,11 @@ const Pagination: React.FC<IPaginationProps> = ({ offset, limit, count, buildUrl
   if (count <= limit) return null;
 
   return (
-    <nav>
+    <nav aria-label={formatMessage(messages.pagination_nav_label)}>
       <BootstraPagination>
         <PaginationLink title='←' offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} aria-label={formatMessage(messages.pagination_previous)} />
         <PaginationNumbersList    offset={offset}   limit={limit}  buildUrl={buildUrl} count={count} />
-        <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} aria-label={formatMessage(messages.pagination_previous)} />
+        <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} aria-label={formatMessage(messages.pagination_next)} />
       </BootstraPagination>
     </nav>
   );

@@ -222,6 +222,7 @@
   "news.hide news button": "Cacher",
   "news.placeholder.introduction": "OwnRecipes est une plateforme de recettes open source auto-gérée. Tu peux créer de nouvelles recettes, commenter et évaluer les recettes, trouver de nouvelles recettes préférées grâce à des outils de recherche complets, et bien plus encore.",
   "news.show news button": "Nouvelles",
+  "pagination.nav_label": "Résultats de cherche",
   "pagination.next": "suivante",
   "pagination.previous": "précédente",
   "random.heading": "Recettes aléatoires",
