@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import '../css/recipe_header.css';
 
 import { Recipe } from '../store/RecipeTypes';
-import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
+import { getRoutePath, isDemoMode, optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 import Chip from '../../common/components/Chip';
 import Ratings from '../../rating/components/Ratings';
@@ -89,6 +89,11 @@ const messages = defineMessages({
     description: 'Tooltip displayed when hovering the print icon button',
     defaultMessage: 'Print this recipe',
   },
+  add_to_menu_tooltip: {
+    id: 'recipe.add_to_menu_tooltip',
+    description: 'Tooltip displayed when hovering the add-recipe-to-menu button',
+    defaultMessage: 'Add recipe to menu',
+  },
   recipe_comments: {
     id: 'recipe.comments',
     description: 'Button to comments',
@@ -147,11 +152,11 @@ export interface IRecipeHeaderProps {
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
-  // onAddToMenuClick: () => void;
+  onAddToMenuClick: () => void;
 }
 
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, editable, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+    recipe, editable, onEditRecipe, deleteRecipe, onAddToMenuClick }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -204,11 +209,17 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     } else {
       return null;
     }
-  }, [recipe?.source]);
+  }, [recipe?.source, intl.locale]);
 
   const printButton = (
     <Button id='print-recipe-button' variant='outline-primary' onClick={window.print} tooltip={formatMessage(messages.print_tooltip)}>
       <Icon icon='printer' />
+    </Button>
+  );
+
+  const addToMenuButton = (
+    <Button id='add-to-menu' variant='outline-primary'tooltip={formatMessage(messages.add_to_menu_tooltip)} onClick={onAddToMenuClick}>
+      <Icon icon='calendar' />
     </Button>
   );
 
@@ -221,11 +232,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             {deleteLink}
           </>
         )}
-        {/*
-          <Button variant='outline-primary' tooltip='Add receipt to menu' onClick={onAddToMenuClick}>
-            <Icon icon='calendar' />
-          </Button>
-        */}
+        {!isDemoMode() && addToMenuButton}
         <CookingModeButton />
         {printButton}
       </Toolbar>

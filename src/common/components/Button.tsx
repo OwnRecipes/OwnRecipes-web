@@ -3,6 +3,7 @@ import { Button as BootstrapButton } from 'react-bootstrap';
 import { Placement } from 'react-bootstrap/esm/types';
 
 import '../css/button.css';
+
 import { CommonProps } from '../types/OverridableComponent';
 import ConditionalWrapper from './ConditionalWrapper';
 import Tooltip from './Tooltip';

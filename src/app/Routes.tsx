@@ -20,7 +20,7 @@ const NewsPage         = lazyJsx(() => import('../news/container/NewsPage'));
 const LoginPage        = lazyJsx(() => import('../account/containers/LoginPage'));
 const GroceryListPage  = lazyJsx(() => import('../groceryList/containers/GroceryListPage'));
 const GroceryListsPage = lazyJsx(() => import('../groceryList/containers/GroceryListsPage'));
-// const MenuPage      = lazyJsx(() => import('../../menu/containers/MenuPage'));
+const MenuPage         = lazyJsx(() => import('../menu_plan/containers/MenuPage'));
 const NotFoundPage     = lazyJsx(() => import('./components/NotFoundPage'));
 const RandomPage       = lazyJsx(() => import('../random/containers/RandomPage'));
 const RecipePage       = lazyJsx(() => import('../recipe/containers/RecipePage'));
@@ -64,11 +64,10 @@ const PrivateRoutes: Array<IRouteType> = [
     path:      '/recipe/:recipe',
     component: RecipePage,
   },
-  /*
   {
-    path:      '/Menu',
-    component: Menu,
-  }, */
+    path:      '/menu',
+    component: MenuPage,
+  },
   {
     path:      '/login',
     component: LoginPage,

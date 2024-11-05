@@ -1,8 +1,9 @@
 import { createRef } from 'react';
 import { Form } from 'react-bootstrap';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import SelectReact, { MultiValue, SingleValue } from 'react-select';
 import CreatableSelectReact from 'react-select/creatable';
-// import AsyncReact from 'react-select/async';
+import AsyncReact from 'react-select/async';
 
 import '../../css/select.css';
 
@@ -10,37 +11,13 @@ import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputCompone
 import ConditionalWrapper from '../ConditionalWrapper';
 import Tooltip from '../Tooltip';
 
-/*
-export class Async extends BaseInputComponent {
-  handleChange(data) {
-    this.setState({
-      value: data,
-    });
-
-    if (this.props.change) {
-      this.props.change(this.props.name, data ? data.value : '');
-      this.props.change(this.props.title, data ? data.label : '');
-    }
-  }
-
-  render() {
-    return (
-      <div className={this.props.class} key={this.props.id}>
-        <div className={`form-group ${this.hasErrors() ? 'has-error' : null}`}>
-          { this.props.label ? <label>{ this.props.label }</label> : null }
-          <AsyncReact
-              name = {this.props.name}
-              value = {this.props.value}
-              onChange = {this.handleChange}
-              loadOptions = {this.props.loadOptions}
-          />
-          { this.getErrorMessage() }
-        </div>
-      </div>
-    );
-  }
-}
-*/
+const selectCommonMessages = defineMessages({
+  no_options: {
+    id: 'select.no_options',
+    description: 'Info text when opening a select dropdown with no options.',
+    defaultMessage: 'No options',
+  },
+});
 
 export interface SelectDataType {
   value: string;
@@ -54,8 +31,7 @@ export interface ISelectProps extends IBaseInputComponentProps {
   onChange?: (name: string, newValue: string | undefined) => void;
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export class Select extends BaseInputComponent<ISelectProps> {
+export class SelectBase extends BaseInputComponent<ISelectProps & WrappedComponentProps> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
 
@@ -68,10 +44,6 @@ export class Select extends BaseInputComponent<ISelectProps> {
   }
 
   handleChange = (data: SingleValue<SelectDataType>) => {
-    this.setState({
-      value: data,
-    });
-
     this.props.onChange?.(this.props.name, data?.value);
   };
 
@@ -97,6 +69,7 @@ export class Select extends BaseInputComponent<ISelectProps> {
               name        = {name}
               value       = {selectedOption}
               options     = {data}
+              noOptionsMessage={() => this.props.intl.formatMessage(selectCommonMessages.no_options)}
 
               isDisabled  = {readOnly || disabled}
 
@@ -112,6 +85,95 @@ export class Select extends BaseInputComponent<ISelectProps> {
     );
   }
 }
+
+export const Select = injectIntl(SelectBase, { forwardRef: true });
+
+export interface IAsyncSelectProps extends Omit<ISelectProps, 'data'> {
+  initialValueLabel?: string;
+  loadOptions: (searchTerm: string) => Promise<Array<SelectDataType>>;
+}
+
+interface IAsyncSelectState {
+  data: Array<SelectDataType> | undefined;
+}
+
+export class AsyncSelectBase extends BaseInputComponent<IAsyncSelectProps & WrappedComponentProps, IAsyncSelectState> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private ref = createRef<any>();
+
+  constructor(props: IAsyncSelectProps & WrappedComponentProps) {
+    super(props);
+
+    this.state = {
+      data: undefined,
+    };
+  }
+
+  focus(): boolean { // eslint-disable-line react/no-unused-class-component-methods
+    if (this.ref != null && this.ref.current) {
+      this.ref.current.focus();
+      return true;
+    }
+    return false;
+  }
+
+  handleChange = (data: SingleValue<SelectDataType>) => {
+    this.props.onChange?.(this.props.name, data?.value);
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleLoadOptions = (searchTerm: string, callback: any) => {
+    if (!searchTerm) return callback([]);
+    return this.props.loadOptions(searchTerm).then(res => {
+      this.setState({ data: res });
+      return res;
+    });
+  };
+
+  render() {
+    const { onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, value, initialValueLabel, style, tooltip, readOnly, disabled,
+        label, className, helpText, errors, meta, loadOptions, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+
+    let selectedOption = this.state.data?.find(o => o.value === value);
+    if (value && initialValueLabel && this.state.data == null) {
+      selectedOption = { value: value, label: initialValueLabel };
+    }
+
+    return (
+      <Form.Group
+          {...this.getGroupProps()}
+          className = {this.getFormGroupClassNames()}
+          style     = {style}>
+        <ConditionalWrapper
+            condition = {tooltip != null}
+            render    = {childr => <Tooltip id={`${name}-tooltip`} tooltip={tooltip}>{childr}</Tooltip>}>
+          {this.getLabel({ htmlFor: `${name}-input` })}
+          {this.getHelpText()}
+          {this.getErrorMessage()}
+          <AsyncReact
+              inputId     = {`${name}-input`}
+              name        = {name}
+              value       = {selectedOption}
+              loadOptions = {this.handleLoadOptions}
+
+              isDisabled  = {readOnly || disabled}
+
+              onChange    = {this.handleChange}
+              className = 'react-select-container'
+              classNamePrefix = 'creatable-select'
+              placeholder = ''
+              noOptionsMessage={() => this.props.intl.formatMessage(selectCommonMessages.no_options)}
+
+              {...rest}
+              ref = {this.ref} />
+        </ConditionalWrapper>
+      </Form.Group>
+    );
+  }
+}
+
+export const AsyncSelect = injectIntl(AsyncSelectBase, { forwardRef: true });
 
 export interface ICreatableSelectValues extends IBaseInputComponentProps {
   value?:   Array<string> | string;

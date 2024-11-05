@@ -11,7 +11,7 @@ import Icon from './Icon';
 import ErrorBoundary from './ErrorBoundary';
 
 export interface IImageViewerProps extends CommonProps {
-  children: React.ReactElement<IImageProps>; // | Array<React.ReactElement<IImageProps>>;
+  children: React.ReactElement<IImageProps>;
 }
 
 const ImageViewer = forwardRef<HTMLButtonElement, IImageViewerProps>(({
@@ -53,12 +53,11 @@ const ImageViewer = forwardRef<HTMLButtonElement, IImageViewerProps>(({
 interface IImageViewerContentProps extends CommonProps {
   onClose: () => void;
 
-  children: React.ReactElement<IImageProps>; // | Array<React.ReactElement<IImageProps>>;
+  children: React.ReactElement<IImageProps>;
 }
 
 const ImageViewerContent = forwardRef<HTMLDivElement, IImageViewerContentProps>(({
     onClose, children, ...rest }: IImageViewerContentProps, ref) => {
-  // This is a good spot to generate some kind of list, if more than 1 image is provided.
   let nextSrc = '';
   Children.forEach(children, element => {
     if (!isValidElement(element)) return;

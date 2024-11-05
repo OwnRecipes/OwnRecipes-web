@@ -134,7 +134,7 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
         subrecipesS:        subrecipesFormatter(intl, measurementsContext.formatter, recipe.subrecipes),
         } : undefined;
     }
-    }, [recipe, isNew, location]);
+    }, [recipe, isNew, location, intl.locale]);
 
   // console.log(`[RecipeForm] recipe=${JSON.stringify(recipe)}, initialValues=${JSON.stringify(initialValues)}`);
 

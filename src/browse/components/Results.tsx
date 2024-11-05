@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useMemo } from 'react';
+import { useIntl } from 'react-intl';
 
 import { toNumberDefault } from '../../common/utility';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
@@ -18,6 +19,8 @@ export interface IResultsProps {
 }
 
 const Results: React.FC<IResultsProps> = ({ pending, search, qs, defaults, buildUrl, onOpenRecipe }: IResultsProps) => {
+  const { locale } = useIntl();
+
   const listJsx = useMemo(() => (
     <ListRecipes
         data = {search.recipes}
@@ -31,7 +34,7 @@ const Results: React.FC<IResultsProps> = ({ pending, search, qs, defaults, build
         count    = {search.totalRecipes}
         offset   = {toNumberDefault(qs.offset, defaults.offset ?? 0)}
         buildUrl = {buildUrl} />
-  ), [search.totalRecipes, qs, defaults, buildUrl, onOpenRecipe]);
+  ), [search.totalRecipes, qs, defaults, buildUrl, onOpenRecipe, locale]);
 
   return (
     <div className={classNames('results-container', { pending: pending })}>

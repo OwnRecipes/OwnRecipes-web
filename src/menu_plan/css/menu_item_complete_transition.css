@@ -1,0 +1,26 @@
+.menu-item-complete-transition {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-item-complete-transition.btn {
+  background-color: var(--primaryShadow);
+  color: #fff;
+  border: none;
+}
+
+.menu-item-complete-transition:hover {
+  background-color: rgba(89, 192, 49, 0.30);
+  color: #fff;
+}
+
+.menu-item-complete-transition .bi-check {
+  font-size: 10rem;
+}

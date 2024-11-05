@@ -3,11 +3,10 @@ import classNames from 'classnames';
 import { defineMessages, useIntl } from 'react-intl';
 import { Form as ReduxForm, FormSpy } from 'react-final-form';
 import { useLocation, useNavigate } from 'react-router';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Dropdown, Form } from 'react-bootstrap';
 
 import '../css/grocery_list_header.css';
 
-import { GroceryList, GroceryListCreate, GroceryListUpdate } from '../store/GroceryListTypes';
 import Icon from '../../common/components/Icon';
 import Modal from '../../common/components/Modal';
 import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
@@ -16,10 +15,12 @@ import ReInput from '../../common/components/ReduxForm/ReInput';
 import NavLink from '../../header/components/NavLink';
 import NavButton from '../../common/components/NavButton';
 import { getRoutePath } from '../../common/utility';
-import GroceryListSummary from './GroceryListSummary';
+import { ValidationResult } from '../../common/store/Validation';
+import Button from '../../common/components/Button';
+import { GroceryList, GroceryListCreate, GroceryListUpdate } from '../store/GroceryListTypes';
 import { GroceryListItem } from '../store/GroceryListItemTypes';
 import { GROCERY_LIST_FILTER } from '../containers/GroceryListContainer';
-import { ValidationResult } from '../../common/store/Validation';
+import GroceryListSummary from './GroceryListSummary';
 
 const messages = defineMessages({
   new_title_placeholder: {
@@ -42,6 +43,14 @@ const messages = defineMessages({
   back_to_lists: {
     id: 'grocery_list.header.back_to_lists',
     defaultMessage: 'To my grocery lists',
+  },
+  save: {
+    id: 'grocery_list.header.save_button_tooltip',
+    defaultMessage: 'Save',
+  },
+  revert: {
+    id: 'grocery_list.header.revert_button_tooltip',
+    defaultMessage: 'Revert',
   },
 });
 
@@ -171,11 +180,11 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
                       <FormSpy subscription={{ values: true, submitting: true }}>
                         {({ values, submitting }) => (
                           <>
-                            <Button type='submit' variant='outline-primary' disabled={!values.title || submitting}>
+                            <Button id='change-grocery-list-save' type='submit' variant='outline-primary' disabled={!values.title || submitting} tooltip={formatMessage(messages.save)} style={{ padding: 0 }}>
                               <Icon icon='check' variant='light' size='2x' />
                             </Button>
                             {!isNew && (
-                              <Button type='button' variant='outline-secondary' disabled={!values.title || submitting} onClick={handleRevertClick}>
+                              <Button id='change-grocery-list-revert' type='button' variant='outline-secondary' disabled={!values.title || submitting} onClick={handleRevertClick} tooltip={formatMessage(messages.revert)} style={{ padding: 0 }}>
                                 <Icon icon='x' variant='light' size='2x' />
                               </Button>
                             )}

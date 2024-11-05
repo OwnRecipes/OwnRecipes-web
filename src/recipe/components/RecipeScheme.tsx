@@ -16,18 +16,16 @@ interface IRecipeSchemeProps {
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
-
-  // lists: Array<any>;
-  // onAddToMenuClick: () => void;
+  onAddToMenuClick: () => void;
 }
 
-const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId, editable, onEditRecipe, deleteRecipe }: IRecipeSchemeProps) => (
+const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId, editable, onEditRecipe, deleteRecipe, onAddToMenuClick }: IRecipeSchemeProps) => (
   <div className='recipe-details'>
     <RecipeHeader
         recipe = {recipe}
         editable = {editable}
         onEditRecipe = {onEditRecipe}
-        // onAddToMenuClick={props.onAddToMenuClick}
+        onAddToMenuClick = {onAddToMenuClick}
         deleteRecipe = {deleteRecipe} />
 
     <hr />

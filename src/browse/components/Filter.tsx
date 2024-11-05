@@ -74,7 +74,7 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
     }
 
     return res;
-  }, [data, qs, qsTitle]);
+  }, [data, qs, qsTitle, intl.locale]);
 
   const items = useMemo(() => (
     dataFormatted
@@ -92,7 +92,7 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
         </ConditionalWrapper>
       </li>
     )) ?? []
-  ), [dataFormatted, qsTitle, multiSelect, buildUrl]);
+  ), [dataFormatted, qsTitle, multiSelect, buildUrl, intl.locale]);
 
   if (data != null && items.length === 0) return null;
 

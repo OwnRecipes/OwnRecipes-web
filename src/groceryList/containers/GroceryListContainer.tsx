@@ -74,13 +74,11 @@ const GroceryListContainer: React.FC<IGroceryListContainerProps> = ({
 
   const toggleItem = useCallback((itemId: number, completed: boolean) => {
     if (list?.id == null) { crash('Invalid state: list item may not be null'); return; }
-    // setIsToggling(true);
     dispatch(GroceryListItemActions.toggleItem(list.id, itemId, completed));
   }, [list?.id]);
 
   const toggleItems = useCallback((items: Array<GroceryListItem>, newCompleted: boolean) => {
     if (list?.id == null || listItems == null) { crash('Invalid state: list item may not be null'); return; }
-    // setIsToggling(true);
     dispatch(GroceryListItemsActions.toggleItems(list.id, items, newCompleted));
   }, [list?.id, listItems]);
 
@@ -91,7 +89,6 @@ const GroceryListContainer: React.FC<IGroceryListContainerProps> = ({
 
   const removeItem = useCallback((itemId: number) => {
     if (list == null) { crash('Invalid state: list item may not be null'); return; }
-    // setIsDeletingItem(true);
     dispatch(GroceryListItemActions.remove(list.id, itemId));
   }, [list]);
 

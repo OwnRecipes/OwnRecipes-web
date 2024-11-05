@@ -81,3 +81,10 @@
     margin-bottom: -2rem;
   }
 }
+
+#news-menu-heading > .link-text {
+  color: var(--primaryText);
+}
+#news-menu-heading > .link-text:hover {
+  color: var(--primaryMain);
+}

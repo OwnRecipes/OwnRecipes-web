@@ -51,7 +51,7 @@ const NewsCarousel: React.FC = () => {
           </Carousel.Caption>
         </Carousel.Item>
       )) ?? []);
-    }, [newsList, intl]);
+    }, [newsList, intl.locale]);
 
   return (
     <>

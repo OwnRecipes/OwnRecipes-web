@@ -1,0 +1,10 @@
+#stats-table tbody th {
+  font-weight: normal;
+}
+
+#stats-table tbody a {
+  color: var(--hoverText);
+}
+#stats-table tbody a:hover {
+  color: var(--primaryMain);
+}

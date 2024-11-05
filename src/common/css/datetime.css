@@ -1,0 +1,8 @@
+.form-datetime.rdtOpen .rdtPicker .rdtActive {
+  background-color: var(--primaryMain);
+  color: var(--primaryContrast);
+}
+
+.form-datetime.rdtOpen .rdtPicker .rdtToday::before {
+  border-bottom-color: var(--primaryMain);
+}

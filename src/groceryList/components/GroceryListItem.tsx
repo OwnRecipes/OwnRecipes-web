@@ -130,8 +130,6 @@ const EditItemForm = forwardRef<HTMLFormElement, IEditItemFormProps>(({
     return onSubmit(upd);
   }, [item.title, onSubmit]);
 
-  // if (!show) return null;
-
   return (
     <ReduxForm
         initialValues = {initialValues}

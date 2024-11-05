@@ -11,10 +11,17 @@ import { RecipeList } from '../../recipe/store/RecipeTypes';
 import { getRecipeImagePlaceholder, getResourcePath, getRoutePath } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
 
-export interface IListRecipes {
-  data:   Array<RecipeList> | undefined;
+export interface IListRecipe extends RecipeList {
+  key?: string;
+  className?: string;
+  header?: React.ReactNode;
+  footer?: React.ReactNode;
+}
+
+export interface IListRecipesProps {
+  data:   Array<IListRecipe> | undefined;
   lg?:    3 | 4;
-  onOpenRecipe: (rec: RecipeList) => void;
+  onOpenRecipe: (rec: IListRecipe) => void;
 }
 
 function hashCode(str: string): number {
@@ -42,15 +49,16 @@ function getRecipeImage(recipe: RecipeList) {
   }
 }
 
-const ListRecipes: React.FC<IListRecipes> = ({ data, lg = 4, onOpenRecipe }: IListRecipes) => {
+const ListRecipes: React.FC<IListRecipesProps> = ({ data, lg = 4, onOpenRecipe }: IListRecipesProps) => {
   const IMAGE_PLACEHOLDER = useMemo(() => getRecipeImagePlaceholder(), []);
   const PLACEHOLDER_STYLE = useMemo(() => ({ background: `url(${IMAGE_PLACEHOLDER}) 100% center / cover` }), [IMAGE_PLACEHOLDER]);
 
   const recipes = data?.map(recipe => {
     const link = getRoutePath(`/recipe/${recipe.slug}`);
     return (
-      <Col key={recipe.id}>
-        <Card className={classNames('recipe')}>
+      <Col key={recipe.key || recipe.id}>
+        <Card className={classNames('recipe', recipe.className)}>
+          {recipe.header && <Card.Header>{recipe.header}</Card.Header>}
           <Link to={link} onClick={() => onOpenRecipe(recipe)}>
             <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' style={PLACEHOLDER_STYLE} />
             <Ratings stars={recipe.rating} count={recipe.ratingCount} collapsed />
@@ -58,6 +66,7 @@ const ListRecipes: React.FC<IListRecipes> = ({ data, lg = 4, onOpenRecipe }: ILi
             {recipe.oTags && <ListTags recipe={recipe} />}
             <Card.Text>{recipe.info}</Card.Text>
           </Link>
+          {recipe.footer && <Card.Footer>{recipe.footer}</Card.Footer>}
         </Card>
       </Col>
     );

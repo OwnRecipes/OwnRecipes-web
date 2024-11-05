@@ -4,14 +4,14 @@ import { Field } from 'react-final-form';
 import { useIntl } from 'react-intl';
 
 import { formatValidation, requiredValidator } from '../../store/Validation';
-import { ISelectProps, Select } from '../Input/Select';
+import { ISelectProps, Select, SelectBase } from '../Input/Select';
 
 export interface IReSelectProps extends ISelectProps {
   format?: (value: any, name: string) => string;
   parse?:  (value: any, name: string) => any;
 }
 
-const ReSelect = forwardRef<Select, IReSelectProps>(({
+const ReSelect = forwardRef<SelectBase, IReSelectProps>(({
     name, required, data, format, parse,
     onChange, onFocus, onBlur, ...rest }: IReSelectProps, ref) => {
   const intl = useIntl();

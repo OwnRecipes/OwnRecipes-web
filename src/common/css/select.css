@@ -41,6 +41,11 @@
   background-color: var(--hoverBg);
 }
 
+.form-group.readonly .creatable-select__control {
+  background-color: var(--inputBgDisabled);
+  color: var(--secondaryText);
+  border: 1px dotted var(--inputBorder);
+}
 .form-group.required:not(.readonly):not(.error) .creatable-select__control {
   background-color: var(--inputBgRequired);
 }

@@ -1,8 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import '../css/recipe_header.css';
-
 import { useWakeLock } from '../../common/hooks/useWakeLock';
 import usePageVisibility from '../../common/hooks/pageVisibility/usePageVisibility';
 
@@ -131,7 +129,7 @@ const CookingModeHandler: React.FC = () => {
           show = {isCookingMode && showCookingModeToast}
           autoHide = {10000}
           anchorOrigin = {{ horizontal: 'center', vertical: 'bottom' }}
-          onClose = {() => setShowCookingModeToast(false)}>
+          onClose = {() => { setShowCookingModeToast(false); }}>
         {formatMessage(messages.activated_cooking_mode_toast)}
       </Toast>
 

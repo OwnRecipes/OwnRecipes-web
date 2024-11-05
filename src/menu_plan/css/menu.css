@@ -1,0 +1,69 @@
+.menu-plan {
+  margin-top: 0.5rem;
+}
+
+.menu-plan .toolbar.center {
+  margin-top: 1rem;
+}
+
+.menu-plan .recipes .row {
+  margin-bottom: 1rem;
+}
+.menu-plan .recipes .row .page-header {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.menu-plan .recipes .recipe.card .card-header {
+  background-color: transparent;
+  border-bottom: 0;
+  text-align: center;
+  padding-top: 0;
+}
+.menu-plan .recipes .recipe.card.active .card-header {
+  font-weight: bold;
+}
+.menu-plan .recipes .recipe.card .card-footer {
+  background-color: transparent;
+  border-top: 0;
+}
+.menu-plan .recipes .recipe.card.completed .card-footer .toolbar {
+  display: none;
+}
+
+
+@media screen and (min-width: 1200px) {
+  .menu-plan .recipes .recipe.card .card-footer .toolbar {
+    position: absolute;
+    bottom: 0;
+    right:  0;
+    border-top: 0;
+    padding-right: 0;
+  }
+  .menu-plan .recipes .recipe.card .card-footer .toolbar {
+    visibility: hidden;
+  }
+  .menu-plan .recipes .recipe.card:not(.completed):hover .card-footer .toolbar {
+    visibility: visible;
+  }
+  .menu-plan .recipes .card-footer .toolbar {
+    padding: 0.25em 0.25em 0.25em 0;
+    border-top-left-radius: 0.25em;
+  }
+  html[data-theme="dark"] .menu-plan .recipes .card-footer .toolbar,
+  html[data-theme="dark"] .menu-plan .recipes .card-footer .toolbar .btn {
+    background-color: var(--midground) !important;
+  }
+  html[data-theme="dark"] .menu-plan .recipes .card-footer .toolbar .btn:hover,
+  html[data-theme="dark"] .menu-plan .recipes .card-footer .toolbar .btn:focus {
+    background-color: var(--midground) !important;
+  }
+  html:not([data-theme="dark"]) .menu-plan .recipes .card-footer .toolbar,
+  html:not([data-theme="dark"]) .menu-plan .recipes .card-footer .toolbar .btn {
+    background-color: #fff !important;
+  }
+
+  .menu-plan .recipes .card-footer .toolbar .tooltip-inline-block {
+    position: relative;
+  }
+}
