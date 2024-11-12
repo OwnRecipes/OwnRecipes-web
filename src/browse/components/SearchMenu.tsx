@@ -153,6 +153,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
         )}
       </Card.Header>
       <Card.Text as='div' className={classNames('sidebar', { 'hidden-xs': !showMenu })}>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <Accordion activeKey={openFilters} flush alwaysOpen className='filter-group-list' onSelect={handleSelect as any}>
           <Filter
               title    = {formatMessage(messages.filter_course)}
