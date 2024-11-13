@@ -28,8 +28,6 @@ const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId
         onAddToMenuClick = {onAddToMenuClick}
         deleteRecipe = {deleteRecipe} />
 
-    <hr />
-
     <Row>
       <Col xl={4} lg={12}>
         <IngredientsPanelContainer

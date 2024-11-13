@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { Card } from 'react-bootstrap';
 
 import '../css/recipe-rating-wrapper.css';
 
@@ -30,15 +29,15 @@ const RatingsWrapper: React.FC<IRatingsWrapperProps> = ({ ratings, userId, userR
   }, []);
 
   return (
-    <Card className='rating-panel' as='article'>
+    <article className='rating-panel'>
       <RatingsHeader commentsCount={ratings?.length ?? 0} userRole={userRole} showNewRating={showNewRating} onShowNewRating={() => { setShowNewRating(true); }} />
-      <Card.Body>
+      <div className='ratings-body'>
         {showNewRating && userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
           <RatingForm addRating={addRating} editRating={editRating} onSubmitSuccess={handleNewRatingUndisplay} onCancel={handleNewRatingUndisplay} />
         )}
         <RatingComments ratings={ratings} pending={pending} userId={userId} userRole={userRole} editRating={editRating} removeRating={removeRating} />
-      </Card.Body>
-    </Card>
+      </div>
+    </article>
   );
 };
 

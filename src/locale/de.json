@@ -273,7 +273,7 @@
   "recipe.add_to_menu_tooltip": "Zum Kochen vormerken",
   "recipe.comments": "Kommentare",
   "recipe.comments.new_rating": "Kommentar schreiben",
-  "recipe.comments.title": "Kommentare ({count})",
+  "recipe.comments.title": "{count, plural, one {# Kommentar} other {# Kommentare}}",
   "recipe.confirm_delete": "Möchten Sie dieses Rezept wirklich unwiderruflich löschen?",
   "recipe.confirm_delete_accept": "Löschen",
   "recipe.confirm_delete_title": "Löschen bestätigen",

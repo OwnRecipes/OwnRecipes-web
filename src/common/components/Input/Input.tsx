@@ -287,7 +287,7 @@ export default class Input extends BaseInputComponent<IAnyInputProps, IInputStat
       <Form.Group
           {...this.getGroupProps()}
           controlId = {name}
-          className = {this.getFormGroupClassNames()}
+          className = {classNames(this.getFormGroupClassNames(), { 'adorned-start': inputAdornmentStart, 'adorned-end': inputAdornmentEnd })}
           style     = {style}>
         <ConditionalWrapper
             condition = {tooltip != null}

@@ -8,6 +8,12 @@
 .container.browser .search-bar .input-adornment-start {
   width: 3em;
   justify-content: center;
+  border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+}
+.container.browser .search-bar input {
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
 }
 .container.browser .search-bar input.adorned-end {
   border-right: none;
@@ -15,10 +21,14 @@
 .container.browser .search-bar .input-adornment-end {
   background-color: transparent;
   border-left: none;
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
   padding: 0;
 }
 .container.browser .search-bar .input-adornment-end .search-clear {
   border: none;
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
   background-color: transparent;
   color: var(--secondaryText);
   padding-top:    0;

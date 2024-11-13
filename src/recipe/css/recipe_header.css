@@ -11,7 +11,11 @@
     justify-content: flex-start;
   }
 }
+.recipe-header .img-wrapper .btn.image-viewer, .recipe-header .img-wrapper .btn.image-viewer img {
+  border-radius: 0.75em;
+}
 .recipe-header .options {
+  padding-top: 0.75em;
   margin-left: auto;
   display: flex;
   flex-direction: row-reverse;
@@ -39,9 +43,11 @@
   html[data-theme="dark"] .recipe-header .row .img-wrapper .options .toolbar .btn:not(.btn-primary):focus {
     background-color: var(--midground) !important;
   }
-  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar,
-  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar .btn:not(.btn-primary) {
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar {
     background-color: rgba(255, 255, 255, 0.55);
+  }
+  html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar .btn:not(.btn-primary) {
+    background-color: #fff;
   }
   html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar .btn:not(.btn-primary):hover,
   html:not([data-theme="dark"]) .recipe-header .row .img-wrapper .options .toolbar .btn:not(.btn-primary):focus {
@@ -81,4 +87,11 @@
 
 .recipe-header .toolbar #cooking-mode-toggle {
   padding: 0;
+}
+
+@media screen and (min-width: 1200px) {
+  .recipe-details .recipe-header-hr {
+    margin-top: 0;
+    width: 50%;
+  }
 }

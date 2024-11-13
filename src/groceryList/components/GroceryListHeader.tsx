@@ -155,7 +155,7 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
           {list && !isNew && !editMode && (
             <>
               <NavButton id='to-grocery-lists' variant='transparent' to={getRoutePath('/grocery-lists')} className='print-hidden' tooltip={formatMessage(messages.back_to_lists)}><Icon icon='caret-left' /></NavButton>
-              <h2>{list.title}</h2>
+              <h1>{list.title}</h1>
             </>
           )}
 

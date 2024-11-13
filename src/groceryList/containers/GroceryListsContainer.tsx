@@ -58,11 +58,10 @@ const GroceryListsContainer: React.FC = () => {
   return (
     <>
       <Row xs={1} className='groceries-header-container'>
-        <h2>{intl.messages['nav.groceryLists'] as string}</h2>
+        <h1>{formatMessage(messages.my_grocery_lists)}</h1>
       </Row>
       <Row xs={1} className='grocery-list-container'>
         <div className={classNames('grocery-lists')}>
-          <h3>{formatMessage(messages.my_grocery_lists)}</h3>
           {pending === PendingState.LOADING && (items == null || items.length === 0) && <Loading />}
           {hasNoData && (
             <P className='placeholder'>{formatMessage(messages.no_grocery_lists)}</P>

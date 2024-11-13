@@ -1,12 +1,17 @@
 .rating-panel {
-  margin-top: 3rem;
+  margin-top: 1.5rem;
   margin-bottom: 2rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
 }
-.rating-panel .card-header .ratings-heading-col {
+.rating-panel .ratings-heading {
+  margin-bottom: 1em;
+}
+.rating-panel .ratings-heading .ratings-heading-col {
   display: flex;
   align-items: center;
 }
-.rating-panel .card-header h2 {
-  font-size: 1.1em;
+.rating-panel .ratings-heading h2 {
+  font-size: 1.3rem;
   margin-bottom: 0;
 }

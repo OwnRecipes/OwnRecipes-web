@@ -145,7 +145,7 @@ const MenuOverview: React.FC<IMenuOverviewProps> = ({
         <Col xs={12} className='recipes'>
           {Object.keys(groups).map(key => (
             <Fragment key={key}>
-              <h3 className='page-header'>{key}</h3>
+              <h2 className='section-header'>{key}</h2>
               <MenuItems
                   items = {groups[key]}
                   onCompleteClick = {onCompleteClick}

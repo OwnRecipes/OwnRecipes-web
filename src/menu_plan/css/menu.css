@@ -1,17 +1,16 @@
-.menu-plan {
-  margin-top: 0.5rem;
-}
-
 .menu-plan .toolbar.center {
   margin-top: 1rem;
 }
 
+.menu-plan .recipes .section-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 1.25em;
+  margin-bottom: 1em;
+}
+
 .menu-plan .recipes .row {
   margin-bottom: 1rem;
-}
-.menu-plan .recipes .row .page-header {
-  margin-top: 1rem;
-  margin-bottom: 0;
 }
 
 .menu-plan .recipes .recipe.card .card-header {

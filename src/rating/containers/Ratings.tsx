@@ -31,6 +31,7 @@ const Ratings: React.FC = () => {
 
   return (
     <ErrorBoundary verbose printStack>
+      <hr />
       <RatingsWrapper
           userId     = {account?.id}
           userRole   = {account?.role}

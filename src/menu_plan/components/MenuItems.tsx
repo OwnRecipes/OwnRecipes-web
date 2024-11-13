@@ -69,7 +69,7 @@ const MenuItems: React.FC<IMenuItemsProps> = ({ items, onCompleteClick, onHideCo
     ),
     footer: (
       <>
-        <Toolbar position='end'>
+        <Toolbar position='end' className='print-hidden'>
           <Button
               id = {`complete-btn-menu-item-${itm.id}`}
               variant = 'outline-primary'

@@ -39,40 +39,39 @@
   }
 }
 
-.rating-panel .card-body .rating-comment {
+.rating-panel .ratings-body .rating-comment {
   position: relative;
 }
 
-.rating-panel .card-body .rating-comment:not(:first-of-type) {
-  border-top: 1px solid var(--inputBorder);
+.rating-panel .ratings-body .rating-comment:not(:first-of-type) {
   padding-top: 0.5em;
 }
-.rating-panel .card-body .rating-comment:not(:last-of-type) {
+.rating-panel .ratings-body .rating-comment:not(:last-of-type) {
   padding-bottom: 0.5em;
 }
-.rating-panel .card-body .rating-form.create {
+.rating-panel .ratings-body .rating-form.create {
   border-bottom: 1px solid var(--inputBorder);
   padding-bottom: 1.5em;
   margin-bottom: 1.5em;
 }
-.rating-panel .card-body .rating-comment.perma-link-active {
+.rating-panel .ratings-body .rating-comment.perma-link-active {
   box-shadow: 0 0 0 1px var(--primaryMain);
 }
 
-.rating-panel .card-body .rating-username {
+.rating-panel .ratings-body .rating-username {
   color: var(--primaryMain);
   margin-bottom: 0.25em;
 }
 
-.rating-panel .card-body .rating-timestamp {
+.rating-panel .ratings-body .rating-timestamp {
   text-decoration: none;
 }
-.rating-panel .card-body .rating-timestamp:hover {
+.rating-panel .ratings-body .rating-timestamp:hover {
   text-decoration: underline;
 }
 
 @media screen and (min-width: 1200px) {
-  .rating-panel .card-body .rating-comment .rating-toolbar {
+  .rating-panel .ratings-body .rating-comment .rating-toolbar {
     position: absolute;
     bottom: 0.5em;
     right: 0.5em;
@@ -80,19 +79,19 @@
 
     display: none;
   }
-  .rating-panel .card-body .rating-comment .rating-toolbar .btn {
+  .rating-panel .ratings-body .rating-comment .rating-toolbar .btn {
     margin-left: 0;
   }
-  .rating-panel .card-body .rating-comment .rating-toolbar .tooltip-inline-block:not(:first-child) {
+  .rating-panel .ratings-body .rating-comment .rating-toolbar .tooltip-inline-block:not(:first-child) {
     margin-left: 0.5em;
   }
 
-  .rating-panel .card-body .rating-comment:hover .rating-toolbar {
+  .rating-panel .ratings-body .rating-comment:hover .rating-toolbar {
     display: initial;
   }
 }
 
-.rating-panel .card-body .rating-comment p {
+.rating-panel .ratings-body .rating-comment p {
   max-width: 100ch;
 }
 

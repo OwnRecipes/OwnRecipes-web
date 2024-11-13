@@ -331,9 +331,11 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             <Ratings stars={recipe?.rating ?? 0} showCount={false} />
             {chips}
             {source}
+
           </Col>
         </Row>
       </article>
+      <hr className='recipe-header-hr' />
 
       <Modal
           show        = {showDeleteConfirm}

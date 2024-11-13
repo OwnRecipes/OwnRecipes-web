@@ -55,7 +55,8 @@ const MenuTabs: React.FC = () => {
           onSelect  = {handleSelect}
           unmountOnExit
           mountOnEnter
-          transition = {false}>
+          transition = {false}
+          className='print-hidden'>
         <Tab eventKey='menuplan' title={formatMessage(messages.tab_menu)}>
           <ErrorBoundary verbose printStack>
             <MenuItemsContainer withPast={false} />
@@ -63,6 +64,7 @@ const MenuTabs: React.FC = () => {
         </Tab>
         <Tab eventKey='stats' title={formatMessage(messages.tab_stats)}>
           <ErrorBoundary verbose printStack>
+            <div className='print-only'><h2>{formatMessage(messages.tab_stats)}</h2></div>
             <StatsContainer />
           </ErrorBoundary>
         </Tab>

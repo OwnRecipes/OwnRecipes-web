@@ -81,7 +81,7 @@ const GroceryListSummary: React.FC<IGroceryListSummaryProps> = ({
         {itemsCount > 0 && completedCount === itemsCount && formatMessage(messages.groceryList_items_summary_completed, { sum: list?.item_count ?? 0 })}
         {itemsCount > 0 && incompletedCount > 0 && formatMessage(messages.groceryList_items_summary_incompleted, { sum: list?.item_count ?? 0, sum_not_completed: incompletedCount })}
       </P>
-      <Dropdown className='filter-items-dropdown'>
+      <Dropdown className='filter-items-dropdown print-hidden'>
         <Dropdown.Toggle variant='outline-primary' id='filter-items-button' disabled={list == null || list.item_count === 0}>
           {formatMessage(messages.groceryList_filter_by, { filter: optionallyFormatMessage(intl, 'groceryList.filter_items.', filter) })}
         </Dropdown.Toggle>

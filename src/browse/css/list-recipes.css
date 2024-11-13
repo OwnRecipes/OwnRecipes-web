@@ -39,6 +39,10 @@
   height: 15rem;
   width:  100%;
   object-fit: cover;
+  border-top-left-radius: calc(0.75rem - 1px);
+  border-top-right-radius: calc(0.75rem - 1px);
+  border-bottom-left-radius: calc(0.25rem - 1px);
+  border-bottom-right-radius: calc(0.25rem - 1px);
 }
 @media screen and (min-width: 768px), print {
   .recipes-list .recipe .card-img-top {

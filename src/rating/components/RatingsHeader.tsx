@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 
 import HeaderLink from '../../common/components/HeaderLink';
@@ -8,7 +8,7 @@ const messages = defineMessages({
   title: {
     id: 'recipe.comments.title',
     description: 'Comments heading',
-    defaultMessage: 'Comments ({count})',
+    defaultMessage: '{count, plural, one {# Comment} other {# Comments}}',
   },
   new_rating_button: {
     id: 'recipe.comments.new_rating',
@@ -28,7 +28,7 @@ const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ commentsCount, userRole,
   const { formatMessage } = useIntl();
 
   return (
-    <Card.Header>
+    <div className='ratings-heading'>
       <Row>
         <Col className='ratings-heading-col'>
           <h2 id='ratings-heading'>
@@ -38,11 +38,11 @@ const RatingsHeader: React.FC<IRatingsHeaderProps> = ({ commentsCount, userRole,
         </Col>
         {userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
           <Col xs='auto' style={showNewRating ? { visibility : 'hidden' } : undefined}>
-            <Button variant='outline-primary' onClick={onShowNewRating}>{formatMessage(messages.new_rating_button)}</Button>
+            <Button variant='primary' onClick={onShowNewRating}>{formatMessage(messages.new_rating_button)}</Button>
           </Col>
         )}
       </Row>
-    </Card.Header>
+    </div>
   );
 };
 

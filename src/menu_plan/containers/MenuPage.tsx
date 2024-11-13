@@ -10,7 +10,7 @@ const MenuPage: React.FC = () => {
   return (
     <PageWrapper title={intl.messages['nav.menuPlan'] as string}>
       <Row xs={1} className='menu-header-container'>
-        <h2>{intl.messages['nav.menuPlan'] as string}</h2>
+        <h1>{intl.messages['nav.menuPlan'] as string}</h1>
       </Row>
       <Row xs={1} className='menu-plan-container'>
         <MenuTabs />

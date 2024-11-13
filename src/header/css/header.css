@@ -153,9 +153,15 @@
   height: 2.5rem;
   line-height: 2.5rem;
 }
-#header-navbar form .input-adornment-end {
+#header-navbar form .form-group.search input {
+  border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+}
+#header-navbar form .form-group.search .input-adornment-end {
   padding: 0;
   height: 2.5rem;
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
 }
 
 @media screen and (max-width: 64rem) {
