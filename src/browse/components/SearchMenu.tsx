@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { defineMessages, useIntl } from 'react-intl';
@@ -6,10 +6,11 @@ import { Accordion, Button, Card } from 'react-bootstrap';
 
 import '../css/filter.css';
 
-import Filter from './Filter';
 import Icon from '../../common/components/Icon';
 import P from '../../common/components/P';
+import Chip from '../../common/components/Chip';
 import { CategoryCount, RatingCount } from '../store/FilterTypes';
+import Filter from './Filter';
 
 const messages = defineMessages({
   reset: {
@@ -96,7 +97,7 @@ export interface ISearchMenuProps {
   ratings:  Array<RatingCount>   | undefined;
   tags:     Array<CategoryCount> | undefined;
 
-  hasActiveFilter: boolean;
+  activeFilters: Record<string, string>;
   resetFilterUrl: string;
   openFilters: Array<string>;
   setOpenFilters: (filters: Array<string>) => void;
@@ -106,7 +107,7 @@ export interface ISearchMenuProps {
 
 const SearchMenu: React.FC<ISearchMenuProps> = ({
     qs, courses, cuisines, ratings, tags,
-    hasActiveFilter, resetFilterUrl, openFilters, setOpenFilters,
+    activeFilters, resetFilterUrl, openFilters, setOpenFilters,
     buildUrl }: ISearchMenuProps) => {
   const { formatMessage } = useIntl();
 
@@ -116,15 +117,18 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
     setShowMenu(prev => !prev);
   }, []);
 
+  const activeFiltersCount = useMemo(() => Object.values(activeFilters).flatMap(f => f.split(',')).length, [activeFilters]);
+
   const mobileHeader = (
     <div className='sidebar-header'>
       <h2>
         <Button type='button' variant='transparent' className='filter-header' onClick={toggleMenu}>
           {showMenu ? formatMessage(messages.hide_filters) : formatMessage(messages.show_filters)}
-          <Icon icon={showMenu ? 'chevron-up' : 'chevron-down'} variant='light' className={classNames({ 'reset-margin': hasActiveFilter })} />
+          {activeFiltersCount > 0 && <Chip color='primary'>{activeFiltersCount}</Chip>}
+          <Icon icon={showMenu ? 'chevron-up' : 'chevron-down'} variant='light' className={classNames({ 'reset-margin': Boolean(activeFiltersCount) })} />
         </Button>
       </h2>
-      {hasActiveFilter && (
+      {activeFiltersCount > 0 && (
         <div className='filter-header-clear'>
           <Link className='clear-filter-mobile btn btn-transparent' to={resetFilterUrl}>
             {formatMessage(messages.reset)}
@@ -146,10 +150,13 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
       </Card.Header>
       <Card.Header className='hidden-xs filter-title'>
         <h2>{formatMessage(messages.filters)}</h2>
-        {hasActiveFilter && (
-          <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl} aria-label={formatMessage(messages.reset_filters)}>
-            <Icon icon='arrow-counterclockwise' variant='light' />
-          </Link>
+        {activeFiltersCount > 0 && (
+          <>
+            <Chip color='primary'>{activeFiltersCount}</Chip>
+            <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl} aria-label={formatMessage(messages.reset_filters)}>
+              <Icon icon='arrow-counterclockwise' variant='light' />
+            </Link>
+          </>
         )}
       </Card.Header>
       <Card.Text as='div' className={classNames('sidebar', { 'hidden-xs': !showMenu })}>
@@ -191,7 +198,7 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
               multiSelect
               buildUrl = {buildUrl} />
         </Accordion>
-        {hasActiveFilter && (
+        {activeFiltersCount > 0 && (
           <div className='row reset-search-row print-hidden hidden-xs'>
             <Link className='btn btn-outline-danger reset-search hidden-xs' to={resetFilterUrl}>
               {formatMessage(messages.reset)}

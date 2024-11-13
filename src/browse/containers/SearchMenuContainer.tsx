@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Dispatch } from 'redux';
+import { pickBy } from 'lodash-es';
 
 import * as FilterActions from '../store/FilterActions';
 import { RootState } from '../../app/Store';
@@ -66,7 +67,7 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
     }
   }, [qs]);
 
-  const hasActiveFilter = Object.keys(qs).filter(key => !['limit', 'ordering', 'offset', 'search'].includes(key)).length !== 0;
+  const activeFiltersKeys = useMemo(() => pickBy(qs, (_, key) => !['limit', 'ordering', 'offset', 'search'].includes(key)), [qs]);
 
   return (
     <SearchMenu
@@ -76,8 +77,8 @@ const SearchMenuContainer: React.FC<ISearchMenuContainerProps> = ({
         tags     = {tags?.[qsString]}
         qs       = {qs}
 
-        hasActiveFilter = {hasActiveFilter}
-        resetFilterUrl  = {resetFilterUrl}
+        activeFilters  = {activeFiltersKeys}
+        resetFilterUrl = {resetFilterUrl}
         openFilters    = {openFilters}
         setOpenFilters = {setOpenFilters}
 

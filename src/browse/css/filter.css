@@ -18,6 +18,10 @@
   padding: 0 10px 0.25em 10px;
   font-weight: bold;
 }
+.container.browser .sidebar .filter-group .list-group-title .chip {
+  padding: 0.25em 0.5em;
+  margin-left: 0.5em;
+}
 .container.browser .sidebar .filter-group .list-group-title .accordion-button {
   background-color: transparent;
   box-shadow: none;
@@ -101,7 +105,17 @@ html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-ti
     margin-bottom: 0;
   }
 
-  .container.browser .sidebar .filter-group .filter-title-tooltip {
+  .container.browser .filter-panel .filter-title {
+    display: flex;
+    min-height: 2.5rem;
+    align-items: center;
+  }
+  .container.browser .filter-panel .filter-title .chip {
+    padding: 0.25em 0.5em;
+    margin-left: 0.5em;
+    font-weight: bold;
+  }
+  .container.browser .filter-panel .filter-title-tooltip {
     width: 100%;
   }
   .container.browser .sidebar .filter-group .list-group-item {
@@ -139,6 +153,11 @@ html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-ti
   }
   .container.browser .filter-panel .filter-header .bi {
     margin-left: 0.375em;
+  }
+  .container.browser .filter-panel .filter-header .chip {
+    padding: 0.25em 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.1em;
   }
 
   .container.browser .filter-panel .filter-list {
