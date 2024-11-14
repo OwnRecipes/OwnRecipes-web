@@ -203,6 +203,8 @@
   border-color: white;
 }
 #header-navbar form .form-group .input-adornment-end .nav-link {
+  height: 100%;
+  align-content: center;
   padding-top: 0;
   padding-bottom: 0;
 }

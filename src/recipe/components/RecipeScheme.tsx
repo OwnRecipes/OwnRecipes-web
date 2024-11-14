@@ -1,4 +1,5 @@
 import { Col, Row } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import '../css/recipe.css';
 
@@ -20,7 +21,7 @@ interface IRecipeSchemeProps {
 }
 
 const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId, editable, onEditRecipe, deleteRecipe, onAddToMenuClick }: IRecipeSchemeProps) => (
-  <div className='recipe-details'>
+  <div className={classNames('recipe-details', { 'with-image': recipe != null && recipe.photo })}>
     <RecipeHeader
         recipe = {recipe}
         editable = {editable}

@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
+import classNames from 'classnames';
 
 import '../css/recipe_header.css';
 
@@ -218,8 +219,8 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
   );
 
   const addToMenuButton = (
-    <Button id='add-to-menu' variant='outline-primary'tooltip={formatMessage(messages.add_to_menu_tooltip)} onClick={onAddToMenuClick}>
-      <Icon icon='calendar' />
+    <Button id='add-to-menu' variant='outline-primary'tooltip={formatMessage(messages.add_to_menu_tooltip)} onClick={onAddToMenuClick} disabled={isDemoMode()}>
+      <Icon icon='calendar-plus' />
     </Button>
   );
 
@@ -232,7 +233,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             {deleteLink}
           </>
         )}
-        {!isDemoMode() && addToMenuButton}
+        {addToMenuButton}
         <CookingModeButton />
         {printButton}
       </Toolbar>
@@ -256,16 +257,22 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             {` ${formatMessage(messages.minutes, { count: recipe.cookTime })}`}
           </Chip>
         )}
-        {recipe.course != null && recipe.course.title != null && recipe.course.title.length > 0 && (
+        {recipe.course?.title != null && recipe.course.title.length > 0 && (
           <Chip color='secondary'>
-            <Icon icon='bar-chart' />
+            <Icon icon='grid' />
             {optionallyFormatMessage(intl, 'course.', recipe.course.title)}
           </Chip>
         )}
-        {recipe.cuisine != null && recipe.cuisine.title != null && recipe.cuisine.title.length > 0 && (
+        {recipe.cuisine?.title != null && recipe.cuisine.title.length > 0 && (
           <Chip color='secondary'>
             <Icon icon='globe' variant='light' />
             {optionallyFormatMessage(intl, 'cuisine.', recipe.cuisine.title)}
+          </Chip>
+        )}
+        {recipe.season?.title != null && recipe.season.title.length > 0 && (
+          <Chip color='secondary'>
+            <Icon icon='basket3'  />
+            {optionallyFormatMessage(intl, 'season.', recipe.season.title)}
           </Chip>
         )}
       </div>
@@ -293,7 +300,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
 
   return (
     <>
-      <article className='recipe-header'>
+      <article className={classNames('recipe-header', { 'with-image': recipe != null && recipe.photo })}>
         <h1 className='d-block d-xl-none'>{recipe?.title}</h1>
 
         <Row className='flex-row-reverse justify-content-center'>
@@ -331,7 +338,6 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             <Ratings stars={recipe?.rating ?? 0} showCount={false} />
             {chips}
             {source}
-
           </Col>
         </Row>
       </article>

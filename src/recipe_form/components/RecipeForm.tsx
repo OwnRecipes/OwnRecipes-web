@@ -10,6 +10,7 @@ import { Recipe } from '../../recipe/store/RecipeTypes';
 import TagListContainer from '../containers/TagListContainer';
 import CourseSelectContainer from '../containers/CourseSelectContainer';
 import CuisineSelectContainer from '../containers/CuisineSelectContainer';
+import SeasonSelectContainer from '../containers/SeasonSelectContainer';
 import RecipeFormToolbar, { SubmittingObserver, SubmittingObserverClass } from '../containers/RecipeFormToolbar';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
@@ -37,6 +38,11 @@ const messages = defineMessages({
     id: 'recipe.create.cuisine_label',
     description: 'Cuisine label',
     defaultMessage: 'Cuisine',
+  },
+  season_label: {
+    id: 'recipe.create.season_label',
+    description: 'Season label',
+    defaultMessage: 'Season',
   },
   tags_label: {
     id: 'recipe.create.tags_label',
@@ -166,6 +172,23 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
 
                   <Row>
                     <Col xs={12} sm={6}>
+                      <ReInput
+                          name     = 'servings'
+                          type     = 'number'
+                          label    = {formatMessage(messages.servings_label)}
+                          min      = {1}
+                          max      = {999}
+                          required />
+                    </Col>
+                    <Col xs={12} sm={6}>
+                      <SeasonSelectContainer
+                          name     = 'season'
+                          label    = {formatMessage(messages.season_label)} />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} sm={6}>
                       <CourseSelectContainer
                           name     = 'course'
                           label    = {formatMessage(messages.course_label)} />
@@ -196,17 +219,6 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                           name     = 'cookTime'
                           type     = 'number'
                           label    = {formatMessage(messages.cooking_time_label)} />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={12}>
-                      <ReInput
-                          name     = 'servings'
-                          type     = 'number'
-                          label    = {formatMessage(messages.servings_label)}
-                          min      = {1}
-                          max      = {999}
-                          required />
                     </Col>
                   </Row>
                   <Row>

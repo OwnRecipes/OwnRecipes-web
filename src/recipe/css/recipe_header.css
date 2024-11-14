@@ -92,7 +92,7 @@
 }
 
 @media screen and (min-width: 1200px) {
-  .recipe-details .recipe-header-hr {
+  .recipe-details.with-image .recipe-header-hr {
     margin-top: 0;
     width: 50%;
   }

@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import P from '../../common/components/P';
 import { SearchResult } from '../../browse/store/SearchTypes';
 import SearchMenu from './SearchMenu';
-import { Course, Cuisine } from '../../recipe/store/RecipeTypes';
+import { Course, Cuisine, Season } from '../../recipe/store/RecipeTypes';
 
 const messages = defineMessages({
   random_heading: {
@@ -21,8 +21,9 @@ const messages = defineMessages({
 
 export interface IRandomHeaderProps {
   search:   Record<string, SearchResult> | undefined;
-  courses:  Array<Course>| undefined;
+  courses:  Array<Course> | undefined;
   cuisines: Array<Cuisine> | undefined;
+  seasons:  Array<Season> | undefined;
   qs:       Record<string, string>;
   qsString: string;
 
@@ -30,7 +31,7 @@ export interface IRandomHeaderProps {
 }
 
 const RandomHeader: React.FC<IRandomHeaderProps> = ({
-    search, courses, cuisines, qs, qsString,
+    search, courses, cuisines, seasons, qs, qsString,
     buildUrl }: IRandomHeaderProps) => {
   const { formatMessage } = useIntl();
 
@@ -47,6 +48,7 @@ const RandomHeader: React.FC<IRandomHeaderProps> = ({
           search   = {qsSearchResult}
           courses  = {courses}
           cuisines = {cuisines}
+          seasons  = {seasons}
           buildUrl = {buildUrl}
           />
     </Row>

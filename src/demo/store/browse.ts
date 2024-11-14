@@ -1,10 +1,11 @@
 /* eslint-disable func-names */
 
 import { CategoryCount, RatingCount } from '../../browse/store/FilterTypes';
-import { CourseDto, CuisineDto, RecipeDto, TagDto } from '../../recipe/store/RecipeTypes';
+import { CourseDto, CuisineDto, RecipeDto, SeasonDto, TagDto } from '../../recipe/store/RecipeTypes';
 import { demoCourses } from './courses';
 import { demoCuisines } from './cuisines';
 import { demoRecipes } from './recipe';
+import { demoSeasons } from './seasons';
 import { demoFindSearchRecipes } from './search';
 import { demoGetAllTags } from './tags';
 import { ObjectIterator, toQueryParams } from './utils';
@@ -31,6 +32,41 @@ export const ratingCountConfig = {
     return {
       results: result,
     };
+  },
+  get: function (_match: Array<string>, data: Record<string, string | number | boolean>) {
+    return { body : data };
+  },
+};
+
+export const courseCountConfig = {
+  pattern: '(.*)/recipe_groups/course-count/(.*)',
+  fixtures: function (match: Array<string>) {
+    // console.log(`fixtures running for courseCountConfig. match=${JSON.stringify(match)}`);
+
+    if (match.length < 3) return {};
+    const queryParams: URLSearchParams = toQueryParams(match[2]);
+    const resultRecipes: Array<RecipeDto> = demoFindSearchRecipes(demoRecipes, queryParams);
+
+    const allCourses: Array<CourseDto> = demoCourses;
+
+    const courseCounts: Array<CategoryCount> = [];
+    allCourses.forEach(c => {
+      courseCounts.push({
+        id:    c.id,
+        total: resultRecipes.filter(rec => rec.course?.title === c.title).length,
+        title: c.title,
+        slug:  c.title,
+      });
+    });
+
+    const result: ObjectIterator<CategoryCount> = {
+      count:    courseCounts.length,
+      next:     null,
+      previous: null,
+      results:  courseCounts,
+    };
+
+    return result;
   },
   get: function (_match: Array<string>, data: Record<string, string | number | boolean>) {
     return { body : data };
@@ -72,32 +108,32 @@ export const cuisineCountConfig = {
   },
 };
 
-export const courseCountConfig = {
-  pattern: '(.*)/recipe_groups/course-count/(.*)',
+export const seasonCountConfig = {
+  pattern: '(.*)/recipe_groups/season-count/(.*)',
   fixtures: function (match: Array<string>) {
-    // console.log(`fixtures running for courseCountConfig. match=${JSON.stringify(match)}`);
+    // console.log(`fixtures running for seasonCountConfig. match=${JSON.stringify(match)}`);
 
     if (match.length < 3) return {};
     const queryParams: URLSearchParams = toQueryParams(match[2]);
     const resultRecipes: Array<RecipeDto> = demoFindSearchRecipes(demoRecipes, queryParams);
 
-    const allCourses: Array<CourseDto> = demoCourses;
+    const allSeasons: Array<SeasonDto> = demoSeasons;
 
-    const courseCounts: Array<CategoryCount> = [];
-    allCourses.forEach(c => {
-      courseCounts.push({
+    const seasonCounts: Array<CategoryCount> = [];
+    allSeasons.forEach(c => {
+      seasonCounts.push({
         id:    c.id,
-        total: resultRecipes.filter(rec => rec.course?.title === c.title).length,
+        total: resultRecipes.filter(rec => rec.season?.title === c.title).length,
         title: c.title,
         slug:  c.title,
       });
     });
 
     const result: ObjectIterator<CategoryCount> = {
-      count:    courseCounts.length,
+      count:    seasonCounts.length,
       next:     null,
       previous: null,
-      results:  courseCounts,
+      results:  seasonCounts,
     };
 
     return result;

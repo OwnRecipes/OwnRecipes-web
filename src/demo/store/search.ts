@@ -42,6 +42,21 @@ function demoFilterCuisine(resultRecipes: Array<RecipeDto>, queryParams: URLSear
   return resultRecipes;
 }
 
+function demoDoFilterBySeason(resultRecipes: Array<RecipeDto>, seasons: Array<string>): Array<RecipeDto> {
+  return resultRecipes.filter(r => r.season && seasons?.includes(r.season.title.toLocaleLowerCase()));
+}
+function demoFilterSeason(resultRecipes: Array<RecipeDto>, queryParams: URLSearchParams): Array<RecipeDto> {
+  if (queryParams.has('season')) {
+    const querySeasons = queryParams.get('season')?.split(',').map(c => c.toLocaleLowerCase());
+    return demoDoFilterBySeason(resultRecipes, querySeasons ?? []);
+  }
+  if (queryParams.has('season__slug')) {
+    const querySeasons = queryParams.get('season__slug')?.split(',').map(c => c.toLocaleLowerCase());
+    return demoDoFilterBySeason(resultRecipes, querySeasons ?? []);
+  }
+  return resultRecipes;
+}
+
 function demoDoFilterByTag(resultRecipes: Array<RecipeDto>, tags: Array<string>): Array<RecipeDto> {
   return resultRecipes.filter(r => r.tags.find(t => tags?.includes(t.title.toLocaleLowerCase())));
 }
@@ -106,8 +121,9 @@ function demoFilterSearch(resultRecipes: Array<RecipeDto>, queryParams: URLSearc
     const querySearches = queryParams.get('search')?.split(' ').map(c => c.toLocaleLowerCase());
     const resultRecipess: Set<RecipeDto> = new Set();
 
-    demoDoFilterByCuisine(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByCourse(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
+    demoDoFilterByCuisine(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
+    demoDoFilterBySeason(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByTag(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByAuthor(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
     demoDoFilterByTitle(resultRecipes, querySearches ?? []).forEach(r => resultRecipess.add(r));
@@ -155,8 +171,9 @@ export function demoFindSearchRecipes(allRecipes: Array<RecipeDto>, queryParams:
   let resultRecipes: Array<RecipeDto> = [...allRecipes];
 
   resultRecipes = demoFilterRating(resultRecipes, queryParams);
-  resultRecipes = demoFilterCuisine(resultRecipes, queryParams);
   resultRecipes = demoFilterCourse(resultRecipes, queryParams);
+  resultRecipes = demoFilterCuisine(resultRecipes, queryParams);
+  resultRecipes = demoFilterSeason(resultRecipes, queryParams);
   resultRecipes = demoFilterTag(resultRecipes, queryParams);
   resultRecipes = demoFilterAuthor(resultRecipes, queryParams);
   resultRecipes = demoFilterSearch(resultRecipes, queryParams);

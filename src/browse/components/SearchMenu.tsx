@@ -9,6 +9,7 @@ import '../css/filter.css';
 import Icon from '../../common/components/Icon';
 import P from '../../common/components/P';
 import Chip from '../../common/components/Chip';
+import Tooltip from '../../common/components/Tooltip';
 import { CategoryCount, RatingCount } from '../store/FilterTypes';
 import Filter from './Filter';
 
@@ -32,6 +33,11 @@ const messages = defineMessages({
     id: 'filter.filter_rating',
     description: 'Filter field rating',
     defaultMessage: 'Ratings',
+  },
+  filter_season: {
+    id: 'filter.filter_season',
+    description: 'Filter field season',
+    defaultMessage: 'Seasons',
   },
   filter_tag: {
     id: 'filter.filter_tag',
@@ -95,6 +101,7 @@ export interface ISearchMenuProps {
   courses:  Array<CategoryCount> | undefined;
   cuisines: Array<CategoryCount> | undefined;
   ratings:  Array<RatingCount>   | undefined;
+  seasons:  Array<CategoryCount> | undefined;
   tags:     Array<CategoryCount> | undefined;
 
   activeFilters: Record<string, string>;
@@ -106,7 +113,7 @@ export interface ISearchMenuProps {
 }
 
 const SearchMenu: React.FC<ISearchMenuProps> = ({
-    qs, courses, cuisines, ratings, tags,
+    qs, courses, cuisines, ratings, seasons, tags,
     activeFilters, resetFilterUrl, openFilters, setOpenFilters,
     buildUrl }: ISearchMenuProps) => {
   const { formatMessage } = useIntl();
@@ -153,9 +160,11 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
         {activeFiltersCount > 0 && (
           <>
             <Chip color='primary'>{activeFiltersCount}</Chip>
-            <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl} aria-label={formatMessage(messages.reset_filters)}>
-              <Icon icon='arrow-counterclockwise' variant='light' />
-            </Link>
+            <Tooltip id='clear-filter-desktop-btn-tooltip' tooltip={formatMessage(messages.reset_filters)}>
+              <Link className='clear-filter-desktop btn btn-transparent' to={resetFilterUrl} aria-label={formatMessage(messages.reset_filters)}>
+                <Icon icon='arrow-counterclockwise' variant='light' />
+              </Link>
+            </Tooltip>
           </>
         )}
       </Card.Header>
@@ -190,6 +199,13 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
               multiSelect
               buildUrl = {buildUrl}
               sort = 'off' />
+          <Filter
+              title    = {formatMessage(messages.filter_season)}
+              qsTitle  = 'season'
+              data     = {seasons}
+              qs       = {qs}
+              multiSelect
+              buildUrl = {buildUrl} />
           <Filter
               title    = {formatMessage(messages.filter_tag)}
               qsTitle  = 'tag'

@@ -8,13 +8,14 @@ import { BROWSER_SEARCH_STORE, SearchDispatch, SearchResultDto, toSearchResult }
 import { parseCSV } from '../utilts/utility';
 
 const FILTER_QUERY_PARAMETER_MAPPING: Record<string, string> = {
-  cuisine: 'cuisine__slug',
-  course:  'course__slug',
-  tag:     'tag__slug',
   author:  'author__username',
+  course:  'course__slug',
+  cuisine: 'cuisine__slug',
+  season:  'season__slug',
+  tag:     'tag__slug',
 };
 
-const FIELDS = ['author', 'cuisine', 'course', 'directions', 'info', 'ordering', 'rating', 'source', 'tag', 'title'];
+const FIELDS = ['author', 'course', 'cuisine', 'directions', 'info', 'ordering', 'rating', 'season', 'source', 'tag', 'title'];
 
 export function extractSearchStringToFields(filters: Record<string, string>): Record<string, string> {
   if (!filters.search || !filters.search.includes(':')) return filters;
