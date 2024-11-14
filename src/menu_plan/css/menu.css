@@ -5,8 +5,11 @@
 .menu-plan .recipes .section-header {
   font-size: 1.25rem;
   font-weight: bold;
-  margin-top: 1.25em;
   margin-bottom: 1em;
+  margin-top: 1em;
+}
+.menu-plan .recipes .section-header:not(:first-of-type) {
+  margin-top: 2.5em;
 }
 
 .menu-plan .recipes .row {
@@ -25,6 +28,7 @@
 .menu-plan .recipes .recipe.card .card-footer {
   background-color: transparent;
   border-top: 0;
+  padding: 0;
 }
 .menu-plan .recipes .recipe.card.completed .card-footer .toolbar {
   display: none;
@@ -37,7 +41,7 @@
     bottom: 0;
     right:  0;
     border-top: 0;
-    padding-right: 0;
+    padding-right: 0.25em;
   }
   .menu-plan .recipes .recipe.card .card-footer .toolbar {
     visibility: hidden;
