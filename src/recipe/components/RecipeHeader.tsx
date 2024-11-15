@@ -196,7 +196,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
       }
 
       return (
-        <div>
+        <div className='source-wrapper'>
           {`${formatMessage(messages.source)}: `}
           {hostname.length > 0 && (
             <>
@@ -275,6 +275,11 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             {optionallyFormatMessage(intl, 'season.', recipe.season.title)}
           </Chip>
         )}
+        {recipe.tags.map(t => (
+          <Chip key={String(t.title)} color='secondary'>
+            {optionallyFormatMessage(intl, 'tag.', t.title)}
+          </Chip>
+        ))}
       </div>
       <div className='recipe-header-chips'>
         <Chip color='secondary'>
@@ -286,15 +291,6 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
           {recipe?.pub_username ?? ''}
         </Chip>
       </div>
-      {recipe.tags != null && recipe.tags.length > 0 && (
-        <div className='recipe-header-chips'>
-          {recipe.tags.map(t => (
-            <Chip key={String(t.title)} color='secondary'>
-              {optionallyFormatMessage(intl, 'tag.', t.title)}
-            </Chip>
-          ))}
-        </div>
-      )}
     </>
   ) : null;
 
@@ -332,9 +328,9 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             optionButtons
           )}
 
-          <Col xl={6} lg={12} className='info-wrapper'>
+          <Col xl={6} lg={12} className='info-wrapper optiwidth'>
             <h1 className='d-none d-xl-block'>{recipe?.title}</h1>
-            <P>{recipe?.info}</P>
+            <P className='recipe-info'>{recipe?.info}</P>
             <Ratings stars={recipe?.rating ?? 0} showCount={false} />
             {chips}
             {source}

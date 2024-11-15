@@ -29,7 +29,7 @@ const RatingsWrapper: React.FC<IRatingsWrapperProps> = ({ ratings, userId, userR
   }, []);
 
   return (
-    <article className='rating-panel'>
+    <article className='rating-panel optiwidth'>
       <RatingsHeader commentsCount={ratings?.length ?? 0} userRole={userRole} showNewRating={showNewRating} onShowNewRating={() => { setShowNewRating(true); }} />
       <div className='ratings-body'>
         {showNewRating && userRole != null && [UserRole.USER, UserRole.STAFF, UserRole.ADMIN].includes(userRole) && (
