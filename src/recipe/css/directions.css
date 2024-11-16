@@ -88,6 +88,9 @@
 }
 
 @media screen and (min-width: 1200px) {
+  .recipe-details .directions-panel {
+    max-width: none;
+  }
   .recipe-details .directions-panel:not(.multi-directions) h2 {
     margin-bottom: 0.75em;
   }
