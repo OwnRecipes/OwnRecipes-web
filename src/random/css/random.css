@@ -1,6 +1,9 @@
 .container.random .random-header-container {
   align-items: flex-end;
 }
+.container.random .random-header-container > div:first-of-type {
+  margin-left: 4px;
+}
 
 .container.random .search-menu {
   margin-bottom: 1rem;
