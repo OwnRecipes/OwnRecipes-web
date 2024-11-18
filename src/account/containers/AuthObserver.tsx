@@ -124,7 +124,7 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
     const currHasConnection = this.props.hasConnection;
 
     if (prevIsAppVisible !== currIsAppVisible || prevHasConnection !== currHasConnection) {
-      this.postProcessAppActivityChange(currIsAppVisible, currHasConnection);
+      this.postProcessAppActivityChange(currIsAppVisible, currHasConnection, currToken);
     }
   }
 
@@ -210,13 +210,24 @@ class AuthObserverClass extends Component<IProps, IAuthObserverState> {
     }, 500);
   }
 
-  postProcessAppActivityChange(isAppVisible: boolean, hasConnection: boolean) {
+  postProcessAppActivityChange(isAppVisible: boolean, hasConnection: boolean, currToken: UserAccount | undefined) {
     if ((!isAppVisible || !hasConnection) && this.timeoutID != null) {
       // console.log('[AuthObserver::postProcessAppActivityChange] app is in background, stop refreshing the token.');
       clearTimeout(this.timeoutID);
       this.timeoutID = undefined;
-    } else if (isAppVisible && hasConnection && this.timeoutID == null && !isDemoMode()) {
-      const newToken = getToken();
+      return;
+    } else if (isDemoMode()) {
+      // console.log('[AuthObserver::postProcessAppActivityChange] demo mode - returning.');
+      return;
+    }
+
+    const newToken = getToken();
+    if (newToken && newToken.token !== currToken?.token) {
+      // console.log('[AuthObserver::postProcessAppActivityChange] token changed outside of this tab, updating the state');
+      this.props.sideloadToken(newToken);
+    }
+
+    if (this.timeoutID == null) {
       if (newToken != null) {
         // console.log('[AuthObserver::postProcessAppActivityChange] app is active again, restart refreshing the token.');
         this.checkAuth(newToken);
