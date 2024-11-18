@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router';
+import classNames from 'classnames';
 
 import { AnyComponent } from '../../types/Types';
 import DynamicHeightContext from '../context/DynamicHeightContext';
@@ -15,6 +16,7 @@ interface IPageWrapperProps {
   title?:   string;
   id?:      string;
   state?:   ItemReducerType<unknown> | ArrayReducerType<unknown>;
+  className?: string;
   /** Page component to render. */
   children: AnyComponent;
 }
@@ -42,7 +44,7 @@ function toCleanLocationPath(path: string): string {
 /**
  * HOC to properly set the browser title to assure accessibilty.
  */
- const PageWrapper: React.FC<IPageWrapperProps> = ({ title, id, state, children }: IPageWrapperProps) => {
+ const PageWrapper: React.FC<IPageWrapperProps> = ({ title, id, state, className, children }: IPageWrapperProps) => {
   const nav = useNavigate();
   const location = useLocation();
   const error = state?.meta.error;
@@ -63,7 +65,7 @@ function toCleanLocationPath(path: string): string {
   }, [id, error]);
 
   return (
-    <Container id='main-container' as='main' className={toCleanLocationPath(location.pathname)} style={{ marginTop: `${dynamicHeightContext.toolbarHeight}px` }}>
+    <Container id='main-container' as='main' className={classNames(toCleanLocationPath(location.pathname), className)} style={{ marginTop: `${dynamicHeightContext.toolbarHeight}px` }}>
       <ErrorBoundary verbose printStack>
         {children}
       </ErrorBoundary>
