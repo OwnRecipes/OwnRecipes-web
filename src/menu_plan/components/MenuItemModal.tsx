@@ -1,4 +1,4 @@
-import React, { forwardRef, RefObject, useCallback, useRef, useState } from 'react';
+import { forwardRef, RefObject, useCallback, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Form, Row } from 'react-bootstrap';
 import { Form as ReduxForm } from 'react-final-form';

@@ -1,4 +1,4 @@
-import React, { Component, useContext, useEffect, useRef } from 'react';
+import { Component, useContext, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';

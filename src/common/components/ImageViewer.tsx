@@ -27,6 +27,7 @@ const ImageViewer = forwardRef<HTMLButtonElement, IImageViewerProps>(({
           type = 'button'
           className = {classNames('image-viewer', className)}
           onClick = {handleOpenModal}
+          variant = 'transparent'
           {...rest}
           ref = {ref}
           >
