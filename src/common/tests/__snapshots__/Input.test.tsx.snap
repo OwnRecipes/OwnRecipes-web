@@ -2,7 +2,7 @@
 
 exports[`Input inputAdornmentStart 1`] = `
 <div
-  className="form-group"
+  className="form-group adorned-start"
   data-api-field="myInput"
 >
   <label

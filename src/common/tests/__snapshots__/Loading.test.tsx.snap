@@ -4,11 +4,11 @@ exports[`Loading component test 1`] = `
 <div
   className="spinner"
 >
-  <h3
-    className="no-results"
+  <span
+    className="h3 no-results"
   >
     Loading ...
-  </h3>
+  </span>
   <div
     className="circular-progress circle"
   >
