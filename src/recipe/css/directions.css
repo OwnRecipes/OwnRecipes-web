@@ -50,7 +50,7 @@
 .recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > caption {
   display: inline;
   caption-side: top;
-  font-size: 0.875em;
+  font-size: 1em;
   font-weight: normal;
   line-height: normal;
   padding: 0 0 0 0.25em;
@@ -66,11 +66,11 @@
 }
 
 .recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td {
-  display: inline-block;
+  display: inline;
   background-color: transparent;
   border: 0;
-  font-size: 0.875em;
-  line-height: normal;
+  font-size: 1em;
+  line-height: 1.33;
   color: var(--secondaryText);
   padding: 2px 0;
   margin: 0;
@@ -97,5 +97,10 @@
 
   .recipe-details .directions-panel:not(.multi-directions) > .direction-groups > .subgroup.default-group > .ingredients {
     display: none;
+  }
+
+  .recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > caption,
+  .recipe-details .directions-panel > .direction-groups > .subgroup > .ingredients > .ingredient-group .ingredients-table > tbody > tr > td {
+    font-size: 0.875em;
   }
 }
