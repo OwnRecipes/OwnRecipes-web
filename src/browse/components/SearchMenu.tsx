@@ -186,6 +186,13 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
               multiSelect
               buildUrl = {buildUrl} />
           <Filter
+              title    = {formatMessage(messages.filter_season)}
+              qsTitle  = 'season'
+              data     = {seasons}
+              qs       = {qs}
+              multiSelect
+              buildUrl = {buildUrl} />
+          <Filter
               title    = {formatMessage(messages.filter_rating)}
               qsTitle  = 'rating'
               data     = {ratings?.map(r => ({
@@ -199,13 +206,6 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({
               multiSelect
               buildUrl = {buildUrl}
               sort = 'off' />
-          <Filter
-              title    = {formatMessage(messages.filter_season)}
-              qsTitle  = 'season'
-              data     = {seasons}
-              qs       = {qs}
-              multiSelect
-              buildUrl = {buildUrl} />
           <Filter
               title    = {formatMessage(messages.filter_tag)}
               qsTitle  = 'tag'
