@@ -3,19 +3,19 @@ import { defineMessages } from 'react-intl';
 export default function initSeasons() {
   defineMessages({
     season_spring: {
-      id: 'season.Spring',
+      id: 'season.spring',
       defaultMessage: 'Spring',
     },
     season_summer: {
-      id: 'season.Summer',
+      id: 'season.summer',
       defaultMessage: 'Summer',
     },
     season_autumn: {
-      id: 'season.Autumn',
+      id: 'season.autumn',
       defaultMessage: 'Autumn',
     },
     season_winter: {
-      id: 'season.Winter',
+      id: 'season.winter',
       defaultMessage: 'Winter',
     },
   });

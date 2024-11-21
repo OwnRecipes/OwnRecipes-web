@@ -30,8 +30,24 @@ export interface ISelectProps extends IBaseInputComponentProps {
 
   onChange?: (name: string, newValue: string | undefined) => void;
 }
+export interface ISelectMultiProps extends IBaseInputComponentProps {
+  value?: Array<string>;
+  data?:  Array<SelectDataType>;
+  isMulti: true;
 
-export class SelectBase extends BaseInputComponent<ISelectProps & WrappedComponentProps> {
+  onChange?: (name: string, newValue: Array<string>) => void;
+}
+export const isMultiSelect = (props: unknown): props is ISelectMultiProps => (props as ISelectMultiProps).isMulti === true;
+
+function findSelectedOptions(options: Array<SelectDataType>, value: Array<string> | string | undefined): Array<SelectDataType> | SelectDataType {
+  if (Array.isArray(value)) {
+    return options.filter(o => value.includes(o.value));
+  } else {
+    return options.find(o => o.value === value) ?? '' as unknown as SelectDataType;
+  }
+}
+
+export class SelectBase extends BaseInputComponent<(ISelectProps | ISelectMultiProps) & WrappedComponentProps> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ref = createRef<any>();
 
@@ -43,8 +59,12 @@ export class SelectBase extends BaseInputComponent<ISelectProps & WrappedCompone
     return false;
   }
 
-  handleChange = (data: SingleValue<SelectDataType>) => {
-    this.props.onChange?.(this.props.name, data?.value);
+  handleChange = (data: SingleValue<SelectDataType> | MultiValue<SelectDataType>) => {
+    if (isMultiSelect(this.props)) {
+      this.props.onChange?.(this.props.name, (data as MultiValue<SelectDataType>).map(d => d.value));
+    } else {
+      this.props.onChange?.(this.props.name, (data as SingleValue<SelectDataType>)?.value);
+    }
   };
 
   render() {
@@ -52,7 +72,9 @@ export class SelectBase extends BaseInputComponent<ISelectProps & WrappedCompone
         name, style, tooltip, readOnly, disabled,
         label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
 
-    const selectedOption = data?.find(o => o.value === value);
+    const dataOptions = data ?? [];
+    const selectedOptions = findSelectedOptions(dataOptions, value);
+
     return (
       <Form.Group
           {...this.getGroupProps()}
@@ -67,7 +89,7 @@ export class SelectBase extends BaseInputComponent<ISelectProps & WrappedCompone
           <SelectReact
               inputId     = {`${name}-input`}
               name        = {name}
-              value       = {selectedOption}
+              value       = {selectedOptions}
               options     = {data}
               noOptionsMessage={() => this.props.intl.formatMessage(selectCommonMessages.no_options)}
 
@@ -190,14 +212,6 @@ interface ICreatableSelectState {
 }
 
 const isValidNewOption = (value: string): boolean => !!value;
-
-function findSelectedOptions(options: Array<SelectDataType>, value: Array<string> | string | undefined): Array<SelectDataType> | SelectDataType {
-  if (Array.isArray(value)) {
-    return options.filter(o => value.includes(o.value));
-  } else {
-    return options.find(o => o.value === value) ?? '' as unknown as SelectDataType;
-  }
-}
 
 export class CreatableSelect extends BaseInputComponent<ICreatableSelectProps, ICreatableSelectState> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

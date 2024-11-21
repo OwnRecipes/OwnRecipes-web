@@ -19,8 +19,8 @@ function getFilters(recipe: Recipe): Record<string, string> | undefined {
   if (recipe.cuisine) {
     res.cuisine__slug = recipe.cuisine.title;
   }
-  if (recipe.season) {
-    res.season__slug = recipe.season.title;
+  if (recipe.seasons.length > 0) {
+    res.season__slug = recipe.seasons.map(s => s.title).join(',');
   }
   return Object.keys(res).length > 0 ? res : undefined;
 }

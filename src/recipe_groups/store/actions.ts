@@ -1,7 +1,7 @@
 import request from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config';
 import { ACTION } from '../../common/store/ReduxHelper';
-import { CourseDto, toCourse, CuisineDto, toCuisine, SeasonDto, toSeason, toTag } from '../../recipe/store/RecipeTypes';
+import { CourseDto, toCourse, CuisineDto, toCuisine, toSeason, toTag } from '../../recipe/store/RecipeTypes';
 import { toBasicAction } from '../../common/store/redux';
 import { handleError } from '../../common/requestUtils';
 import { COURSES_STORE, CUISINES_STORE, RecipeGroupsDispatch, SEASONS_STORE, TAGS_STORE } from './types';
@@ -55,9 +55,7 @@ export const fetchSeasons = () => (dispatch: RecipeGroupsDispatch) => {
           SEASONS_STORE,
           ACTION.GET_SUCCESS
         ),
-        payload: res.body.results
-            .filter((seasonDto: SeasonDto) => seasonDto.title !== '-')
-            .map(toSeason),
+        payload: res.body.results.map(toSeason),
       });
     })
     .catch(err => dispatch(handleError(err, CUISINES_STORE)));

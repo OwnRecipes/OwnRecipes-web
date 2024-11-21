@@ -6,7 +6,7 @@ import { COURSES_STORE, CUISINES_STORE, RecipeGroupsAction, RecipeGroupsState, S
 
 const defaultCourseState  = ReduxHelper.getArrayReducerDefaultState<Array<Course>>(COURSES_STORE);
 const defaultCuisineState = ReduxHelper.getArrayReducerDefaultState<Array<Cuisine>>(CUISINES_STORE);
-const defaultSeasonState  = ReduxHelper.getArrayReducerDefaultState<Array<Season>>(SEASONS_STORE);
+const defaultSeasonsState = ReduxHelper.getArrayReducerDefaultState<Array<Season>>(SEASONS_STORE);
 const defaultTagsState    = ReduxHelper.getArrayReducerDefaultState<Array<Tag>>(TAGS_STORE);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +19,7 @@ function createRecipeGroupsWithNamedType(defaultState: any): Reducer<any, Recipe
 const recipeGroups: Reducer<RecipeGroupsState, RecipeGroupsAction> = combineReducers({
   courses:  createRecipeGroupsWithNamedType(defaultCourseState),
   cuisines: createRecipeGroupsWithNamedType(defaultCuisineState),
-  seasons:  createRecipeGroupsWithNamedType(defaultSeasonState),
+  seasons:  createRecipeGroupsWithNamedType(defaultSeasonsState),
   tags:     createRecipeGroupsWithNamedType(defaultTagsState),
 });
 

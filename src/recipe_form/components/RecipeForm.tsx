@@ -7,10 +7,10 @@ import '../../recipe/css/recipe.css';
 import '../css/recipe_form.css';
 
 import { Recipe } from '../../recipe/store/RecipeTypes';
+import SeasonListContainer from '../containers/SeasonListContainer';
 import TagListContainer from '../containers/TagListContainer';
 import CourseSelectContainer from '../containers/CourseSelectContainer';
 import CuisineSelectContainer from '../containers/CuisineSelectContainer';
-import SeasonSelectContainer from '../containers/SeasonSelectContainer';
 import RecipeFormToolbar, { SubmittingObserver, SubmittingObserverClass } from '../containers/RecipeFormToolbar';
 import ReInput from '../../common/components/ReduxForm/ReInput';
 import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
@@ -39,10 +39,10 @@ const messages = defineMessages({
     description: 'Cuisine label',
     defaultMessage: 'Cuisine',
   },
-  season_label: {
-    id: 'recipe.create.season_label',
-    description: 'Season label',
-    defaultMessage: 'Season',
+  seasons_label: {
+    id: 'recipe.create.seasons_label',
+    description: 'Seasons label',
+    defaultMessage: 'Seasons',
   },
   tags_label: {
     id: 'recipe.create.tags_label',
@@ -181,9 +181,9 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                           required />
                     </Col>
                     <Col xs={12} sm={6}>
-                      <SeasonSelectContainer
-                          name     = 'season'
-                          label    = {formatMessage(messages.season_label)} />
+                      <ReCheckbox
+                          name      = 'public'
+                          label     = {formatMessage(messages.public_label)} />
                     </Col>
                   </Row>
 
@@ -197,6 +197,11 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                       <CuisineSelectContainer
                           name     = 'cuisine'
                           label    = {formatMessage(messages.cuisine_label)} />
+                    </Col>
+                    <Col xs={12}>
+                      <SeasonListContainer
+                          name     = 'seasons'
+                          label    = {formatMessage(messages.seasons_label)} />
                     </Col>
                     <Col xs={12}>
                       <TagListContainer
@@ -229,27 +234,32 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                           tooltip  = {formatMessage(messages.source_tooltip)} />
                     </Col>
                   </Row>
-                  <Row>
-                    <Col xs={12}>
-                      <ReCheckbox
-                          name      = 'public'
-                          label     = {formatMessage(messages.public_label)} />
-                    </Col>
-                  </Row>
 
                 </Col>
                 <Col id='recipe' md={7} lg={8}>
-                  <ReInput
-                      name     = 'info'
-                      rows     = {3}
-                      label    = {formatMessage(messages.information_label)}
-                      placeholder = {formatMessage(messages.information_placeholder)} />
-                  <IngredientGroupsBox
-                      nameIg   = 'ingredientGroupsS'
-                      nameSub  = 'subrecipesS'
-                      fetchRecipeList = {fetchRecipeList} />
-                  <DirectionBox
-                      name       = 'directions' />
+                  <Row>
+                    <Col xs={12}>
+                      <ReInput
+                          name     = 'info'
+                          rows     = {3}
+                          label    = {formatMessage(messages.information_label)}
+                          placeholder = {formatMessage(messages.information_placeholder)} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <IngredientGroupsBox
+                          nameIg   = 'ingredientGroupsS'
+                          nameSub  = 'subrecipesS'
+                          fetchRecipeList = {fetchRecipeList} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <DirectionBox
+                          name       = 'directions' />
+                    </Col>
+                  </Row>
 
                   <RecipeFormToolbar />
                 </Col>

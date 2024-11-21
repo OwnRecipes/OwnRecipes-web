@@ -55,6 +55,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [
       {
         "id": 1,
@@ -113,10 +119,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 1,
       "title": "American"
-    },
-    "season": {
-      "id": 2,
-      "title": "Summer"
     }
   },
   {
@@ -193,6 +195,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [
       {
         "id": 1,
@@ -222,10 +230,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 1,
       "title": "Mexican"
-    },
-    "season": {
-      "id": 2,
-      "title": "Summer"
     }
   },
   {
@@ -334,6 +338,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -367,10 +377,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 1,
       "title": "American"
-    },
-    "season": {
-      "id": 2,
-      "title": "Summer"
     }
   },
   {
@@ -476,6 +482,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -495,10 +507,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 10,
       "title": "German"
-    },
-    "season": {
-      "id": 2,
-      "title": "Summer"
     },
     "title": "Wild Garlic Potato Cake with Asparagus",
     "slug": "demo-wild-garlic-potato-cake-with-asparagus",
@@ -612,6 +620,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [
       {
         "id": 2,
@@ -629,10 +638,6 @@ export const demoRecipes: Array<RecipeDto> = [
       "title": "-"
     },
     "cuisine": {
-      "id": 0,
-      "title": "-"
-    },
-    "season": {
       "id": 0,
       "title": "-"
     },
@@ -765,6 +770,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [],
     "rating": 0,
     "rating_count": 0,
@@ -779,10 +790,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 11,
       "title": "European"
-    },
-    "season": {
-      "id": 2,
-      "title": "Summer"
     },
     "title": "Beef on prunes",
     "slug": "demo-beef-on-prunes",
@@ -930,6 +937,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 3,
+        "title": "autumn"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -949,10 +962,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 11,
       "title": "European"
-    },
-    "season": {
-      "id": 3,
-      "title": "Autumn"
     },
     "title": "Creamy apple pie",
     "slug": "demo-creamy-apple-pie",
@@ -1039,6 +1048,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 4,
+        "title": "winter"
+      }
+    ],
     "tags": [
       {
         "id": 1,
@@ -1070,10 +1085,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 11,
       "title": "European"
-    },
-    "season": {
-      "id": 4,
-      "title": "Winter"
     },
     "title": "Crunchy muesli variety",
     "slug": "demo-crunchy-muesli-variety",
@@ -1180,6 +1191,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 1,
+        "title": "spring"
+      }
+    ],
     "tags": [],
     "rating": 0,
     "rating_count": 0,
@@ -1194,10 +1211,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 11,
       "title": "European"
-    },
-    "season": {
-      "id": 1,
-      "title": "Spring"
     },
     "title": "Chicken-roulade with dried plums",
     "slug": "demo-chicken-roulade-with-dried-plums",
@@ -1280,6 +1293,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [
       {
         "id": 1,
@@ -1301,10 +1315,6 @@ export const demoRecipes: Array<RecipeDto> = [
       "title": "Side Dish"
     },
     "cuisine": {
-      "id": 0,
-      "title": "-"
-    },
-    "season": {
       "id": 0,
       "title": "-"
     },
@@ -1405,6 +1415,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 4,
+        "title": "winter"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -1424,10 +1440,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 11,
       "title": "European"
-    },
-    "season": {
-      "id": 4,
-      "title": "Winter"
     },
     "title": "Simsalabim cheesecake with pudding",
     "slug": "demo-simsalabim-cheesecake-with-pudding",
@@ -1510,6 +1522,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 1,
+        "title": "spring"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -1529,10 +1547,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 0,
       "title": "-"
-    },
-    "season": {
-      "id": 1,
-      "title": "Spring"
     },
     "title": "Gorgonzola asparagus",
     "slug": "demo-gorgonzola-asparagus",
@@ -1609,6 +1623,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [
       {
         "id": 1,
@@ -1641,10 +1656,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 10,
       "title": "German"
-    },
-    "season": {
-      "id": 0,
-      "title": "-"
     },
     "title": "Balsamic mushrooms",
     "slug": "demo-balsamic-mushrooms",
@@ -1741,6 +1752,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [],
     "rating": 0,
     "rating_count": 0,
@@ -1764,10 +1776,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 10,
       "title": "German"
-    },
-    "season": {
-      "id": 0,
-      "title": "-"
     },
     "title": "Herb fillet pocket",
     "slug": "demo-herb-fillet-pocket",
@@ -1825,6 +1833,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 4,
+        "title": "winter"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -1854,10 +1868,6 @@ export const demoRecipes: Array<RecipeDto> = [
       "id": 10,
       "title": "German"
     },
-    "season": {
-      "id": 4,
-      "title": "Winter"
-    },
     "title": "Eggnog coffee",
     "slug": "demo-eggnog-coffee",
     "info": "This dessert is part of a magic menu, see subrecipes.",
@@ -1874,6 +1884,7 @@ export const demoRecipes: Array<RecipeDto> = [
     "photo": null,
     "photo_thumbnail": null,
     "ingredient_groups": [],
+    "seasons": [],
     "tags": [],
     "rating": 0,
     "rating_count": 0,
@@ -1913,10 +1924,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 10,
       "title": "German"
-    },
-    "season": {
-      "id": 0,
-      "title": "-"
     },
     "title": "Magical Menu",
     "slug": "demo-magical-menu",
@@ -2005,6 +2012,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 1,
+        "title": "winter"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -2024,10 +2037,6 @@ export const demoRecipes: Array<RecipeDto> = [
     "cuisine": {
       "id": 0,
       "title": "-"
-    },
-    "season": {
-      "id": 4,
-      "title": "Winter"
     },
     "title": "Beetroot cream soup with croutons",
     "slug": "demo-beetroot-cream-soup-with-croutons",

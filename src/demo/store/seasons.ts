@@ -1,42 +1,38 @@
 /* eslint-disable func-names */
 
-import { SeasonDto } from '../../recipe/store/RecipeTypes';
+import { RecipeDto, SeasonDto } from '../../recipe/store/RecipeTypes';
+import { demoRecipes } from './recipe';
 import { ObjectIterator } from './utils';
 
-/* eslint-disable quotes, quote-props, comma-dangle */
-export const demoSeasons: Array<SeasonDto> = [
-  {
-    "id": 1,
-    "title": "Spring",
-  },
-  {
-    "id": 2,
-    "title": "Summer",
-  },
-  {
-    "id": 3,
-    "title": "Autumn",
-  },
-  {
-    "id": 4,
-    "title": "Winter",
-  },
-];
-/* eslint-enable quotes, quote-props, comma-dangle */
+export function demoGetAllSeasons(allRecipes: Array<RecipeDto>): Array<SeasonDto> {
+  const recipeSeasons = allRecipes.map(rec => rec.seasons).flat();
+  const uniqueSeasonsSlug: Array<string> = [];
+  const uniqueSeasons: Array<SeasonDto> = [];
+  recipeSeasons.forEach(s => {
+    if (!uniqueSeasonsSlug.includes(s.title)) {
+      uniqueSeasonsSlug.push(s.title);
+      uniqueSeasons.push(s);
+    }
+  });
+
+  return uniqueSeasons;
+}
 
 const config = {
-  pattern: '(.*)/recipe_groups/season/',
+  pattern: '(.*)/recipe_groups/season/(.*)',
   fixtures: function () {
-    // console.log(`fixtures running for seasons.`);
+    // console.log('fixtures running for seasons.');
 
-    const result: ObjectIterator<SeasonDto> = {
-      count:    demoSeasons.length,
+    const uniqueSeasons: Array<SeasonDto> = demoGetAllSeasons(demoRecipes);
+
+    const seasonsIterator: ObjectIterator<SeasonDto> = {
+      count:    uniqueSeasons.length,
       next:     null,
       previous: null,
-      results:  demoSeasons,
+      results:  uniqueSeasons,
     };
 
-    return result;
+    return seasonsIterator;
   },
   get: function (_match: Array<string>, data: Record<string, string | number | boolean>) {
     return { body : data };

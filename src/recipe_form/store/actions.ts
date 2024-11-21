@@ -100,7 +100,7 @@ export const invalidateCreatableLists = (oldRecipe: Recipe, savedRecipe: Recipe)
   if (oldRecipe.cuisine?.id !== savedRecipe.cuisine?.id) {
     dispatch({ ...toBasicAction(CUISINES_STORE, ACTION.RESET) });
   }
-  if (oldRecipe.season?.id !== savedRecipe.season?.id) {
+  if (oldRecipe.seasons?.map(s => s.id).join('/') !== savedRecipe.seasons?.map(s => s.id).join('/')) {
     dispatch({ ...toBasicAction(SEASONS_STORE, ACTION.RESET) });
   }
   if (oldRecipe.tags?.map(t => t.id).join('/') !== savedRecipe.tags?.map(t => t.id).join('/')) {

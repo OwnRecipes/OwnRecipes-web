@@ -5,7 +5,7 @@ import { CourseDto, CuisineDto, RecipeDto, SeasonDto, TagDto } from '../../recip
 import { demoCourses } from './courses';
 import { demoCuisines } from './cuisines';
 import { demoRecipes } from './recipe';
-import { demoSeasons } from './seasons';
+import { demoGetAllSeasons } from './seasons';
 import { demoFindSearchRecipes } from './search';
 import { demoGetAllTags } from './tags';
 import { ObjectIterator, toQueryParams } from './utils';
@@ -117,15 +117,15 @@ export const seasonCountConfig = {
     const queryParams: URLSearchParams = toQueryParams(match[2]);
     const resultRecipes: Array<RecipeDto> = demoFindSearchRecipes(demoRecipes, queryParams);
 
-    const allSeasons: Array<SeasonDto> = demoSeasons;
+    const allSeasons: Array<SeasonDto> = demoGetAllSeasons(demoRecipes);
 
     const seasonCounts: Array<CategoryCount> = [];
-    allSeasons.forEach(c => {
+    allSeasons.forEach(s => {
       seasonCounts.push({
-        id:    c.id,
-        total: resultRecipes.filter(rec => rec.season?.title === c.title).length,
-        title: c.title,
-        slug:  c.title,
+        id:    s.id,
+        total: resultRecipes.filter(rec => rec.seasons.map(recS => recS.title).includes(s.title)).length,
+        title: s.title,
+        slug:  s.title,
       });
     });
 
