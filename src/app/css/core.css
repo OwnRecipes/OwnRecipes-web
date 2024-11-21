@@ -212,7 +212,7 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
 
 
 .card {
-  background-color: var(--migdround);
+  background-color: var(--midground);
   border-color: var(--elevationBorder);
 }
 .card-header {

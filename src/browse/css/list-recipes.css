@@ -14,9 +14,12 @@
   text-decoration: none;
   color: unset;
   padding: 4px;
+  border-radius: 0.75rem;
 }
-.recipes-list .recipe > a:focus {
+.recipes-list .recipe > a:focus,
+.recipes-list .recipe > a:focus-visible {
   box-shadow: 0 0 0 2px var(--primaryText);
+  outline: none;
 }
 .recipes-list .recipe > a:hover .card-title, .recipes-list .recipe > a:focus .card-title {
   text-decoration: underline;
@@ -43,6 +46,7 @@
   border-top-right-radius: calc(0.75rem - 1px);
   border-bottom-left-radius: calc(0.25rem - 1px);
   border-bottom-right-radius: calc(0.25rem - 1px);
+  border: 1px solid var(--midground); /* Fix weird borders in Firefox */
 }
 @media screen and (min-width: 768px), print {
   .recipes-list .recipe .card-img-top {

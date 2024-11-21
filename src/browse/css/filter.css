@@ -81,6 +81,9 @@ html[data-theme="dark"] .container.browser .sidebar .filter-group .list-group-ti
   color: var(--errorText);
 }
 
+.container.browser .filter-panel {
+  padding-top: 5px;
+}
 .container.browser .filter-panel .card-header h2 {
   font-size: inherit;
   font-weight: bold;
