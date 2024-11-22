@@ -70,7 +70,7 @@ export const remove = (id: number) => (dispatch: MenuItemDispatch) => {
   dispatch({ ...toBasicAction(MENU_ITEM_STORE, ACTION.DELETE_START) });
 
   request()
-    .delete(`${serverURLs.menu_item}${id}`)
+    .delete(`${serverURLs.menu_item}${id}/`)
     .then(() => {
       dispatch({
         ...toBasicAction(

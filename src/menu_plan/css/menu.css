@@ -30,6 +30,9 @@
   border-top: 0;
   padding: 0;
 }
+.menu-plan .recipes .recipe.card .card-footer .menu-2x-button {
+  padding: 0;
+}
 .menu-plan .recipes .recipe.card.completed .card-footer .toolbar {
   display: none;
 }

@@ -182,7 +182,7 @@
   "menu.section_next_week_heading": "Next Week ({title})",
   "menu.section_this_week_heading": "This Week ({title})",
   "menu_item.confirm_delete": "Are you sure you want to delete this item?",
-  "menu_item.delete_button": "Delete menu item",
+  "menu_item.delete_button": "Remove menu item",
   "menu_item.edit_button": "Edit menu item",
   "menu_item.mark_as_completed_button": "Mark as completed",
   "menu_item_modal.add_success_toast": "Recipe added to your menu.",

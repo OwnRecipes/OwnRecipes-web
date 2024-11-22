@@ -25,7 +25,7 @@ const messages = defineMessages({
   },
   delete_button: {
     id: 'menu_item.delete_button',
-    defaultMessage: 'Delete menu item',
+    defaultMessage: 'Remove menu item',
   },
   confirm_delete_message: {
     id: 'menu_item.confirm_delete',
@@ -89,9 +89,10 @@ const MenuItems: React.FC<IMenuItemsProps> = ({ items, onCompleteClick, onHideCo
               id = {`delete-btn-menu-item-${itm.id}`}
               variant='outline-danger'
               size='sm'
+              className = 'menu-2x-button'
               tooltip = {formatMessage(messages.delete_button)}
               onClick = {() => handleDeleteClick(itm)}>
-            <Icon icon='trash' />
+            <Icon icon='x' variant='light' size='2x' />
           </Button>
         </Toolbar>
         <MenuItemCompleteTransition item={itm} onHide={onHideCompleted} />

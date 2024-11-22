@@ -189,7 +189,7 @@
   "menu.section_next_week_heading": "Nächste Woche ({title})",
   "menu.section_this_week_heading": "Diese Woche ({title})",
   "menu_item.confirm_delete": "Möchten Sie diesen Eintrag wirklich löschen?",
-  "menu_item.delete_button": "Löschen",
+  "menu_item.delete_button": "Eintrag entfernen",
   "menu_item.edit_button": "Eintrag bearbeiten",
   "menu_item.mark_as_completed_button": "Als abgeschlossen markieren",
   "menu_item_modal.add_success_toast": "Gericht zum Speiseplan hinzugefügt.",
