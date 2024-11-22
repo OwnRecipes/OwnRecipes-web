@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from '../../common/store/redux';
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import { Tag } from '../../recipe/store/RecipeTypes';
-import ReCreatableSelect from '../../common/components/ReduxForm/ReCreatableSelect';
+import ReCreatableSelect from '../../common/components/ReInput/ReCreatableSelect';
 
 export interface ITagListContainerProps {
   name: string;

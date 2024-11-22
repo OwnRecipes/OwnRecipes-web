@@ -4,10 +4,10 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Field, Form as ReduxForm, FormSpy } from 'react-final-form';
 
 import { Rating, RatingCreate, RatingUpdate } from '../store/types';
-import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
-import ReInput from '../../common/components/ReduxForm/ReInput';
+import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReInput/ReInput';
 import { requiredValidator, ValidationResult } from '../../common/store/Validation';
-import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
+import ReFormStatus from '../../common/components/ReInput/ReFormStatus';
 import Ratings from './Ratings';
 import { RatingEditor, RatingTimestamp } from './RatingView';
 import classNames from 'classnames';

@@ -6,9 +6,9 @@ import { Form as ReduxForm, FormSpy } from 'react-final-form';
 import '../css/login.css';
 
 import Icon from '../../common/components/Icon';
-import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
-import ReInput from '../../common/components/ReduxForm/ReInput';
-import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReInput/ReInput';
+import ReCheckbox from '../../common/components/ReInput/ReCheckbox';
 import { ValidationResult } from '../../common/store/Validation';
 import LoginAlert from './LoginAlert';
 

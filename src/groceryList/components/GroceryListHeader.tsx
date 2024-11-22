@@ -9,9 +9,9 @@ import '../css/grocery_list_header.css';
 
 import Icon from '../../common/components/Icon';
 import Modal from '../../common/components/Modal';
-import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
-import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
-import ReInput from '../../common/components/ReduxForm/ReInput';
+import ReFormStatus from '../../common/components/ReInput/ReFormStatus';
+import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReInput/ReInput';
 import NavLink from '../../header/components/NavLink';
 import NavButton from '../../common/components/NavButton';
 import { getRoutePath } from '../../common/utility';

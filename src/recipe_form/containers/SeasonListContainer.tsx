@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from '../../common/store/redux';
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage } from '../../common/utility';
 import { Season } from '../../recipe/store/RecipeTypes';
-import ReSelect from '../../common/components/ReduxForm/ReSelect';
+import ReSelect from '../../common/components/ReInput/ReSelect';
 import useCrash from '../../common/hooks/useCrash';
 
 export interface ISeasonListContainerProps {

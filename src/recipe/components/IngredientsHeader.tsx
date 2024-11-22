@@ -6,8 +6,8 @@ import { Form as ReduxForm } from 'react-final-form';
 import { Recipe } from '../store/RecipeTypes';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
 import Icon from '../../common/components/Icon';
-import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
-import ReInput from '../../common/components/ReduxForm/ReInput';
+import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReInput/ReInput';
 import HeaderLink from '../../common/components/HeaderLink';
 import { ValidationResult } from '../../common/store/Validation';
 

@@ -8,7 +8,7 @@ import { RootState } from '../../app/Store';
 import useSingle from '../../common/hooks/useSingle';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import { Cuisine } from '../../recipe/store/RecipeTypes';
-import ReCreatableSelect from '../../common/components/ReduxForm/ReCreatableSelect';
+import ReCreatableSelect from '../../common/components/ReInput/ReCreatableSelect';
 
 export interface ICuisineSelectContainerProps {
   name: string;
