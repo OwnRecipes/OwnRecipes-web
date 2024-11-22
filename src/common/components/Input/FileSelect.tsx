@@ -1,6 +1,8 @@
 import { createRef } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 
+import '../../css/button.css';
+
 import ConditionalWrapper from '../ConditionalWrapper';
 import Icon from '../Icon';
 import Tooltip from '../Tooltip';
@@ -74,7 +76,7 @@ class FileSelect extends BaseInputComponent<IFileSelectProps> {
             {!readOnly && !disabled && onChange
                 && (value || (this.ref.current != null && this.ref.current.value)) && (
                   <InputGroup.Text className='input-adornment-end button'>
-                    <Button onClick={this.handleClear}><Icon icon='x' variant='light' size='2x' /></Button>
+                    <Button onClick={this.handleClear} variant='outline-primary' style={{ borderRadius: 0 }}><Icon icon='x' variant='light' size='2x' /></Button>
                   </InputGroup.Text>
             )}
           </InputGroup>
