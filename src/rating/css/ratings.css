@@ -75,7 +75,10 @@
     position: absolute;
     bottom: 0.5em;
     right: 0.5em;
-    background-color: var(--elevation);
+    background-color: var(--midground);
+    padding-top: 0.25em;
+    padding-left: 0.25em;
+    border-radius: 0.25em;
 
     display: none;
   }

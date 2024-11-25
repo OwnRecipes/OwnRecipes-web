@@ -1,3 +1,6 @@
+.menu-plan p.placeholder {
+  margin-top: 1em;
+}
 .menu-plan .toolbar.center {
   margin-top: 1rem;
 }
@@ -54,7 +57,7 @@
   }
   .menu-plan .recipes .card-footer .toolbar {
     padding: 0.25em 0.25em 0.25em 0;
-    border-top-left-radius: 0.25em;
+    border-radius: 0.75rem;
   }
   html[data-theme="dark"] .menu-plan .recipes .card-footer .toolbar,
   html[data-theme="dark"] .menu-plan .recipes .card-footer .toolbar .btn {

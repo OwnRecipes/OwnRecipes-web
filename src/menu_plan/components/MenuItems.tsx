@@ -88,7 +88,6 @@ const MenuItems: React.FC<IMenuItemsProps> = ({ items, onCompleteClick, onHideCo
           <Button
               id = {`delete-btn-menu-item-${itm.id}`}
               variant='outline-danger'
-              size='sm'
               className = 'menu-2x-button'
               tooltip = {formatMessage(messages.delete_button)}
               onClick = {() => handleDeleteClick(itm)}>

@@ -173,14 +173,13 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
         variant = 'outline-primary'
         tooltip={formatMessage(messages.edit_tooltip)}
         to={getRoutePath(`/recipe/edit/${recipe?.slug}`)}
-        onClick={handleEditClick}
-        size='sm'>
+        onClick={handleEditClick}>
       <Icon icon='pencil' />
     </NavButton>
   ) : null;
 
   const deleteLink = editable ? (
-    <Button id='trash-recipe-button' variant='outline-danger' size='sm' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
+    <Button id='trash-recipe-button' variant='outline-danger' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
       <Icon icon='trash' />
     </Button>
   ) : null;

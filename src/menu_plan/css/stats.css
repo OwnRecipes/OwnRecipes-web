@@ -1,3 +1,7 @@
+#menu-plan-tabs-tabpane-stats p.placeholder {
+  margin-top: 1em;
+}
+
 #stats-table tbody th {
   font-weight: normal;
 }
