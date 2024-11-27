@@ -9,6 +9,12 @@ import { toBasicAction } from './store/redux';
 import LocalStorageHelper from './LocalStorageHelper';
 import { isNetworkError } from './requestUtils';
 import { ACTION } from './store/ReduxHelper';
+import { isDemoMode } from './utility';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import mock from 'superagent-mock';
+import mockConfig from '../demo/store/config';
 
 export const refreshToken = (() => {
   let blocking = false;
@@ -72,6 +78,10 @@ export const initializeSuperagent = (): SuperAgentStatic & SuperAgentRequest => 
     response: 30000, // 30 s
     deadline: 60000, // 60 s
   });
+
+  if (isDemoMode()) {
+    mock(customRequest.request, mockConfig);
+  }
 
   return customRequest;
 };

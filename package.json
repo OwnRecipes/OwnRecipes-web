@@ -2,10 +2,13 @@
   "name": "ownrecipes-web",
   "version": "3.4.0",
   "private": false,
+  "homepage": "https://ownrecipes.github.io/ownrecipes-web/",
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "build": "react-scripts build",
     "build:prod": "sh -c 'env-cmd -f .env.${REACT_APP_ENV} react-scripts build'",
+    "predeploy": "sh -c 'env-cmd -f .env.demo npm run build'",
+    "deploy": "gh-pages -d build",
     "lint": "eslint \"./src/**/*.{ts,tsx}\"",
     "lint:fix": "eslint \"./src/**/*.{ts,tsx}\" --fix",
     "start": "react-scripts start",
@@ -58,6 +61,7 @@
     "eslint-plugin-react": "^7.37.2",
     "extract-react-intl-messages": "^4.1.1",
     "lodash": "^4.17.21",
+    "gh-pages": "^3.2.3",
     "react-dev-utils": "^12.0.0",
     "react-inject-env": "^2.1.0",
     "react-scripts": "5.0.1",
@@ -88,7 +92,8 @@
     "redux": "4.2.1",
     "redux-thunk": "2.4.2",
     "superagent": "^10.1.1",
-    "superagent-defaults": "^0.1.14"
+    "superagent-defaults": "^0.1.14",
+    "superagent-mock": "^4.0.0"
   },
   "browserslist": [
     ">0.2%",
