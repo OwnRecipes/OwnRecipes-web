@@ -43,7 +43,7 @@ function demoFilterCuisine(resultRecipes: Array<RecipeDto>, queryParams: URLSear
 }
 
 function demoDoFilterBySeason(resultRecipes: Array<RecipeDto>, seasons: Array<string>): Array<RecipeDto> {
-  return resultRecipes.filter(r => r.seasons.find(s => seasons?.includes(s.title.toLocaleLowerCase())));
+  return resultRecipes.filter(r => r.seasons?.find(s => seasons?.includes(s.title.toLocaleLowerCase())));
 }
 function demoFilterSeason(resultRecipes: Array<RecipeDto>, queryParams: URLSearchParams): Array<RecipeDto> {
   if (queryParams.has('season')) {
@@ -58,7 +58,7 @@ function demoFilterSeason(resultRecipes: Array<RecipeDto>, queryParams: URLSearc
 }
 
 function demoDoFilterByTag(resultRecipes: Array<RecipeDto>, tags: Array<string>): Array<RecipeDto> {
-  return resultRecipes.filter(r => r.tags.find(t => tags?.includes(t.title.toLocaleLowerCase())));
+  return resultRecipes.filter(r => r.tags?.find(t => tags?.includes(t.title.toLocaleLowerCase())));
 }
 function demoFilterTag(resultRecipes: Array<RecipeDto>, queryParams: URLSearchParams): Array<RecipeDto> {
   if (queryParams.has('tag')) {

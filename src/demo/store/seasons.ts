@@ -5,7 +5,7 @@ import { demoRecipes } from './recipe';
 import { ObjectIterator } from './utils';
 
 export function demoGetAllSeasons(allRecipes: Array<RecipeDto>): Array<SeasonDto> {
-  const recipeSeasons = allRecipes.map(rec => rec.seasons).flat();
+  const recipeSeasons = allRecipes.map(rec => rec.seasons ?? []).flat();
   const uniqueSeasonsSlug: Array<string> = [];
   const uniqueSeasons: Array<SeasonDto> = [];
   recipeSeasons.forEach(s => {

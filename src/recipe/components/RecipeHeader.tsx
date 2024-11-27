@@ -268,13 +268,13 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             {optionallyFormatMessage(intl, 'cuisine.', recipe.cuisine.title)}
           </Chip>
         )}
-        {recipe.seasons.length > 0 && (
+        {recipe.seasons != null && recipe.seasons.length > 0 && (
           <Chip color='secondary'>
             <Icon icon='basket3'  />
             {recipe.seasons.map(s => optionallyFormatMessage(intl, 'season.', s.title)).join(', ')}
           </Chip>
         )}
-        {recipe.tags.map(t => (
+        {recipe.tags?.map(t => (
           <Chip key={String(t.title)} color='secondary'>
             {optionallyFormatMessage(intl, 'tag.', t.title)}
           </Chip>

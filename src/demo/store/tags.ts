@@ -5,7 +5,7 @@ import { demoRecipes } from './recipe';
 import { ObjectIterator } from './utils';
 
 export function demoGetAllTags(allRecipes: Array<RecipeDto>): Array<TagDto> {
-  const recipeTags = allRecipes.map(rec => rec.tags).flat();
+  const recipeTags = allRecipes.map(rec => rec.tags ?? []).flat();
   const uniqueTagsSlug: Array<string> = [];
   const uniqueTags: Array<TagDto> = [];
   recipeTags.forEach(t => {

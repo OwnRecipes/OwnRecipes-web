@@ -123,7 +123,7 @@ export const seasonCountConfig = {
     allSeasons.forEach(s => {
       seasonCounts.push({
         id:    s.id,
-        total: resultRecipes.filter(rec => rec.seasons.map(recS => recS.title).includes(s.title)).length,
+        total: resultRecipes.filter(rec => rec.seasons?.map(recS => recS.title).includes(s.title)).length,
         title: s.title,
         slug:  s.title,
       });
@@ -158,7 +158,7 @@ export const tagCountConfig = {
     allTags.forEach(t => {
       tagCounts.push({
         id:    t.id,
-        total: resultRecipes.filter(rec => rec.tags.map(recT => recT.title).includes(t.title)).length,
+        total: resultRecipes.filter(rec => rec.tags?.map(recT => recT.title).includes(t.title)).length,
         title: t.title,
         slug:  t.title,
       });

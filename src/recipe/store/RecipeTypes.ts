@@ -197,8 +197,8 @@ export interface RecipeDto extends RecipeListDto {
 
   course?:  CourseDto;
   cuisine?: CuisineDto;
-  seasons:  Array<SeasonDto>;
-  tags:     Array<TagDto>;
+  seasons?: Array<SeasonDto>;
+  tags?:    Array<TagDto>;
 
   photo?: string | null;
 
@@ -225,8 +225,8 @@ export interface Recipe extends RecipeList {
 
   course?:  Course;
   cuisine?: Cuisine;
-  seasons:  Array<Season>;
-  tags:     Array<Tag>;
+  seasons?: Array<Season>;
+  tags?:    Array<Tag>;
   oTags:    TagObj;
 
   photo?: string;
@@ -260,9 +260,9 @@ export const toRecipe = (dto: RecipeDto): Recipe => ({
 
   course:  (dto.course == null || dto.course.title  === '-')  ? undefined : toCourse(dto.course),
   cuisine: (dto.cuisine == null || dto.cuisine.title === '-') ? undefined : toCuisine(dto.cuisine),
-  seasons: dto.seasons.map(toSeason),
-  tags:    dto.tags.map(toTag),
-  oTags:   _.keyBy(dto.tags.map(toTag), 'title'),
+  seasons: dto.seasons?.map(toSeason),
+  tags:    dto.tags?.map(toTag),
+  oTags:   _.keyBy(dto.tags?.map(toTag) ?? [], 'title'),
 
   photo: dto.photo ?? undefined,
   photoThumbnail: dto.photo_thumbnail ?? undefined,
@@ -296,8 +296,8 @@ export interface RecipeRequest {
   prep_time:  number | null;
   servings:   number;
 
-  seasons:    Array<SeasonDto>;
-  tags:       Array<TagDto>;
+  seasons?:   Array<SeasonDto>;
+  tags?:      Array<TagDto>;
   course:     CourseDto | null;
   cuisine:    CuisineDto | null;
 
