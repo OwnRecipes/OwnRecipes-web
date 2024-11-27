@@ -1,11 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
+import classNames from 'classnames';
 
 import '../css/recipe_header.css';
 
 import { Recipe } from '../store/RecipeTypes';
-import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
+import { getRoutePath, isDemoMode, optionallyFormatMessage } from '../../common/utility';
 import Icon from '../../common/components/Icon';
 import Chip from '../../common/components/Chip';
 import Ratings from '../../rating/components/Ratings';
@@ -89,6 +90,11 @@ const messages = defineMessages({
     description: 'Tooltip displayed when hovering the print icon button',
     defaultMessage: 'Print this recipe',
   },
+  add_to_menu_tooltip: {
+    id: 'recipe.add_to_menu_tooltip',
+    description: 'Tooltip displayed when hovering the add-recipe-to-menu button',
+    defaultMessage: 'Add recipe to menu',
+  },
   recipe_comments: {
     id: 'recipe.comments',
     description: 'Button to comments',
@@ -147,11 +153,11 @@ export interface IRecipeHeaderProps {
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
-  // onAddToMenuClick: () => void;
+  onAddToMenuClick: () => void;
 }
 
 const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
-    recipe, editable, onEditRecipe, deleteRecipe }: IRecipeHeaderProps) => {
+    recipe, editable, onEditRecipe, deleteRecipe, onAddToMenuClick }: IRecipeHeaderProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -167,14 +173,13 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
         variant = 'outline-primary'
         tooltip={formatMessage(messages.edit_tooltip)}
         to={getRoutePath(`/recipe/edit/${recipe?.slug}`)}
-        onClick={handleEditClick}
-        size='sm'>
+        onClick={handleEditClick}>
       <Icon icon='pencil' />
     </NavButton>
   ) : null;
 
   const deleteLink = editable ? (
-    <Button id='trash-recipe-button' variant='outline-danger' size='sm' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
+    <Button id='trash-recipe-button' variant='outline-danger' onClick={handleDeleteClick} tooltip={formatMessage(messages.delete_tooltip)}>
       <Icon icon='trash' />
     </Button>
   ) : null;
@@ -190,7 +195,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
       }
 
       return (
-        <div>
+        <div className='source-wrapper'>
           {`${formatMessage(messages.source)}: `}
           {hostname.length > 0 && (
             <>
@@ -204,11 +209,17 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
     } else {
       return null;
     }
-  }, [recipe?.source]);
+  }, [recipe?.source, intl.locale]);
 
   const printButton = (
     <Button id='print-recipe-button' variant='outline-primary' onClick={window.print} tooltip={formatMessage(messages.print_tooltip)}>
       <Icon icon='printer' />
+    </Button>
+  );
+
+  const addToMenuButton = (
+    <Button id='add-to-menu' variant='outline-primary'tooltip={formatMessage(messages.add_to_menu_tooltip)} onClick={onAddToMenuClick} disabled={isDemoMode()}>
+      <Icon icon='calendar-plus' />
     </Button>
   );
 
@@ -221,11 +232,7 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             {deleteLink}
           </>
         )}
-        {/*
-          <Button variant='outline-primary' tooltip='Add receipt to menu' onClick={onAddToMenuClick}>
-            <Icon icon='calendar' />
-          </Button>
-        */}
+        {addToMenuButton}
         <CookingModeButton />
         {printButton}
       </Toolbar>
@@ -249,18 +256,29 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             {` ${formatMessage(messages.minutes, { count: recipe.cookTime })}`}
           </Chip>
         )}
-        {recipe.course != null && recipe.course.title != null && recipe.course.title.length > 0 && (
+        {recipe.course?.title != null && recipe.course.title.length > 0 && (
           <Chip color='secondary'>
-            <Icon icon='bar-chart' />
+            <Icon icon='grid' />
             {optionallyFormatMessage(intl, 'course.', recipe.course.title)}
           </Chip>
         )}
-        {recipe.cuisine != null && recipe.cuisine.title != null && recipe.cuisine.title.length > 0 && (
+        {recipe.cuisine?.title != null && recipe.cuisine.title.length > 0 && (
           <Chip color='secondary'>
             <Icon icon='globe' variant='light' />
             {optionallyFormatMessage(intl, 'cuisine.', recipe.cuisine.title)}
           </Chip>
         )}
+        {recipe.seasons != null && recipe.seasons.length > 0 && (
+          <Chip color='secondary'>
+            <Icon icon='basket3'  />
+            {recipe.seasons.map(s => optionallyFormatMessage(intl, 'season.', s.title)).join(', ')}
+          </Chip>
+        )}
+        {recipe.tags?.map(t => (
+          <Chip key={String(t.title)} color='secondary'>
+            {optionallyFormatMessage(intl, 'tag.', t.title)}
+          </Chip>
+        ))}
       </div>
       <div className='recipe-header-chips'>
         <Chip color='secondary'>
@@ -272,21 +290,12 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
           {recipe?.pub_username ?? ''}
         </Chip>
       </div>
-      {recipe.tags != null && recipe.tags.length > 0 && (
-        <div className='recipe-header-chips'>
-          {recipe.tags.map(t => (
-            <Chip key={String(t.title)} color='secondary'>
-              {optionallyFormatMessage(intl, 'tag.', t.title)}
-            </Chip>
-          ))}
-        </div>
-      )}
     </>
   ) : null;
 
   return (
     <>
-      <article className='recipe-header'>
+      <article className={classNames('recipe-header', { 'with-image': recipe != null && recipe.photo })}>
         <h1 className='d-block d-xl-none'>{recipe?.title}</h1>
 
         <Row className='flex-row-reverse justify-content-center'>
@@ -318,15 +327,16 @@ const RecipeHeader: React.FC<IRecipeHeaderProps> = ({
             optionButtons
           )}
 
-          <Col xl={6} lg={12} className='info-wrapper'>
+          <Col xl={6} lg={12} className='info-wrapper optiwidth'>
             <h1 className='d-none d-xl-block'>{recipe?.title}</h1>
-            <P>{recipe?.info}</P>
+            <P className='recipe-info'>{recipe?.info}</P>
             <Ratings stars={recipe?.rating ?? 0} showCount={false} />
             {chips}
             {source}
           </Col>
         </Row>
       </article>
+      <hr className='recipe-header-hr' />
 
       <Modal
           show        = {showDeleteConfirm}

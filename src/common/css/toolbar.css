@@ -1,6 +1,9 @@
 .toolbar {
   display: flex;
 }
+.toolbar.center {
+  justify-content: center;
+}
 .toolbar.end {
   justify-content: flex-end;
 }

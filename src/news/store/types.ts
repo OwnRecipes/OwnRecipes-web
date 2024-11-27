@@ -5,9 +5,9 @@ import { GenericArrayReducerAction } from '../../common/store/ReduxHelper';
 
 export interface NewsItemDto {
   id:        number;
-  image:     string;
+  image:     string; // can be empty
   title:     string;
-  content:   string;
+  content:   string; // can be empty
   frontpage: boolean;
 }
 

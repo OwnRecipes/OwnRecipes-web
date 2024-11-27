@@ -8,7 +8,7 @@ import MeasurementContext, { IMeasurementContext } from '../../common/context/Me
 import HeaderLink from '../../common/components/HeaderLink';
 import { optionallyFormatMessage, slugify } from '../../common/utility';
 import { Ingredient, IngredientGroup } from '../store/RecipeTypes';
-import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+import ReCheckbox from '../../common/components/ReInput/ReCheckbox';
 
 const messages = defineMessages({
   quantity: {

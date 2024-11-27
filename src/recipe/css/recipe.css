@@ -91,6 +91,9 @@
 .recipe-details .panel-footer .btn-danger {
   margin-left: 5px;
 }
+.recipe-footer > h2 {
+  margin-top: 0.5em;
+}
 @media print {
   body * {
     visibility: hidden;

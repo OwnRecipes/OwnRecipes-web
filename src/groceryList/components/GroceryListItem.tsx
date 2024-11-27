@@ -9,9 +9,9 @@ import Checkbox from '../../common/components/Input/Checkbox';
 import Modal from '../../common/components/Modal';
 import { ValidationResult } from '../../common/store/Validation';
 import { GroceryListItem, GroceryListItemUpdate } from '../store/GroceryListItemTypes';
-import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
-import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
-import ReInput from '../../common/components/ReduxForm/ReInput';
+import ReFormStatus from '../../common/components/ReInput/ReFormStatus';
+import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReInput/ReInput';
 
 const messages = defineMessages({
   edit_button: {
@@ -129,8 +129,6 @@ const EditItemForm = forwardRef<HTMLFormElement, IEditItemFormProps>(({
     };
     return onSubmit(upd);
   }, [item.title, onSubmit]);
-
-  // if (!show) return null;
 
   return (
     <ReduxForm

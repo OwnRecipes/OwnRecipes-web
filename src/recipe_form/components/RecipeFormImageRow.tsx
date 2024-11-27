@@ -6,8 +6,8 @@ import { defineMessages, useIntl } from 'react-intl';
 import { getRecipeImage, getRecipeImagePlaceholder } from '../../common/utility';
 import WidthHeightRatio from '../../common/components/WidthHeightRatio';
 import Image from '../../common/components/Image';
-import ReFileSelect from '../../common/components/ReduxForm/ReFileSelect';
-import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import ReFileSelect from '../../common/components/ReInput/ReFileSelect';
+import FieldSpyValues from '../../common/components/ReInput/FieldSpyValues';
 
 const messages = defineMessages({
   photo_label: {

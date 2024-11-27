@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { SearchResult } from '../../browse/store/SearchTypes';
 import { optionallyFormatMessage } from '../../common/utility';
-import { Course, Cuisine } from '../../recipe/store/RecipeTypes';
+import { Course, Cuisine, Season } from '../../recipe/store/RecipeTypes';
 
 const messages = defineMessages({
   filter_by_course: {
@@ -17,6 +17,11 @@ const messages = defineMessages({
     id: 'random.search.menu.filter_by_cuisine_dropdown',
     description: 'Filter by indian/...',
     defaultMessage: 'Cuisine: {cuisine}',
+  },
+  filter_by_season: {
+    id: 'random.search.menu.filter_by_season_dropdown',
+    description: 'Filter by spring/...',
+    defaultMessage: 'Season: {season}',
   },
   filter_all: {
     id: 'random.search.menu.filter_all',
@@ -30,10 +35,11 @@ export interface ISearchMenuProps {
   qs:       Record<string, string>;
   courses:  Array<Course> | undefined;
   cuisines: Array<Cuisine> | undefined;
+  seasons:  Array<Season> | undefined;
   buildUrl: (qsTitle: string, recipeSlug: string, multiSelect?: boolean) => string;
 }
 
-const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines, buildUrl }: ISearchMenuProps) => {
+const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines, seasons, buildUrl }: ISearchMenuProps) => {
   const intl = useIntl();
   const { formatMessage } = intl;
 
@@ -67,6 +73,20 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines,
     </Dropdown.Item>
   ));
 
+  const currentSeason = qs.season__slug ?? '';
+  const handleFilterSeasonClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>, filterSeason: string) => {
+    if (currentSeason === filterSeason) {
+      event.preventDefault();
+    }
+  }, [currentSeason]);
+  const seasonDropdownItems = seasons?.map(season => ({ key: season.title, value: optionallyFormatMessage(intl, 'season.', season.title) }));
+  seasonDropdownItems?.unshift({ key: '', value: filterAllText });
+  const seasonDropdownItemsJsx = seasonDropdownItems?.map(item => (
+    <Dropdown.Item key={item.key} as={Link} to={buildUrl('season__slug', item.key)} active={currentSeason === item.key} onClick={(event: React.MouseEvent<HTMLAnchorElement>) => handleFilterSeasonClick(event, item.key)}>
+      {item.value}
+    </Dropdown.Item>
+  ));
+
   return (
     <Row xs={1} xl='auto' className='search-menu'>
       <Dropdown className='filter-course-dropdown'>
@@ -83,6 +103,14 @@ const SearchMenu: React.FC<ISearchMenuProps> = ({ search, qs, courses, cuisines,
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {cuisineDropdownItemsJsx}
+        </Dropdown.Menu>
+      </Dropdown>
+      <Dropdown className='filter-season-dropdown'>
+        <Dropdown.Toggle variant='outline-primary' id='filter-season-button' disabled={search == null}>
+          {formatMessage(messages.filter_by_season, { season: currentSeason ? optionallyFormatMessage(intl, 'season.', currentSeason) : filterAllText })}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          {seasonDropdownItemsJsx}
         </Dropdown.Menu>
       </Dropdown>
     </Row>

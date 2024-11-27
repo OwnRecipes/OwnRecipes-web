@@ -72,7 +72,7 @@ const GroceryListPage: React.FC = () => {
   }, []);
 
   return (
-    <PageWrapper title={isNew ? formatMessage(messages.new_grocery_list) : groceryListState.item?.title}>
+    <PageWrapper title={isNew ? formatMessage(messages.new_grocery_list) : groceryListState.item?.title} className='optiwidth'>
       <GroceryListContainer isNew={isNew} />
     </PageWrapper>
   );

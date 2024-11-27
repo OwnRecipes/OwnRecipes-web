@@ -125,7 +125,7 @@ export function optionallyFormatMessage(intl: IntlShape, baseMessageId: string, 
     return '';
   } else {
     // HACK: Ignore locales generator.
-    return (intl as IntlShape).formatMessage({ id: fullMsgId }, values) as string;
+    return (intl as IntlShape).formatMessage({ id: fullMsgId }, values) as unknown as string;
   }
 }
 

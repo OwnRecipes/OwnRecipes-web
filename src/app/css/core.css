@@ -8,13 +8,14 @@ html {
   flex-direction: column;
 
   margin-bottom: 2.75rem;
+  min-height: calc(100vh - 2.75rem);
   background-color: var(--background);
 }
 #content > .container {
   flex: 1;
   background-color: var(--midground);
 
-  padding-top: 0.75em;
+  padding-top: 1em;
   padding-bottom: 1em;
 }
 
@@ -25,7 +26,7 @@ html {
   }
 }
 
-@media (min-width: 87rem) {
+@media screen and (min-width: 87rem) {
   .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
     max-width: 83rem;
   }
@@ -62,11 +63,13 @@ a:hover {
   color: var(--primaryLight);
 }
 
-h1, .h1 {
-  font-size:     1.8rem;
+h1, .h1, .row > h1, .row > .h1 {
+  font-size:     1.6rem;
+  margin-top:    0.25em;
+  margin-bottom: 0.5em;
 }
 h2, .h2 {
-  font-size:     1.6rem;
+  font-size:     1.5rem;
   margin-bottom: 0.5em;
 }
 h3, .h3 {
@@ -89,6 +92,13 @@ h4, .h4 {
 .subtitle2 {
   font-size: 0.92rem;
   color: var(--disabledText);
+}
+
+
+.optiwidth {
+  max-width: 90ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
@@ -202,7 +212,7 @@ html[data-theme="dark"] .accordion.accordion-flush .accordion-button.collapsed::
 
 
 .card {
-  background-color: var(--migdround);
+  background-color: var(--midground);
   border-color: var(--elevationBorder);
 }
 .card-header {

@@ -153,7 +153,7 @@ const FeaturesOverview: React.FC = () => {
     } else {
       return null;
     }
-  }, [newsList, intl]);
+  }, [newsList, intl.locale]);
 
   return featureOverview;
 };

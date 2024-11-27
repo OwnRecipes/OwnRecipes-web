@@ -17,10 +17,11 @@ export interface RatingCount {
 
 export const BROWSE_FILTER_STORE = 'browserFilter';
 
-export const BROWSE_FILTER_COURSE_STORE  = 'courses';
-export const BROWSE_FILTER_CUISINE_STORE = 'cuisines';
-export const BROWSE_FILTER_RATING_STORE  = 'ratings';
-export const BROWSE_FILTER_TAGS_STORE    = 'tags';
+export const BROWSE_FILTER_COURSE_STORE  = 'filter_courses';
+export const BROWSE_FILTER_CUISINE_STORE = 'filter_cuisines';
+export const BROWSE_FILTER_RATING_STORE  = 'filter_ratings';
+export const BROWSE_FILTER_SEASONS_STORE = 'filter_seasons';
+export const BROWSE_FILTER_TAGS_STORE    = 'filter_tags';
 
 export type CategoryCountState = MapReducerType<Array<CategoryCount>>;
 export type RatingCountState   = MapReducerType<Array<RatingCount>>;
@@ -28,8 +29,9 @@ export type RatingCountState   = MapReducerType<Array<RatingCount>>;
 export type FilterAction   = GenericMapReducerAction<Array<CategoryCount>> | GenericMapReducerAction<Array<RatingCount>>;
 export type FilterDispatch = ReduxDispatch<FilterAction>;
 export interface FilterState {
-  courses:  CategoryCountState;
-  cuisines: CategoryCountState;
-  ratings:  RatingCountState;
-  tags:     CategoryCountState;
+  filter_courses:  CategoryCountState;
+  filter_cuisines: CategoryCountState;
+  filter_ratings:  RatingCountState;
+  filter_seasons:  CategoryCountState;
+  filter_tags:     CategoryCountState;
 }

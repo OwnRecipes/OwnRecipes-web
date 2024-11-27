@@ -1,0 +1,59 @@
+.rdt.form-datetime.rdtOpen .rdtPicker .rdtActive {
+  background-color: var(--primaryMain);
+  color: var(--primaryContrast);
+}
+.rdt.form-datetime.rdtOpen .rdtPicker td.rdtActive:hover {
+  background-color: var(--primaryLight);
+  color: var(--primaryContrast);
+}
+.rdt.form-datetime.rdtOpen .rdtPicker .rdtToday::before {
+  border-bottom-color: var(--primaryMain);
+}
+.rdt.form-datetime.rdtOpen .rdtPicker .rdtToday:hover::before {
+  border-bottom-color: var(--primaryLight);
+}
+
+.rdt.form-datetime.rdtOpen .rdtPicker thead th {
+  min-width: 3.5rem;
+  vertical-align: middle;
+}
+.rdt.form-datetime.rdtOpen .rdtPicker thead th {
+  border-radius: 0.5em;
+}
+.rdt.form-datetime.rdtOpen .rdtPicker tr {
+  height: 3.5rem;
+}
+@media screen and (min-width: 768px), print {
+  .rdt.form-datetime.rdtOpen .rdtPicker thead th {
+    min-width: 2.5rem;
+  }
+  .rdt.form-datetime.rdtOpen .rdtPicker tr {
+    height: 2.5rem;
+  }
+}
+
+.rdt.form-datetime.rdtOpen .rdtPicker thead tr:not(:first-of-type) th {
+  font-weight: normal;
+  color: var(--secondaryText);
+}
+
+.rdt.form-datetime.rdtOpen .rdtPicker tbody td {
+  border-radius: 25%;
+}
+
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker {
+  box-shadow: 0 1px 3px var(--elevationShadow);
+  background: var(--elevation);
+  border-color: var(--elevationBorder);
+}
+
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker thead tr:first-of-type th:hover,
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker td.rdtDay:hover,
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker td.rdtHour:hover,
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker td.rdtMinute:hover,
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker td.rdtSecond:hover,
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker .rdtTimeToggle:hover,
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker td.rdtMonth:hover,
+html[data-theme="dark"] .rdt.form-datetime.rdtOpen .rdtPicker td.rdtYear:hover {
+  background: var(--elevationShadow);
+}

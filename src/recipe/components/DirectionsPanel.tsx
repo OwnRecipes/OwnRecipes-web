@@ -40,7 +40,7 @@ const DirectionsPanel: React.FC<IDirectionsPanelProps> = ({
   const isMultiDirections = directionsString.includes(':\n');
 
   return (
-    <article className={classNames('directions-panel', { 'multi-directions': isMultiDirections })}>
+    <article className={classNames('directions-panel', 'optiwidth', { 'multi-directions': isMultiDirections })}>
       <h2 id='directions-heading'>
         {formatMessage(messages.directions)}
         <HeaderLink linkFor='directions-heading' />

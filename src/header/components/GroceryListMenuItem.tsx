@@ -11,6 +11,11 @@ import NavLink from './NavLink';
 import Chip from '../../common/components/Chip';
 
 const messages = defineMessages({
+  groceryLists: {
+    id: 'nav.groceryLists',
+    description: 'Grocery Lists',
+    defaultMessage: 'Groceries',
+  },
   grocery_list_create: {
     id: 'nav.grocery_list_create',
     description: 'Button to create a new grocery List',
@@ -43,7 +48,7 @@ const GroceryListMenuItem: React.FC = () => {
         id = 'grocery-lists-dropdown'
         title = {(
           <>
-            <span>{intl.messages['nav.groceryLists'] as string}</span>
+            <span>{formatMessage(messages.groceryLists)}</span>
             {sumItemCount != null && sumItemCount > 0 && <Chip color='secondary' className='grocery-list-item-count'>{sumItemCount}</Chip>}
           </>
         )}

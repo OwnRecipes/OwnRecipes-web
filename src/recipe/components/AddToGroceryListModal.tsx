@@ -10,8 +10,8 @@ import { RootState } from '../../app/Store';
 import Modal from '../../common/components/Modal';
 import { ValidationResult } from '../../common/store/Validation';
 import { Ingredient, IngredientGroup, SubRecipe } from '../store/RecipeTypes';
-import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
-import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
+import ReFormStatus from '../../common/components/ReInput/ReFormStatus';
+import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import Checkbox from '../../common/components/Input/Checkbox';
 import useCrash from '../../common/hooks/useCrash';
@@ -22,11 +22,12 @@ import { PendingState } from '../../common/store/GenericReducerType';
 import { GroceryList, GroceryListBulkAdd, GroceryListCreate } from '../../groceryList/store/GroceryListTypes';
 import * as GroceryListsActions from '../../groceryList/store/GroceryListsActions';
 import * as GroceryListActions from '../../groceryList/store/GroceryListActions';
-import ReSelect from '../../common/components/ReduxForm/ReSelect';
+import ReSelect from '../../common/components/ReInput/ReSelect';
 import MeasurementContext from '../../common/context/MeasurementContext';
 import IngredientGroups from './IngredientGroups';
 import SubRecipes from './SubRecipes';
 import { formatMeasurement } from './Ingredients';
+import { isDemoMode } from '../../common/utility';
 
 export interface IAddToGroceryListModalProps {
   show: boolean;
@@ -56,6 +57,7 @@ const AddToGroceryListModal: React.FC<IAddToGroceryListModalProps> = ({
   const groceryListsState = useSelector((state: RootState) => state.groceryLists);
   const { items: lists } = groceryListsState;
   useEffect(() => {
+    if (isDemoMode()) return;
     dispatch(GroceryListsActions.load());
   }, []);
 

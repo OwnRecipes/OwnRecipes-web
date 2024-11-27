@@ -6,8 +6,8 @@ import { Form as ReduxForm } from 'react-final-form';
 
 import Icon from '../../common/components/Icon';
 import { getRoutePath } from '../../common/utility';
-import ReInput from '../../common/components/ReduxForm/ReInput';
-import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import ReInput from '../../common/components/ReInput/ReInput';
+import FieldSpyValues from '../../common/components/ReInput/FieldSpyValues';
 import InputAdornment from '../../common/components/Input/InputAdornment';
 import NavLink from './NavLink';
 

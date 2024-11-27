@@ -13,10 +13,10 @@ import { Ingredient, IngredientGroup, IngredientInput, SubRecipe } from '../../r
 import SubRecipes from '../../recipe/components/SubRecipes';
 import MeasurementContext from '../../common/context/MeasurementContext';
 import { formatValidation } from '../../common/store/Validation';
-import ReInput from '../../common/components/ReduxForm/ReInput';
-import ReTextareaAutocomplete from '../../common/components/ReduxForm/ReTextareaAutocomplete';
+import ReInput from '../../common/components/ReInput/ReInput';
+import ReTextareaAutocomplete from '../../common/components/ReInput/ReTextareaAutocomplete';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
-import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
+import FieldSpyValues from '../../common/components/ReInput/FieldSpyValues';
 import { NEW_ITEM_URL_ID } from '../../common/constants';
 import TabbedView from './TabbedView';
 import { slugify } from '../../common/utility';

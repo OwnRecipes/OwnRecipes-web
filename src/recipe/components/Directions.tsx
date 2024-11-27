@@ -69,7 +69,7 @@ function parseDirections(directionsString: string, ingredients: Array<Ingredient
   let nextHeading = '';
 
   if (isMultiStep) {
-    directionsString.split('\n').filter(direction => direction.length > 0).forEach(direction => {
+    directionsString.split('\n').filter(line => line.length > 0).map(line => line.trimEnd()).forEach(direction => {
       if (direction.endsWith(':')) {
         pushDirections(directionsGroups, nextHeading, directions, unassignedIngredients);
         nextHeading = direction.substring(0, direction.length - 1);

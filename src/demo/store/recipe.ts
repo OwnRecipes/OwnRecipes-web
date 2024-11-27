@@ -55,6 +55,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [
       {
         "id": 1,
@@ -106,13 +112,13 @@ export const demoRecipes: Array<RecipeDto> = [
     "rating_count": 2,
     "public": true,
     "author": 1,
-    "cuisine": {
-      "id": 1,
-      "title": "American"
-    },
     "course": {
       "id": 4,
       "title": "Main"
+    },
+    "cuisine": {
+      "id": 1,
+      "title": "American"
     }
   },
   {
@@ -189,6 +195,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [
       {
         "id": 1,
@@ -211,13 +223,13 @@ export const demoRecipes: Array<RecipeDto> = [
     "rating_count": 132,
     "public": true,
     "author": 3,
-    "cuisine": {
-      "id": 1,
-      "title": "Mexican"
-    },
     "course": {
       "id": 1,
       "title": "Entry"
+    },
+    "cuisine": {
+      "id": 1,
+      "title": "Mexican"
     }
   },
   {
@@ -326,6 +338,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -352,13 +370,13 @@ export const demoRecipes: Array<RecipeDto> = [
     "rating_count": 42,
     "public": true,
     "author": 2,
-    "cuisine": {
-      "id": 1,
-      "title": "American"
-    },
     "course": {
       "id": 4,
       "title": "Main"
+    },
+    "cuisine": {
+      "id": 1,
+      "title": "American"
     }
   },
   {
@@ -462,6 +480,12 @@ export const demoRecipes: Array<RecipeDto> = [
             "title": "lemon juice"
           }
         ]
+      }
+    ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
       }
     ],
     "tags": [
@@ -596,6 +620,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [
       {
         "id": 2,
@@ -743,6 +768,12 @@ export const demoRecipes: Array<RecipeDto> = [
             "title": "almonds"
           }
         ]
+      }
+    ],
+    "seasons": [
+      {
+        "id": 2,
+        "title": "summer"
       }
     ],
     "tags": [],
@@ -906,6 +937,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 3,
+        "title": "autumn"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -1009,6 +1046,12 @@ export const demoRecipes: Array<RecipeDto> = [
             "title": "salt"
           }
         ]
+      }
+    ],
+    "seasons": [
+      {
+        "id": 4,
+        "title": "winter"
       }
     ],
     "tags": [
@@ -1148,6 +1191,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 1,
+        "title": "spring"
+      }
+    ],
     "tags": [],
     "rating": 0,
     "rating_count": 0,
@@ -1244,6 +1293,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [
       {
         "id": 1,
@@ -1365,6 +1415,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 4,
+        "title": "winter"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -1466,6 +1522,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 1,
+        "title": "spring"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -1561,6 +1623,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [
       {
         "id": 1,
@@ -1689,6 +1752,7 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [],
     "tags": [],
     "rating": 0,
     "rating_count": 0,
@@ -1769,6 +1833,12 @@ export const demoRecipes: Array<RecipeDto> = [
         ]
       }
     ],
+    "seasons": [
+      {
+        "id": 4,
+        "title": "winter"
+      }
+    ],
     "tags": [
       {
         "id": 2,
@@ -1814,6 +1884,7 @@ export const demoRecipes: Array<RecipeDto> = [
     "photo": null,
     "photo_thumbnail": null,
     "ingredient_groups": [],
+    "seasons": [],
     "tags": [],
     "rating": 0,
     "rating_count": 0,
@@ -1939,6 +2010,12 @@ export const demoRecipes: Array<RecipeDto> = [
             "title": "of chives"
           }
         ]
+      }
+    ],
+    "seasons": [
+      {
+        "id": 1,
+        "title": "winter"
       }
     ],
     "tags": [

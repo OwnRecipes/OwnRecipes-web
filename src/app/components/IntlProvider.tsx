@@ -8,6 +8,12 @@ import LocalStorageHelper from '../../common/LocalStorageHelper';
 import { getEnv } from '../../common/utility';
 
 import { RootState } from '../Store';
+import moment from 'moment';
+
+import 'moment/locale/de';
+// import 'moment/locale/en';
+import 'moment/locale/es';
+import 'moment/locale/fr';
 
 export interface IIntlProviderProps {
   children: React.ReactNode;
@@ -48,6 +54,7 @@ const IntlProvider: React.FC<IIntlProviderProps> = ({ children }: IIntlProviderP
 
   useEffect(() => {
     window.document.documentElement.lang = language;
+    moment.locale(language);
   }, [language]);
 
   return (

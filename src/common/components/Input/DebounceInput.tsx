@@ -172,6 +172,7 @@ export default class DebounceInput extends PureComponent<IDebounceInputProps, ID
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   doNotify = (...args: Array<any>) => {
     const { onChange } = this.props;
 
@@ -236,6 +237,7 @@ export default class DebounceInput extends PureComponent<IDebounceInputProps, ID
 
     const maybeRef = inputRef ? { ref: inputRef } : {};
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return createElement(element as any, {
       ...props,
       onChange: this.onChange,

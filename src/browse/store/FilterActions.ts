@@ -6,7 +6,7 @@ import { ACTION } from '../../common/store/ReduxHelper';
 import { handleError } from '../../common/requestUtils';
 import { objToSearchString } from '../../common/utility';
 import { toBasicAction } from '../../common/store/redux';
-import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_RATING_STORE, BROWSE_FILTER_TAGS_STORE, FilterDispatch } from './FilterTypes';
+import { BROWSE_FILTER_COURSE_STORE, BROWSE_FILTER_CUISINE_STORE, BROWSE_FILTER_RATING_STORE, BROWSE_FILTER_SEASONS_STORE, BROWSE_FILTER_TAGS_STORE, FilterDispatch } from './FilterTypes';
 import { extractSearchStringToFields } from './SearchActions';
 
 const parsedFilter = (filters: Record<string, string>): Record<string, string> => {
@@ -72,6 +72,25 @@ export const loadRatings = (filter: Record<string, string>) => (dispatch: Filter
     .catch(err => dispatch(handleError(err, BROWSE_FILTER_RATING_STORE)));
 };
 
+export const loadSeasons = (filters: Record<string, string>) => (dispatch: FilterDispatch) => {
+  dispatch({ ...toBasicAction(BROWSE_FILTER_SEASONS_STORE, ACTION.LOADING) });
+
+  request()
+    .get(serverURLs.season_count)
+    .query(parsedFilter(filters))
+    .then(res => (
+      dispatch({
+        ...toBasicAction(
+          BROWSE_FILTER_SEASONS_STORE,
+          ACTION.GET_SUCCESS
+        ),
+        id: objToSearchString(filters),
+        payload: res.body.results,
+      })
+    ))
+    .catch(err => dispatch(handleError(err, BROWSE_FILTER_SEASONS_STORE)));
+};
+
 export const loadTags = (filters: Record<string, string>) => (dispatch: FilterDispatch) => {
   dispatch({ ...toBasicAction(BROWSE_FILTER_TAGS_STORE, ACTION.LOADING) });
 
@@ -88,19 +107,5 @@ export const loadTags = (filters: Record<string, string>) => (dispatch: FilterDi
         payload: res.body.results,
       })
     ))
-    .catch(err => {
-      // Older backend versions may not support this action.
-      if (err.status === 404) {
-        dispatch({
-          ...toBasicAction(
-            BROWSE_FILTER_TAGS_STORE,
-            ACTION.GET_SUCCESS
-          ),
-          id: objToSearchString(filters),
-          payload: [],
-        });
-      } else {
-        dispatch(handleError(err, BROWSE_FILTER_TAGS_STORE));
-      }
-    });
+    .catch(err => dispatch(handleError(err, BROWSE_FILTER_TAGS_STORE)));
 };

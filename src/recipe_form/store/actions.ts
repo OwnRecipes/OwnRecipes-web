@@ -5,7 +5,7 @@ import { AnyDispatch, toBasicAction } from '../../common/store/redux';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
 import { handleError, handleFormError } from '../../common/requestUtils';
 import { Recipe, RecipeDto, toRecipe, toRecipeRequest } from '../../recipe/store/RecipeTypes';
-import { COURSES_STORE, CUISINES_STORE, TAGS_STORE } from '../../recipe_groups/store/types';
+import { COURSES_STORE, CUISINES_STORE, SEASONS_STORE, TAGS_STORE } from '../../recipe_groups/store/types';
 import { getRecipeSuccess } from '../../recipe/store/RecipeActions';
 import { RecipeFormDispatch, RECIPE_FORM_STORE } from './types';
 
@@ -99,6 +99,9 @@ export const invalidateCreatableLists = (oldRecipe: Recipe, savedRecipe: Recipe)
   }
   if (oldRecipe.cuisine?.id !== savedRecipe.cuisine?.id) {
     dispatch({ ...toBasicAction(CUISINES_STORE, ACTION.RESET) });
+  }
+  if (oldRecipe.seasons?.map(s => s.id).join('/') !== savedRecipe.seasons?.map(s => s.id).join('/')) {
+    dispatch({ ...toBasicAction(SEASONS_STORE, ACTION.RESET) });
   }
   if (oldRecipe.tags?.map(t => t.id).join('/') !== savedRecipe.tags?.map(t => t.id).join('/')) {
     dispatch({ ...toBasicAction(TAGS_STORE, ACTION.RESET) });

@@ -1,4 +1,5 @@
 import { Col, Row } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import '../css/recipe.css';
 
@@ -16,21 +17,17 @@ interface IRecipeSchemeProps {
 
   onEditRecipe: () => void;
   deleteRecipe: () => void;
-
-  // lists: Array<any>;
-  // onAddToMenuClick: () => void;
+  onAddToMenuClick: () => void;
 }
 
-const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId, editable, onEditRecipe, deleteRecipe }: IRecipeSchemeProps) => (
-  <div className='recipe-details'>
+const RecipeScheme: React.FC<IRecipeSchemeProps> = ({ recipe, recipeMeta, userId, editable, onEditRecipe, deleteRecipe, onAddToMenuClick }: IRecipeSchemeProps) => (
+  <div className={classNames('recipe-details', { 'with-image': recipe != null && recipe.photo })}>
     <RecipeHeader
         recipe = {recipe}
         editable = {editable}
         onEditRecipe = {onEditRecipe}
-        // onAddToMenuClick={props.onAddToMenuClick}
+        onAddToMenuClick = {onAddToMenuClick}
         deleteRecipe = {deleteRecipe} />
-
-    <hr />
 
     <Row>
       <Col xl={4} lg={12}>

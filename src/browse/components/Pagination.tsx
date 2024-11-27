@@ -5,13 +5,28 @@ import { Pagination as BootstraPagination } from 'react-bootstrap';
 import { PaginationLink } from '../../common/components/Pagination';
 
 const messages = defineMessages({
+  pagination_nav_label: {
+    id: 'pagination.nav_label',
+    description: 'Label for the nav region for screenreader',
+    defaultMessage: 'Search results',
+  },
   pagination_previous: {
     id: 'pagination.previous',
     description: 'Button to previous pagination page',
+    defaultMessage: 'Prev',
+  },
+  pagination_previous_aria_label: {
+    id: 'pagination.previous_aria_label',
+    description: 'Label to previous pagination page button',
     defaultMessage: 'Previous',
   },
   pagination_next: {
     id: 'pagination.next',
+    description: 'Button to next pagination page',
+    defaultMessage: 'Next',
+  },
+  pagination_next_aria_label: {
+    id: 'pagination.next_aria_label',
     description: 'Button to next pagination page',
     defaultMessage: 'Next',
   },
@@ -178,11 +193,11 @@ const Pagination: React.FC<IPaginationProps> = ({ offset, limit, count, buildUrl
   if (count <= limit) return null;
 
   return (
-    <nav>
+    <nav aria-label={formatMessage(messages.pagination_nav_label)}>
       <BootstraPagination>
-        <PaginationLink title='←' offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} aria-label={formatMessage(messages.pagination_previous)} />
-        <PaginationNumbersList    offset={offset}   limit={limit}  buildUrl={buildUrl} count={count} />
-        <PaginationLink title='→' offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} aria-label={formatMessage(messages.pagination_previous)} />
+        <PaginationLink title={formatMessage(messages.pagination_previous)} offset={previous} key='previous' buildUrl={buildUrl} disabled={previous < 0} aria-label={formatMessage(messages.pagination_previous_aria_label)} className='pagination-separator' />
+        <PaginationNumbersList                                              offset={offset}   limit={limit}  buildUrl={buildUrl} count={count} />
+        <PaginationLink title={formatMessage(messages.pagination_next)}     offset={next}     key='next'     buildUrl={buildUrl} disabled={next > count} aria-label={formatMessage(messages.pagination_next_aria_label)}     className='pagination-separator' />
       </BootstraPagination>
     </nav>
   );

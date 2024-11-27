@@ -6,7 +6,7 @@ import '../css/toolbar.css';
 import { CommonProps } from '../types/OverridableComponent';
 
 export interface IToolbarProps extends CommonProps {
-  position?: 'start' | 'end';
+  position?: 'start' | 'center' | 'end';
   children: React.ReactNode;
 }
 

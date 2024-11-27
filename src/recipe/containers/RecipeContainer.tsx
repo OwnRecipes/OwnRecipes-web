@@ -8,10 +8,6 @@ import RecipeScheme from '../components/RecipeScheme';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import * as RecipeActions from '../store/RecipeActions';
 import * as RecipeFormActions from '../../recipe_form/store/actions';
-// import MenuItemModal from '../../menu/components/modals/MenuItemModal';
-// import * as MenuItemActions from '../../menu/actions/MenuItemActions';
-// import { fetchRecipeList } from '../../menu/actions/RecipeListActions';
-// import { menuItemValidation } from '../../menu/actions/validation';
 import { RootState } from '../../app/Store';
 import { Recipe } from '../store/RecipeTypes';
 import { getRoutePath } from '../../common/utility';
@@ -19,6 +15,8 @@ import useCrash from '../../common/hooks/useCrash';
 import CookingModeContextProvider from '../context/CookingModeContextProvider';
 import CookingModeHandler from '../components/CookingModeHandler';
 import UserRole from '../../common/types/UserRole';
+import MenuItemModal from '../../menu_plan/components/MenuItemModal';
+import SaveMenuItemSuccessToast from '../../menu_plan/components/SaveMenuItemSuccessToast';
 
 const RecipeContainer: React.FC = () => {
   const dispatch = useDispatch();
@@ -32,7 +30,6 @@ const RecipeContainer: React.FC = () => {
   const recipeMeta  = recipeState.meta;
   const prevRecipe  = useRef<Recipe | undefined>();
 
-  // const [showItemModal, setShowItemModal] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const handlePreloadRecipe = useCallback(() => {
@@ -40,7 +37,6 @@ const RecipeContainer: React.FC = () => {
     dispatch(RecipeFormActions.preload(recipe));
   }, [recipe]);
 
-  // const menuItemSave = useCallback(() => { /* dispatch(MenuItemActions.save() */ }, []);
   const deleteRecipe = useCallback(() => {
     if (recipe == null) { crash('Invalid state: recipe may not be null'); return; }
     setIsDeleting(true);
@@ -56,19 +52,17 @@ const RecipeContainer: React.FC = () => {
     }
   }, [recipe]);
 
+  const [showItemModal, setShowItemModal] = useState<boolean>(false);
+  const showMenuItemModal = useCallback(() => { setShowItemModal(true); }, []);
+  const closeMenuItemModal = useCallback(() => { setShowItemModal(false); }, []);
+
+  const [showAddMenuItemSuccessToast, setShowAddMenuItemToast] = useState<boolean>(false);
+  const handleAddMenuItemSuccess = useCallback(() => { setShowAddMenuItemToast(true); }, []);
+  const handleCloseAddMenuItemToast = useCallback(() => { setShowAddMenuItemToast(false); }, []);
+
   if (recipe != null) {
     return (
       <CookingModeContextProvider>
-        {/* TODO Menu
-        <MenuItemModal
-            id={0}
-            show={showItemModal}
-            onHide={() => setShowItemModal(false)}
-            recipe={recipe.id}
-            title={recipe.title}
-            onSave={menuItemSave}
-            fetchRecipeList={fetchRecipeList}
-            validation={menuItemValidation} /> */}
         <RecipeScheme
             recipe       = {recipe}
             recipeMeta   = {recipeMeta}
@@ -76,8 +70,20 @@ const RecipeContainer: React.FC = () => {
             editable     = {recipe.author === userId || userRole === UserRole.STAFF || userRole === UserRole.ADMIN}
 
             onEditRecipe = {handlePreloadRecipe}
-            deleteRecipe = {deleteRecipe} />
+            deleteRecipe = {deleteRecipe}
+            onAddToMenuClick = {showMenuItemModal} />
         <CookingModeHandler />
+
+        <MenuItemModal
+            show={showItemModal}
+            recipe={recipe}
+            recipeReadonly
+            onSaveSuccess={handleAddMenuItemSuccess}
+            onClose={closeMenuItemModal} />
+        <SaveMenuItemSuccessToast
+            show = {showAddMenuItemSuccessToast}
+            created
+            onClose = {handleCloseAddMenuItemToast} />
       </CookingModeContextProvider>
     );
   } else {

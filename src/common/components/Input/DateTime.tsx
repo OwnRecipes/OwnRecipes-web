@@ -1,6 +1,8 @@
 import Datetime from 'react-datetime';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { Form } from 'react-bootstrap';
+
+import '../../css/datetime.css';
 
 import BaseInputComponent, { IBaseInputComponentProps } from './BaseInputComponent';
 import Tooltip from '../Tooltip';
@@ -8,11 +10,12 @@ import ConditionalWrapper from '../ConditionalWrapper';
 
 require('react-datetime/css/react-datetime.css');
 
-interface IDateTimeProps extends IBaseInputComponentProps {
-  timeFormat?: string;
-  dateFormat?: string;
+export interface IDateTimeProps extends IBaseInputComponentProps {
+  value?: string | Date | Moment | null;
+  timeFormat?: string | boolean;
+  dateFormat?: string | boolean;
 
-  onChange: (name: string, newIsoDate: string) => void;
+  onChange?: (name: string, value: moment.MomentInput) => void;
 }
 
 interface IDateTimeState {
@@ -21,15 +24,12 @@ interface IDateTimeState {
 
 export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTimeState> {
   handleChange = (date: moment.MomentInput) => {
-    this.setState({
-      value: date,
-    });
-
-    this.props.onChange?.(this.props.name, moment(date).toISOString());
+    this.props.onChange?.(this.props.name, date);
   };
 
   render() {
-    const { timeFormat, dateFormat, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+    const { onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        value, timeFormat, dateFormat,
         name, style, tooltip,
         label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
 
@@ -46,7 +46,7 @@ export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTi
           {this.getHelpText()}
           {this.getErrorMessage()}
           <Datetime
-              value = {!timeFormat ? moment(this.state.value).format('ddd, ll') : moment(this.state.value).format('llll')}
+              value  = {value ?? ''}
               inputProps = {{
                 name:       name,
                 className: 'form-control',
@@ -54,6 +54,8 @@ export default class DateTime extends BaseInputComponent<IDateTimeProps, IDateTi
               }}
               dateFormat = {dateFormat || 'ddd, ll'}
               timeFormat = {timeFormat}
+              closeOnSelect
+              className = 'form-datetime'
               onChange   = {this.handleChange} />
         </ConditionalWrapper>
       </Form.Group>

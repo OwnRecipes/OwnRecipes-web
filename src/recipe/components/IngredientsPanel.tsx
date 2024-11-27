@@ -50,6 +50,7 @@ const IngredientsPanel: React.FC<IIngredientsPanelProps> = ({ recipe, recipeMeta
                 withHeaderLink
                 subRecipes = {recipe?.subrecipes}
                 />
+            {recipe?.subrecipes && recipe?.subrecipes.length > 0 && <div className='grid-space-subrecipes' />}
             <IngredientGroups
                 withHeaderLink
                 groups  = {recipe?.ingredientGroups}

@@ -29,6 +29,7 @@ const reducer = (state = defaultState, action: GroceryListAction): GroceryListSt
         }
       case ACTION.DELETE_SUCCESS:
         {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           if (!state.item || (itemAction.payload as any).listId !== state.item.id) break;
 
           const updState = ReduxHelper.cloneState(state);

@@ -2,12 +2,13 @@ import { lazy, Suspense, useCallback, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { NavDropdown } from 'react-bootstrap';
 
-import GroceryListMenuItem from './GroceryListMenuItem';
 import { getEnv, getRoutePath, isDemoMode } from '../../common/utility';
 import { UserAccount } from '../../account/store/types';
 import Icon from '../../common/components/Icon';
 import LoadingSpinner from '../../common/components/LoadingSpinner';
 import NavButton from '../../common/components/NavButton';
+import GroceryListMenuItem from './GroceryListMenuItem';
+import NavLink from './NavLink';
 
 const SettingsDialog = lazy(() => import('./SettingsDialog'));
 
@@ -36,6 +37,11 @@ const messages = defineMessages({
     id: 'nav.accountmenu.theme',
     description: 'Item to open the theme change dialog',
     defaultMessage: 'Theme',
+  },
+  menuPlan: {
+    id: 'nav.menuPlan',
+    description: 'Menu / Eating Plan',
+    defaultMessage: 'Menu',
   },
   settings: {
     id: 'nav.accountmenu.settings',
@@ -92,6 +98,7 @@ export const AccountMenuMenuItem: React.FC<IAccountMenuMenuItemProps> = ({
           align = 'end'
           className = 'header-dropdown my-account-dropdown'
           id = 'my-account-dropdown'>
+        {!isDemoMode() && <NavLink to={getRoutePath('/menu')}>{formatMessage(messages.menuPlan)}</NavLink>}
         {!isDemoMode() && <GroceryListMenuItem />}
         <NavDropdown.Divider />
         <NavDropdown.Item onClick={handleSettingsClick}>{`${formatMessage(messages.settings)} …`}</NavDropdown.Item>

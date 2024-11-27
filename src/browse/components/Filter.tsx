@@ -8,6 +8,7 @@ import Icon from '../../common/components/Icon';
 import { optionallyFormatMessage, sortByLabel } from '../../common/utility';
 import Tooltip from '../../common/components/Tooltip';
 import ConditionalWrapper from '../../common/components/ConditionalWrapper';
+import Chip from '../../common/components/Chip';
 
 const messages = defineMessages({
   filter_active: {
@@ -74,7 +75,7 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
     }
 
     return res;
-  }, [data, qs, qsTitle]);
+  }, [data, qs, qsTitle, intl.locale]);
 
   const items = useMemo(() => (
     dataFormatted
@@ -92,18 +93,32 @@ const Filter: React.FC<IFilterProps> = ({ title, qsTitle, data, qs, multiSelect,
         </ConditionalWrapper>
       </li>
     )) ?? []
-  ), [dataFormatted, qsTitle, multiSelect, buildUrl]);
+  ), [dataFormatted, qsTitle, multiSelect, buildUrl, intl.locale]);
 
   if (data != null && items.length === 0) return null;
 
   return (
     <Accordion.Item eventKey={qsTitle} className={classNames('filter-group', cssClass)}>
-      <Accordion.Header as='h3' className='list-group-title'>{title}</Accordion.Header>
+      <Accordion.Header as='h3' className='list-group-title'>
+        <FilterHeader title={title} active={dataFormatted.filter(i => i.active).length} />
+      </Accordion.Header>
       <Accordion.Body as='ul' className='filter-list'>
         {items}
       </Accordion.Body>
     </Accordion.Item>
   );
 };
+
+interface IFilterHeaderProps {
+  title: string;
+  active: number;
+}
+
+const FilterHeader: React.FC<IFilterHeaderProps> = ({ title, active }) => (
+  <>
+    {`${title}`}
+    {active > 0 && <Chip color='primary'>{active}</Chip>}
+  </>
+);
 
 export default Filter;

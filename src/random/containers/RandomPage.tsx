@@ -39,6 +39,10 @@ const RandomPage: React.FC = () => {
   const cuisines  = useSelector((state: RootState) => state.recipeGroups.cuisines.items);
   useSingle(fetchCuisines, cuisines);
 
+  const fetchSeasons = useCallback(() => { dispatch(RecipeGroupActions.fetchSeasons()); }, []);
+  const seasons  = useSelector((state: RootState) => state.recipeGroups.seasons.items);
+  useSingle(fetchSeasons, seasons);
+
   const reloadData = useCallback(() => {
     dispatch(SearchActions.loadRandomRecipes(qsMergedDefaults));
   }, [qsMergedDefaults]);
@@ -61,6 +65,7 @@ const RandomPage: React.FC = () => {
           search   = {search}
           courses  = {courses}
           cuisines = {cuisines}
+          seasons  = {seasons}
           qs       = {qs}
           qsString = {qsMergedString}
           buildUrl = {handleBuildUrl}

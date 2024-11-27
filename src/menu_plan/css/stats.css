@@ -1,0 +1,14 @@
+#menu-plan-tabs-tabpane-stats p.placeholder {
+  margin-top: 1em;
+}
+
+#stats-table tbody th {
+  font-weight: normal;
+}
+
+#stats-table tbody a {
+  color: var(--hoverText);
+}
+#stats-table tbody a:hover {
+  color: var(--primaryMain);
+}

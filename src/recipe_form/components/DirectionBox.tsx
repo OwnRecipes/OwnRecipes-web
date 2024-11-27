@@ -4,8 +4,8 @@ import { FormSpy } from 'react-final-form';
 import { defineMessages, useIntl } from 'react-intl';
 import { useLocation } from 'react-router';
 
-import FieldSpyValues from '../../common/components/ReduxForm/FieldSpyValues';
-import ReInput from '../../common/components/ReduxForm/ReInput';
+import FieldSpyValues from '../../common/components/ReInput/FieldSpyValues';
+import ReInput from '../../common/components/ReInput/ReInput';
 import { NEW_ITEM_URL_ID } from '../../common/constants';
 import MeasurementContext from '../../common/context/MeasurementContext';
 import { formatValidation } from '../../common/store/Validation';

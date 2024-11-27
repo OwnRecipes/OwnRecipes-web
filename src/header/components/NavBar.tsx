@@ -16,7 +16,6 @@ import { getEnvAsBoolean, getResourcePath, getRoutePath } from '../../common/uti
 import { UserAccount } from '../../account/store/types';
 import { Settings, ThemeMode } from '../../account/store/settings/types';
 import LoginSettings from './LoginSettings';
-// import MenuMenuItem from './MenuMenuItem';
 import NavSearch from './NavSearch';
 import NavLink from './NavLink';
 
@@ -51,11 +50,6 @@ const messages = defineMessages({
     id: 'nav.randomRecipe',
     description: 'Random Recipe',
     defaultMessage: 'Random',
-  },
-  groceryLists: {
-    id: 'nav.groceryLists',
-    description: 'Grocery Lists',
-    defaultMessage: 'Groceries',
   },
 });
 
@@ -143,7 +137,6 @@ const NavBar: React.FC<INavBarProps> = ({
               </NavLink>
             )}
             {(!isLoginRequired || isAuthenticated) && <NavLink to={`${getRoutePath('/random')}?course__slug=Main`} active={locationPath.endsWith('/random')} aria-current={locationPath.endsWith('/random') ? 'page' : undefined} accessKey='r'>{formatMessage(messages.randomRecipe)}</NavLink>}
-            {/* isAuthenticated && <MenuMenuItem /> */}
             {isAuthenticated && isPrivilegedUser && <CreateRecipeMenuItem />}
           </Nav>
           {isScreenMdUp && (

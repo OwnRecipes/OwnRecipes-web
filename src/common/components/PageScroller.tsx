@@ -1,17 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
 import { scrollToElement } from '../utility';
 
 export interface IPageScrollerProps {
   uriFragmentId?: string;
+  scrollOnKeyChange?: boolean;
 }
 
-const PageScroller: React.FC<IPageScrollerProps> = ({ uriFragmentId }: IPageScrollerProps) => {
+const PageScroller: React.FC<IPageScrollerProps> = ({ uriFragmentId, scrollOnKeyChange }: IPageScrollerProps) => {
   const { pathname, hash, key } = useLocation();
 
+  const prevPathname = useRef<string>('');
+
   useEffect(() => {
+    // console.log(`[PageScroller] pathname=${pathname}, hash=${hash}, key=${key}`);
+
     if (hash === '') {
       if (!uriFragmentId) {
+        // If same page and no different hash, then do not scroll.
+        // This occurs when search params change (e. g. servings on recipe page).
+        if (pathname === prevPathname.current && !scrollOnKeyChange) return;
+
         setTimeout(() => {
           // console.log('[PageScroller] No hash, scroll to top.');
           window.scrollTo(0, 0);
@@ -33,6 +42,8 @@ const PageScroller: React.FC<IPageScrollerProps> = ({ uriFragmentId }: IPageScro
         }
       }, 0);
     }
+
+    prevPathname.current = pathname;
   }, [pathname, hash, key]);
 
   return null;

@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import HeaderLink from '../../common/components/HeaderLink';
-import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
+import ReCheckbox from '../../common/components/ReInput/ReCheckbox';
 import { getRoutePath, optionallyFormatMessage } from '../../common/utility';
 import { SubRecipe } from '../store/RecipeTypes';
 

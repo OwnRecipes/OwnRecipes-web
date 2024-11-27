@@ -48,6 +48,7 @@ const reducer = (state = defaultState, action: GroceryListItemsAction): GroceryL
           const updState = ReduxHelper.cloneState(state);
           const updItems = state.items != null ? [...state.items] : [];
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           updState.items = updItems.filter(item => item.listId !== (itemAction.payload as any).listId || item.id !== itemAction.payload.id);
           return updState;
         }

@@ -15,7 +15,12 @@ import groceryListItems from '../groceryList/store/GroceryListItemsReducer';
 import { GROCERY_LIST_ITEMS_STORE } from '../groceryList/store/GroceryListItemsTypes';
 import internalError from '../internal_error/store/reducer';
 import { INTERNAL_ERROR_STORE } from '../internal_error/store/types';
-// import menu from '../../menu/reducers/reducer';
+import menuItem from '../menu_plan/store/MenuItemReducer';
+import { MENU_ITEM_STORE } from '../menu_plan/store/MenuItemTypes';
+import menuItems from '../menu_plan/store/MenuItemsReducer';
+import { MENU_ITEMS_STORE } from '../menu_plan/store/MenuItemsTypes';
+import menuStats from '../menu_plan/store/MenuStatsReducer';
+import { MENU_STATS_STORE } from '../menu_plan/store/MenuStatsTypes';
 import news from '../news/store/reducer';
 import { NEWS_STORE } from '../news/store/types';
 import ratings from '../rating/store/reducer';
@@ -38,7 +43,9 @@ const reducer = combineReducers({
   [GROCERY_LIST_ITEM_STORE]: groceryListItem,
   [GROCERY_LIST_ITEMS_STORE]: groceryListItems,
   [INTERNAL_ERROR_STORE]: internalError,
-  // menu,
+  [MENU_ITEM_STORE]: menuItem,
+  [MENU_ITEMS_STORE]: menuItems,
+  [MENU_STATS_STORE]: menuStats,
   [NEWS_STORE]: news,
   [RATINGS_STORE]: ratings,
   [RECIPE_STORE]: recipe,

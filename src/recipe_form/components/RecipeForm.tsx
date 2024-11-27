@@ -7,16 +7,17 @@ import '../../recipe/css/recipe.css';
 import '../css/recipe_form.css';
 
 import { Recipe } from '../../recipe/store/RecipeTypes';
+import SeasonListContainer from '../containers/SeasonListContainer';
 import TagListContainer from '../containers/TagListContainer';
 import CourseSelectContainer from '../containers/CourseSelectContainer';
 import CuisineSelectContainer from '../containers/CuisineSelectContainer';
 import RecipeFormToolbar, { SubmittingObserver, SubmittingObserverClass } from '../containers/RecipeFormToolbar';
-import ReInput from '../../common/components/ReduxForm/ReInput';
-import ReCheckbox from '../../common/components/ReduxForm/ReCheckbox';
-import InitialValuesResetter from '../../common/components/ReduxForm/ReInitialValuesResetter';
+import ReInput from '../../common/components/ReInput/ReInput';
+import ReCheckbox from '../../common/components/ReInput/ReCheckbox';
+import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
 import { AutocompleteListItem } from '../../common/components/Input/TextareaAutocomplete';
 import MeasurementContext from '../../common/context/MeasurementContext';
-import ReFormStatus from '../../common/components/ReduxForm/ReFormStatus';
+import ReFormStatus from '../../common/components/ReInput/ReFormStatus';
 import RecipeFormImageRow from './RecipeFormImageRow';
 import IngredientGroupsBox, { ingredientsFormatter, ingredientsParser, subrecipesFormatter, subrecipesParser } from './IngredientGroupsBox';
 import DirectionBox from './DirectionBox';
@@ -37,6 +38,11 @@ const messages = defineMessages({
     id: 'recipe.create.cuisine_label',
     description: 'Cuisine label',
     defaultMessage: 'Cuisine',
+  },
+  seasons_label: {
+    id: 'recipe.create.seasons_label',
+    description: 'Seasons label',
+    defaultMessage: 'Seasons',
   },
   tags_label: {
     id: 'recipe.create.tags_label',
@@ -134,7 +140,7 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
         subrecipesS:        subrecipesFormatter(intl, measurementsContext.formatter, recipe.subrecipes),
         } : undefined;
     }
-    }, [recipe, isNew, location]);
+    }, [recipe, isNew, location, intl.locale]);
 
   // console.log(`[RecipeForm] recipe=${JSON.stringify(recipe)}, initialValues=${JSON.stringify(initialValues)}`);
 
@@ -166,6 +172,23 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
 
                   <Row>
                     <Col xs={12} sm={6}>
+                      <ReInput
+                          name     = 'servings'
+                          type     = 'number'
+                          label    = {formatMessage(messages.servings_label)}
+                          min      = {1}
+                          max      = {999}
+                          required />
+                    </Col>
+                    <Col xs={12} sm={6}>
+                      <ReCheckbox
+                          name      = 'public'
+                          label     = {formatMessage(messages.public_label)} />
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col xs={12} sm={6}>
                       <CourseSelectContainer
                           name     = 'course'
                           label    = {formatMessage(messages.course_label)} />
@@ -174,6 +197,11 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                       <CuisineSelectContainer
                           name     = 'cuisine'
                           label    = {formatMessage(messages.cuisine_label)} />
+                    </Col>
+                    <Col xs={12}>
+                      <SeasonListContainer
+                          name     = 'seasons'
+                          label    = {formatMessage(messages.seasons_label)} />
                     </Col>
                     <Col xs={12}>
                       <TagListContainer
@@ -201,43 +229,37 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
                   <Row>
                     <Col xs={12}>
                       <ReInput
-                          name     = 'servings'
-                          type     = 'number'
-                          label    = {formatMessage(messages.servings_label)}
-                          min      = {1}
-                          max      = {999}
-                          required />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col xs={12}>
-                      <ReInput
                           name     = 'source'
                           label    = {formatMessage(messages.source_label)}
                           tooltip  = {formatMessage(messages.source_tooltip)} />
                     </Col>
                   </Row>
-                  <Row>
-                    <Col xs={12}>
-                      <ReCheckbox
-                          name      = 'public'
-                          label     = {formatMessage(messages.public_label)} />
-                    </Col>
-                  </Row>
 
                 </Col>
                 <Col id='recipe' md={7} lg={8}>
-                  <ReInput
-                      name     = 'info'
-                      rows     = {3}
-                      label    = {formatMessage(messages.information_label)}
-                      placeholder = {formatMessage(messages.information_placeholder)} />
-                  <IngredientGroupsBox
-                      nameIg   = 'ingredientGroupsS'
-                      nameSub  = 'subrecipesS'
-                      fetchRecipeList = {fetchRecipeList} />
-                  <DirectionBox
-                      name       = 'directions' />
+                  <Row>
+                    <Col xs={12}>
+                      <ReInput
+                          name     = 'info'
+                          rows     = {3}
+                          label    = {formatMessage(messages.information_label)}
+                          placeholder = {formatMessage(messages.information_placeholder)} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <IngredientGroupsBox
+                          nameIg   = 'ingredientGroupsS'
+                          nameSub  = 'subrecipesS'
+                          fetchRecipeList = {fetchRecipeList} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <DirectionBox
+                          name       = 'directions' />
+                    </Col>
+                  </Row>
 
                   <RecipeFormToolbar />
                 </Col>

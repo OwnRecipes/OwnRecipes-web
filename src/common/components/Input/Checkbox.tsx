@@ -52,8 +52,8 @@ export default class Checkbox extends BaseInputComponent<ICheckboxProps> {
   render() {
     // console.log(`[Checkbox] name=${this.props.name}`);
 
-    const { value, onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
-        name, style, tooltip,
+    const { onChange, // eslint-disable-line @typescript-eslint/no-unused-vars
+        name, style, tooltip, value,
         label, className, helpText, errors, meta, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
 
     return (

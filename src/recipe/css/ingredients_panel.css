@@ -64,19 +64,30 @@
   margin-right: calc(var(--bs-gutter-x) * -.5);
 }
 .ingredients-panel .ingredient-groups .subgroup {
-  margin: 1em;
+  padding: 1em;
   min-width: 18rem;
 }
 .ingredients-panel .ingredient-groups .ingredient-group {
-  flex: 1;
+  flex: 1 1 auto;
+}
+@media screen and (max-width: 1200px) {
+  .ingredients-panel .ingredient-groups .subgroup,
+  .ingredients-panel .ingredient-groups .grid-space-subrecipes {
+    min-width: 50%;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+  .ingredients-panel .ingredient-groups .subgroup:not(:first-of-type) {
+    max-width: 50%;
+  }
 }
 @media print {
   .ingredients-panel .ingredient-groups .subgroup {
-    margin: 10px;
+    padding: 10px;
     min-width: 18rem;
   }
 }
-@media screen and (min-width: 70rem) {
+@media screen and (min-width: 1200px) {
   .ingredients-panel .ingredient-groups .subgroup {
     min-width: 20rem;
   }

@@ -12,9 +12,10 @@ import * as RecipeActions from '../../recipe/store/RecipeActions';
 import { useDispatch, useSelector } from '../../common/store/redux';
 import DefaultFilters from '../constants/DefaultFilters';
 import PageWrapper from '../../common/components/PageWrapper';
+import PageScroller from '../../common/components/PageScroller';
+import { getRoutePath, objToSearchString } from '../../common/utility';
 import { RootState } from '../../app/Store';
 import { RecipeList } from '../../recipe/store/RecipeTypes';
-import { getRoutePath, objToSearchString } from '../../common/utility';
 
 export function mergeDefaultFilters(
     defaultFilters: Record<string, unknown>,
@@ -106,6 +107,7 @@ const BrowsePage: React.FC = () => {
 
   return (
     <PageWrapper title={intl.messages['nav.recipes'] as string}>
+      <PageScroller scrollOnKeyChange />
       <Search
           qs        = {qsMergedDefaults}
           qsString  = {qsMergedString}

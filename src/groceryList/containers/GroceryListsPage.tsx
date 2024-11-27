@@ -7,7 +7,7 @@ const GroceryListsPage: React.FC = () => {
   const intl = useIntl();
 
   return (
-    <PageWrapper title={intl.messages['nav.groceryLists'] as string}>
+    <PageWrapper title={intl.messages['nav.groceryLists'] as string} className='optiwidth'>
       <GroceryListsContainer />
     </PageWrapper>
   );

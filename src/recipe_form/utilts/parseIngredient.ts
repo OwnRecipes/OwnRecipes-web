@@ -139,7 +139,6 @@ export default (parser: Record<string, string>, line: string): IngredientInput =
       let { amount, rest } = numberSplit(nextTag); // eslint-disable-line prefer-const
       quantities.push(amount);
       if (rest) {
-        // OPT The fraction handling is hard to read.
         // The first char of the rest could be a fraction, e. g. 1¾cup flour.
         const restFrac = parseFraction(rest[0]);
         if (restFrac[1]) {

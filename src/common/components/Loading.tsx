@@ -6,7 +6,7 @@ interface ILoadingProps {
 
 const Loading = ({ message }: ILoadingProps) => (
   <div className='spinner'>
-    {message && <h3 className='no-results'>{ message }</h3>}
+    {message && <span className='h3 no-results'>{ message }</span>}
     <CircularProgress />
   </div>
 );
