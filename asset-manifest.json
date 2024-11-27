@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ownrecipes-web/static/css/main.ed958003.css",
-    "main.js": "/ownrecipes-web/static/js/main.d8f54cc4.js",
+    "main.js": "/ownrecipes-web/static/js/main.9ae99601.js",
     "static/css/934.2f826b63.chunk.css": "/ownrecipes-web/static/css/934.2f826b63.chunk.css",
     "static/js/934.e0616c25.chunk.js": "/ownrecipes-web/static/js/934.e0616c25.chunk.js",
     "static/js/739.05bba675.chunk.js": "/ownrecipes-web/static/js/739.05bba675.chunk.js",
@@ -21,7 +21,7 @@
     "static/css/507.d2b3301f.chunk.css": "/ownrecipes-web/static/css/507.d2b3301f.chunk.css",
     "static/js/507.2f1e41b6.chunk.js": "/ownrecipes-web/static/js/507.2f1e41b6.chunk.js",
     "static/css/121.d2aeadee.chunk.css": "/ownrecipes-web/static/css/121.d2aeadee.chunk.css",
-    "static/js/121.816b1f54.chunk.js": "/ownrecipes-web/static/js/121.816b1f54.chunk.js",
+    "static/js/121.a2baa611.chunk.js": "/ownrecipes-web/static/js/121.a2baa611.chunk.js",
     "static/css/611.adcdb8de.chunk.css": "/ownrecipes-web/static/css/611.adcdb8de.chunk.css",
     "static/js/611.ed5fddec.chunk.js": "/ownrecipes-web/static/js/611.ed5fddec.chunk.js",
     "static/css/315.ab438ac0.chunk.css": "/ownrecipes-web/static/css/315.ab438ac0.chunk.css",
@@ -37,7 +37,7 @@
     "static/media/bootstrap-icons.woff2?": "/ownrecipes-web/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
     "index.html": "/ownrecipes-web/index.html",
     "main.ed958003.css.map": "/ownrecipes-web/static/css/main.ed958003.css.map",
-    "main.d8f54cc4.js.map": "/ownrecipes-web/static/js/main.d8f54cc4.js.map",
+    "main.9ae99601.js.map": "/ownrecipes-web/static/js/main.9ae99601.js.map",
     "934.2f826b63.chunk.css.map": "/ownrecipes-web/static/css/934.2f826b63.chunk.css.map",
     "934.e0616c25.chunk.js.map": "/ownrecipes-web/static/js/934.e0616c25.chunk.js.map",
     "739.05bba675.chunk.js.map": "/ownrecipes-web/static/js/739.05bba675.chunk.js.map",
@@ -57,7 +57,7 @@
     "507.d2b3301f.chunk.css.map": "/ownrecipes-web/static/css/507.d2b3301f.chunk.css.map",
     "507.2f1e41b6.chunk.js.map": "/ownrecipes-web/static/js/507.2f1e41b6.chunk.js.map",
     "121.d2aeadee.chunk.css.map": "/ownrecipes-web/static/css/121.d2aeadee.chunk.css.map",
-    "121.816b1f54.chunk.js.map": "/ownrecipes-web/static/js/121.816b1f54.chunk.js.map",
+    "121.a2baa611.chunk.js.map": "/ownrecipes-web/static/js/121.a2baa611.chunk.js.map",
     "611.adcdb8de.chunk.css.map": "/ownrecipes-web/static/css/611.adcdb8de.chunk.css.map",
     "611.ed5fddec.chunk.js.map": "/ownrecipes-web/static/js/611.ed5fddec.chunk.js.map",
     "315.ab438ac0.chunk.css.map": "/ownrecipes-web/static/css/315.ab438ac0.chunk.css.map",
@@ -72,6 +72,6 @@
   },
   "entrypoints": [
     "static/css/main.ed958003.css",
-    "static/js/main.d8f54cc4.js"
+    "static/js/main.9ae99601.js"
   ]
 }
