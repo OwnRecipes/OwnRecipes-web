@@ -59,7 +59,7 @@ const MenuTabs: React.FC = () => {
           className='print-hidden'>
         <Tab eventKey='menuplan' title={formatMessage(messages.tab_menu)}>
           <ErrorBoundary verbose printStack>
-            <MenuItemsContainer withPast={false} />
+            <MenuItemsContainer />
           </ErrorBoundary>
         </Tab>
         <Tab eventKey='stats' title={formatMessage(messages.tab_stats)}>

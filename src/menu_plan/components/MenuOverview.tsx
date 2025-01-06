@@ -61,6 +61,12 @@ function sortMenuItemsAsc(a: MenuItem, b: MenuItem) {
   return moment(a.start_date).diff(moment(b.start_date));
 }
 
+function checkHasPastItems(items: Array<MenuItem>): boolean {
+  const thisWeekStart = moment().startOf('week');
+
+  return items.find(itm => moment(itm.start_date).diff(thisWeekStart) < 0) != null;
+}
+
 function filterMenuItems(items: Array<MenuItem> | undefined, withPast: boolean, withDistantFuture: boolean): Array<MenuItem> | undefined {
   if (!items) return items;
 
@@ -86,9 +92,14 @@ const MenuOverview: React.FC<IMenuOverviewProps> = ({
   const [forceShowPrevious, setForceShowPrevious] = useState<boolean>(false);
   const handleShowPreviousClick = useCallback(() => { setForceShowPrevious(true); }, []);
 
+  const hasPrevious = useMemo(() => {
+    if (!items || items.length === 0 || !withPast) return false;
+    return checkHasPastItems(items);
+  }, [items, withPast]);
+
   const groups: Record<string, Array<MenuItem>> | undefined = useMemo(() => {
     const itemsSorted = items?.sort(sortMenuItemsAsc);
-    const itemsFiltered = filterMenuItems(itemsSorted, withPast || forceShowPrevious, withDistantFuture);
+    const itemsFiltered = filterMenuItems(itemsSorted, withPast && forceShowPrevious, withDistantFuture);
 
     const nextWeek = moment().add(1, 'week').startOf('week').format('MMMM D');
     const thisWeek = moment().startOf('week').format('MMMM D');
@@ -116,7 +127,7 @@ const MenuOverview: React.FC<IMenuOverviewProps> = ({
     }, {} as Record<string, Array<MenuItem>>);
 
     return res;
-  }, [items, withPast, withDistantFuture, forceShowPrevious, formatMessage]);
+  }, [items, withPast, forceShowPrevious, withDistantFuture, formatMessage]);
 
   const hasNoData = pending === PendingState.COMPLETED
       && (items == null || items.length === 0 || groups == null || Object.keys(groups).length === 0);
@@ -132,7 +143,7 @@ const MenuOverview: React.FC<IMenuOverviewProps> = ({
         <P className='placeholder'>{formatMessage(messages.no_items)}</P>
       )}
 
-      {withPast && !forceShowPrevious && (
+      {withPast && !forceShowPrevious && hasPrevious && (
         <Toolbar position='center'>
           <Button id='show-previous-menu-items-button' variant='outline-primary' onClick={handleShowPreviousClick}>
             <Icon icon='arrow-up' variant='light' style={{ marginRight: '0.25em' }} />
