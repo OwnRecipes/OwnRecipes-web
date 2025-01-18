@@ -25,7 +25,7 @@ const ReSelect = forwardRef<SelectBase, IReSelectProps>(({
     if (value == null) {
       return isMulti ? [] : undefined;
     } else {
-      return formatter?.(value);
+      return formatter ? formatter(value) : value;
     }
   }, [formatter, isMulti]);
 
@@ -43,7 +43,7 @@ const ReSelect = forwardRef<SelectBase, IReSelectProps>(({
             value    = {formatValue(fprops.input.value)}
             errors   = {formatValidation(intl, fprops.meta.error || (!fprops.meta.dirtySinceLastSubmit ? fprops.meta.submitError : undefined))}
             meta     = {fprops.meta}
-            onChange = {(namee: string, value: string | undefined) => { fprops.input.onChange(parser?.(value)); onChange?.(namee, parser?.(value)); }}
+            onChange = {(namee: string, value: string | undefined) => { fprops.input.onChange(parser ? parser(value) : value); onChange?.(namee, parser ? parser(value) : value); }}
             onFocus  = {(event: React.FocusEvent<HTMLElement, Element>) => { fprops.input.onFocus(event); onFocus?.(event); }}
             onBlur   = {(event: React.FocusEvent<HTMLElement, Element>) => { fprops.input.onBlur(event);  onBlur?.(event); }}
             ref = {ref} />

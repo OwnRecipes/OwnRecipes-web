@@ -21,7 +21,7 @@ const ReCreatableSelect = forwardRef<CreatableSelect, IReCreatableSelectProps>((
     if (value == null) {
       return isMulti ? [] : undefined;
     } else {
-      return formatter(value);
+      return formatter ? formatter(value) : value;
     }
   }, [formatter, isMulti]);
 
