@@ -61,6 +61,15 @@ const MenuItems: React.FC<IMenuItemsProps> = ({ items, onCompleteClick, onHideCo
   const listRecipes: Array<IListRecipe> = useMemo(() => items.map(itm => ({
     key: String(itm.id),
     className: classNames({ completed: itm.complete, active: moment(itm.start_date).isSame(new Date(), 'day') }),
+    // stub external item to recipe
+    id: itm.id,
+    title: itm.ext_title || '',
+    slug: itm.ext_title || '',
+    info: itm.ext_source,
+    rating: -1,
+    ratingCount: -1,
+    pub_date: '-1',
+
     ...itm.recipe_data,
     header: (
       <span>

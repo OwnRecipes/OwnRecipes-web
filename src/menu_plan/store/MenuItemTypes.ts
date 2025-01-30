@@ -8,20 +8,22 @@ import { PayloadAction } from '../../common/store/redux';
 export const MENU_ITEM_STORE  = 'menuItem';
 
 export interface MenuItemDto {
-  id:          number;
-  recipe_data: RecipeListDto;
-  start_date:  string;
-  complete:    boolean;
+  id:           number;
+  recipe_data?: RecipeListDto;
+  ext_title?:   string;
+  ext_source?:  string;
+  start_date:   string;
+  complete:     boolean;
 }
 
 export type MenuItem = Omit<MenuItemDto, 'recipe_data'> & {
-  recipe_data: RecipeList;
+  recipe_data: RecipeList | undefined;
 };
 
-export const toMenuItem = (dto: MenuItemDto): MenuItem => ({ ...dto, recipe_data: toRecipeList(dto.recipe_data) });
+export const toMenuItem = (dto: MenuItemDto): MenuItem => ({ ...dto, recipe_data: dto.recipe_data ? toRecipeList(dto.recipe_data) : undefined });
 
 export type MenuItemUpdate = Omit<MenuItem, 'id' | 'recipe_data'> & {
-  recipe: number;
+  recipe: number | null | undefined;
 };
 
 export enum MenuItemActionTypes {

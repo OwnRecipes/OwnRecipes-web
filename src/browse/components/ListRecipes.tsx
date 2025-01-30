@@ -39,7 +39,7 @@ function hashCode(str: string): number {
   return hash;
 }
 
-function getRecipeImage(recipe: RecipeList) {
+function getRecipeImage(recipe: RecipeList): string {
   if (recipe.photoThumbnail) {
     return recipe.photoThumbnail ?? getRecipeImagePlaceholder();
   } else {
@@ -49,23 +49,52 @@ function getRecipeImage(recipe: RecipeList) {
   }
 }
 
+interface IExternalListRecipeCardContentProps {
+  recipe: IListRecipe;
+}
+const ExternalListRecipeCardContent: React.FC<IExternalListRecipeCardContentProps> = ({ recipe }: IExternalListRecipeCardContentProps) => {
+  const hasLink = recipe.info && recipe.info.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g);
+
+  return (
+    <>
+      <Card.Title as='h3'>
+        <Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>
+          {recipe.title}
+        </Tooltip>
+      </Card.Title>
+      {Boolean(recipe.info) && (
+        <Card.Text>
+          {hasLink && (
+            <a href={recipe.info} target='_blank' rel='noreferrer'>{recipe.info}</a>
+          )}
+          {!hasLink && recipe.info && <>{recipe.info}</>}
+        </Card.Text>
+      )}
+    </>
+  );
+};
+
 const ListRecipes: React.FC<IListRecipesProps> = ({ data, lg = 4, onOpenRecipe }: IListRecipesProps) => {
   const IMAGE_PLACEHOLDER = useMemo(() => getRecipeImagePlaceholder(), []);
   const PLACEHOLDER_STYLE = useMemo(() => ({ background: `url(${IMAGE_PLACEHOLDER}) 100% center / cover` }), [IMAGE_PLACEHOLDER]);
 
   const recipes = data?.map(recipe => {
     const link = getRoutePath(`/recipe/${recipe.slug}`);
+    const isExternal = recipe.rating === -1; // HACK: external recipes
     return (
       <Col key={recipe.key || recipe.id}>
         <Card className={classNames('recipe', recipe.className)}>
           {recipe.header && <Card.Header>{recipe.header}</Card.Header>}
-          <Link to={link} onClick={() => onOpenRecipe(recipe)}>
-            <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' style={PLACEHOLDER_STYLE} />
-            <Ratings stars={recipe.rating} count={recipe.ratingCount} collapsed />
-            <Card.Title as='h3'><Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>{recipe.title}</Tooltip></Card.Title>
-            {recipe.oTags && <ListTags recipe={recipe} />}
-            <Card.Text>{recipe.info}</Card.Text>
-          </Link>
+          {!isExternal && (
+            <Link to={link} onClick={() => onOpenRecipe(recipe)}>
+              <Card.Img variant='top' src={getRecipeImage(recipe)} alt='' style={PLACEHOLDER_STYLE} />
+              <Ratings stars={recipe.rating} count={recipe.ratingCount} collapsed />
+              <Card.Title as='h3'><Tooltip id={recipe.slug} tooltip={recipe.title} placement='bottom' className='card-title-tooltip'>{recipe.title}</Tooltip></Card.Title>
+              {recipe.oTags && <ListTags recipe={recipe} />}
+              <Card.Text>{recipe.info}</Card.Text>
+            </Link>
+          )}
+          {isExternal && <ExternalListRecipeCardContent recipe={recipe} />}
           {recipe.footer && <Card.Footer>{recipe.footer}</Card.Footer>}
         </Card>
       </Col>

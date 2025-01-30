@@ -180,6 +180,7 @@ export class AsyncSelectBase extends BaseInputComponent<IAsyncSelectProps & Wrap
               loadOptions = {this.handleLoadOptions}
 
               isDisabled  = {readOnly || disabled}
+              isClearable
 
               onChange    = {this.handleChange}
               className = 'react-select-container'

@@ -1,7 +1,8 @@
 import { forwardRef, RefObject, useCallback, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Form, Row } from 'react-bootstrap';
-import { Form as ReduxForm } from 'react-final-form';
+import { ValidationErrors } from 'final-form';
+import { Form as ReForm } from 'react-final-form';
 import moment from 'moment';
 
 import { create, update } from '../store/MenuItemActions';
@@ -9,32 +10,38 @@ import { useDispatch, useSelector } from '../../common/store/redux';
 import { RootState } from '../../app/Store';
 import { PendingState } from '../../common/store/GenericReducerType';
 import Modal from '../../common/components/Modal';
-import { ValidationResult } from '../../common/store/Validation';
+import { requiredValidator, ValidationResult } from '../../common/store/Validation';
 import ReFormStatus from '../../common/components/ReInput/ReFormStatus';
 import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
 import ReAsyncSelect from '../../common/components/ReInput/ReAsyncSelect';
 import { fetchRecipeList } from '../store/MenuItemsActions';
-import ReCheckbox from '../../common/components/ReInput/ReCheckbox';
+import FieldSpyValues from '../../common/components/ReInput/FieldSpyValues';
+import ReInput from '../../common/components/ReInput/ReInput';
 import ReDateTime from '../../common/components/ReInput/ReDateTime';
 import { SelectDataType } from '../../common/components/Input/Select';
 import { MenuItem, MenuItemUpdate } from '../store/MenuItemTypes';
 import { Recipe } from '../../recipe/store/RecipeTypes';
 
 const messages = defineMessages({
-  start_date: {
-    id: 'menu_item_modal.start_date',
-    description: 'Start Date',
-    defaultMessage: 'Start Date',
+  ext_title: {
+    id: 'menu_item_modal.ext_title',
+    description: 'External recipe title',
+    defaultMessage: 'External recipe',
+  },
+  ext_source: {
+    id: 'menu_item_modal.ext_source',
+    description: 'External recipe source',
+    defaultMessage: 'External recipe source',
   },
   recipe: {
     id: 'menu_item_modal.recipe',
     description: 'Recipe',
     defaultMessage: 'Recipe',
   },
-  complete: {
-    id: 'menu_item_modal.complete',
-    description: 'Complete',
-    defaultMessage: 'Complete',
+  start_date: {
+    id: 'menu_item_modal.start_date',
+    description: 'Start Date',
+    defaultMessage: 'Start Date',
   },
 });
 
@@ -60,7 +67,7 @@ const MenuItemModal: React.FC<IMenuItemModalProps> = ({
       }
     }, [onClose]);
 
-    const savePending = useSelector((state: RootState) => state.menuItem.meta.pending);
+    const savePending: PendingState = useSelector((state: RootState) => state.menuItem.meta.pending);
 
     const submitRef = useRef<HTMLButtonElement>(null);
 
@@ -69,9 +76,11 @@ const MenuItemModal: React.FC<IMenuItemModalProps> = ({
     }, [submitRef.current]);
     const handleSubmit = useCallback(async (form: IMenuItemModalFormDataProps) => {
       const data: MenuItemUpdate = {
-        recipe: form.recipe || 0,
-        complete: form.complete,
+        recipe: form.recipe || null,
+        ext_title: form.ext_title || '',
+        ext_source: form.ext_source || '',
         start_date: moment.unix(form.start_date).toISOString(),
+        complete: false,
       };
       if (item?.id == null) {
         return create(dispatch, data);
@@ -118,7 +127,8 @@ interface IMenuItemModalFormProps {
 
 interface IMenuItemModalFormDataProps {
   recipe: number | undefined;
-  complete: boolean;
+  ext_title: string | undefined;
+  ext_source: string | undefined;
   start_date: number;
 }
 
@@ -130,6 +140,12 @@ function parseAsNumber(val: string | undefined): number | undefined {
   return val ? parseInt(val) : undefined;
 }
 
+function handleValidate(values: IMenuItemModalFormDataProps): ValidationErrors {
+  const errors: ValidationErrors = {};
+  errors.recipe = requiredValidator(values.recipe || values.ext_title);
+  return errors;
+}
+
 const MenuItemModalForm = forwardRef<HTMLFormElement, IMenuItemModalFormProps>(({
   item, recipe, recipeReadonly, fetchRecipes, onSubmit, onSubmitSuccess, submitRef }: IMenuItemModalFormProps, ref) => {
     const intl = useIntl();
@@ -138,15 +154,16 @@ const MenuItemModalForm = forwardRef<HTMLFormElement, IMenuItemModalFormProps>((
 
     const [initialValues] = useState<Partial<IMenuItemModalFormDataProps>>({
       recipe: recipeId,
+      ext_title: item?.ext_title,
+      ext_source: item?.ext_source,
       start_date: moment(item?.start_date || new Date()).unix(),
-      complete: false,
     });
-    // console.log(`initialValues=${JSON.stringify(initialValues, undefined, 2)}`);
 
     return (
-      <ReduxForm
+      <ReForm
           initialValues = {initialValues}
           onSubmit = {onSubmit}
+          validate = {handleValidate}
           subscription = {{}}
           render = {({ form, handleSubmit: renderSubmit }) => (
             <Form onSubmit={renderSubmit} ref={ref}>
@@ -155,28 +172,46 @@ const MenuItemModalForm = forwardRef<HTMLFormElement, IMenuItemModalFormProps>((
 
               <Row>
                 <Col xs={12}>
-                  <ReAsyncSelect
-                      name   = 'recipe'
-                      initialValueLabel = {item?.recipe_data?.title || recipe?.title}
-                      label  = {formatMessage(messages.recipe)}
-                      loadOptions = {fetchRecipes}
-                      format = {formatNumber}
-                      parse = {parseAsNumber}
-                      readOnly = {recipeReadonly}
-                      required
-                      />
+                  <FieldSpyValues fieldNames={['ext_title', 'ext_source']}>
+                    {values => (
+                      <ReAsyncSelect
+                          name   = 'recipe'
+                          initialValueLabel = {item?.recipe_data?.title || recipe?.title}
+                          label  = {formatMessage(messages.recipe)}
+                          loadOptions = {fetchRecipes}
+                          format = {formatNumber}
+                          parse = {parseAsNumber}
+                          readOnly = {recipeReadonly || Boolean(values.ext_title) || Boolean(values.ext_source)}
+                          />
+                    )}
+                  </FieldSpyValues>
                 </Col>
+                {!recipeReadonly && (
+                  <FieldSpyValues fieldNames={['recipe']}>
+                    {values => (
+                      <>
+                        <Col xs={12}>
+                          <ReInput
+                              label      = {formatMessage(messages.ext_title)}
+                              name       = 'ext_title'
+                              readOnly   = {Boolean(values.recipe)} />
+                        </Col>
+                        <Col xs={12}>
+                          <ReInput
+                              label      = {formatMessage(messages.ext_source)}
+                              name       = 'ext_source'
+                              readOnly   = {Boolean(values.recipe)} />
+                        </Col>
+                      </>
+                    )}
+                  </FieldSpyValues>
+                )}
                 <Col xs={12}>
                   <ReDateTime
                       label      = {formatMessage(messages.start_date)}
                       name       = 'start_date'
                       timeFormat = {false}
                       required />
-                </Col>
-                <Col xs={12}>
-                  <ReCheckbox
-                      name    = 'complete'
-                      label   = {formatMessage(messages.complete)} />
                 </Col>
               </Row>
 

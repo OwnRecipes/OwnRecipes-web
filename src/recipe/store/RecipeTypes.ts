@@ -165,7 +165,7 @@ export interface RecipeList {
 
   photoThumbnail?: string;
 
-  info:     string;
+  info:     string | undefined;
   rating:   number;
   ratingCount: number;
   pub_date:  string; // 2011-05-20
