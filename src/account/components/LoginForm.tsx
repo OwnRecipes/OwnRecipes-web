@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import { Form as ReduxForm, FormSpy } from 'react-final-form';
+import { Form as ReForm, FormSpy } from 'react-final-form';
 
 import '../css/login.css';
 
@@ -65,7 +65,7 @@ const LoginForm: React.FC<ILoginFormProps> = ({ username, onSubmit, onLogout }: 
   const initialValues = useMemo(() => ({ username: username, remember: true }), [username]);
 
   return (
-    <ReduxForm
+    <ReForm
         initialValues = {initialValues}
         onSubmit = {handleSubmit}
         subscription = {{}}

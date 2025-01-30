@@ -2,7 +2,7 @@ import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'r
 import { Form } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
 import classNames from 'classnames';
-import { Form as ReduxForm } from 'react-final-form';
+import { Form as ReForm } from 'react-final-form';
 
 import Icon from '../../common/components/Icon';
 import { getRoutePath } from '../../common/utility';
@@ -78,7 +78,7 @@ const NavSearch: React.FC<INavSearchProps> = ({ onExpandSearch }: INavSearchProp
   }, [islgUp, urlRef?.current, handleSetExpanded]);
 
   return (
-    <ReduxForm
+    <ReForm
         onSubmit = {handleSubmit}
         subscription = {{}}
         render = {({ handleSubmit: renderSubmit }) => (

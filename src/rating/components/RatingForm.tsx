@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import { Field, Form as ReduxForm, FormSpy } from 'react-final-form';
+import { Field, Form as ReForm, FormSpy } from 'react-final-form';
 
 import { Rating, RatingCreate, RatingUpdate } from '../store/types';
 import InitialValuesResetter from '../../common/components/ReInput/ReInitialValuesResetter';
@@ -80,7 +80,7 @@ const RatingForm: React.FC<IRatingFormProps> = ({ rating, addRating, editRating,
   }, [addRating, rating?.id]);
 
   return (
-    <ReduxForm
+    <ReForm
         initialValues = {initialValues}
         onSubmit = {handleSubmit}
         subscription = {{}}

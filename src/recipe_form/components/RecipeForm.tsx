@@ -1,7 +1,7 @@
 import { useCallback, useContext, useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Container, Form, Row } from 'react-bootstrap';
-import { Form as ReduxForm } from 'react-final-form';
+import { Form as ReForm } from 'react-final-form';
 
 import '../../recipe/css/recipe.css';
 import '../css/recipe_form.css';
@@ -145,7 +145,7 @@ const RecipeForm: React.FC<IRecipeFormProps> = ({
   // console.log(`[RecipeForm] recipe=${JSON.stringify(recipe)}, initialValues=${JSON.stringify(initialValues)}`);
 
   return (
-    <ReduxForm
+    <ReForm
         initialValues = {initialValues}
         onSubmit = {handleSubmit}
         subscription = {{ submitting: true }}

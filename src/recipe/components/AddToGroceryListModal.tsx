@@ -1,7 +1,7 @@
 import { forwardRef, RefObject, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Col, Form, Row } from 'react-bootstrap';
-import { Form as ReduxForm } from 'react-final-form';
+import { Form as ReForm } from 'react-final-form';
 import { FormApi } from 'final-form';
 
 import '../css/add_to_grocery_list_modal.css';
@@ -218,7 +218,7 @@ const AddToGroceryListForm = forwardRef<HTMLFormElement, IAddToGroceryListProps>
   }, [ingredients, onSubmit]);
 
   return (
-    <ReduxForm
+    <ReForm
         initialValues = {initialValues}
         onSubmit = {handleSubmit}
         subscription = {{}}

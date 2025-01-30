@@ -2,7 +2,7 @@ import { forwardRef, RefObject, useCallback, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Dropdown, Col, Form, Row } from 'react-bootstrap';
 import { defineMessages, useIntl } from 'react-intl';
-import { Form as ReduxForm } from 'react-final-form';
+import { Form as ReForm } from 'react-final-form';
 
 import Icon from '../../common/components/Icon';
 import Checkbox from '../../common/components/Input/Checkbox';
@@ -131,7 +131,7 @@ const EditItemForm = forwardRef<HTMLFormElement, IEditItemFormProps>(({
   }, [item.title, onSubmit]);
 
   return (
-    <ReduxForm
+    <ReForm
         initialValues = {initialValues}
         onSubmit = {handleSubmit}
         subscription = {{}}

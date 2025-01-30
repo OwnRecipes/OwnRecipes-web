@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { defineMessages, useIntl } from 'react-intl';
-import { Form as ReduxForm, FormSpy } from 'react-final-form';
+import { Form as ReForm, FormSpy } from 'react-final-form';
 import { useLocation, useNavigate } from 'react-router';
 import { Dropdown, Form } from 'react-bootstrap';
 
@@ -160,7 +160,7 @@ const GroceryListHeader: React.FC<IGroceryListHeaderProps> = ({
           )}
 
           {editMode && (
-            <ReduxForm
+            <ReForm
                 initialValues = {initialValues}
                 onSubmit = {handleSubmit}
                 subscription = {{}}

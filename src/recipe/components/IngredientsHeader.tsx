@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button, Form } from 'react-bootstrap';
-import { Form as ReduxForm } from 'react-final-form';
+import { Form as ReForm } from 'react-final-form';
 
 import { Recipe } from '../store/RecipeTypes';
 import { PendingState, ReducerMeta } from '../../common/store/GenericReducerType';
@@ -84,7 +84,7 @@ const IngredientsHeader: React.FC<IIngredientsHeaderProps> = ({
             <span className='print-only'>{`: ${recipe?.customServings ?? ''} ${formatMessage(messages.servings)}`}</span>
           </h2>
           <div className='custom-servings print-hidden'>
-            <ReduxForm
+            <ReForm
                 initialValues = {initialValues}
                 onSubmit = {handleSubmit}
                 subscription = {{}}
