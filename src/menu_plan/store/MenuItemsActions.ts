@@ -33,7 +33,7 @@ export const fetchRecipeList = (searchTerm: string) => request()
     .then(res => {
       const titles: Array<SelectDataType> = [];
       res.body.results.map((recipe: RecipeDto) => {
-        titles.push({ value: String(recipe.id), label: recipe.title });
+        titles.push({ value: String(recipe.id), label: recipe.title } as SelectDataType);
         return recipe;
       });
       return titles;

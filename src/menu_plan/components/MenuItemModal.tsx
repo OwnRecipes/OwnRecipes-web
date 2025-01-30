@@ -122,6 +122,14 @@ interface IMenuItemModalFormDataProps {
   start_date: number;
 }
 
+function formatNumber(val: number | undefined): string {
+  return val != null ? String(val) : '';
+}
+
+function parseAsNumber(val: string | undefined): number | undefined {
+  return val ? parseInt(val) : undefined;
+}
+
 const MenuItemModalForm = forwardRef<HTMLFormElement, IMenuItemModalFormProps>(({
   item, recipe, recipeReadonly, fetchRecipes, onSubmit, onSubmitSuccess, submitRef }: IMenuItemModalFormProps, ref) => {
     const intl = useIntl();
@@ -152,6 +160,8 @@ const MenuItemModalForm = forwardRef<HTMLFormElement, IMenuItemModalFormProps>((
                       initialValueLabel = {item?.recipe_data?.title || recipe?.title}
                       label  = {formatMessage(messages.recipe)}
                       loadOptions = {fetchRecipes}
+                      format = {formatNumber}
+                      parse = {parseAsNumber}
                       readOnly = {recipeReadonly}
                       required
                       />
